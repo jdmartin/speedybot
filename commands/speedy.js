@@ -7,10 +7,9 @@ module.exports = {
             "encoding": "utf-8"
         });
         message.reply(`
-            Hello!  I can help by telling you stuff.\n
-            Here are some things I can do:\n\n
+            Hello!  I can help by telling you stuff. Here are some things I can do:\n
             All commands start with a **!**\n
-            **adventure**: Want a real Adventure?\n
+            **adventure**: Want a real Adventure?
             **logs**: Want the link to the logs?\n
             **miniwheat**: Why not flip a mini-wheat?\n
             **speedy**: Displays this help message.\n
