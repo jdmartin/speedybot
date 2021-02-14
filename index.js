@@ -1,10 +1,13 @@
+//Load required modules
 const Discord = require("discord.js");
 const fs = require('fs');
+//Load the config file.
 const config = require("./config.json");
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
+//Load commands into array
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
@@ -12,6 +15,7 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
+//Define the prefix that should precede a command.
 const prefix = "!";
 
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
@@ -20,6 +24,7 @@ client.once("ready", () => { // prints "Ready!" to the console once the bot is o
     client.user.setActivity("you. | say !speedy", { type: "LISTENING"});
 });
 
+//Make sure the message doesn't come from a bot.
 client.on("message", function(message) {
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
@@ -28,6 +33,7 @@ client.on("message", function(message) {
   const args = commandBody.split(' ');
   const command = args.shift().toLowerCase();
 
+  //If the command is in our list of commands, try:
   if (!client.commands.has(command)) return;
 
   try {
@@ -37,6 +43,5 @@ client.on("message", function(message) {
     message.reply('there was an error trying to execute that command!');
   }
 });
-
 
 client.login(config.BOT_TOKEN);
