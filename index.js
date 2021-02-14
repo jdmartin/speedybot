@@ -20,14 +20,14 @@ client.once("ready", () => { // prints "Ready!" to the console once the bot is o
     client.user.setActivity("you. | say !speedy", { type: "LISTENING"});
 });
 
-if (!client.commands.has(command)) return;
+//if (!client.commands.has(command)) return;
 
-try {
-	client.commands.get(command).execute(message, args);
-} catch (error) {
-	console.error(error);
-	message.reply('there was an error trying to execute that command!');
-}
+//try {
+//	client.commands.get(command).execute(message, args);
+//} catch (error) {
+//	console.error(error);
+//	message.reply('there was an error trying to execute that command!');
+//}
 
 client.on("message", function(message) {
   if (message.author.bot) return;
