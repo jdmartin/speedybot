@@ -2,10 +2,10 @@ Hello!  I can help by telling you stuff.
 
 Here are some things I can do:
 
-\t!adventure - Want a real Adventure?
-!logs - Want the link to the logs?
-!miniwheat - Why not flip a mini-wheat?
-!speedysource - View my source code.
+!adventure:      Want a real Adventure?
+!logs:           Want the link to the logs?
+!miniwheat:      Why not flip a mini-wheat?
+!speedysource:   View my source code.
 
 Want something else? Ask Doolan.
 
