@@ -7,8 +7,8 @@ module.exports = {
             "encoding": "utf-8"
         });
         message.reply(`
-            Hello!  I can help by telling you stuff. Here are some things I can do:\n
-            All commands start with a **!**\n
+            Hello!  I can help by telling you stuff.  Here are some things I can do:\n
+            __Remember: All commands start with a **!**__\n
             **adventure**: Want a real Adventure?
             **logs**: Want the link to the logs?
             **miniwheat**: Why not flip a mini-wheat?
