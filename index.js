@@ -20,15 +20,6 @@ client.once("ready", () => { // prints "Ready!" to the console once the bot is o
     client.user.setActivity("you. | say !speedy", { type: "LISTENING"});
 });
 
-//if (!client.commands.has(command)) return;
-
-//try {
-//	client.commands.get(command).execute(message, args);
-//} catch (error) {
-//	console.error(error);
-//	message.reply('there was an error trying to execute that command!');
-//}
-
 client.on("message", function(message) {
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
@@ -37,14 +28,13 @@ client.on("message", function(message) {
   const args = commandBody.split(' ');
   const command = args.shift().toLowerCase();
 
-  if (command === "speedy") {
-    client.commands.get('speedy').execute(message, args);
-  } else if (command === "logs") {
-    client.commands.get('logs').execute(message, args);
-  } else if (command === "adventure") {
-    client.commands.get('adventure').execute(message, args);
-  } else if (command === "miniwheat") {
-    client.commands.get('miniwheat').execute(message, args);
+  if (!client.commands.has(command)) return;
+
+  try {
+    client.commands.get(command).execute(message, args);
+  } catch (error) {
+    console.error(error);
+    message.reply('there was an error trying to execute that command!');
   }
 });
 
