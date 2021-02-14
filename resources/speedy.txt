@@ -2,9 +2,9 @@ Hello!  I can help by telling you stuff.
 
 Here are some things I can do:
 
-!adventure      Want a real Adventure?
-!logs           Want the link to the logs?
-!miniwheat      Why not flip a mini-wheat? 
+!adventure - Want a real Adventure?
+!logs - Want the link to the logs?
+!miniwheat - Why not flip a mini-wheat? 
 
 Want something else? Ask Doolan.
 
