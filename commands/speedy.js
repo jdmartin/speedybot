@@ -10,10 +10,10 @@ module.exports = {
             Hello!  I can help by telling you stuff. Here are some things I can do:\n
             All commands start with a **!**\n
             **adventure**: Want a real Adventure?
-            **logs**: Want the link to the logs?\n
-            **miniwheat**: Why not flip a mini-wheat?\n
-            **speedy**: Displays this help message.\n
-            **speedysource**: View my source code.\n\n
+            **logs**: Want the link to the logs?
+            **miniwheat**: Why not flip a mini-wheat?
+            **speedy**: Displays this help message.
+            **speedysource**: View my source code.\n
             Want something else? Ask Doolan. ~~ 🐢
         `)
     },
