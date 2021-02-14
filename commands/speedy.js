@@ -1,6 +1,5 @@
 module.exports = {
     name: 'speedy',
-    cooldown: 10,
     description: 'Speedy!',
     execute(message, args) {
         const fs = require('fs');
