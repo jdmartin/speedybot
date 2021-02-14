@@ -11,21 +11,23 @@ client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
+  const command = require(`./commands/${file}`);
+  client.commands.set(command.name, command);
 }
 
 //Define the prefix that should precede a command.
 const prefix = "!";
 
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
-    console.log("Ready!");
-    client.user.setStatus("online");
-    client.user.setActivity("you. | say !speedy", { type: "LISTENING"});
+  console.log("Ready!");
+  client.user.setStatus("online");
+  client.user.setActivity("you. | say !speedy", {
+    type: "LISTENING"
+  });
 });
 
 //Make sure the message doesn't come from a bot.
-client.on("message", function(message) {
+client.on("message", function (message) {
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
 
