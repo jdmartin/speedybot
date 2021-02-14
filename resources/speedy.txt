@@ -4,7 +4,8 @@ Here are some things I can do:
 
 !adventure - Want a real Adventure?
 !logs - Want the link to the logs?
-!miniwheat - Why not flip a mini-wheat? 
+!miniwheat - Why not flip a mini-wheat?
+!speedysource - View my source code.
 
 Want something else? Ask Doolan.
 
