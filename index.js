@@ -31,14 +31,15 @@ client.on("message", function (message) {
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
 
-  if (command.guildOnly && message.channel.type === 'dm') {
-		return message.reply('Sorry, I can\'t execute that command inside DMs!');
-	}
-
   const commandBody = message.content.slice(prefix.length);
   const args = commandBody.split(' ');
   const command = args.shift().toLowerCase();
 
+  //If command is guildOnly, handle that:
+  if (command.guildOnly && message.channel.type === 'dm') {
+		return message.reply('Sorry, I can\'t execute that command inside DMs!');
+	}
+  
   //If the command is in our list of commands, try:
   if (!client.commands.has(command)) return;
 
