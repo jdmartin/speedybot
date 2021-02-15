@@ -35,19 +35,19 @@ client.on("message", function (message) {
   const args = commandBody.split(' ');
   const command = args.shift().toLowerCase();
 
-  //If the command is not in our list of commands, try:
+  //If the command is !speedy and we're in a DM, fail:
+  if (command === 'speedy' && message.channel.type === 'dm') {
+		return message.reply('I can\'t execute that command inside DMs!');
+	}
+
+  //If the command is not in our list of commands...
   if (!client.commands.has(command)) return;
 
   try {
     client.commands.get(command).execute(message, args);
   } catch (error) {
     console.error(error);
-    //If command is reserved, handle that:
-    if (command.reserved && message.channel.type === 'dm') {
-      return message.reply('Sorry, I can\'t execute that command inside DMs!');
-    } else {
-      message.reply('there was an error trying to execute that command!');
-    }
+    message.reply('there was an error trying to execute that command!');
   }
 });
 
