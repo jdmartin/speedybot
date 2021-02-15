@@ -31,9 +31,9 @@ client.on("message", function (message) {
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
 
-  const commandBody = message.content.slice(prefix.length);
-  const args = commandBody.split(' ');
-  const command = args.shift().toLowerCase();
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const commandName = args.shift().toLowerCase();
+  const command = client.commands.get(commandName)
 
   //If the command is not in our list of commands, try:
   if (!client.commands.has(command)) return;
