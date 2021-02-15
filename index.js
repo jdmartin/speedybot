@@ -16,7 +16,7 @@ for (const file of commandFiles) {
 }
 
 //Define the prefix that should precede a command.
-const prefix = "!";
+const prefix = config.prefix;
 
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
   console.log("Ready!");
