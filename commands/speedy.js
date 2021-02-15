@@ -1,7 +1,6 @@
 module.exports = {
     name: 'speedy',
     description: 'Speedy!',
-    reserved: true,
     execute(message, args) {
         message.member.send(`Hello!  Here are some things I can do (commands work here or in chat):\n
             __Remember: All commands start with a **!**__\n
