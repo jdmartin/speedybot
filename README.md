@@ -5,6 +5,7 @@ A tiny, eclectic bot for my guild's Discord channel.
 ## commands:
 
 - !adventure - Want a real Adventure?
+- !askspeedy - Need a *guaranteed* helpful answer? Ask away.
 - !logs - Want the link to the logs?
 - !miniwheat - Why not flip a mini-wheat?
 - !rules - Read the Raid Rules!
