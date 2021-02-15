@@ -35,13 +35,13 @@ client.on("message", function (message) {
   const args = commandBody.split(' ');
   const command = args.shift().toLowerCase();
 
+  //If the command is not in our list of commands, try:
+  if (!client.commands.has(command)) return;
+
   //If command is guildOnly, handle that:
   if (command.guildOnly && message.channel.type === 'dm') {
-		return message.reply('Sorry, I can\'t execute that command inside DMs!');
-	}
-  
-  //If the command is in our list of commands, try:
-  if (!client.commands.has(command)) return;
+    return message.reply('Sorry, I can\'t execute that command inside DMs!');
+  }
 
   try {
     client.commands.get(command).execute(message, args);
