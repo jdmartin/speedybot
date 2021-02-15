@@ -38,16 +38,16 @@ client.on("message", function (message) {
   //If the command is not in our list of commands, try:
   if (!client.commands.has(command)) return;
 
-  //If command is guildOnly, handle that:
-  if (command.reserved && message.channel.type === 'dm') {
-    return message.reply('Sorry, I can\'t execute that command inside DMs!');
-  }
-
   try {
     client.commands.get(command).execute(message, args);
   } catch (error) {
     console.error(error);
-    message.reply('there was an error trying to execute that command!');
+    //If command is reserved, handle that:
+    if (command.reserved && message.channel.type === 'dm') {
+      return message.reply('Sorry, I can\'t execute that command inside DMs!');
+    } else {
+      message.reply('there was an error trying to execute that command!');
+    }
   }
 });
 
