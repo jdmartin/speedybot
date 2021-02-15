@@ -39,8 +39,8 @@ client.on("message", function (message) {
   if (!client.commands.has(command)) return;
 
   //If command is guildOnly, handle that:
-  if (command.guildOnly && message.channel.type === 'dm') {
-    return message.send('Sorry, I can\'t execute that command inside DMs!');
+  if (command.reserved && message.channel.type === 'dm') {
+    return message.reply('Sorry, I can\'t execute that command inside DMs!');
   }
 
   try {
