@@ -37,7 +37,7 @@ client.on("message", function (message) {
 
   //If the command is !speedy and we're in a DM, fail:
   if (command === 'speedy' && message.channel.type === 'dm') {
-		return message.reply('I can\'t execute that command inside DMs!');
+		return message.reply('Sorry, I can\'t execute that command inside DMs!');
 	}
 
   //If the command is not in our list of commands...
