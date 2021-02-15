@@ -1,6 +1,7 @@
 # speedybot
 A tiny, eclectic bot for my guild's Discord channel.
 
+<small>(Always tested in prod.)</small>
 ## commands:
 
 - !adventure - Want a real Adventure?
