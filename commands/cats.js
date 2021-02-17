@@ -2,7 +2,6 @@ module.exports = {
     name: 'cats',
     description: 'See a random cat!',
     execute(message, args) {
-        const fetch = require('node-fetch');
 
         const {
             file
