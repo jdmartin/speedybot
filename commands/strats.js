@@ -7,7 +7,7 @@ module.exports = {
             .setTitle("Evie's Strats!")
             .setColor(0xFFFFFF)
             .setAuthor("🧛‍♀️")
-            .setDescription("__Castle Nathria__\n\n")
+            .setDescription("__Castle Nathria__")
             .setFooter("SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...")
             .addFields({name: "Bosses", value: "[Shriekwing](https://discord.com/channels/308622057707536385/308626596623810562/793739928093065236)\n[Huntsman](https://discord.com/channels/308622057707536385/308626596623810562/793740029323247646)\n[Devourer](https://discord.com/channels/308622057707536385/308626596623810562/793740126454284328)\n[Darkvein](https://discord.com/channels/308622057707536385/308626596623810562/796565645612285972)\n[Xy'Mox](https://discord.com/channels/308622057707536385/308626596623810562/795513357817479219)", inline: true})
             .addFields({name: "Even More Bosses", value: "[Sun King](https://discord.com/channels/308622057707536385/308626596623810562/796099898201341952)\n[Council](https://discord.com/channels/308622057707536385/308626596623810562/796831060709081160)\n[Sludgefist](https://discord.com/channels/308622057707536385/308626596623810562/797714826297344070)\n[Stone Legion](https://discord.com/channels/308622057707536385/308626596623810562/797999175044038656)", inline: true})
