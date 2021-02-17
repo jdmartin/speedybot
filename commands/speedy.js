@@ -9,6 +9,7 @@ module.exports = {
         **cats**: Need a cat right now? Let's get one from the Internet...
         **logs**: Want the link to the logs?
         **miniwheat**: Why not flip a mini-wheat?
+        **raidbrigade**: Need the code for the in-game channel?
         **rules**: Read the Raid Rules!
         **speedysource**: View my source code.
         **strats**: Did you read the strat?\n
