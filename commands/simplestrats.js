@@ -1,5 +1,5 @@
 module.exports = {
-    name: 'strats',
+    name: 'simplestrats',
     description: 'Did you read the strat?',
     execute(message, args) {
         if (message.channel.type === 'dm') {

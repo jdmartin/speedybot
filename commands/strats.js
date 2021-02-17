@@ -1,5 +1,5 @@
 module.exports = {
-    name: 'xyzzy',
+    name: 'strats',
     description: 'Did you read the strat?',
     execute(message, args) {
         const Discord = require("discord.js");
