@@ -2,6 +2,7 @@ module.exports = {
     name: 'xyzzy',
     description: 'Did you read the strat?',
     execute(message, args) {
+        const Discord = require("discord.js");
         const embed = new Discord.MessageEmbed()
             .setTitle("Evie's Strats!")
             .setAuthor("Speedy", "./resources/images/sewerspeedy.jpg")
