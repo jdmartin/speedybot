@@ -36,7 +36,7 @@ client.on("message", function (message) {
   const command = args.shift().toLowerCase();
 
   //If the command is !speedy and we're in a DM, fail:
-  if ((command === 'speedy' || command === 'strats') && message.channel.type === 'dm') {
+  if (command === 'strats' && message.channel.type === 'dm') {
 		return message.reply('Sorry, I can\'t execute that command inside DMs (yet)!');
 	}
 
