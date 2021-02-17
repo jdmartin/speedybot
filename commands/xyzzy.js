@@ -6,7 +6,7 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
             .setTitle("Evie's Strats!")
             .setColor(0xFFFFFF)
-            .setAuthor("🧛‍♀️", "https://cdn.discordapp.com/avatars/810395362761375765/041521ca9f7dac6aabbb909f4091f98b.png")
+            .setAuthor("🧛‍♀️")
             .setDescription("__Castle Nathria__\n\n")
             .setFooter("SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...")
             .addFields({name: "Bosses", value: "[Shriekwing](https://discord.com/channels/308622057707536385/308626596623810562/793739928093065236)\n[Huntsman](https://discord.com/channels/308622057707536385/308626596623810562/793740029323247646)\n[Devourer](https://discord.com/channels/308622057707536385/308626596623810562/793740126454284328)\n[Darkvein](https://discord.com/channels/308622057707536385/308626596623810562/796565645612285972)\n[Xy'Mox](https://discord.com/channels/308622057707536385/308626596623810562/795513357817479219)", inline: true})
