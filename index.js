@@ -1,6 +1,6 @@
 //Load required modules
 const Discord = require("discord.js");
-const fs = require('fs');s
+const fs = require('fs');
 //Load the config file.
 const config = require("./config.json");
 
