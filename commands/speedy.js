@@ -6,6 +6,7 @@ module.exports = {
             __Remember: All commands start with a **!**__\n
             **adventure**: Want a real Adventure?
             **askspeedy**: Need a *guaranteed* helpful answer? Ask away.
+            **cats**: Need a cat right now? Let's get one from the Internet...
             **logs**: Want the link to the logs?
             **miniwheat**: Why not flip a mini-wheat?
             **rules**: Read the Raid Rules!

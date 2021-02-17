@@ -3,11 +3,11 @@ module.exports = {
     description: 'See a random cat!',
     execute(message, args) {
         const fetch = require('node-fetch');
-        (async function(){
-            const { file } = await fetch('https://aws.random.cat/meow').then(response => response.json());
-            message.member.send(file);
+        (async function () {
+            const {
+                file
+            } = await fetch('https://aws.random.cat/meow').then(response => response.json());
+            message.reply(file);
         })();
-
-        
     },
 };
