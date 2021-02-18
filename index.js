@@ -2,7 +2,7 @@
 const Discord = require("discord.js");
 const fs = require('fs');
 //Load the config file.
-const config = require("./config.json");
+require("dotenv").config();
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -16,7 +16,7 @@ for (const file of commandFiles) {
 }
 
 //Define the prefix that should precede a command.
-const prefix = config.prefix;
+const prefix = process.env.prefix;
 
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
   console.log("Ready!");
@@ -46,4 +46,4 @@ client.on("message", function (message) {
   }
 });
 
-client.login(config.BOT_TOKEN);
+client.login(process.env.BOT_TOKEN);
