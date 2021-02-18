@@ -2,6 +2,10 @@ module.exports = {
 	name: 'speedysource',
 	description: 'See my source code!',
 	execute(message, args) {
-		message.reply(`My source code is here: https://github.com/jdmartin/speedybot`);
+		const response = (`
+			My source code is here: https://github.com/jdmartin/speedybot
+			This is the latest release: https://github.com/jdmartin/speedybot/releases/latest
+		`)
+		message.reply(response);
 	},
 };
