@@ -19,7 +19,6 @@ for (const file of commandFiles) {
 const prefix = process.env.prefix;
 
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
-  console.log("Ready!");
   client.user.setStatus("online");
   client.user.setActivity("you. | say !speedy", {
     type: "LISTENING"
