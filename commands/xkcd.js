@@ -11,9 +11,7 @@ module.exports = {
 
             const choice = Math.round(Math.random() * (num - 1) + 1);
             
-            if (message.channel.type === 'dm') {
-                message.reply(`Here's a random comic from xkcd.com: https://xkcd.com/${choice}/\n`);
-            } 
+            message.reply(`Here's a random comic from xkcd.com: https://xkcd.com/${choice}/\n`); 
         })();
     },
 };
