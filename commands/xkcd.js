@@ -18,9 +18,8 @@ module.exports = {
             const Discord = require("discord.js");
             const embed = new Discord.MessageEmbed()
             .setTitle("xkcd")
-            .setURL(`https://xkcd.com/${choice}/`)
+            .AddFields(`{name: "Link to Original", value: "https://xkcd.com/${choice}/"}`)
             .setImage(img)
-            .setFooter("Comic courtesy of xkcd.com: https://xkcd.com/")
             
             
             if (message.channel.type === 'dm') {
