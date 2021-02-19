@@ -4,10 +4,13 @@ module.exports = {
     execute(message, args) {
         const fetch = require('node-fetch');
         
+        async function getANumber() {
         const latest = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
         const num = await latest.json();
         
-        const choice = Math.round(Math.random() * (`${num}` - 1) + 1);
+        const choice = Math.round(Math.random() * (`${num}` - 1) + 1); 
+        return choice
+    }
       
         (async function getImg () {
                  const {
