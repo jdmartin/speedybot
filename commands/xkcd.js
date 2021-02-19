@@ -16,7 +16,7 @@ module.exports = {
             const choice = getRandomArbitrary(1, num);
             const {
                 img
-            } = fetch('https://xkcd.com/${choice}/info.0.json').then(response => response.json());
+            } = fetch(`https://xkcd.com/${choice}/info.0.json`).then(response => response.json());
             message.reply(img);
         })();
     },
