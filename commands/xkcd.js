@@ -4,15 +4,13 @@ module.exports = {
     execute(message, args) {
         const fetch = require('node-fetch');
 
-        const {
+        async function () {
+            const {
             num
         } = fetch('https://xkcd.com/info.0.json').then(response => response.json());
-
-        var currentComic = num;
-        const choice = Math.round(Math.random() * (`${currentComic}` - 1) + 1);
-
-        message.reply(choice);
-
+            const choice = Math.round(Math.random() * (`${num}` - 1) + 1);
+            message.reply(choice);
+    })();
         //        
         //       (async function () {
         //         const {
