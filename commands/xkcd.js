@@ -18,7 +18,7 @@ module.exports = {
             const Discord = require("discord.js");
             const embed = new Discord.MessageEmbed()
             .setTitle("xkcd")
-            .setFooter(`[Click here to see this comic on the xkcd site](https://xkcd.com/${choice}/)`)
+            .setURL(`https://xkcd.com/${choice}/`)
             .setImage(img)
             
             
