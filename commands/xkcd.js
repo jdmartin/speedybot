@@ -11,9 +11,9 @@ module.exports = {
             const {
                 num
             } = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
-
+            message.reply(num);
             return num
-        })();message.reply(num);
+        })();
         
 //        const choice = getRandomArbitrary(1, num);
  //       (async function () {
