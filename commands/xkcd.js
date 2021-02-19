@@ -7,14 +7,16 @@ module.exports = {
         }
 
         const fetch = require('node-fetch');
+        const choice;
         const num = (async function () {
         const {
             num
         } = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
         const choice = getRandomArbitrary(1, num);
-        message.reply(choice);
-            return num
+        return choice
         })();
+        
+        message.reply(choice);
         
 //        
  //       (async function () {
