@@ -14,6 +14,7 @@ A tiny, eclectic bot for my guild's Discord channel.
 - !speedy -  Displays the help message.
 - !speedysource: View my source code.
 - !strats: Did you read the strat?
+- !xkcd: Read a random selection.
 
 <small>1: Cats from [Random Cat](https://aws.random.cat/)</small>
 
