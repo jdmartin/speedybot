@@ -14,10 +14,10 @@ module.exports = {
             .addFields({name: "Denathrius", value: "[Phase 1](https://discord.com/channels/308622057707536385/308626596623810562/799400259205464075)\n[Phase 2](https://discord.com/channels/308622057707536385/308626596623810562/799412289530626058)\n[Phase 3](https://discord.com/channels/308622057707536385/308626596623810562/799452523735023646)", inline: true})
         
         if (message.channel.type === 'dm') {
-            message.reply(`It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try !simplestrats.)`);
+            message.reply(`It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try !simplestrats or !speedyhelp.)`);
             message.channel.send(embed);
         } else {
-            message.member.send(`It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try !simplestrats.)`);
+            message.member.send(`It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try !simplestrats or !speedyhelp.)`);
             message.member.send(embed);
         }
     },
