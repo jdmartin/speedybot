@@ -4,7 +4,7 @@ module.exports = {
     execute(message, args) {
         const fetch = require('node-fetch');
         
-        (async function getANum () {
+        (async function () {
             const {
             num
         } = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
@@ -14,6 +14,5 @@ module.exports = {
             } = await fetch(`https://xkcd.com/${choice}/info.0.json`).then(response => response.json());
             message.reply(img);
     })();
-        getANum();
     },
 };
