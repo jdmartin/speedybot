@@ -8,7 +8,7 @@ module.exports = {
             const {
             num
         } = fetch('https://xkcd.com/info.0.json').then(response => response.json());
-            const choice = Math.round(Math.random() * (`${num}` - 1) + 1);
+            const choice = Math.round(Math.random() * (num - 1) + 1);
             message.reply(choice);
     })();
         //        
