@@ -7,7 +7,7 @@ module.exports = {
         }
 
         const fetch = require('node-fetch');
-        const choice;
+        var choice;
         const num = (async function () {
         const {
             num
