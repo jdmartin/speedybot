@@ -2,19 +2,15 @@ module.exports = {
     name: 'xkcd',
     description: 'Get a random xkcd comic!',
     execute(message, args) {
-        function getRandomArbitrary(min, max) {
-            return Math.round(Math.random() * (max - min) + min);
-        }
-
         const fetch = require('node-fetch');
 
         const {
             num
         } = fetch('https://xkcd.com/info.0.json').then(response => response.json());
 
-        const choice = getRandomArbitrary(1, num);
+        const choice = Math.round(Math.random() * (`${num}` - 1) + 1);
 
-        message.reply(num);
+        message.reply(choice);
 
         //        
         //       (async function () {
