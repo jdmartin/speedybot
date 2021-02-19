@@ -8,17 +8,16 @@ module.exports = {
             const num = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
 
             const choice = Math.round(Math.random() * (`${num}` - 1) + 1);
-            return choice
+            getImg(choice)
         }
 
-        async function getImg() {
-            const choice = await getANumber()
+        async function getImg(choice) {
             let url = 'https://xkcd.com/' + choice + '/info.0.json';
             const {
                 img
             } = await fetch(url).then(response => response.json());
             message.reply(img);
         }
-        getImg();
+        getANumber();
     },
 };
