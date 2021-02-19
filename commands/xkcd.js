@@ -13,6 +13,7 @@ module.exports = {
     }
       
         (async function getImg () {
+            const choice = await getANumber()
                  const {
                    img
              } = await fetch(`https://xkcd.com/${choice}/info.0.json`).then(response => response.json());
