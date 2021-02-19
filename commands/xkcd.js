@@ -8,7 +8,7 @@ module.exports = {
 
         
         const fetch = require('node-fetch');
-        (async function () {
+        var num = (async function () {
             const {
                 num
             } = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
