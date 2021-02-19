@@ -3,7 +3,7 @@ module.exports = {
     description: 'Get a random xkcd comic!',
     execute(message, args) {
         function getRandomArbitrary(min, max) {
-            return Math.random() * (max - min) + min;
+            return Math.round(Math.random() * (max - min) + min);
         }
 
         const fetch = require('node-fetch');
