@@ -8,7 +8,7 @@ module.exports = {
 
         const fetch = require('node-fetch');
         
-        const choice = await getLatest();
+        var choice = await getLatest();
         
         (async function getLatest() {
         const {
