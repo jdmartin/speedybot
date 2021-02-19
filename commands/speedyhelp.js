@@ -9,7 +9,7 @@ module.exports = {
         If you can't see these, and you'd like to, do this:
         \`\`\`
         1. Open your settings via the gear at the bottom.
-        2. Go to **Text & Images**
+        2. Go to Text & Images
         3. Enable 'Link Preview.'\`\`\`
         If you don't want to do that, it's ok.  I've implemented a simple view of strats (!simplestrats), and 
         will work on a solution for xkcd.
