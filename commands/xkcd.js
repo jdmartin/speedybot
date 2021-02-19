@@ -7,23 +7,21 @@ module.exports = {
         }
 
         const fetch = require('node-fetch');
-        
-       (async function getLatest() {
+
         const {
             num
         } = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
+
         const choice = getRandomArbitrary(1, num);
-        return choice
-        })();
-        
+
         message.reply(choice);
-        
-//        
- //       (async function () {
-   //         const {
-     //           img
-       //     } = await fetch(`https://xkcd.com/${choice}/info.0.json`).then(response => response.json());
-         //   message.reply(img);
+
+        //        
+        //       (async function () {
+        //         const {
+        //           img
+        //     } = await fetch(`https://xkcd.com/${choice}/info.0.json`).then(response => response.json());
+        //   message.reply(img);
         //})();
     },
 };
