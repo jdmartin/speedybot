@@ -13,9 +13,7 @@ module.exports = {
             
             if (message.channel.type === 'dm') {
                 message.reply(`Here's a random comic from xkcd.com: https://xkcd.com/${choice}/\n`);
-            } else {
-                message.member.send(`Here's a random comic from xkcd.com: https://xkcd.com/${choice}/\n`);
-            }
+            } 
         })();
     },
 };
