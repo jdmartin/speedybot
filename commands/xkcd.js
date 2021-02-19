@@ -13,14 +13,14 @@ module.exports = {
             } = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
 
             return num
-        })();
+        })();message.reply(num);
         
-        const choice = getRandomArbitrary(1, num);
-        (async function () {
-            const {
-                img
-            } = await fetch(`https://xkcd.com/${choice}/info.0.json`).then(response => response.json());
-            message.reply(img);
-        })();
+//        const choice = getRandomArbitrary(1, num);
+ //       (async function () {
+   //         const {
+     //           img
+       //     } = await fetch(`https://xkcd.com/${choice}/info.0.json`).then(response => response.json());
+         //   message.reply(img);
+        //})();
     },
 };
