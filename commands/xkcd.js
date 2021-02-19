@@ -6,12 +6,13 @@ module.exports = {
             return Math.random() * (max - min) + min;
         }
 
-        
         const fetch = require('node-fetch');
-        var num = (async function () {
+        const num = (async function () {
             const {
                 num
             } = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
+
+            return num
         })();
         
         const choice = getRandomArbitrary(1, num);
