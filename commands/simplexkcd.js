@@ -10,17 +10,11 @@ module.exports = {
             } = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
 
             const choice = Math.round(Math.random() * (num - 1) + 1);
-
-            const {
-                img
-            } = await fetch(`https://xkcd.com/${choice}/info.0.json`).then(response => response.json());
             
             if (message.channel.type === 'dm') {
-                message.reply(`Here's a random comic from xkcd.com': (Source: https://xkcd.com/${choice}/)\n`);
-                message.channel.send(img);
+                message.reply(`Here's a random comic from xkcd.com: https://xkcd.com/${choice}/\n`);
             } else {
-                message.member.send(`Here's a random comic from xkcd.com': (Source: https://xkcd.com/${choice}/)\n`);
-                message.member.send(img);
+                message.member.send(`Here's a random comic from xkcd.com: https://xkcd.com/${choice}/\n`);
             }
         })();
     },
