@@ -8,19 +8,15 @@ module.exports = {
 
         const fetch = require('node-fetch');
 
-        async.waterfall([
-            function () {
-                const {
-                    num
-                } = fetch('https://xkcd.com/info.0.json').then(response => response.json());
-            },
-            function (num) {
-                const choice = getRandomArbitrary(1, num);
-                const {
-                    img
-                } = fetch('https://xkcd.com/${choice}/info.0.json').then(response => response.json());
-            }
-        ], function (choice) {
+        const {
+            num
+        } = fetch('https://xkcd.com/info.0.json').then(response => response.json());
+
+        (async function (num) {
+            const choice = getRandomArbitrary(1, num);
+            const {
+                img
+            } = fetch('https://xkcd.com/${choice}/info.0.json').then(response => response.json());
             message.reply(img);
         })();
     },
