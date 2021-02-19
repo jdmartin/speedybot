@@ -20,6 +20,7 @@ module.exports = {
             .setTitle("xkcd")
             .setURL(`https://xkcd.com/${choice}/`)
             .setImage(img)
+            .setFooter("Comic courtesy of xkcd.com: https://xkcd.com/")
             
             
             if (message.channel.type === 'dm') {
