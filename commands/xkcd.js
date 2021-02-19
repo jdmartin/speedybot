@@ -15,6 +15,7 @@ module.exports = {
                 img
             } = await fetch(`https://xkcd.com/${choice}/info.0.json`).then(response => response.json());
             
+            const Discord = require("discord.js");
             const embed = new Discord.MessageEmbed()
             .setTitle("xkcd")
             .setFooter(`See this comic on the xkcd site: https://xkcd.com/${choice}/`)
