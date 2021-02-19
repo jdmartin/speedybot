@@ -18,7 +18,7 @@ module.exports = {
             const Discord = require("discord.js");
             const embed = new Discord.MessageEmbed()
             .setTitle("xkcd")
-            .AddFields(`{name: "Link to Original", value: "https://xkcd.com/${choice}/"}`)
+            .addFields(`{name: "Link to Original", value: "https://xkcd.com/${choice}/"}`)
             .setImage(img)
             
             
