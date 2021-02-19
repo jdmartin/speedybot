@@ -14,7 +14,7 @@ module.exports = {
 
         const choice = getRandomArbitrary(1, num);
 
-        message.reply(choice);
+        message.reply(num);
 
         //        
         //       (async function () {
