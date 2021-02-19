@@ -8,11 +8,26 @@ module.exports = {
             const {
                 num
             } = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
+
             const choice = Math.round(Math.random() * (num - 1) + 1);
+            
             const {
                 img
             } = await fetch(`https://xkcd.com/${choice}/info.0.json`).then(response => response.json());
-            message.reply(img);
+            
+            const embed = new Discord.MessageEmbed()
+            .setTitle("xkcd")
+            .setFooter(`See this comic on the xkcd site: https://xkcd.com/${choice}/`)
+            .setImage(img)
+            
+            
+            if (message.channel.type === 'dm') {
+                message.reply(`Here you go:\n\n(If you don't see anything, try !speedyhelp.)`);
+                message.channel.send(embed);
+            } else {
+                message.member.send(`Here you go:\n\n(If you don't see anything, try !speedyhelp.)`);
+                message.member.send(embed);
+            }
         })();
     },
 };
