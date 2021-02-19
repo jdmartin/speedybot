@@ -7,8 +7,10 @@ module.exports = {
         }
 
         const fetch = require('node-fetch');
-        var choice;
-        const num = (async function () {
+        
+        const choice = await getLatest();
+        
+        (async function getLatest() {
         const {
             num
         } = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
