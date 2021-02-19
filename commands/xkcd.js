@@ -12,7 +12,6 @@ module.exports = {
   //              img
     //        } = await fetch(`https://xkcd.com/${choice}/info.0.json`).then(response => response.json());
             message.reply(num);
-            message.reply(choice);
         }
         getANumber();
     },
