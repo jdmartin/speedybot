@@ -2,7 +2,7 @@ module.exports = {
     name: 'speedyhelp',
     description: 'How can Speedy help you?',
     execute(message, args) {
-        const strats = (`Hello!  So, here's a bit of help:\n
+        const advice = (`Hello!  So, here's a bit of help:\n
         __Setup__\n
         Some of the commands (!strats, some planned ones) use the embeds feature to present things in a nicer way.
         
@@ -19,9 +19,9 @@ module.exports = {
     `)
     
         if (message.channel.type === 'dm') {
-            message.reply(strats)
+            message.reply(advice)
         } else {
-            message.member.send(strats)
+            message.member.send(advice)
         }
     },
 };
