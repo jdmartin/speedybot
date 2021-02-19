@@ -10,7 +10,7 @@ module.exports = {
 
         const {
             num
-        } = await fetch('https://xkcd.com/info.0.json').then(response => response.json());
+        } = fetch('https://xkcd.com/info.0.json').then(response => response.json());
 
         const choice = getRandomArbitrary(1, num);
 
