@@ -14,9 +14,10 @@ A tiny, eclectic bot for my guild's Discord channel.
 - !speedy -  Displays the help message.
 - !speedysource: View my source code.
 - !strats: Did you read the strat?
-- !xkcd: Read a random selection.
+- !xkcd: Read a random selection.<sup>2</sip>
 
 <small>1: Cats from [Random Cat](https://aws.random.cat/)</small>
+<small>2: Comics from [xkcd.com](https://xkcd.com/)</small>
 
 ## requests?
 More ideas are welcome.  Let me know here, or tell Doolan in-game/Discord. ❤️
