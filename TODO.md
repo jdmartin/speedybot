@@ -1,0 +1,1 @@
+- Better formatting of usage statistics.
