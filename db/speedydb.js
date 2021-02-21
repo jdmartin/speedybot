@@ -26,7 +26,7 @@ class DatabaseTools {
     }
 
     error(command) {
-        db.run('UPDATE commands SET count = count + 1 WHERE name = (?)', [command]);
+        db.run('UPDATE commands SET errors = errors + 1 WHERE name = (?)', [command]);
     }
 }
 
