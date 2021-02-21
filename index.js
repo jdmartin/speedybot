@@ -1,38 +1,23 @@
-//Load required modules
-const Discord = require("discord.js");
-const fs = require('fs');
-const sqlite3 = require('sqlite3');
-
 //Load the config file.
 require("dotenv").config();
 
-const client = new Discord.Client();
-client.commands = new Discord.Collection();
+//Load helper files
+const speedydb = require("./db/speedydb.js");
+const utils = require("./speedyutils.js");
 
-//Define the prefix that should precede a command.
+//Get some essential variables from the helper files:
+const client = utils.client;
 const prefix = process.env.prefix;
 
 //Load commands into array
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const speedyutils = new utils.CreateCommandSet();
+speedyutils.generateSet();
 
-for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
-  client.commands.set(command.name, command);
-}
-
-//Initialize the statistics database:
-const db = new sqlite3.Database(':memory:');
-
-db.serialize(function () {
-  db.run("CREATE TABLE `commands` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `count` INT, `errors` INT)");
-
-  var stmt = db.prepare("INSERT INTO `commands` (`name`, `count`, `errors`) VALUES (?, 0, 0)");
-  commandFiles.forEach(name => {
-    var thisCommand = name.split(".", 1);
-    stmt.run(thisCommand);
-  })
-  stmt.finalize();
-});
+//Initialize the statistics database and get helper for stats:
+const speedy = new speedydb.CreateDatabase();
+const speedyStats = new speedydb.GetStats();
+const speedyDBHelper = new speedydb.DatabaseTools();
+speedy.startup();
 
 //Once that's done, let's move on to main.
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
@@ -55,29 +40,7 @@ client.on("message", function (message) {
 
   //If the command is xzzyz (for stats):
   if (command === 'xyzzy') {
-    let sql = `SELECT DISTINCT Name name, Count count, Errors errors FROM commands ORDER BY name`;
-
-    db.all(sql, [], (err, rows) => {
-      if (err) {
-        throw err;
-      }
-      const embed = new Discord.MessageEmbed()
-        .setColor(0xFFFFFF)
-        .setTitle("Usage stats since last launch")
-        .setFooter("These statistics are a product of the Inifite Speedyflight. Use Wisely.")
-      rows.forEach((row) => {
-        embed.addFields({
-          name: row.name,
-          value: "\t\tCount: " + row.count + "\t\tErrors " + row.errors,
-          inline: true
-        })
-      });
-      if (message.channel.type === 'dm') {
-        message.channel.send(embed);
-      } else {
-        message.member.send(embed);
-      }
-    }, )
+    speedyStats.retrieve(message);
   };
 
   //If the command is not in our list of commands...
@@ -85,11 +48,11 @@ client.on("message", function (message) {
 
   try {
     client.commands.get(command).execute(message, args);
-    db.run('UPDATE commands SET count = count + 1 WHERE name = (?)', [command]);
+    speedyDBHelper.success(command);
   } catch (error) {
     console.error(error);
     message.reply('there was an error trying to execute that command!');
-    db.run('UPDATE commands SET errors = errors + 1 WHERE name = (?)', [command]);
+    speedyDBHelper.error(command);
   }
 });
 
