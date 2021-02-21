@@ -55,7 +55,7 @@ client.on("message", function (message) {
 
   //If the command is xzzyz (for stats):
   if (command === 'xyzzy') {
-    let sql = `SELECT DISTINCT Name name, Count count, Errors errors FROM commands ORDER BY count DESC`;
+    let sql = `SELECT DISTINCT Name name, Count count, Errors errors FROM commands ORDER BY name`;
 
     db.all(sql, [], (err, rows) => {
       if (err) {
