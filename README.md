@@ -17,6 +17,7 @@ A tiny, eclectic bot for my guild's Discord channel.
 - !xkcd: Read a random selection.<sup>2</sip>
 
 <small>1: Cats from [Random Cat](https://aws.random.cat/)</small>
+
 <small>2: Comics from [xkcd.com](https://xkcd.com/)</small>
 
 ## requests?
