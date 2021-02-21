@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database(':memory:');
-const utils = require('../speedyutils.js');
+const utils = require('../utils/speedyutils.js');
 
 const commandFiles = utils.commandFiles;
 

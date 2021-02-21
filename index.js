@@ -3,7 +3,7 @@ require("dotenv").config();
 
 //Load helper files
 const speedydb = require("./db/speedydb.js");
-const utils = require("./speedyutils.js");
+const utils = require("./utils/speedyutils.js");
 
 //Get some essential variables from the helper files:
 const client = utils.client;
