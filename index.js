@@ -4,6 +4,7 @@ require("dotenv").config();
 //Load helper files
 const speedydb = require("./db/speedydb.js");
 const utils = require("./utils/speedyutils.js");
+const heart = require("./utils/heartbeat.js");
 
 //Get some essential variables from the helper files:
 const client = utils.client;
@@ -26,6 +27,10 @@ client.once("ready", () => { // prints "Ready!" to the console once the bot is o
     type: "LISTENING"
   });
   console.log('Speedy Standing By!');
+
+  //Start the heartbeat
+  const heartbeat = new heart.Heartbeat();
+  heartbeat.startBeating();
 });
 
 client.on("message", function (message) {
