@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require('express');
 const app = express();
-const port = ${process.env.speedyport}
+const port = process.env.speedyport;
 
 const helmet = require('helmet');
 
