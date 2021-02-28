@@ -10,8 +10,8 @@ class Heartbeat {
             res.send('🐢')
         })
 
-        app.listen('../run/speedysock', () => {
-            console.log(`Heartbeat beating on socket: ../run/speedysock`)
+        app.listen('/run/speedysock/speedysock', () => {
+            console.log(`Heartbeat beating on socket: /run/speedysock/speedysock`)
         })
     }
 };
