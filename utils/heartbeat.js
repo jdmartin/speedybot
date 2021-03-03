@@ -7,9 +7,19 @@ const helmet = require('helmet');
 
 class Heartbeat {
     startBeating() {
-        app.use(helmet())
+        //These are tailored to my setup. If you're starting elsewhere,
+        //see the docs: https://helmetjs.github.io/
+        app.use(helmet.contentSecurityPolicy());
+        app.use(helmet.dnsPrefetchControl());
+        app.use(helmet.hidePoweredBy());
+        app.use(helmet.ieNoOpen());
+        app.use(helmet.permittedCrossDomainPolicies());
+        app.use(helmet.referrerPolicy());
+        app.use(helmet.xssFilter());
+
 
         app.get('/', (req, res) => {
+            res.set('Cache-control', 'public, max-age=86400')
             res.send('🐢')
         })
 
