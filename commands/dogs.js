@@ -3,7 +3,7 @@ module.exports = {
     description: 'See a random dog!',
     execute(message, args) {
         const fetch = require('node-fetch');
-        if (args[0] === 'corgi') {
+        if (message.first() === 'corgi') {
             (async function () {
                 const {
                     response
