@@ -2,9 +2,8 @@ module.exports = {
     name: 'dogs',
     description: 'See a random dog!',
     execute(message, args) {
-        const args = message.content.slice(prefix.length).trim().split(/ +/);
         const fetch = require('node-fetch');
-        if (args === 'corgi') {
+        if (args[0] === 'corgi') {
             (async function () {
                 const {
                     message
