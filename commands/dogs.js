@@ -18,7 +18,7 @@ module.exports = {
                 ds_message.reply(message);
             })();
         } else {
-            ds_message.reply("Sorry, I don't understand. Try !dogs for a random dog, or !dogs corgi for a corgi.")
+            ds_message.reply("Sorry, I don't understand. Try `!dogs` for a random dog, or `!dogs corgi` for a corgi.")
         }
     },
 };
