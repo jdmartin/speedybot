@@ -1,1 +1,1 @@
-- Better formatting of usage statistics.
+- Better handling of dog breeds. Spaghetti code makes me sad.
