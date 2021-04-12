@@ -6,16 +6,16 @@ module.exports = {
         if (args[0] === 'corgi') {
             (async function () {
                 const {
-                    message
+                    response
                 } = await fetch('https://dog.ceo/api/breed/corgi/images/random').then(response => response.json());
-                message.reply(message);
+                message.reply(response);
             })();
         } else {
             (async function () {
                 const {
-                    message
+                    response
                 } = await fetch('https://dog.ceo/api/breeds/image/random').then(response => response.json());
-                message.reply(message);
+                message.reply(response);
             })();
         }
     },
