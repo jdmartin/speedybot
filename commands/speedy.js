@@ -7,6 +7,7 @@ module.exports = {
         **adventure**: Want a real Adventure?
         **askspeedy**: Need a *guaranteed* helpful answer? Ask away.
         **cats**: Need a cat right now? Let's get one from the Internet...
+        **foxes**: How about a fox instead? To the Internet!
         **logs**: Want the link to the logs?
         **miniwheat**: Why not flip a mini-wheat?
         **raidbrigade**: Need the code for the in-game channel?
