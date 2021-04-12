@@ -17,6 +17,8 @@ module.exports = {
                 } = await fetch('https://dog.ceo/api/breed/corgi/images/random').then(response => response.json());
                 ds_message.reply(message);
             })();
+        } else {
+            ds_message.reply("Sorry, I don't understand. Try !dogs for a random dog, or !dogs corgi for a corgi.")
         }
     },
 };
