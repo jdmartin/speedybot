@@ -12,17 +12,17 @@ module.exports = {
             .addFields({
                 name: "Immediate",
                 value: "[Posted May 9](https://discord.com/channels/308622057707536385/308625441546043402/841157209764397067)\n",
-                inline: true
+                inline: false
             })
             .addFields({
                 name: "Planning",
                 value: "[The Burning Reconquista](https://discord.com/channels/308622057707536385/308625441546043402/839871852045664337)\n",
-                inline: true
+                inline: false
             })
             .addFields({
                 name: "Reminders",
                 value: "Don't forget to check the #annoucements channel for more stuff!",
-                inline: true
+                inline: false
             })
 
         if (message.channel.type === 'dm') {
