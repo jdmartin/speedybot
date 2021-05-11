@@ -7,7 +7,7 @@ module.exports = {
             .setTitle("Evie's Announcements!")
             .setColor(0xFFFFFF)
             .setAuthor("🧛‍♀️")
-            .setDescription("Coming Up")
+            .setDescription("")
             .setFooter("SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...")
             .addFields({
                 name: "Immediate",
@@ -21,7 +21,7 @@ module.exports = {
             })
             .addFields({
                 name: "Reminders",
-                value: "Don't forget to check the #annoucements channel for more stuff!",
+                value: "Don't forget to check the #annoucements channel for more stuff!\n",
                 inline: false
             })
 
