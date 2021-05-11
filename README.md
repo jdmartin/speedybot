@@ -10,6 +10,7 @@ A tiny, eclectic bot for my guild's Discord channel.
 - !foxes - Need a fox instead? To the Internet!<sup>3</sup>
 - !logs - Want the link to the logs?
 - !miniwheat - Why not flip a mini-wheat?
+- !next - What are we doing?
 - !raidbrigade - Grab the code for the in-game channel.
 - !rules - Read the Raid Rules!
 - !speedy -  Displays the help message.
