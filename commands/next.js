@@ -6,7 +6,7 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
             .setTitle("Evie's Announcements!")
             .setColor(0xFFFFFF)
-            .setAuthor("🧛‍♀️")
+            .setAuthor("🐢")
             .setDescription("")
             .setFooter("SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...")
             .addFields({
