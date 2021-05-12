@@ -3,6 +3,13 @@ module.exports = {
     description: 'See a random dog!',
     execute(ds_message, args) {
         const fetch = require('node-fetch');
+        const dogsDict = {
+            corgi: 'https://dog.ceo/api/breed/corgi/images/random',
+            cardigan: 'https://dog.ceo/api/breed/corgi/cardigan/images/random',
+            poodle: 'https://dog.ceo/api/breed/poodle/standard/images/random',
+            husky: 'https://dog.ceo/api/breed/husky/images/random'
+        };
+
         if (!args.length) {
             (async function () {
                 const {
@@ -10,32 +17,11 @@ module.exports = {
                 } = await fetch('https://dog.ceo/api/breeds/image/random').then(response => response.json());
                 ds_message.reply(message);
             })();
-        } else if (args[0] === 'corgi') {
+        } else if (args[0] in (dogsDict)) {
             (async function () {
                 const {
                     message
-                } = await fetch('https://dog.ceo/api/breed/corgi/images/random').then(response => response.json());
-                ds_message.reply(message);
-            })();
-        } else if (args[0] === 'poodle') {
-            (async function () {
-                const {
-                    message
-                } = await fetch('https://dog.ceo/api/breed/poodle/standard/images/random').then(response => response.json());
-                ds_message.reply(message);
-            })();
-        } else if (args[0] === 'cardigan') {
-            (async function () {
-                const {
-                    message
-                } = await fetch('https://dog.ceo/api/breed/corgi/cardigan/images/random').then(response => response.json());
-                ds_message.reply(message);
-            })();
-        } else if (args[0] === 'husky') {
-            (async function () {
-                const {
-                    message
-                } = await fetch('https://dog.ceo/api/breed/husky/images/random').then(response => response.json());
+                } = await fetch(dogsDict[args[0]]).then(response => response.json());
                 ds_message.reply(message);
             })();
         } else {
