@@ -7,7 +7,8 @@ module.exports = {
             corgi: 'corgi',
             cardigan: 'corgi/cardigan',
             poodle: 'poodle/standard',
-            husky: 'husky'
+            husky: 'husky',
+            germanshepherd: 'germanshepherd'
         };
 
         if (!args.length) {
