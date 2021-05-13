@@ -22,7 +22,7 @@ module.exports = {
                 const breed = dogsDict[args[0]];
                 const {
                     message
-                } = await fetch(`https://dog.ceo/api/breed/**${breed}**/images/random`).then(response => response.json());
+                } = await fetch(`https://dog.ceo/api/breed/${breed}/images/random`).then(response => response.json());
                 ds_message.reply(message);
             })();
         } else {
