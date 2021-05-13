@@ -13,6 +13,7 @@ A tiny, eclectic bot for my guild's Discord channel.
 - !next - What are we doing?
 - !raidbrigade - Grab the code for the in-game channel.
 - !rules - Read the Raid Rules!
+- !sheep - I need CC (and wool)!
 - !speedy -  Displays the help message.
 - !speedysource: View my source code.
 - !strats: Did you read the strat?
