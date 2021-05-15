@@ -6,6 +6,7 @@ module.exports = {
         const dogsDict = {
             corgi: 'corgi',
             cardigan: 'corgi/cardigan',
+            pembroke: 'pembroke',
             poodle: 'poodle/standard',
             husky: 'husky',
             germanshepherd: 'germanshepherd'
