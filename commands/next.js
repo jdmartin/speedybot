@@ -11,7 +11,7 @@ module.exports = {
             .setFooter("SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...")
             .addFields({
                 name: "Immediate",
-                value: "[Posted June 3](https://discord.com/channels/308622057707536385/308625441546043402/850248244890304592)\n",
+                value: "[Posted June 27](https://discord.com/channels/308622057707536385/308625441546043402/858751305971793950)\n",
                 inline: false
             })
             .addFields({
