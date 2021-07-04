@@ -23,7 +23,7 @@ speedy.startup();
 
 //Initialize the absences database:
 const absence = new absencedb.CreateDatabase();
-//const absenceDBHelper = new absencedb.DatabaseTools();
+const absenceDBHelper = new absencedb.DatabaseTools();
 absence.startup();
 
 //Once that's done, let's move on to main.
@@ -46,7 +46,7 @@ client.on("message", message => {
   if (!message.content.startsWith(prefix)) return;
 
   //Store the author's name.
-  let user = message.author.id;
+  let messageSender = (message.author.id);
 
   const commandBody = message.content.slice(prefix.length);
   const args = commandBody.split(' ');
@@ -59,7 +59,7 @@ client.on("message", message => {
 
   //Pass author for these commands
   if (command === 'absent') {
-    absencedb.run(SQL`INSERT INTO absences(name, start, end, comment) VALUES (${person}, "0000-01-01", "0000-01-01", "testing")`);
+    absenceDBHelper.test(messageSender);
   }
 
   //If the command is not in our list of commands...
