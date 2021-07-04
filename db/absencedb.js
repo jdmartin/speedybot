@@ -35,7 +35,7 @@ class DatabaseTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date " + row.start + "\t\tEnd Date " + row.end + "\t\tComment " + row.comment,
+                    value: "\t\tStart Date " + row.start + "\nEnd Date " + row.end + "\nComment " + row.comment,
                     inline: false
                 })
             });
