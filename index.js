@@ -46,7 +46,7 @@ client.on("message", message => {
   if (!message.content.startsWith(prefix)) return;
 
   //Store the author's name.
-  let messageSender = (message.author.id);
+  let messageSender = (message.member.id);
 
   const commandBody = message.content.slice(prefix.length);
   const args = commandBody.split(' ');
