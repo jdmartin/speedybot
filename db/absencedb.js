@@ -24,7 +24,7 @@ class DatabaseTools {
         absencedb.run('UPDATE commands SET errors = errors + 1 WHERE name = (?)', [command]);
     }
 
-    test(command) {
+    test() {
         message.reply(`This adventure, Speedy craves: https://quuxplusone.github.io/Advent/index.html`);
     }
 }
