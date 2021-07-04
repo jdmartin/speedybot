@@ -27,6 +27,10 @@ class DatabaseTools {
     test() {
         absencedb.run('INSERT INTO absences(name, start, end, comment) VALUES ("test", "0000-01-01", "0000-01-01", "testing")');
     }
+
+    show() {
+        absencedb.run('SELECT * FROM absences ORDER BY name')
+    }
 }
 
 module.exports = {
