@@ -53,8 +53,8 @@ client.on("message", function (message) {
   //If the command is xzzyz (for stats):
   if (command === 'xyzzy') {
     speedyStats.retrieve(message);
-  };
-
+  }
+  
   //Pass author for these commands
   if (command === 'absent') {
     absenceDBHelper.test(message, user);
