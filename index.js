@@ -45,9 +45,6 @@ client.on("message", message => {
   //Make sure the message starts with the prefix.
   if (!message.content.startsWith(prefix)) return;
 
-  //Store the author's name.
-  let messageSender = (message.member.id);
-
   const commandBody = message.content.slice(prefix.length);
   const args = commandBody.split(' ');
   const command = args.shift().toLowerCase();
@@ -59,7 +56,7 @@ client.on("message", message => {
 
   //Pass author for these commands
   if (command === 'absent') {
-    absenceDBHelper.test(messageSender);
+    absenceDBHelper.test(message);
   }
 
   //If the command is not in our list of commands...
