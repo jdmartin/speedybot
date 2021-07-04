@@ -47,6 +47,7 @@ client.on("message", function (message) {
 
   const commandBody = message.content.slice(prefix.length);
   const args = commandBody.split(' ');
+  const user = message.author.id;
   const command = args.shift().toLowerCase();
 
   //If the command is xzzyz (for stats):
@@ -56,7 +57,7 @@ client.on("message", function (message) {
 
   //Pass author for these commands
   if (command === 'absent') {
-    absenceDBHelper.test(message, message.author.id);
+    absenceDBHelper.test(message, user);
   }
 
   //If the command is not in our list of commands...
