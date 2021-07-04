@@ -36,7 +36,7 @@ module.exports = {
         **Xy'Mox**: https://discord.com/channels/308622057707536385/308626596623810562/821981523372539954
         🐢
     `)
-        
+
         if (!args.length) {
             if (message.channel.type === 'dm') {
                 message.reply(sanctum)
@@ -50,6 +50,6 @@ module.exports = {
                 message.member.send(nathria)
             }
         }
-        
+
     },
 };
