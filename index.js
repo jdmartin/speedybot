@@ -47,14 +47,14 @@ client.on("message", function (message) {
 
   const commandBody = message.content.slice(prefix.length);
   const args = commandBody.split(' ');
-  const user = message.author.id;
+  const user = message.author;
   const command = args.shift().toLowerCase();
 
   //If the command is xzzyz (for stats):
   if (command === 'xyzzy') {
     speedyStats.retrieve(message);
   }
-  
+
   //Pass author for these commands
   if (command === 'absent') {
     absenceDBHelper.test(message, user);
