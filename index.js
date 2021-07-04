@@ -45,9 +45,11 @@ client.on("message", message => {
   //Make sure the message starts with the prefix.
   if (!message.content.startsWith(prefix)) return;
 
+  //Store the author's name.
+  let user = message.author;
+  
   const commandBody = message.content.slice(prefix.length);
   const args = commandBody.split(' ');
-  const user = message.author;
   const command = args.shift().toLowerCase();
 
   //If the command is xzzyz (for stats):
