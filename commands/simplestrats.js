@@ -2,7 +2,15 @@ module.exports = {
     name: 'simplestrats',
     description: 'Did you read the strat?',
     execute(message, args) {
-        const strats = (`Hello!  Here are links to Evie's raid strats:\n
+        const sanctum = (`Hello! Here are links to Evie's raid strats:\n
+        __Sanctum of Domination__\n
+        **The Tarragrue**: https://discord.com/channels/308622057707536385/308626596623810562/861108078976172072
+        **Eye of the Jailer**: https://discord.com/channels/308622057707536385/308626596623810562/861108185917161473
+        **The Nine**: https://discord.com/channels/308622057707536385/308626596623810562/861108293966495747
+        **Ner'zhul**: https://discord.com/channels/308622057707536385/308626596623810562/861108398400471060
+        🐢
+    `)
+        const nathria = (`Hello!  Here are links to Evie's raid strats:\n
         __Castle Nathria__\n
         **Shriekwing**: https://discord.com/channels/308622057707536385/308626596623810562/793739928093065236
         **Huntsman**: https://discord.com/channels/308622057707536385/308626596623810562/793740029323247646
@@ -25,11 +33,20 @@ module.exports = {
         **Xy'Mox**: https://discord.com/channels/308622057707536385/308626596623810562/821981523372539954
         🐢
     `)
-    
-        if (message.channel.type === 'dm') {
-            message.reply(strats)
-        } else {
-            message.member.send(strats)
+        
+        if (!args.length) {
+            if (message.channel.type === 'dm') {
+                message.reply(sanctum)
+            } else {
+                message.member.send(sanctum)
+            }
+        } else if (args[0].toLowerCase() === 'nathria') {
+            if (message.channel.type === 'dm') {
+                message.reply(nathria)
+            } else {
+                message.member.send(nathria)
+            }
         }
+        
     },
 };
