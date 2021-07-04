@@ -1,15 +1,11 @@
 const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
-const absencedb = new sqlite3.Database('./db/absence.db', (err) => {
+const absencedb = new sqlite3.Database('./absence.db', (err) => {
     if (err) {
       console.error(err.message);
     }
     console.log('Connected to the absence database.');
   });
-
-const utils = require('../utils/speedyutils.js');
-
-const commandFiles = utils.commandFiles;
 
 class CreateDatabase {
     startup() {
