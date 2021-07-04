@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
-let absencedb = new sqlite3.Database('./db/absence.db', sqlite3.OPEN_CREATE, (err) => {
+let absencedb = new sqlite3.Database('./absence.db', sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
     }
