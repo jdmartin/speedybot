@@ -25,7 +25,7 @@ class DatabaseTools {
     }
 
     test() {
-        message.reply(`This adventure, Speedy craves: https://quuxplusone.github.io/Advent/index.html`);
+        absencedb.run("INSERT INTO `absences` (`name`, `start`, `end`, `comment`) VALUES (test, 0000-01-01, 0000-01-01, testing)");
     }
 }
 
