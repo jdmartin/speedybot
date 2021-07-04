@@ -23,6 +23,10 @@ class DatabaseTools {
     error(command) {
         absencedb.run('UPDATE commands SET errors = errors + 1 WHERE name = (?)', [command]);
     }
+
+    test(command) {
+        message.reply(`This adventure, Speedy craves: https://quuxplusone.github.io/Advent/index.html`);
+    }
 }
 
 module.exports = {
