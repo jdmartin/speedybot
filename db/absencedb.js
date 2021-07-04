@@ -16,14 +16,6 @@ let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
  }
 
 class DatabaseTools {
-    success(command) {
-        absencedb.run('UPDATE commands SET count = count + 1 WHERE name = (?)', [command]);
-    }
-
-    error(command) {
-        absencedb.run('UPDATE commands SET errors = errors + 1 WHERE name = (?)', [command]);
-    }
-
     test() {
         absencedb.run('INSERT INTO absences(name, start, end, comment) VALUES ("test", "0000-01-01", "0000-01-01", "testing")');
     }
@@ -34,6 +26,22 @@ class DatabaseTools {
         absencedb.all(sql, [], (err, rows) => {
             if (err) {
                 throw err;
+            }
+            const embed = new Discord.MessageEmbed()
+                .setColor(0xFFFFFF)
+                .setTitle("Upcoming absences")
+                .setFooter("These absences are a product of the Inifite Speedyflight. Use Wisely.")
+            rows.forEach((row) => {
+                embed.addFields({
+                    name: row.name,
+                    value: "\t\tName: " + row.name + "\t\tStart Date " + row.start + "\t\tEnd Date " + row.end + "\t\tComment " + row.comment,
+                    inline: true
+                })
+            });
+            if (message.channel.type === 'dm') {
+                message.channel.send(embed);
+            } else {
+                message.member.send(embed);
             }
         });
     }
