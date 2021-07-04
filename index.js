@@ -39,7 +39,7 @@ client.once("ready", () => { // prints "Ready!" to the console once the bot is o
   heartbeat.startBeating();
 });
 
-client.on("message", async (message) => {
+client.on("message", message => {
   //Make sure the message doesn't come from a bot.
   if (message.author.bot) return;
   //Make sure the message starts with the prefix.
@@ -59,7 +59,7 @@ client.on("message", async (message) => {
 
   //Pass author for these commands
   if (command === 'absent') {
-    absenceDBHelper.test(user);
+    absencedb.run(SQL`INSERT INTO absences(name, start, end, comment) VALUES (${person}, "0000-01-01", "0000-01-01", "testing")`);
   }
 
   //If the command is not in our list of commands...
