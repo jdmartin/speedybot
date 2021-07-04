@@ -21,7 +21,7 @@ class DatabaseTools {
     test(user) {
         let author = user;
         console.log(author);
-        absencedb.run(SQL `INSERT INTO absences(name, start, end, comment) VALUES (${author}, "0000-01-01", "0000-01-01", "testing")`);
+        absencedb.run(SQL`INSERT INTO absences(name, start, end, comment) VALUES (${author}, "0000-01-01", "0000-01-01", "testing")`);
     }
 
     show(message) {
