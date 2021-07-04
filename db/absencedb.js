@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3');
 let absencedb = new sqlite3.Database('./db/absence.db', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
     if (err) {
       console.error(err.message);
@@ -12,14 +12,13 @@ class CreateDatabase {
         absencedb.serialize(function () {
             absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `start` TEXT, `end` TEXT, `comment` TEXT)");
 
-//            var stmt = absencedb.prepare("INSERT INTO `absences` (`name`, `start`, `errors`) VALUES (?, 0, 0)");
+            var stmt = absencedb.prepare("INSERT INTO `absences` (`name`, `start`, `end`, `comment`) VALUES (test, 0000-01-01, 0000-01-01, test)");
 //            commandFiles.forEach(name => {
 //                var thisCommand = name.split(".", 1);
 //                stmt.run(thisCommand);
 //            })
-//            stmt.finalize();
-//        });
-        })
+            stmt.finalize();
+        });
     }
 }
 
