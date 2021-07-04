@@ -29,7 +29,13 @@ class DatabaseTools {
     }
 
     show() {
-        absencedb.run('SELECT * FROM absences ORDER BY name')
+        let sql = `SELECT * FROM absences ORDER BY name`;
+
+        absencedb.all(sql, [], (err, rows) => {
+            if (err) {
+                throw err;
+            }
+        });
     }
 }
 
