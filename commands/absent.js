@@ -4,6 +4,6 @@ module.exports = {
 	execute(message, args) {
         const absencedb = require("../db/absencedb.js");
         const absenceDBHelper = new absencedb.DatabaseTools();
-        absenceDBHelper.test(message);
+        absenceDBHelper.test(user, message);
 	},
 };

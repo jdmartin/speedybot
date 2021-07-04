@@ -18,8 +18,7 @@ let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
  }
 
 class DatabaseTools {
-    test(message) {
-        var user = message.author.id;
+    test(user, message) {
         absencedb.run(SQL `INSERT INTO absences(name, start, end, comment) VALUES (${user}, "0000-01-01", "0000-01-01", "testing")`);
     }
 
