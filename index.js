@@ -17,10 +17,14 @@ speedyutils.generateSet();
 
 //Initialize the statistics database and get helper for stats:
 const speedy = new speedydb.CreateDatabase();
-const absence = new absencedb.CreateDatabase();
 const speedyStats = new speedydb.GetStats();
 const speedyDBHelper = new speedydb.DatabaseTools();
 speedy.startup();
+
+//Initialize the absences database:
+const absence = new absencedb.CreateDatabase();
+const absenceDBHelper = new absencedb.DatabaseTools();
+absence.startup();
 
 //Once that's done, let's move on to main.
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
