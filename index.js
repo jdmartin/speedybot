@@ -39,7 +39,7 @@ client.once("ready", () => { // prints "Ready!" to the console once the bot is o
   heartbeat.startBeating();
 });
 
-client.on("message", message => {
+client.on("message", async (message) => {
   //Make sure the message doesn't come from a bot.
   if (message.author.bot) return;
   //Make sure the message starts with the prefix.
