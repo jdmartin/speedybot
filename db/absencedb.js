@@ -11,9 +11,6 @@ class CreateDatabase {
     startup() {
         absencedb.serialize(function () {
             absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `start` TEXT, `end` TEXT, `comment` TEXT)");
-
-            var stmt = absencedb.prepare("INSERT INTO `absences` (`name`, `start`, `end`, `comment`) VALUES ('test', '0000-01-01', '0000-01-01', 'test')");
-            stmt.finalize();
         });
     }
 }
