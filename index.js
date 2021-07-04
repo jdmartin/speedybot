@@ -56,7 +56,7 @@ client.on("message", function (message) {
 
   //Pass author for these commands
   if (command === 'absent') {
-    absenceDBHelper.test(message, message.author);
+    absenceDBHelper.test(message, message.author.id);
   }
 
   //If the command is not in our list of commands...
