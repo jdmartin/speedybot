@@ -20,7 +20,7 @@ class DatabaseTools {
         absencedb.run('INSERT INTO absences(name, start, end, comment) VALUES ("test", "0000-01-01", "0000-01-01", "testing")');
     }
 
-    show() {
+    show(message) {
         let sql = `SELECT * FROM absences ORDER BY name`;
 
         absencedb.all(sql, [], (err, rows) => {
