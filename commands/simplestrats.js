@@ -8,6 +8,9 @@ module.exports = {
         **Eye of the Jailer**: https://discord.com/channels/308622057707536385/308626596623810562/861108185917161473
         **The Nine**: https://discord.com/channels/308622057707536385/308626596623810562/861108293966495747
         **Ner'zhul**: https://discord.com/channels/308622057707536385/308626596623810562/861108398400471060
+        
+        
+        Want Nathria? Try !simplestrats nathria
         🐢
     `)
         const nathria = (`Hello!  Here are links to Evie's raid strats:\n
