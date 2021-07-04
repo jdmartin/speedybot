@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
-const SQL = require('sql-template-strings');
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
     if (err) {
@@ -19,7 +18,7 @@ let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
 
 class DatabaseTools {
     test(message) {
-        absencedb.run(SQL`INSERT INTO absences(name, start, end, comment) VALUES (${message.author}, "0000-01-01", "0000-01-01", "testing")`);
+        absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES (${message.author}, "0000-01-01", "0000-01-01", "testing")`);
     }
 
     show(message) {
