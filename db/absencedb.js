@@ -7,14 +7,14 @@ let absencedb = new sqlite3.Database('./absence.db', sqlite3.OPEN_CREATE, (err) 
     console.log('Connected to the absence database.');
   });
 
-class CreateDatabase {
-    startup() {
-        absencedb.serialize(function () {
-            absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `start` TEXT, `end` TEXT, `comment` TEXT)"),
-            absencedb.run("CREATE TABLE IF NOT EXISTS `foo` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `start` TEXT, `end` TEXT, `comment` TEXT)");
-        });
-    }
-}
+// class CreateDatabase {
+//     startup() {
+//         absencedb.serialize(function () {
+//             absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `start` TEXT, `end` TEXT, `comment` TEXT)"),
+//             absencedb.run("CREATE TABLE IF NOT EXISTS `foo` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `start` TEXT, `end` TEXT, `comment` TEXT)");
+//         });
+//     }
+// }
 
 class DatabaseTools {
     success(command) {
@@ -27,6 +27,6 @@ class DatabaseTools {
 }
 
 module.exports = {
-    CreateDatabase,
+    //CreateDatabase,
     DatabaseTools,
 };
