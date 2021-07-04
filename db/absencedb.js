@@ -10,7 +10,7 @@ let absencedb = new sqlite3.Database('./absence.db', sqlite3.OPEN_CREATE, (err) 
 class CreateDatabase {
     startup() {
         absencedb.serialize(function () {
-            absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `start` TEXT, `end` TEXT, `comment` TEXT)");
+            absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `start` TEXT, `end` TEXT, `comment` TEXT)"),
             absencedb.run("CREATE TABLE IF NOT EXISTS `foo` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `start` TEXT, `end` TEXT, `comment` TEXT)");
         });
     }
