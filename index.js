@@ -23,7 +23,7 @@ speedy.startup();
 
 //Initialize the absences database:
 const absence = new absencedb.CreateDatabase();
-const absenceDBHelper = new absencedb.DatabaseTools();
+//const absenceDBHelper = new absencedb.DatabaseTools();
 absence.startup();
 
 //Once that's done, let's move on to main.
