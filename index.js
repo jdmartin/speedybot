@@ -23,6 +23,7 @@ speedy.startup();
 
 //Initialize the absences database:
 const absence = new absencedb.CreateDatabase();
+const absenceDBHelper = new absencedb.DatabaseTools();
 absence.startup();
 
 //Once that's done, let's move on to main.
@@ -52,6 +53,11 @@ client.on("message", function (message) {
   if (command === 'xyzzy') {
     speedyStats.retrieve(message);
   };
+
+  //Pass author for these commands
+  if (command === 'absent') {
+    absenceDBHelper.test(message, message.author);
+  }
 
   //If the command is not in our list of commands...
   if (!client.commands.has(command)) return;
