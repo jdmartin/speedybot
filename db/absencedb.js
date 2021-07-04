@@ -34,8 +34,8 @@ class DatabaseTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tName: " + row.name + "\t\tStart Date " + row.start + "\t\tEnd Date " + row.end + "\t\tComment " + row.comment,
-                    inline: true
+                    value: "\t\tStart Date " + row.start + "\t\tEnd Date " + row.end + "\t\tComment " + row.comment,
+                    inline: false
                 })
             });
             if (message.channel.type === 'dm') {
