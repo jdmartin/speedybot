@@ -20,12 +20,13 @@ A tiny, eclectic bot for my guild's Discord channel.
 - !xkcd: Read a random selection.<sup>4</sip>
 
 ## attendance-related commands:
-The basic format for both !absent and !present is this: !command start_date end_date (optional, same as start is assumed)
-The format for the dates is YYYY-MM-DD
-
-- !absences - See known absences.
-- !absent - Let us know you won't be raiding. (Example: !absent 2021-07-04)
-- !present - Cancel an absence. (Example: !present 2021-07-04)
+- The basic format for both !absent and !present is this: `!command start_date end_date`
+- The format for the dates is YYYY-MM-DD
+- The end_date is optional, and is set to the same as the start_date by default.
+- Commands:
+  - !absences - See known absences.
+  - !absent - Let us know you won't be raiding. (Example: !absent 2021-07-04)
+  - !present - Cancel an absence. (Example: !present 2021-07-04)
 
 <small>1: Cats from [Random Cat](https://aws.random.cat/)</small>
 
