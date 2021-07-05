@@ -41,7 +41,7 @@ class DatabaseTools {
 
         today = yyyy + '-' + mm + '-' + dd;
         console.log(today);
-        let sql = `SELECT * FROM absences ORDER BY name WHERE start >= date('now')`;
+        let sql = `SELECT * FROM absences WHERE start >= date('now') ORDER BY name`;
 
         absencedb.all(sql, [], (err, rows) => {
             if (err) {
