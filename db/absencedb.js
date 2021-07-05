@@ -100,6 +100,7 @@ class DatabaseTools {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
         let tardy_message = "Ok, I've got the date. If you'd like to add a comment, reply to me in the next five minutes."
+        const filter = m => m.content.startsWith('!vote');
         message.channel.send(tardy_message).then(() => {
             message.channel.awaitMessages(filter, { max: 1, time: 300, errors: ['time'] })
                 .then(collected => {
