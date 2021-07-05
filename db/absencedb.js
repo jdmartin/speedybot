@@ -2,7 +2,6 @@ const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
 var parseISO = require('date-fns/parseISO');
 var isValid = require('date-fns/isValid');
-var SqlString = require('sqlstring');
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
     if (err) {
@@ -14,7 +13,7 @@ let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
  class CreateDatabase {
      startup() {
          absencedb.serialize(function () {
-             absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start` TEXT, `end` TEXT, `comment` TEXT)");
+             absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start` TEXT, `end` TEXT)");
          });
      }
  }
@@ -28,11 +27,9 @@ class DatabaseTools {
         if (!isValid(parseISO(args[1]))) {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD.");
         }
-        //Sanitize comment
-        var safeComment = SqlString.escape(args[2]);
 
         if(isValid(parseISO(args[0])) && isValid(parseISO(args[1]))) {
-            absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${args[0]}", "${args[1]}", "${safeComment}")`);
+            absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${args[0]}", "${args[1]}")`);
         }
     }
 
@@ -44,8 +41,6 @@ class DatabaseTools {
         if (!isValid(parseISO(args[1]))) {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD.");
         }
-        //Sanitize comment
-        var safeComment = SqlString.escape(args[2]);
 
         if(isValid(parseISO(args[0])) && isValid(parseISO(args[1]))) {
             absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${args[0]}" AND end = "${args[1]}")`);
@@ -66,7 +61,7 @@ class DatabaseTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date " + row.start + "\nEnd Date " + row.end + "\nComment " + row.comment,
+                    value: "\t\tStart Date " + row.start + "\nEnd Date " + row.end,
                     inline: false
                 })
             });
