@@ -33,6 +33,14 @@ class DatabaseTools {
     }
 
     show(message) {
+        //Get today's date
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+        console.log(today);
         let sql = `SELECT * FROM absences ORDER BY name`;
 
         absencedb.all(sql, [], (err, rows) => {
@@ -41,7 +49,7 @@ class DatabaseTools {
             }
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
-                .setTitle(`Upcoming absences for ${Date.now()}`)
+                .setTitle("Upcoming absences")
                 .setFooter("These absences are a product of the Inifite Speedyflight. Use Wisely.")
             rows.forEach((row) => {
                 embed.addFields({
