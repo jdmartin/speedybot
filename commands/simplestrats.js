@@ -8,6 +8,7 @@ module.exports = {
         **Eye of the Jailer**: https://discord.com/channels/308622057707536385/308626596623810562/861108185917161473
         **The Nine**: https://discord.com/channels/308622057707536385/308626596623810562/861108293966495747
         **Ner'zhul**: https://discord.com/channels/308622057707536385/308626596623810562/861108398400471060
+        **Soulrender Dormazain**: https://discord.com/channels/308622057707536385/308626596623810562/861748064217858109
         
         
         Want Nathria? Try !simplestrats nathria

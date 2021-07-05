@@ -11,7 +11,7 @@ module.exports = {
             .setFooter("SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...")
             .addFields({
                 name: "Bosses",
-                value: "[The Tarragrue](https://discord.com/channels/308622057707536385/308626596623810562/861108078976172072)\n[Eye of the Jailer](https://discord.com/channels/308622057707536385/308626596623810562/861108185917161473)\n[The Nine](https://discord.com/channels/308622057707536385/308626596623810562/861108293966495747)\n[Ner'zhul](https://discord.com/channels/308622057707536385/308626596623810562/861108398400471060)\n\nWant Nathria? Use `!strats nathria`",
+                value: "[The Tarragrue](https://discord.com/channels/308622057707536385/308626596623810562/861108078976172072)\n[Eye of the Jailer](https://discord.com/channels/308622057707536385/308626596623810562/861108185917161473)\n[The Nine](https://discord.com/channels/308622057707536385/308626596623810562/861108293966495747)\n[Ner'zhul](https://discord.com/channels/308622057707536385/308626596623810562/861108398400471060)\n[Soulrender Dormazain](https://discord.com/channels/308622057707536385/308626596623810562/861748064217858109)\n\nWant Nathria? Use `!strats nathria`",
                 inline: true
             })
         const nathria = new Discord.MessageEmbed()
