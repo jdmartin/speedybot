@@ -159,7 +159,7 @@ class DatabaseTools {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
         if (isValid(parseISO(startDate))) {
-            message.reply("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next five minutes.");
+            message.author.send("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next five minutes.");
             message.author.createDM().then(dmchannel => {
                 const collector = new Discord.MessageCollector(dmchannel, m => m.author.id === message.author.id, {
                     max: 1,
