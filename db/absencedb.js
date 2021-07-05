@@ -45,7 +45,7 @@ class DatabaseTools {
         }
     }
 
-    generateResponse(message, this_command, undo_command, start, end) {
+    generateResponse(message, this_command, undo_command, start, end, reason) {
         if (!end) {
             end = start;
         }
@@ -97,7 +97,7 @@ class DatabaseTools {
         //Make sure dates are good.
         if (this.validateDates(message, startDate, endDate)) {
             absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
-            this.generateResponse(message, "absent", "present", startDate, endDate);
+            this.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
         }                
     }
 
@@ -190,7 +190,7 @@ class DatabaseTools {
         }
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            this.generateResponse(message, "late", "ontime", startDate);
+            this.generateResponse(message, "late", "ontime", startDate," ", safe_reason);
             //message.author.send(`Ok, I've got you down as coming late on ${this.makeFriendlyDates(startDate)}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
         }
     }
