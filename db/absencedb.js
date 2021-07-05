@@ -167,7 +167,7 @@ class DatabaseTools {
         }
 
         //Process a comment, if supplied.
-        let comment = args.slice(0).join(' ');
+        let comment = args.slice(1).join(' ');
 
         if (comment) {
             var safe_reason = SqlString.escape(comment);
