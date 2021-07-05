@@ -91,25 +91,18 @@ class DatabaseTools {
         }
     }
 
-    tardy(message, args) {
-        //Make sure we have a date.
+    ontime(message, args) {
+        //Make sure we have start and end dates.
         let startDate = args[0];
-
         //Make sure given dates are dates.
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
+        //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate))) {
-            message.author.send("Ok, I've got the date. If you'd like to add a comment, reply to me in the next five minutes.");
-            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 300000 });
-            collector.on('collect', m => {
-                if (m.content) {
-                    var safe_reason = SqlString.escape(m.content);
-                    absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            }
-        })
+            absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate})"`);
+        }
     }
-}
 
     show(message) {
         let sql = `SELECT * FROM absences WHERE end >= date('now','-1 day') ORDER BY name`;
@@ -135,6 +128,26 @@ class DatabaseTools {
                 message.member.send(embed);
             }
         });
+    }
+
+    tardy(message, args) {
+        //Make sure we have a date.
+        let startDate = args[0];
+
+        //Make sure given dates are dates.
+        if (!isValid(parseISO(startDate))) {
+            message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
+        }
+        if (isValid(parseISO(startDate))) {
+            message.author.send("Ok, I've got the date. If you'd like to add a comment, reply to me in the next five minutes.");
+            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 300000 });
+            collector.on('collect', m => {
+                if (m.content) {
+                    var safe_reason = SqlString.escape(m.content);
+                    absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
+                }
+            })
+        }
     }
 }
 
