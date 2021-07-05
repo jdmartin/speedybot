@@ -34,7 +34,7 @@ class DatabaseTools {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD.");
         }
 
-        if(isValid(parseISO(args[0])) && isValid(parseISO(args[1]))) {
+        if(isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
             absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${startDate}", "${endDate}")`);
         }
     }
