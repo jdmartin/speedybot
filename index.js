@@ -63,6 +63,10 @@ client.on("message", message => {
     absenceDBHelper.addPresent(message, args);
   }
 
+  if (command === 'late') {
+    absenceDBHelper.tardy(message, args);
+  }
+
   //If the command is not in our list of commands...
   if (!client.commands.has(command)) return;
 

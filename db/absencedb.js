@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
 var parseISO = require('date-fns/parseISO');
 var isValid = require('date-fns/isValid');
+var SqlString = require('sqlstring');
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
     if (err) {
@@ -14,6 +15,7 @@ class CreateDatabase {
     startup() {
         absencedb.serialize(function () {
             absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start` TEXT, `end` TEXT)");
+            absencedb.run("CREATE TABLE IF NOT EXISTS `latecomers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start` TEXT, `comment` TEXT)");
         });
     }
 }
@@ -88,6 +90,32 @@ class DatabaseTools {
             }
         }
     }
+
+    tardy(message, args) {
+        //Make sure we have a date.
+        let startDate = args[0];
+
+        //Make sure given dates are dates.
+        if (!isValid(parseISO(startDate))) {
+            message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
+        }
+        let tardy_message = "Ok, I've got the date. If you'd like to add a comment, reply to me in the next five minutes."
+        message.channel.send(tardy_message).then(() => {
+            message.channel.awaitMessages(filter, { max: 1, time: 300, errors: ['time'] })
+                .then(collected => {
+                    let tardy_reason = collected.first();
+                })
+                .catch(collected => {
+                    //
+                });
+        let safe_reason = SqlString.escape(tardy_reason);
+
+        //Only update db if we have valid start and end dates.
+        if (isValid(parseISO(startDate))) {
+            absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
+        }
+    })
+}
 
     show(message) {
         let sql = `SELECT * FROM absences WHERE end >= date('now','-1 day') ORDER BY name`;
