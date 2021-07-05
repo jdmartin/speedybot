@@ -72,25 +72,6 @@ class DatabaseTools {
                     collector.stop();
                 }
             })
-
-
-            // //If dates are good, do the update.
-            // absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${startDate}", "${endDate}")`);
-            // //Send message to confirm.
-            // if (message.channel.type === 'dm') {
-            //     if (startDate != endDate) {
-            //         message.reply(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
-            //     } else {
-            //         message.reply(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
-            //     }
-            // } else {
-            //     if (!startDate != endDate) {
-            //         message.member.send(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
-            //     } else {
-            //         message.member.send(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
-            //     }
-            // }
-            // client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${startDate} to ${endDate}. They commented: ${safe_reason}`)
         } 
     }
 
@@ -150,7 +131,7 @@ class DatabaseTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date " + row.start + "\nEnd Date " + row.end,
+                    value: "\t\tStart Date " + row.start + "\nEnd Date " + row.end + "\nComments " + row.comment,
                     inline: false
                 })
             });
