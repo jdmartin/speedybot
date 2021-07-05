@@ -45,6 +45,10 @@ class DatabaseTools {
                 .setFooter("These absences are a product of the Inifite Speedyflight. Use Wisely.")
             rows.forEach((row) => {
                 embed.addFields({
+                    name: "Today is " + Date.now(),
+                    inline: false
+                }),
+                embed.addFields({
                     name: row.name,
                     value: "\t\tStart Date " + row.start + "\nEnd Date " + row.end + "\nComment " + row.comment,
                     inline: false
