@@ -99,24 +99,16 @@ class DatabaseTools {
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
-        let tardy_message = "Ok, I've got the date. If you'd like to add a comment, reply to me in the next five minutes."
-        const filter = m => m.content.startsWith('!vote');
-        message.channel.send(tardy_message).then(() => {
-            message.channel.awaitMessages(filter, { max: 1, time: 300, errors: ['time'] })
-                .then(collected => {
+        if (isValid(parseISO(startDate))) {
+            message.author.send("Ok, I've got the date. If you'd like to add a comment, reply to me in the next five minutes.");
+            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 300 });
+            collector.on('collect', message => {
+                if (message.content) {
                     var safe_reason = SqlString.escape(collected.first());
-                    //Only update db if we have valid start and end dates.
-                    if (isValid(parseISO(startDate))) {
-                        absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-                    }
-                })
-                .catch(collected => {
-                    //
-                });
-        let safe_reason = SqlString.escape(tardy_reason);
-
-        
-    })
+                    absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
+            }
+        })
+    }
 }
 
     show(message) {
