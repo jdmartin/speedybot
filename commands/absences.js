@@ -3,7 +3,7 @@ module.exports = {
 	description: 'Show absences',
 	execute(message, args) {
         const absencedb = require("../db/absencedb.js");
-        const absenceDBHelper = new absencedb.DatabaseTools();
-        const absences = absenceDBHelper.show(message);
+        const absenceDBHelper = new absencedb.DataDisplayTools();
+        absenceDBHelper.show(message);
 	},
 };

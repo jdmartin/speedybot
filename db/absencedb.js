@@ -81,7 +81,7 @@ class DataFormattingTools {
 
 const tools = new DataFormattingTools();
 
-class DatabaseTools {
+class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
         let startDate = args[0];
@@ -91,7 +91,7 @@ class DatabaseTools {
         }
 
         //Process a comment, if supplied.
-        //Absences with and end date:
+        //Absences with an end date:
         if (isValid(parseISO(args[1]))) {
             var comment = args.slice(2).join(' ');
         //Absences without an end date:
@@ -143,6 +143,30 @@ class DatabaseTools {
         }
     }
 
+    tardy(message, args) {
+        //Make sure we have a date.
+        let startDate = args[0];
+
+        //Make sure given dates are dates.
+        if (!isValid(parseISO(startDate))) {
+            message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
+        }
+        //Process a comment, if supplied.
+        let comment = args.slice(1).join(' ');
+
+        if (comment) {
+            var safe_reason = SqlString.escape(comment);
+        } else {
+            var safe_reason = ' ';
+        }
+        if (isValid(parseISO(startDate))) {
+            absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
+            tools.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
+        }
+    }
+}
+
+class DataDisplayTools {
     show(message) {
         //Get all absences for today and later.
         let sql = `SELECT * FROM absences WHERE end >= date('now','-1 day') ORDER BY name`;
@@ -185,31 +209,10 @@ class DatabaseTools {
             message.reply(embed);
         });
     }
-
-    tardy(message, args) {
-        //Make sure we have a date.
-        let startDate = args[0];
-
-        //Make sure given dates are dates.
-        if (!isValid(parseISO(startDate))) {
-            message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
-        }
-        //Process a comment, if supplied.
-        let comment = args.slice(1).join(' ');
-
-        if (comment) {
-            var safe_reason = SqlString.escape(comment);
-        } else {
-            var safe_reason = ' ';
-        }
-        if (isValid(parseISO(startDate))) {
-            absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            tools.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
-        }
-    }
 }
 
 module.exports = {
     CreateDatabase,
-    DatabaseTools,
+    DataDisplayTools,
+    DataEntryTools,
 };
