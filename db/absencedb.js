@@ -72,8 +72,8 @@ class DatabaseTools {
                     if (reason === 'time') {
                         msg.reply('Sorry, I ran out of time...please try again.');
                     }
-                    if (collected.content) {
-                        var safe_reason = SqlString.escape(collected.content);
+                    if (collected.first().content) {
+                        var safe_reason = SqlString.escape(collected.first().content);
                         absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
                         this.generateResponse(message, "absent", "present", startDate, endDate);
                         client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${startDate} until ${endDate}. They commented: ${safe_reason}`)
