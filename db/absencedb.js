@@ -159,7 +159,7 @@ class DatabaseTools {
 
     tardy(message, args) {
         //Make sure we have a date.
-        let startDate = args[0];
+        let startDate = args[0] + 'T20:52:29.478Z';
 
         //Make sure given dates are dates.
         if (!isValid(parseISO(startDate))) {
