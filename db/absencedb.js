@@ -75,9 +75,17 @@ class DatabaseTools {
         }
         //Send message to confirm.
         if (message.channel.type === 'dm') {
-            message.reply(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
+            if (startDate != endDate) {
+                message.reply(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
+            } else {
+                message.reply(`Ok, I've marked you present on ${startDate}.  \n\nTo undo this, type: !absent ${startDate}`);
+            }
         } else {
-            message.member.send(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
+            if (!startDate != endDate) {
+                message.member.send(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
+            } else {
+                message.member.send(`Ok, I've marked you present on ${startDate}.  \n\nTo undo this, type: !absent ${startDate}`);
+            }
         }
     }
 
