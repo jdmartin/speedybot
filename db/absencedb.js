@@ -39,7 +39,7 @@ class DataFormattingTools {
                 message.reply(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
         } else {
-            if (start == end) {
+            if (start != end) {
                 message.member.send(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
                 message.member.send(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
