@@ -55,9 +55,6 @@ client.on("message", message => {
   }
 
   //Pass author for these commands
-  if (command === 'absent') {
-    absenceDBHelper.addAbsence(message, args);
-  }
 
   if (command === 'present') {
     absenceDBHelper.addPresent(message, args);
