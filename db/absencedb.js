@@ -37,6 +37,22 @@ class DatabaseTools {
         }
     }
 
+    generateResponse(message, undo_command, start, end) {
+        if (message.channel.type === 'dm') {
+            if (start != end) {
+                message.reply(`Ok, I've marked you absent from ${start} until ${end}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
+            } else {
+                message.reply(`Ok, I've marked you absent on ${start}.  \n\nTo undo this, type: !${undo_command} ${start}`);
+            }
+        } else {
+            if (!start != end) {
+            message.member.send(`Ok, I've marked you absent from ${start} until ${end}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
+            } else {
+                message.member.send(`Ok, I've marked you absent on ${start}.  \n\nTo undo this, type: !${undo_command} ${start}`);
+            }
+        }
+    }
+
     addAbsence(message, args) {
         //Make sure we have start and end dates.
         let startDate = args[0];
@@ -55,19 +71,7 @@ class DatabaseTools {
                 if (m.content) {
                     var safe_reason = SqlString.escape(m.content);
                     absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
-                    if (message.channel.type === 'dm') {
-                        if (startDate != endDate) {
-                            message.reply(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
-                        } else {
-                            message.reply(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
-                        }
-                    } else {
-                        if (!startDate != endDate) {
-                        message.member.send(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
-                        } else {
-                            message.member.send(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
-                        }
-                    }
+                    this.generateResponse(message, present, startDate, endDate);
                     client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${startDate} until ${endDate}. They commented: ${safe_reason}`)
                     collector.stop();
                 }
