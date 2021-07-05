@@ -55,6 +55,8 @@ class DatabaseTools {
 
     show(message) {
         let sql = `SELECT * FROM absences WHERE start >= date('now','-1 day') ORDER BY name`;
+        let presences = `SELECT name,start FROM absences LEFT JOIN present ON present.name = absences.name WHERE present.start IS NOT EQUAL TO absences.start`;
+        console.log(presences);
 
         absencedb.all(sql, [], (err, rows) => {
             if (err) {
