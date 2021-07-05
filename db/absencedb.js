@@ -64,7 +64,11 @@ class DatabaseTools {
             }
         }
         if (this_command === 'absent') {
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${this.makeFriendlyDates(start)} until ${this.makeFriendlyDates(end)}. They commented: ${reason}`)
+            if (start != end) {
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${this.makeFriendlyDates(start)} until ${this.makeFriendlyDates(end)}. They commented: ${reason}`)
+            } else {
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent on ${this.makeFriendlyDates(start)}. They commented: ${reason}`)
+            }
         }
         if (this_command === 'late') {
             client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${this.makeFriendlyDates(start)}. They commented: ${reason}`)
