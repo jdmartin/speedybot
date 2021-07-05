@@ -48,7 +48,6 @@ class DatabaseTools {
     generateResponse(message, this_command, undo_command, start, end, reason) {
         if (!end) {
             end = start;
-            console.log(start,end);
         }
         if (message.channel.type === 'dm') {
             if (start != end) {
