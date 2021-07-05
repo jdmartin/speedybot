@@ -20,11 +20,12 @@ module.exports = {
         **xkcd**: Read a random comic and feel better...\n
         __Attendance-related Commands__:
         **absences**: See known absences.
-        **absent**: Let us know you won't be raiding. (Example: !absent 2021-07-04)
-        **late**: Let us know you're running late. Speedy will ask you for a reason. (Example: !late 2021-07-04)
+        **absent**: Let us know you won't be raiding. (Example: !absent 2021-07-04 Comment)
+        **late**: Let us know you're running late. (Example: !late 2021-07-04 Comment)
         **ontime**: Cancels late. (Example: !ontime 2021-07-04)
         **present**: Cancel an absence. (Example: !present 2021-07-04)\n
         Some examples which work with either **absent**, **late**, **ontime**, or **present**:
+        (N.B. Comments in !absent and !late can have spaces.)
         !absent 2021-07-04 (Absent on July 4, 2021)
         !absent 2021-07-06 2021-07-13 (Absent from July 6 until July 13, 2021)
         !late 2021-07-04 (Late on July 4, 2021)
