@@ -26,30 +26,6 @@ class CreateDatabase {
 }
 
 class DataFormattingTools {
-    makeFriendlyDates(date) {
-        //Ensures that dates are in the appropriate time zone (locally) by adding an ugly ISO timestamp.
-        let friendlyDateTemp = date + 'T20:52:29.478Z';
-        let friendlyDate = format(new Date(friendlyDateTemp), 'iii, MMM dd yyyy');
-        return (friendlyDate)
-    }
-}
-
-const tools = new DataFormattingTools();
-
-class DatabaseTools {
-    validateDates(message, start, end) {
-        //Make sure given dates are dates.
-        if (!isValid(parseISO(start))) {
-            message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
-        }
-        if (!isValid(parseISO(end))) {
-            message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
-        }
-        if ((isValid(parseISO(start))) && (isValid(parseISO(end)))) {
-            return (true);
-        }
-    }
-
     generateResponse(message, this_command, undo_command, start, end, reason) {
         //Make certain there's an end value.
         if (!end) {
@@ -82,6 +58,30 @@ class DatabaseTools {
         }
     }
 
+    makeFriendlyDates(date) {
+        //Ensures that dates are in the appropriate time zone (locally) by adding an ugly ISO timestamp.
+        let friendlyDateTemp = date + 'T20:52:29.478Z';
+        let friendlyDate = format(new Date(friendlyDateTemp), 'iii, MMM dd yyyy');
+        return (friendlyDate)
+    }
+
+    validateDates(message, start, end) {
+        //Make sure given dates are dates.
+        if (!isValid(parseISO(start))) {
+            message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
+        }
+        if (!isValid(parseISO(end))) {
+            message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
+        }
+        if ((isValid(parseISO(start))) && (isValid(parseISO(end)))) {
+            return (true);
+        }
+    }
+}
+
+const tools = new DataFormattingTools();
+
+class DatabaseTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
         let startDate = args[0];
@@ -107,9 +107,9 @@ class DatabaseTools {
         }
 
         //Make sure dates are good.
-        if (this.validateDates(message, startDate, endDate)) {
+        if (tools.validateDates(message, startDate, endDate)) {
             absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
-            this.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
+            tools.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
         }                
     }
 
@@ -121,11 +121,11 @@ class DatabaseTools {
             endDate = startDate;
         }
         //Make sure given dates are dates.
-        if (this.validateDates(message, startDate, endDate)) {
+        if (tools.validateDates(message, startDate, endDate)) {
             //If dates are good, do the update.
             absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
             //Send message to confirm.
-            this.generateResponse(message, "present", "absent", startDate, endDate);
+            tools.generateResponse(message, "present", "absent", startDate, endDate);
         }
     }
 
@@ -139,7 +139,7 @@ class DatabaseTools {
         //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate))) {
             absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
-            message.author.send(`Ok, I've got you down as on-time on ${this.makeFriendlyDates(startDate)}. See you then!`)
+            message.author.send(`Ok, I've got you down as on-time on ${tools.makeFriendlyDates(startDate)}. See you then!`)
         }
     }
 
@@ -158,7 +158,7 @@ class DatabaseTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date " + this.makeFriendlyDates(row.start) + "\nEnd Date " + this.makeFriendlyDates(row.end) + "\nComments " + row.comment,
+                    value: "\t\tStart Date " + tools.makeFriendlyDates(row.start) + "\nEnd Date " + tools.makeFriendlyDates(row.end) + "\nComments " + row.comment,
                     inline: false
                 })
             });
@@ -178,7 +178,7 @@ class DatabaseTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date " + this.makeFriendlyDates(row.start) + "\nComments " + row.comment,
+                    value: "\t\tStart Date " + tools.makeFriendlyDates(row.start) + "\nComments " + row.comment,
                     inline: false
                 })
             });
@@ -204,7 +204,7 @@ class DatabaseTools {
         }
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            this.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
+            tools.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
         }
     }
 }
