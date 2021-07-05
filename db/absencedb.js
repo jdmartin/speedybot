@@ -64,7 +64,7 @@ class DatabaseTools {
         if (this.processDates(message, startDate, endDate)) {
             message.author.send("Ok, I've got the date(s). If you'd like to add a comment, reply to me in the next five minutes.");
             message.author.createDM().then(dmchannel => {
-                const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+                const collector = new Discord.MessageCollector(dmchannel, m => m.author.id === message.author.id, {
                     max: 1,
                     time: 300000
                 });
