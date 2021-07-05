@@ -104,17 +104,18 @@ class DatabaseTools {
         message.channel.send(tardy_message).then(() => {
             message.channel.awaitMessages(filter, { max: 1, time: 300, errors: ['time'] })
                 .then(collected => {
-                    let tardy_reason = collected.first();
+                    var safe_reason = SqlString.escape(collected.first());
+                    //Only update db if we have valid start and end dates.
+                    if (isValid(parseISO(startDate))) {
+                        absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
+                    }
                 })
                 .catch(collected => {
                     //
                 });
         let safe_reason = SqlString.escape(tardy_reason);
 
-        //Only update db if we have valid start and end dates.
-        if (isValid(parseISO(startDate))) {
-            absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-        }
+        
     })
 }
 
