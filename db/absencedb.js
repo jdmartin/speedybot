@@ -25,7 +25,13 @@ class CreateDatabase {
 }
 
 class DatabaseTools {
-    processDates(message, start, end) {
+    makeFriendlyDates(date) {
+        let friendlyDateTemp = date + 'T20:52:29.478Z';
+        let friendlyDate = format(new Date(friendlyDateTemp), 'MMM dd yyyy');
+        return (friendlyDate)
+    }
+
+    validateDates(message, start, end) {
         //Make sure given dates are dates.
         if (!isValid(parseISO(start))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
@@ -79,7 +85,7 @@ class DatabaseTools {
         }
 
         //Make sure dates are good.
-        if (this.processDates(message, startDate, endDate)) {
+        if (this.validateDates(message, startDate, endDate)) {
             absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
             this.generateResponse(message, "absent", "present", startDate, endDate);
             client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${startDate} until ${endDate}. They commented: ${safe_reason}`)
@@ -94,7 +100,7 @@ class DatabaseTools {
             endDate = startDate;
         }
         //Make sure given dates are dates.
-        if (this.processDates(message, startDate, endDate)) {
+        if (this.validateDates(message, startDate, endDate)) {
             //If dates are good, do the update.
             absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
             //Send message to confirm.
@@ -160,8 +166,6 @@ class DatabaseTools {
     tardy(message, args) {
         //Make sure we have a date.
         let startDate = args[0];
-        let friendlyDateTemp = args[0] + 'T20:52:29.478Z';
-        let friendlyStartDate = format(new Date(friendlyDateTemp), 'MMM dd yyyy');
 
         //Make sure given dates are dates.
         if (!isValid(parseISO(startDate))) {
@@ -177,8 +181,8 @@ class DatabaseTools {
         }
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            message.author.send(`Ok, I've got you down as coming late on ${friendlyStartDate}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${friendlyStartDate}. They commented: ${safe_reason}`)
+            message.author.send(`Ok, I've got you down as coming late on ${this.makeFriendlyDates(startDate)}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${this.makeFriendlyDates(startDate)}. They commented: ${safe_reason}`)
             
         }
     }
