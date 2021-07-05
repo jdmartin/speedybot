@@ -31,6 +31,7 @@ A tiny, eclectic bot for my guild's Discord channel.
   - !ontime - Cancels !late.
   - !present - Cancel an absence. (Example: !present 2021-07-04)
 
+## credits:
 <small>1: Cats from [Random Cat](https://aws.random.cat/)</small>
 
 <small>2: Dogs from [Dog CEO](https://dog.ceo/dog-api/)</small>
