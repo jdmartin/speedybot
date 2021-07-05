@@ -18,6 +18,13 @@ module.exports = {
         **speedysource**: View my source code.
         **strats**: Did you read the strat?
         **xkcd**: Read a random comic and feel better...\n
+        __Attendance-related Commands__:
+        The basic format for both !absent and !present is this: !command start end(optional, same as start is assumed)
+        The format for the dates is YYYY-MM-DD
+
+        **absences**: See known absences.
+        **absent**: Let us know you won't be raiding. (Example: !absent 2021-07-04)
+        **present**: Cancel an absence. (Example: !present 2021-07-04)\n
         Want something else? Ask Doolan. ~~ 🐢
     `)
 
