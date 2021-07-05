@@ -128,9 +128,9 @@ class DatabaseTools {
                 message.member.send(embed);
             }
         });
-        let sql = `SELECT * FROM latecomers WHERE start >= date('now','-1 day') ORDER BY name`;
+        let late_sql = `SELECT * FROM latecomers WHERE start >= date('now','-1 day') ORDER BY name`;
 
-        absencedb.all(sql, [], (err, rows) => {
+        absencedb.all(late_sql, [], (err, rows) => {
             if (err) {
                 throw err;
             }
