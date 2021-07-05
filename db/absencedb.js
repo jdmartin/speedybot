@@ -105,7 +105,7 @@ class DatabaseTools {
     }
 
     show(message) {
-        let sql = `SELECT * FROM absences WHERE end >= date('now','-1 day') ORDER BY name; SELECT * FROM latecomers WHERE start >= date('now','-1 day) ORDER BY name`;
+        let sql = `SELECT * FROM absences WHERE end >= date('now','-1 day') ORDER BY name`;
 
         absencedb.all(sql, [], (err, rows) => {
             if (err) {
@@ -119,6 +119,29 @@ class DatabaseTools {
                 embed.addFields({
                     name: row.name,
                     value: "\t\tStart Date " + row.start + "\nEnd Date " + row.end,
+                    inline: false
+                })
+            });
+            if (message.channel.type === 'dm') {
+                message.channel.send(embed);
+            } else {
+                message.member.send(embed);
+            }
+        });
+        let sql = `SELECT * FROM latecomers WHERE start >= date('now','-1 day') ORDER BY name`;
+
+        absencedb.all(sql, [], (err, rows) => {
+            if (err) {
+                throw err;
+            }
+            const embed = new Discord.MessageEmbed()
+                .setColor(0xFFFFFF)
+                .setTitle("Upcoming tardiness")
+                .setFooter("This tardiness is known to the Inifite Speedyflight. Use this information wisely.")
+            rows.forEach((row) => {
+                embed.addFields({
+                    name: row.name,
+                    value: "\t\tStart Date " + row.start + "\nComments " + row.comment,
                     inline: false
                 })
             });
