@@ -68,7 +68,7 @@ class DatabaseTools {
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
                 .setTitle("Upcoming absences")
-                .setFooter("These absences are a product of the Inifite Speedyflight. Use Wisely.")
+                .setFooter("These absences are known to the Inifite Speedyflight. Use this information wisely.")
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
