@@ -62,9 +62,8 @@ class DatabaseTools {
                     message.member.send(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
                 }
             }
-        } else {
-            console.log("OH Noes!");
-        }
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${startDate} to ${endDate}.`)
+        } 
     }
 
     addPresent(message, args) {
