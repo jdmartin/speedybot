@@ -38,23 +38,23 @@ class DatabaseTools {
     }
 
     generateResponse(message, this_command, undo_command, start, end) {
+        if (this_command === 'late') {
+            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+                max: 1,
+                time: 300000
+            });
+            collector.on('collect', m => {
+                if (m.content) {
+                    var safe_reason = SqlString.escape(m.content);
+                    absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
+                    message.author.send(`Ok, I've got you down as coming late on ${startDate}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
+                    client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${startDate}. They commented: ${safe_reason}`)
+                    collector.stop();
+                }
+            })
+        }
+        
         if (message.channel.type === 'dm') {
-            if (this_command == 'late') {
-                const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
-                    max: 1,
-                    time: 300000
-                });
-                collector.on('collect', m => {
-                    if (m.content) {
-                        var safe_reason = SqlString.escape(m.content);
-                        absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-                        message.author.send(`Ok, I've got you down as coming late on ${startDate}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
-                        client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${startDate}. They commented: ${safe_reason}`)
-                        collector.stop();
-                    }
-                })
-            }
-
             if (start != end) {
                 message.reply(`Ok, I've marked you ${this_command} from ${start} until ${end}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
