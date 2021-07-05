@@ -26,6 +26,8 @@ A tiny, eclectic bot for my guild's Discord channel.
 - Commands:
   - !absences - See known absences.
   - !absent - Let us know you won't be raiding. (Example: !absent 2021-07-04)
+  - !late - Let us know you'll be coming late. Speedy will follow-up. (Example: !late 2021-07-04)
+  - !ontime - Cancels !late.
   - !present - Cancel an absence. (Example: !present 2021-07-04)
 
 <small>1: Cats from [Random Cat](https://aws.random.cat/)</small>
