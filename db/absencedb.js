@@ -23,7 +23,7 @@ class DatabaseTools {
         //Make sure we have start and end dates.
         let startDate = args[0];
         let endDate = args[1];
-        if (!args[1].length) {
+        if (!args[1]) {
             endDate = startDate;                           
         }
         if (!isValid(parseISO(startDate))) {
