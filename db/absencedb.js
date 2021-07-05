@@ -34,27 +34,27 @@ class DataFormattingTools {
         //Select the appropriate type of response, and shorten if it's a single day.
         if (message.channel.type === 'dm') {
             if (start != end) {
-                message.reply(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
+                message.reply(`Ok, I've marked you ${this_command} from ${DataFormattingTools.makeFriendlyDates(start)} until ${DataFormattingTools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
-                message.reply(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
+                message.reply(`Ok, I've marked you ${this_command} on ${DataFormattingTools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
         } else {
             if (start != end) {
-                message.member.send(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
+                message.member.send(`Ok, I've marked you ${this_command} from ${DataFormattingTools.makeFriendlyDates(start)} until ${DataFormattingTools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
-                message.member.send(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
+                message.member.send(`Ok, I've marked you ${this_command} on ${DataFormattingTools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
         }
         //Handle channel posts for absences and lates. Shorten if only a single day.
         if (this_command === 'absent') {
             if (start != end) {
-                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}. They commented: ${reason}`)
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${DataFormattingTools.makeFriendlyDates(start)} until ${DataFormattingTools.makeFriendlyDates(end)}. They commented: ${reason}`)
             } else {
-                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent on ${tools.makeFriendlyDates(start)}. They commented: ${reason}`)
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent on ${DataFormattingTools.makeFriendlyDates(start)}. They commented: ${reason}`)
             }
         }
         if (this_command === 'late') {
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${tools.makeFriendlyDates(start)}. They commented: ${reason}`)
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${DataFormattingTools.makeFriendlyDates(start)}. They commented: ${reason}`)
         }
     }
 
@@ -78,8 +78,6 @@ class DataFormattingTools {
         }
     }
 }
-
-const tools = new DataFormattingTools();
 
 class DataEntryTools {
     addAbsence(message, args) {
@@ -107,9 +105,9 @@ class DataEntryTools {
         }
 
         //Make sure dates are good.
-        if (tools.validateDates(message, startDate, endDate)) {
+        if (DataFormattingTools.validateDates(message, startDate, endDate)) {
             absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
-            tools.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
+            DataFormattingTools.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
         }                
     }
 
@@ -121,11 +119,11 @@ class DataEntryTools {
             endDate = startDate;
         }
         //Make sure given dates are dates.
-        if (tools.validateDates(message, startDate, endDate)) {
+        if (DataFormattingTools.validateDates(message, startDate, endDate)) {
             //If dates are good, do the update.
             absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
             //Send message to confirm.
-            tools.generateResponse(message, "present", "absent", startDate, endDate);
+            DataFormattingTools.generateResponse(message, "present", "absent", startDate, endDate);
         }
     }
 
@@ -139,7 +137,7 @@ class DataEntryTools {
         //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate))) {
             absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
-            message.author.send(`Ok, I've got you down as on-time on ${tools.makeFriendlyDates(startDate)}. See you then!`)
+            message.author.send(`Ok, I've got you down as on-time on ${DataFormattingTools.makeFriendlyDates(startDate)}. See you then!`)
         }
     }
 
@@ -161,7 +159,7 @@ class DataEntryTools {
         }
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            tools.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
+            DataFormattingTools.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
         }
     }
 }
@@ -182,7 +180,7 @@ class DataDisplayTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date " + tools.makeFriendlyDates(row.start) + "\nEnd Date " + tools.makeFriendlyDates(row.end) + "\nComments " + row.comment,
+                    value: "\t\tStart Date " + DataFormattingTools.makeFriendlyDates(row.start) + "\nEnd Date " + DataFormattingTools.makeFriendlyDates(row.end) + "\nComments " + row.comment,
                     inline: false
                 })
             });
@@ -202,7 +200,7 @@ class DataDisplayTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date " + tools.makeFriendlyDates(row.start) + "\nComments " + row.comment,
+                    value: "\t\tStart Date " + DataFormattingTools.makeFriendlyDates(row.start) + "\nComments " + row.comment,
                     inline: false
                 })
             });
