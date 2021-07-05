@@ -168,6 +168,7 @@ class DatabaseTools {
         if (isValid(parseISO(startDate))) {
             message.author.send("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next five minutes.");
             const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+                max: 1,
                 time: 300000
             });
             collector.on('collect', m => {
