@@ -100,7 +100,7 @@ class DatabaseTools {
         }
         //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate))) {
-            absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate})"`);
+            absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
         }
     }
 
