@@ -169,7 +169,7 @@ class DatabaseTools {
                 });
                 collector.on('end', (m, reason) => {
                     if (reason === 'time') {
-                        msg.reply('Ran out of time ☹...');
+                        message.author.send('Ran out of time...');
                     } else if (m.content) {
                         var safe_reason = SqlString.escape(m.content);
                         absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
