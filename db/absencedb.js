@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
-var isValid = require('date-fns/isValid')
+var parseISO = require('date-fns/parseISO');
+var isValid = require('date-fns/isValid');
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
     if (err) {
