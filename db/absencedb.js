@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
 var parseISO = require('date-fns/parseISO');
 var isValid = require('date-fns/isValid');
+var SqlString = require('sqlstring');
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
     if (err) {
@@ -27,8 +28,11 @@ class DatabaseTools {
         if (!isValid(parseISO(args[1]))) {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD.");
         }
+        //Sanitize comment
+        var safeComment = SqlString.escape(args[2]);
+
         if(isValid(parseISO(args[0])) && isValid(parseISO(args[1]))) {
-            absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${args[0]}", "${args[1]}", "${args[2]}")`);
+            absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${args[0]}", "${args[1]}", "${safeComment}")`);
         }
     }
 
