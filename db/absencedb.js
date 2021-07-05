@@ -40,13 +40,13 @@ class DatabaseTools {
         }
         //Send message to confirm.
         if (message.channel.type === 'dm') {
-            if (!startDate == endDate) {
+            if (startDate != endDate) {
                 message.reply(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
             } else {
                 message.reply(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
             }
         } else {
-            if (!startDate == endDate) {
+            if (!startDate != endDate) {
                 message.member.send(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
             } else {
                 message.member.send(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
