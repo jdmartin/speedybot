@@ -63,10 +63,10 @@ class DatabaseTools {
             }
         }
         if (this_command === 'absent') {
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${this.makeFriendlyDates(startDate)} until ${this.makeFriendlyDates(endDate)}. They commented: ${safe_reason}`)
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${this.makeFriendlyDates(startDate)} until ${this.makeFriendlyDates(endDate)}. They commented: ${reason}`)
         }
         if (this_command === 'late') {
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${this.makeFriendlyDates(start)}. They commented: ${safe_reason}`)
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${this.makeFriendlyDates(start)}. They commented: ${reason}`)
         }
     }
 
@@ -190,7 +190,7 @@ class DatabaseTools {
         }
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            this.generateResponse(message, "late", "ontime", startDate,undefined,safe_reason);
+            this.generateResponse(message, "late", "ontime", startDate,undefined,   safe_reason);
             //message.author.send(`Ok, I've got you down as coming late on ${this.makeFriendlyDates(startDate)}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
         }
     }
