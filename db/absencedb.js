@@ -38,23 +38,12 @@ class DatabaseTools {
     }
 
     generateResponse(message, this_command, undo_command, start, end) {
-        if (this_command === 'late') {
-            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
-                max: 1,
-                time: 300000
-            });
-            collector.on('collect', m => {
-                if (m.content) {
-                    var safe_reason = SqlString.escape(m.content);
-                    absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-                    message.author.send(`Ok, I've got you down as coming late on ${startDate}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
-                    client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${startDate}. They commented: ${safe_reason}`)
-                    collector.stop();
-                }
-            })
-        }
-        
         if (message.channel.type === 'dm') {
+            if (this_command === 'late') {
+                message.reply("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next five minutes.");
+            } else {
+                message.member.send("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next five minutes.");
+            }
             if (start != end) {
                 message.reply(`Ok, I've marked you ${this_command} from ${start} until ${end}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
@@ -177,16 +166,34 @@ class DatabaseTools {
     tardy(message, args) {
         //Make sure we have a date.
         let startDate = args[0];
-        let endDate = args[1];
-        if (!args[1]) {
-            endDate = startDate;
-        }
+
         //Make sure given dates are dates.
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
         if (isValid(parseISO(startDate))) {
-            this.generateResponse(message, "late", "ontime", startDate, endDate);
+            this.generateResponse(message, "late", "ontime", startDate);
+            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+                max: 1,
+                time: 300000
+            });
+            collector.on('collect', m => {
+                if (m.content) {
+                    var safe_reason = SqlString.escape(m.content);
+                    absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
+
+                    speedy_response = `Ok, I've got you down as coming late on ${startDate}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`
+                    
+                    if (message.channel.type === 'dm') {
+                        message.author.send(speedy_response);
+                    } else {
+                        message.member.send(speedy_response);
+                    }
+                    
+                    client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${startDate}. They commented: ${safe_reason}`)
+                    collector.stop();
+                }
+            })
         }
     }
 }
