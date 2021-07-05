@@ -66,7 +66,7 @@ class DatabaseTools {
             client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${this.makeFriendlyDates(startDate)} until ${this.makeFriendlyDates(endDate)}. They commented: ${safe_reason}`)
         }
         if (this_command === 'late') {
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${this.makeFriendlyDates(startDate)}. They commented: ${safe_reason}`)
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${this.makeFriendlyDates(start)}. They commented: ${safe_reason}`)
         }
     }
 
