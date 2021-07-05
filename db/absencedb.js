@@ -71,7 +71,7 @@ class DatabaseTools {
                 if (m.content) {
                     var safe_reason = SqlString.escape(m.content);
                     absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
-                    this.generateResponse(message, present, startDate, endDate);
+                    this.generateResponse(message, "present", startDate, endDate);
                     client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${startDate} until ${endDate}. They commented: ${safe_reason}`)
                     collector.stop();
                 }
