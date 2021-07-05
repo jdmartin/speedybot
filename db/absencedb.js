@@ -40,9 +40,19 @@ class DatabaseTools {
     generateResponse(message, this_command, undo_command, start, end) {
         if (message.channel.type === 'dm') {
             if (this_command === 'late') {
-                message.reply("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next five minutes.");
-            } else {
-                message.member.send("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next five minutes.");
+                const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+                    max: 1,
+                    time: 300000
+                });
+                collector.on('collect', m => {
+                    if (m.content) {
+                        var safe_reason = SqlString.escape(m.content);
+                        absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
+                        message.author.send(`Ok, I've got you down as coming late on ${startDate}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
+                        client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${startDate}. They commented: ${safe_reason}`)
+                        collector.stop();
+                    }
+                })
             }
 
             if (start != end) {
@@ -177,19 +187,6 @@ class DatabaseTools {
         }
         if (isValid(parseISO(startDate))) {
             this.generateResponse(message, "late", "ontime", startDate, endDate);
-            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
-                max: 1,
-                time: 300000
-            });
-            collector.on('collect', m => {
-                if (m.content) {
-                    var safe_reason = SqlString.escape(m.content);
-                    absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-                    message.author.send(`Ok, I've got you down as coming late on ${startDate}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
-                    client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${startDate}. They commented: ${safe_reason}`)
-                    collector.stop();
-                }
-            })
         }
     }
 }
