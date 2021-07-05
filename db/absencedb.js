@@ -48,7 +48,7 @@ class DatabaseTools {
         var safeComment = SqlString.escape(args[2]);
 
         if(isValid(parseISO(args[0])) && isValid(parseISO(args[1]))) {
-            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${args[0]}" AND end = "${args[1]}"`);
+            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${args[0]}" AND end = "${args[1]}")`);
         }
     }
 
