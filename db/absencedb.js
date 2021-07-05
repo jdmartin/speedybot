@@ -88,7 +88,7 @@ class DatabaseTools {
         if (this.validateDates(message, startDate, endDate)) {
             absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
             this.generateResponse(message, "absent", "present", startDate, endDate);
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${startDate} until ${endDate}. They commented: ${safe_reason}`)
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${this.makeFriendlyDates(startDate)} until ${this.makeFriendlyDates(endDate)}. They commented: ${safe_reason}`)
         }                
     }
 
