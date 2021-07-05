@@ -43,28 +43,23 @@ class DatabaseTools {
             endDate = startDate;
         }
         if (this.processDates(message, startDate, endDate)) {
-            console.log("A-OK");
+            absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${startDate}", "${endDate}")`);
+            //Send message to confirm.
+            if (message.channel.type === 'dm') {
+                if (startDate != endDate) {
+                    message.reply(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
+                } else {
+                    message.reply(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
+                }
+            } else {
+                if (!startDate != endDate) {
+                    message.member.send(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
+                } else {
+                    message.member.send(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
+                }
+            }
         } else {
             console.log("OH Noes!");
-        }
-
-        //Only update db if we have valid start and end dates.
-        if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
-            absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${startDate}", "${endDate}")`);
-        }
-        //Send message to confirm.
-        if (message.channel.type === 'dm') {
-            if (startDate != endDate) {
-                message.reply(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
-            } else {
-                message.reply(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
-            }
-        } else {
-            if (!startDate != endDate) {
-                message.member.send(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
-            } else {
-                message.member.send(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
-            }
         }
     }
 
