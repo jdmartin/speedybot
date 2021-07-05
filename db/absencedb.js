@@ -41,15 +41,20 @@ class DatabaseTools {
 
     addPresent(message, args) {
         //Make sure we have start and end dates.
-        if (!isValid(parseISO(args[0]))) {
+        let startDate = args[0];
+        let endDate = args[1];
+        if (!args[1]) {
+            endDate = startDate;                           
+        }
+        if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
         }
-        if (!isValid(parseISO(args[1]))) {
+        if (!isValid(parseISO(endDate))) {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD.");
         }
 
-        if(isValid(parseISO(args[0])) && isValid(parseISO(args[1]))) {
-            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${args[0]}" AND end = "${args[1]}")`);
+        if(isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
+            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
         }
     }
 
