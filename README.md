@@ -19,6 +19,14 @@ A tiny, eclectic bot for my guild's Discord channel.
 - !strats: Did you read the strat?
 - !xkcd: Read a random selection.<sup>4</sip>
 
+## attendance-related commands:
+The basic format for both !absent and !present is this: !command start end(optional, same as start is assumed)
+The format for the dates is YYYY-MM-DD
+
+- !absences - See known absences.
+- !absent - Let us know you won't be raiding. (Example: !absent 2021-07-04)
+- !present - Cancel an absence. (Example: !present 2021-07-04)
+
 <small>1: Cats from [Random Cat](https://aws.random.cat/)</small>
 
 <small>2: Dogs from [Dog CEO](https://dog.ceo/dog-api/)</small>
