@@ -21,15 +21,21 @@ let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
 class DatabaseTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
-        if (!isValid(parseISO(args[0]))) {
+        let startDate = args[0];
+        let endDate = args[1];
+        if (!endDate.length) {
+            endDate = startDate;                           
+        }
+        if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
         }
-        if (!isValid(parseISO(args[1]))) {
+        
+        if (!isValid(parseISO(endDate))) {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD.");
         }
 
         if(isValid(parseISO(args[0])) && isValid(parseISO(args[1]))) {
-            absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${args[0]}", "${args[1]}")`);
+            absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${startDate}", "${endDate}")`);
         }
     }
 
