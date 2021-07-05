@@ -165,7 +165,7 @@ class DatabaseTools {
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
-        console.log(format(new Date(startDate), 'MM/dd/yyyy'));
+        console.log(new Date(startDate).toLocaleDateString('en-US'));
         //Process a comment, if supplied.
         let comment = args.slice(1).join(' ');
 
