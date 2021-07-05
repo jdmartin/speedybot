@@ -26,6 +26,7 @@ class DatabaseTools {
         if (!args[1]) {
             endDate = startDate;
         }
+        //Make sure given dates are dates.
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
         }
@@ -33,14 +34,23 @@ class DatabaseTools {
         if (!isValid(parseISO(endDate))) {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
         }
-
+        //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
             absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${startDate}", "${endDate}")`);
         }
+        //Send message to confirm.
         if (message.channel.type === 'dm') {
-            message.reply(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
+            if (!startDate == endDate) {
+                message.reply(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
+            } else {
+                message.reply(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
+            }
         } else {
-            message.member.send(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
+            if (!startDate == endDate) {
+                message.member.send(`Ok, I've marked you absent from ${startDate} until ${endDate}.  \n\nTo undo this, type: !present ${startDate} ${endDate} `);
+            } else {
+                message.member.send(`Ok, I've marked you absent on ${startDate}.  \n\nTo undo this, type: !present ${startDate}`);
+            }
         }
     }
 
@@ -51,6 +61,7 @@ class DatabaseTools {
         if (!args[1]) {
             endDate = startDate;
         }
+        //Make sure given dates are dates.
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
         }
@@ -58,10 +69,11 @@ class DatabaseTools {
         if (!isValid(parseISO(endDate))) {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
         }
-
+        //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
             absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
         }
+        //Send message to confirm.
         if (message.channel.type === 'dm') {
             message.reply(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
         } else {
