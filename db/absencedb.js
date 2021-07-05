@@ -27,7 +27,7 @@ class CreateDatabase {
 class DatabaseTools {
     makeFriendlyDates(date) {
         let friendlyDateTemp = date + 'T20:52:29.478Z';
-        let friendlyDate = format(new Date(friendlyDateTemp), 'MMM dd yyyy');
+        let friendlyDate = format(new Date(friendlyDateTemp), 'iii, MMM dd yyyy');
         return (friendlyDate)
     }
 
