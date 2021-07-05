@@ -15,7 +15,6 @@ let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
      startup() {
          absencedb.serialize(function () {
              absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start` TEXT, `end` TEXT, `comment` TEXT)");
-             absencedb.run("CREATE TABLE IF NOT EXISTS `present` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start` TEXT, `end` TEXT, `comment` TEXT)")
          });
      }
  }
@@ -49,7 +48,7 @@ class DatabaseTools {
         var safeComment = SqlString.escape(args[2]);
 
         if(isValid(parseISO(args[0])) && isValid(parseISO(args[1]))) {
-            absencedb.run(`INSERT INTO present(name, start, end, comment) VALUES ("${message.author.username}", "${args[0]}", "${args[1]}", "${safeComment}")`);
+            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${args[0]}" AND end = "${args[1]}"`);
         }
     }
 
