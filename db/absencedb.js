@@ -145,6 +145,7 @@ class DatabaseTools {
                 if (m.content) {
                     var safe_reason = SqlString.escape(m.content);
                     absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
+                    collector.stop();
                 }
             })
         }
