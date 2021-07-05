@@ -39,6 +39,12 @@ class DatabaseTools {
 
     generateResponse(message, this_command, undo_command, start, end) {
         if (message.channel.type === 'dm') {
+            if (this_command === 'late') {
+                message.reply("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next five minutes.");
+            } else {
+                message.member.send("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next five minutes.");
+            }
+            
             if (start != end) {
                 message.reply(`Ok, I've marked you ${this_command} from ${start} until ${end}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
@@ -167,7 +173,7 @@ class DatabaseTools {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
         if (isValid(parseISO(startDate))) {
-            message.author.send("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next five minutes.");
+            this.generateResponse(message, "late", "ontime", startDate);
             const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
                 max: 1,
                 time: 300000
