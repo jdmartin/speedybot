@@ -39,7 +39,7 @@ class DatabaseTools {
 
     generateResponse(message, this_command, undo_command, start, end) {
         if (message.channel.type === 'dm') {
-            if (this_command === 'late') {
+            if (this_command == 'late') {
                 const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
                     max: 1,
                     time: 300000
