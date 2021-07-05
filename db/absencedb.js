@@ -28,19 +28,18 @@ class DatabaseTools {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD.");
         }
         if(isValid(parseISO(args[0])) && isValid(parseISO(args[1]))) {
-            absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${args[0]}", "${args[1]}", "${args[2]}")`);
+            absencedb.query(
+                `
+                INSERT INTO absences(name, start, end, comment) 
+                VALUES (?,?,?,?)
+                `,
+                [`${message.author.username}", "${args[0]}", "${args[1]}", "${args[2]}`]
+            );
+//            absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${args[0]}", "${args[1]}", "${args[2]}")`);
         }
     }
 
     show(message) {
-        //Get today's date
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = today.getFullYear();
-
-        today = yyyy + '-' + mm + '-' + dd;
-        console.log(today);
         let sql = `SELECT * FROM absences WHERE start >= date('now','-1 day') ORDER BY name`;
 
         absencedb.all(sql, [], (err, rows) => {
