@@ -150,11 +150,7 @@ class DatabaseTools {
                     inline: false
                 })
             });
-            if (message.channel.type === 'dm') {
-                message.channel.send(embed);
-            } else {
-                message.member.send(embed);
-            }
+            message.reply(embed);
         });
     }
 
