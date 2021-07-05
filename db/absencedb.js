@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const moment = require("moment");
 const sqlite3 = require('sqlite3');
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
@@ -19,10 +20,10 @@ let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
 class DatabaseTools {
     test(message, args) {
         //Make sure we have start and end dates.
-        if (!new Date(args[0]) instanceof Date) {
+        if (!moment(args[0], "YYYY-MM-DD").isValid()) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
         }
-        if (!new Date(args[1]) instanceof Date) {
+        if (!moment(args[1], "YYYY-MM-DD").isValid()) {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD.");
         }
         absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${args[0]}", "${args[1]}", "${args[2]}")`);
