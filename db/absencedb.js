@@ -21,6 +21,17 @@ class CreateDatabase {
 }
 
 class DatabaseTools {
+    processDates(start, end) {
+        //Make sure given dates are dates.
+        if (!isValid(parseISO(start))) {
+            message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
+        }
+
+        if (!isValid(parseISO(end))) {
+            message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
+        }
+    }
+
     addAbsence(message, args) {
         //Make sure we have start and end dates.
         let startDate = args[0];
@@ -28,14 +39,12 @@ class DatabaseTools {
         if (!args[1]) {
             endDate = startDate;
         }
-        //Make sure given dates are dates.
-        if (!isValid(parseISO(startDate))) {
-            message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
+        if (this.processDates(startDate, endDate)) {
+            console.log("A-OK");
+        } else {
+            console.log("OH Noes!");
         }
 
-        if (!isValid(parseISO(endDate))) {
-            message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
-        }
         //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
             absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${startDate}", "${endDate}")`);
