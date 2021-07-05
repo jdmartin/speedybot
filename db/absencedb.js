@@ -37,6 +37,11 @@ class DatabaseTools {
         if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
             absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${startDate}", "${endDate}")`);
         }
+        if (message.channel.type === 'dm') {
+            message.reply(`Ok, I've marked you absent from ${startDate} until${endDate}.  To undo this, type:\n\n !present ${startDate} ${endDate} `);
+        } else {
+            message.member.send(`Ok, I've marked you absent from ${startDate} until${endDate}.  To undo this, type:\n\n !present ${startDate} ${endDate} `);
+        }
     }
 
     addPresent(message, args) {
