@@ -167,7 +167,7 @@ class DatabaseTools {
         }
 
         //Process a comment, if supplied.
-        let zargs = process.argv.slice(0);
+        let zargs = args.slice(0).join(' ');
         console.log(zargs);
 
         if (args[1]) {
