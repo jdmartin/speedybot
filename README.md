@@ -20,7 +20,7 @@ A tiny, eclectic bot for my guild's Discord channel.
 - !xkcd: Read a random selection.<sup>4</sip>
 
 ## attendance-related commands:
-The basic format for both !absent and !present is this: !command start end(optional, same as start is assumed)
+The basic format for both !absent and !present is this: !command start_date end_date (optional, same as start is assumed)
 The format for the dates is YYYY-MM-DD
 
 - !absences - See known absences.
