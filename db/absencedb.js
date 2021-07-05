@@ -37,6 +37,22 @@ class DatabaseTools {
         }
     }
 
+    addPresent(message, args) {
+        //Make sure we have start and end dates.
+        if (!isValid(parseISO(args[0]))) {
+            message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
+        }
+        if (!isValid(parseISO(args[1]))) {
+            message.reply("Sorry, I need an end date in the format YYYY-MM-DD.");
+        }
+        //Sanitize comment
+        var safeComment = SqlString.escape(args[2]);
+
+        if(isValid(parseISO(args[0])) && isValid(parseISO(args[1]))) {
+            absencedb.run(`INSERT INTO present(name, start, end, comment) VALUES ("${message.author.username}", "${args[0]}", "${args[1]}", "${safeComment}")`);
+        }
+    }
+
     show(message) {
         let sql = `SELECT * FROM absences WHERE start >= date('now','-1 day') ORDER BY name`;
 

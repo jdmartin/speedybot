@@ -59,6 +59,10 @@ client.on("message", message => {
     absenceDBHelper.addAbsence(message, args);
   }
 
+  if (command === 'present') {
+    absenceDBHelper.addPresent(message, args);
+  }
+
   //If the command is not in our list of commands...
   if (!client.commands.has(command)) return;
 
