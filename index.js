@@ -67,6 +67,10 @@ client.on("message", message => {
     absenceDBHelper.tardy(message, args);
   }
 
+  if (command === 'ontime') {
+    absenceDBHelper.ontime(message, args);
+  }
+
   //If the command is not in our list of commands...
   if (!client.commands.has(command)) return;
 
