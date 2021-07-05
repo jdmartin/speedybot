@@ -127,11 +127,7 @@ class DatabaseTools {
                     inline: false
                 })
             });
-            if (message.channel.type === 'dm') {
-                message.channel.send(embed);
-            } else {
-                message.member.send(embed);
-            }
+            message.reply(embed);
         });
         let late_sql = `SELECT * FROM latecomers WHERE start >= date('now','-1 day') ORDER BY name`;
 
