@@ -159,13 +159,14 @@ class DatabaseTools {
 
     tardy(message, args) {
         //Make sure we have a date.
-        let startDate = args[0] + 'T20:52:29.478Z';
+        let startDate = args[0];
+        let friendlyDateTemp = args[0] + + 'T20:52:29.478Z';
+        let friendlyStartDate = format(new Date(friendlyDateTemp), 'MMM dd yyyy');
 
         //Make sure given dates are dates.
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
-        console.log(format(new Date(startDate), 'MMM dd yyyy'));
         //Process a comment, if supplied.
         let comment = args.slice(1).join(' ');
 
@@ -176,8 +177,8 @@ class DatabaseTools {
         }
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            message.author.send(`Ok, I've got you down as coming late on ${startDate}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${startDate}. They commented: ${safe_reason}`)
+            message.author.send(`Ok, I've got you down as coming late on ${friendlyStartDate}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${friendlyStartDate}. They commented: ${safe_reason}`)
             
         }
     }
