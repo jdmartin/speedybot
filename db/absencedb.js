@@ -69,6 +69,7 @@ class DataFormattingTools {
         //Make sure given dates are dates.
         if (!isValid(parseISO(start))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
+            return;
         }
         if (!isValid(parseISO(end))) {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
