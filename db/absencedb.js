@@ -190,7 +190,7 @@ class DatabaseTools {
         }
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            this.generateResponse(message, "late", "ontime", startDate," ", safe_reason);
+            this.generateResponse(message, "late", "ontime", startDate, reason=safe_reason);
             //message.author.send(`Ok, I've got you down as coming late on ${this.makeFriendlyDates(startDate)}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
         }
     }
