@@ -26,12 +26,11 @@ class DatabaseTools {
         if (!isValid(parseISO(start))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
         }
-
         if (!isValid(parseISO(end))) {
             message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
         }
         if ((isValid(parseISO(start))) && (isValid(parseISO(end)))) {
-            return(true);
+            return (true);
         }
     }
 
@@ -42,7 +41,9 @@ class DatabaseTools {
         if (!args[1]) {
             endDate = startDate;
         }
+        //Make sure dates are good.
         if (this.processDates(message, startDate, endDate)) {
+            //If dates are good, do the update.
             absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${startDate}", "${endDate}")`);
             //Send message to confirm.
             if (message.channel.type === 'dm') {
@@ -71,29 +72,22 @@ class DatabaseTools {
             endDate = startDate;
         }
         //Make sure given dates are dates.
-        if (!isValid(parseISO(startDate))) {
-            message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
-        }
-
-        if (!isValid(parseISO(endDate))) {
-            message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
-        }
-        //Only update db if we have valid start and end dates.
-        if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
+        if (this.processDates(message, startDate, endDate)) {
+            //If dates are good, do the update.
             absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
-        }
-        //Send message to confirm.
-        if (message.channel.type === 'dm') {
-            if (startDate != endDate) {
-                message.reply(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
+            //Send message to confirm.
+            if (message.channel.type === 'dm') {
+                if (startDate != endDate) {
+                    message.reply(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
+                } else {
+                    message.reply(`Ok, I've marked you present on ${startDate}.  \n\nTo undo this, type: !absent ${startDate}`);
+                }
             } else {
-                message.reply(`Ok, I've marked you present on ${startDate}.  \n\nTo undo this, type: !absent ${startDate}`);
-            }
-        } else {
-            if (!startDate != endDate) {
-                message.member.send(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
-            } else {
-                message.member.send(`Ok, I've marked you present on ${startDate}.  \n\nTo undo this, type: !absent ${startDate}`);
+                if (!startDate != endDate) {
+                    message.member.send(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
+                } else {
+                    message.member.send(`Ok, I've marked you present on ${startDate}.  \n\nTo undo this, type: !absent ${startDate}`);
+                }
             }
         }
     }
@@ -170,7 +164,9 @@ class DatabaseTools {
         }
         if (isValid(parseISO(startDate))) {
             message.author.send("Ok, I've got the date. If you'd like to add a comment, reply to me in the next five minutes.");
-            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 300000 });
+            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+                time: 300000
+            });
             collector.on('collect', m => {
                 if (m.content) {
                     var safe_reason = SqlString.escape(m.content);
