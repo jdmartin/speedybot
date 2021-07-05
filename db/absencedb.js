@@ -102,6 +102,7 @@ class DatabaseTools {
         //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate))) {
             absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
+            message.author.send(`Ok, I've got you down as on-time on ${startDate}. See you then!`)
         }
     }
 
@@ -171,7 +172,7 @@ class DatabaseTools {
                 if (m.content) {
                     var safe_reason = SqlString.escape(m.content);
                     absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-                    message.author.send(`Ok, I've got you down as coming late on ${startDate}. You've indicated the reason is ${safe_reason}. If you want to change this, type: !ontime ${startDate}`)
+                    message.author.send(`Ok, I've got you down as coming late on ${startDate}. You've indicated the reason is ${safe_reason}.\n If you want to change this, type: !ontime ${startDate}`)
                     collector.stop();
                 }
             })
