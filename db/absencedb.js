@@ -46,6 +46,9 @@ class DatabaseTools {
     }
 
     generateResponse(message, this_command, undo_command, start, end) {
+        if (!end) {
+            end = start;
+        }
         if (message.channel.type === 'dm') {
             if (start != end) {
                 message.reply(`Ok, I've marked you ${this_command} from ${this.makeFriendlyDates(start)} until ${this.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
