@@ -48,6 +48,7 @@ class DatabaseTools {
     generateResponse(message, this_command, undo_command, start, end, reason) {
         if (!end) {
             end = start;
+            console.log(start,end);
         }
         if (message.channel.type === 'dm') {
             if (start != end) {
@@ -56,7 +57,7 @@ class DatabaseTools {
                 message.reply(`Ok, I've marked you ${this_command} on ${this.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
         } else {
-            if (!start != end) {
+            if (start == end) {
                 message.member.send(`Ok, I've marked you ${this_command} from ${this.makeFriendlyDates(start)} until ${this.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
                 message.member.send(`Ok, I've marked you ${this_command} on ${this.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
