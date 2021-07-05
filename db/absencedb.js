@@ -167,8 +167,11 @@ class DatabaseTools {
         }
 
         //Process a comment, if supplied.
+        let process_args = arguments;
+        console.log(process_args);
+        
         if (args[1]) {
-            var safe_reason = SqlString.escape(args.split(' ').map(elem => elem.trim()));
+            var safe_reason = SqlString.escape(args[1]);
         } else {
             var safe_reason = ' ';
         }
