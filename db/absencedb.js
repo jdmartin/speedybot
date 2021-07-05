@@ -30,7 +30,6 @@ class DatabaseTools {
         if(isValid(parseISO(args[0])) && isValid(parseISO(args[1]))) {
             var stmt = absencedb.prepare("INSERT INTO `absences`(`name`, `start`, `end`, `comment`) VALUES (?, ?, ?, ?)");
             stmt.run(`[${message.author.username}", "${args[0]}", "${args[1]}", "${args[2]}]`);
-            stmt.finalize();
 //            absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${args[0]}", "${args[1]}", "${args[2]}")`);
         }
     }
