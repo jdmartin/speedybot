@@ -26,6 +26,7 @@ class CreateDatabase {
 
 class DatabaseTools {
     makeFriendlyDates(date) {
+        //Ensures that dates are in the appropriate time zone (locally) by adding an ugly ISO timestamp.
         let friendlyDateTemp = date + 'T20:52:29.478Z';
         let friendlyDate = format(new Date(friendlyDateTemp), 'iii, MMM dd yyyy');
         return (friendlyDate)
@@ -58,6 +59,12 @@ class DatabaseTools {
                 message.member.send(`Ok, I've marked you ${this_command} on ${this.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
         }
+        if (this_command === 'absent') {
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${this.makeFriendlyDates(startDate)} until ${this.makeFriendlyDates(endDate)}. They commented: ${safe_reason}`)
+        }
+        if (this_command === 'late') {
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${this.makeFriendlyDates(startDate)}. They commented: ${safe_reason}`)
+        }
     }
 
     addAbsence(message, args) {
@@ -88,7 +95,6 @@ class DatabaseTools {
         if (this.validateDates(message, startDate, endDate)) {
             absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
             this.generateResponse(message, "absent", "present", startDate, endDate);
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${this.makeFriendlyDates(startDate)} until ${this.makeFriendlyDates(endDate)}. They commented: ${safe_reason}`)
         }                
     }
 
@@ -181,9 +187,8 @@ class DatabaseTools {
         }
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            message.author.send(`Ok, I've got you down as coming late on ${this.makeFriendlyDates(startDate)}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${this.makeFriendlyDates(startDate)}. They commented: ${safe_reason}`)
-            
+            this.generateResponse(message, "late", "ontime", startDate);
+            //message.author.send(`Ok, I've got you down as coming late on ${this.makeFriendlyDates(startDate)}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
         }
     }
 }
