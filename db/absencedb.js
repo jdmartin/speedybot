@@ -160,7 +160,7 @@ class DatabaseTools {
     tardy(message, args) {
         //Make sure we have a date.
         let startDate = args[0];
-        let friendlyDateTemp = args[0] + + 'T20:52:29.478Z';
+        let friendlyDateTemp = args[0] + 'T20:52:29.478Z';
         let friendlyStartDate = format(new Date(friendlyDateTemp), 'MMM dd yyyy');
 
         //Make sure given dates are dates.
