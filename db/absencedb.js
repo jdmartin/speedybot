@@ -20,7 +20,7 @@ let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
  }
 
 class DatabaseTools {
-    test(message, args) {
+    addAbsence(message, args) {
         //Make sure we have start and end dates.
         if (!isValid(parseISO(args[0]))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
