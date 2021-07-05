@@ -4,7 +4,7 @@ var parseISO = require('date-fns/parseISO');
 var isValid = require('date-fns/isValid');
 var SqlString = require('sqlstring');
 require("dotenv").config();
-const utils = require("./utils/speedyutils.js");
+const utils = require("../utils/speedyutils.js");
 const client = utils.client;
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
