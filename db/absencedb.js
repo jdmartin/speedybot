@@ -62,7 +62,7 @@ class DatabaseTools {
         }
         //Make sure dates are good.
         if (this.processDates(message, startDate, endDate)) {
-            message.author.send("Ok, I've got the date(s). If you'd like to add a comment, reply to me in the next two minutes...or, enter '.' to skip.");
+            message.author.send("Ok, I've got the date(s). If you'd like to add a comment, reply to me in the next two minutes. You could also just enter '.' to skip.");
             message.author.createDM().then(dmchannel => {
                 const collector = new Discord.MessageCollector(dmchannel, m => m.author.id === message.author.id, {
                     max: 1,
@@ -161,7 +161,7 @@ class DatabaseTools {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
         if (isValid(parseISO(startDate))) {
-            message.author.send("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next two minutes...or, enter '.' to skip.");
+            message.author.send("Ok, I've got the date. If you'd like to add a comment, or if you want to let us know when you're coming, reply to me in the next two minutes. You could also just enter '.' to skip.");
             message.author.createDM().then(dmchannel => {
                 const collector = new Discord.MessageCollector(dmchannel, m => m.author.id === message.author.id, {
                     max: 1,
