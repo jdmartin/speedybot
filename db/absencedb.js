@@ -167,7 +167,8 @@ class DatabaseTools {
         }
 
         //Process a comment, if supplied.
-        let process_args = arguments.splice(0, 1);
+        let process_args = arguments;
+        let process_args = process_args.splice(0, 1);
         console.log(process_args);
 
         if (args[1]) {
