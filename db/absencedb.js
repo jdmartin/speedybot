@@ -1,11 +1,11 @@
+require("dotenv").config();
 const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
+const utils = require("../utils/speedyutils.js");
+const client = utils.client;
 var parseISO = require('date-fns/parseISO');
 var isValid = require('date-fns/isValid');
 var SqlString = require('sqlstring');
-require("dotenv").config();
-const utils = require("../utils/speedyutils.js");
-const client = utils.client;
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
     if (err) {
@@ -57,33 +57,32 @@ class DatabaseTools {
         //Make sure we have start and end dates.
         let startDate = args[0];
         let endDate = args[1];
-        if (!args[1]) {
+        if (!isValid(parseISO(args[1]))) {
             endDate = startDate;
         }
+
+        //Process a comment, if supplied.
+        //Absences with and end date:
+        if (isValid(parseISO(args[1]))) {
+            var comment = args.slice(2).join(' ');
+        //Absences without an end date:
+        } else {
+            var comment = args.slice(1).join(' ');
+        }
+
+        //Make sure there's something in the comment field, even if empty.
+        if (comment) {
+            var safe_reason = SqlString.escape(comment);
+        } else {
+            var safe_reason = ' ';
+        }
+
         //Make sure dates are good.
         if (this.processDates(message, startDate, endDate)) {
-            message.author.send("Ok, I've got the date(s). If you'd like to add a comment, reply to me in the next two minutes. You could also just enter '.' to skip.");
-            message.author.createDM().then(dmchannel => {
-                const collector = new Discord.MessageCollector(dmchannel, m => m.author.id === message.author.id, {
-                    max: 1,
-                    time: 120000
-                });
-                collector.on('collect', m => {
-                    if (m.content) {
-                        var safe_reason = SqlString.escape(m.content);
-                        absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
-                        this.generateResponse(message, "absent", "present", startDate, endDate);
-                        client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${startDate} until ${endDate}. They commented: ${safe_reason}`)
-                        collector.stop();
-                    }
-                })
-                collector.on('end', (collected, reason) => {
-                    if (reason === 'time') {
-                        message.reply('Sorry, I ran out of time. Please try again.');
-                      }        
-                })
-            })
-        }
+            absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
+            this.generateResponse(message, "absent", "present", startDate, endDate);
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${startDate} until ${endDate}. They commented: ${safe_reason}`)
+        }                
     }
 
     addPresent(message, args) {
