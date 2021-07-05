@@ -171,6 +171,7 @@ class DatabaseTools {
                 if (m.content) {
                     var safe_reason = SqlString.escape(m.content);
                     absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
+                    message.author.send(`Ok, I've got you down as coming late on ${startDate}. You've indicated the reason is ${safe_reason}. If you want to change this, type: !ontime ${startDate}`)
                     collector.stop();
                 }
             })
