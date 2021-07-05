@@ -47,15 +47,15 @@ class DatabaseTools {
     generateResponse(message, this_command, undo_command, start, end) {
         if (message.channel.type === 'dm') {
             if (start != end) {
-                message.reply(`Ok, I've marked you ${this_command} from ${start} until ${end}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
+                message.reply(`Ok, I've marked you ${this_command} from ${this.makeFriendlyDates(start)} until ${this.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
-                message.reply(`Ok, I've marked you ${this_command} on ${start}.  \n\nTo undo this, type: !${undo_command} ${start}`);
+                message.reply(`Ok, I've marked you ${this_command} on ${this.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
         } else {
             if (!start != end) {
-                message.member.send(`Ok, I've marked you ${this_command} from ${start} until ${end}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
+                message.member.send(`Ok, I've marked you ${this_command} from ${this.makeFriendlyDates(start)} until ${this.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
-                message.member.send(`Ok, I've marked you ${this_command} on ${start}.  \n\nTo undo this, type: !${undo_command} ${start}`);
+                message.member.send(`Ok, I've marked you ${this_command} on ${this.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
         }
     }
@@ -118,7 +118,7 @@ class DatabaseTools {
         //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate))) {
             absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
-            message.author.send(`Ok, I've got you down as on-time on ${startDate}. See you then!`)
+            message.author.send(`Ok, I've got you down as on-time on ${this.makeFriendlyDates(startDate)}. See you then!`)
         }
     }
 
@@ -136,7 +136,7 @@ class DatabaseTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date " + row.start + "\nEnd Date " + row.end + "\nComments " + row.comment,
+                    value: "\t\tStart Date " + this.makeFriendlyDates(row.start) + "\nEnd Date " + this.makeFriendlyDates(row.end) + "\nComments " + row.comment,
                     inline: false
                 })
             });
@@ -155,7 +155,7 @@ class DatabaseTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date " + row.start + "\nComments " + row.comment,
+                    value: "\t\tStart Date " + this.makeFriendlyDates(row.start) + "\nComments " + row.comment,
                     inline: false
                 })
             });
