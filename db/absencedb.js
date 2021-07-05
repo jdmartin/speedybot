@@ -82,7 +82,7 @@ class DatabaseTools {
     }
 
     show(message) {
-        let sql = `SELECT * FROM absences WHERE start >= date('now','-1 day') ORDER BY name`;
+        let sql = `SELECT * FROM absences WHERE end >= date('now','-1 day') ORDER BY name`;
 
         absencedb.all(sql, [], (err, rows) => {
             if (err) {
