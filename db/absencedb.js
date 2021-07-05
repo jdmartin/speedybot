@@ -21,7 +21,7 @@ class CreateDatabase {
 }
 
 class DatabaseTools {
-    processDates(start, end) {
+    processDates(message, start, end) {
         //Make sure given dates are dates.
         if (!isValid(parseISO(start))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
@@ -42,7 +42,7 @@ class DatabaseTools {
         if (!args[1]) {
             endDate = startDate;
         }
-        if (this.processDates(startDate, endDate)) {
+        if (this.processDates(message, startDate, endDate)) {
             console.log("A-OK");
         } else {
             console.log("OH Noes!");
