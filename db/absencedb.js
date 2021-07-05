@@ -46,9 +46,11 @@ class DatabaseTools {
     }
 
     generateResponse(message, this_command, undo_command, start, end, reason) {
+        //Make certain there's an end value.
         if (!end) {
             end = start;
         }
+        //Select the appropriate type of response, and shorten if it's a single day.
         if (message.channel.type === 'dm') {
             if (start != end) {
                 message.reply(`Ok, I've marked you ${this_command} from ${this.makeFriendlyDates(start)} until ${this.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
@@ -62,6 +64,7 @@ class DatabaseTools {
                 message.member.send(`Ok, I've marked you ${this_command} on ${this.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
         }
+        //Handle channel posts for absences and lates. Shorten if only a single day.
         if (this_command === 'absent') {
             if (start != end) {
                 client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${this.makeFriendlyDates(start)} until ${this.makeFriendlyDates(end)}. They commented: ${reason}`)
@@ -136,6 +139,7 @@ class DatabaseTools {
     }
 
     show(message) {
+        //Get all absences for today and later.
         let sql = `SELECT * FROM absences WHERE end >= date('now','-1 day') ORDER BY name`;
 
         absencedb.all(sql, [], (err, rows) => {
@@ -155,6 +159,7 @@ class DatabaseTools {
             });
             message.reply(embed);
         });
+        //Get all tardiness from today and later.
         let late_sql = `SELECT * FROM latecomers WHERE start >= date('now','-1 day') ORDER BY name`;
 
         absencedb.all(late_sql, [], (err, rows) => {
@@ -194,8 +199,7 @@ class DatabaseTools {
         }
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            this.generateResponse(message, "late", "ontime", startDate,undefined,   safe_reason);
-            //message.author.send(`Ok, I've got you down as coming late on ${this.makeFriendlyDates(startDate)}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
+            this.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
         }
     }
 }
