@@ -5,18 +5,18 @@ var isValid = require('date-fns/isValid');
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
     if (err) {
-      console.error(err.message);
+        console.error(err.message);
     }
     console.log('Connected to the absence database.');
-  });
+});
 
- class CreateDatabase {
-     startup() {
-         absencedb.serialize(function () {
-             absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start` TEXT, `end` TEXT)");
-         });
-     }
- }
+class CreateDatabase {
+    startup() {
+        absencedb.serialize(function () {
+            absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start` TEXT, `end` TEXT)");
+        });
+    }
+}
 
 class DatabaseTools {
     addAbsence(message, args) {
@@ -24,17 +24,17 @@ class DatabaseTools {
         let startDate = args[0];
         let endDate = args[1];
         if (!args[1]) {
-            endDate = startDate;                           
+            endDate = startDate;
         }
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
         }
-        
+
         if (!isValid(parseISO(endDate))) {
-            message.reply("Sorry, I need an end date in the format YYYY-MM-DD.");
+            message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
         }
 
-        if(isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
+        if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
             absencedb.run(`INSERT INTO absences(name, start, end) VALUES ("${message.author.username}", "${startDate}", "${endDate}")`);
         }
     }
@@ -44,16 +44,17 @@ class DatabaseTools {
         let startDate = args[0];
         let endDate = args[1];
         if (!args[1]) {
-            endDate = startDate;                           
+            endDate = startDate;
         }
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
         }
+
         if (!isValid(parseISO(endDate))) {
-            message.reply("Sorry, I need an end date in the format YYYY-MM-DD.");
+            message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
         }
 
-        if(isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
+        if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
             absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
         }
     }
