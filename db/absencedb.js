@@ -5,6 +5,7 @@ const utils = require("../utils/speedyutils.js");
 const client = utils.client;
 var parseISO = require('date-fns/parseISO');
 var isValid = require('date-fns/isValid');
+var format = require('date-fns/format');
 var SqlString = require('sqlstring');
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
@@ -164,7 +165,7 @@ class DatabaseTools {
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
-
+        console.log(format(new Date(startDate), 'MM/dd/yyyy'));
         //Process a comment, if supplied.
         let comment = args.slice(1).join(' ');
 
