@@ -41,13 +41,9 @@ class DatabaseTools {
             }
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
-                .setTitle("Upcoming absences")
+                .setTitle("Upcoming absences for ") + Date.now()
                 .setFooter("These absences are a product of the Inifite Speedyflight. Use Wisely.")
             rows.forEach((row) => {
-                embed.addFields({
-                    name: "Today is " + Date.now(),
-                    inline: false
-                }),
                 embed.addFields({
                     name: row.name,
                     value: "\t\tStart Date " + row.start + "\nEnd Date " + row.end + "\nComment " + row.comment,
