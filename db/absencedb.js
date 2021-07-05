@@ -3,7 +3,6 @@ const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
 const utils = require("../utils/speedyutils.js");
 const client = utils.client;
-const tools = new DataFormattingTools();
 var parseISO = require('date-fns/parseISO');
 var isValid = require('date-fns/isValid');
 var format = require('date-fns/format');
@@ -34,6 +33,8 @@ class DataFormattingTools {
         return (friendlyDate)
     }
 }
+
+const tools = new DataFormattingTools();
 
 class DatabaseTools {
     validateDates(message, start, end) {
