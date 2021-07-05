@@ -172,7 +172,7 @@ class DatabaseTools {
                         message.author.send('Ran out of time...');
                     } 
                     if (collected.content) {
-                        var safe_reason = SqlString.escape(m.content);
+                        var safe_reason = SqlString.escape(collected.content);
                         absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
                         message.author.send(`Ok, I've got you down as coming late on ${startDate}. You've indicated the reason is ${safe_reason}.\n\nIf you want to cancel this, type: !ontime ${startDate}`)
                         client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${startDate}. They commented: ${safe_reason}`)
