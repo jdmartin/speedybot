@@ -102,9 +102,9 @@ class DatabaseTools {
         if (isValid(parseISO(startDate))) {
             message.author.send("Ok, I've got the date. If you'd like to add a comment, reply to me in the next five minutes.");
             const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 300000 });
-            collector.on('collect', message => {
-                if (message.content) {
-                    var safe_reason = SqlString.escape(collected.first());
+            collector.on('collect', m => {
+                if (m.content) {
+                    var safe_reason = SqlString.escape(m.content);
                     absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
             }
         })
