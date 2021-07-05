@@ -46,7 +46,7 @@ class DatabaseTools {
             }
         } else {
             if (!start != end) {
-            message.member.send(`Ok, I've marked you absent from ${start} until ${end}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
+                message.member.send(`Ok, I've marked you absent from ${start} until ${end}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
                 message.member.send(`Ok, I've marked you absent on ${start}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
@@ -76,7 +76,7 @@ class DatabaseTools {
                     collector.stop();
                 }
             })
-        } 
+        }
     }
 
     addPresent(message, args) {
@@ -91,19 +91,7 @@ class DatabaseTools {
             //If dates are good, do the update.
             absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
             //Send message to confirm.
-            if (message.channel.type === 'dm') {
-                if (startDate != endDate) {
-                    message.reply(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
-                } else {
-                    message.reply(`Ok, I've marked you present on ${startDate}.  \n\nTo undo this, type: !absent ${startDate}`);
-                }
-            } else {
-                if (!startDate != endDate) {
-                    message.member.send(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
-                } else {
-                    message.member.send(`Ok, I've marked you present on ${startDate}.  \n\nTo undo this, type: !absent ${startDate}`);
-                }
-            }
+            this.generateResponse(message, "absent", startDate, endDate);
         }
     }
 
