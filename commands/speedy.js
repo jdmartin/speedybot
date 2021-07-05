@@ -19,13 +19,14 @@ module.exports = {
         **strats**: Did you read the strat?
         **xkcd**: Read a random comic and feel better...\n
         __Attendance-related Commands__:
-        The commands !absent and !present assume you have a start date and an end date (defaults to same as start date if not given)
-        The basic format for both !absent and !present is this: 
-        \t\t!command YYYY-MM-DD YYYY-MM-DD 
-        
         **absences**: See known absences.
         **absent**: Let us know you won't be raiding. (Example: !absent 2021-07-04)
         **present**: Cancel an absence. (Example: !present 2021-07-04)\n
+        Some examples which work with either **absent** or **present**:
+        !absent 2021-07-04 (Absent on July 4, 2021)
+        !absent 2021-07-06 2021-07-13 (Absent from July 6 until July 13, 2021)
+        !present 2021-07-04 (Present on July 4, 2021 -- removes an absence for just that date)
+        !present 2021-07-06 2021-07-13 (Present from July 6 until July 13, 2021 -- removes that range of absences)\n
         Want something else? Ask Doolan. ~~ 🐢
     `)
 
