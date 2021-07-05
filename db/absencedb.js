@@ -167,7 +167,7 @@ class DatabaseTools {
                     max: 1,
                     time: 10000
                 });
-                collector.on('end', (m, reason) => {
+                collector.on('end', m => {
                     if (m.content) {
                         var safe_reason = SqlString.escape(m.content);
                         absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
