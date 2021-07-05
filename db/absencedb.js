@@ -62,6 +62,11 @@ class DatabaseTools {
         if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
             absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
         }
+        if (message.channel.type === 'dm') {
+            message.reply(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
+        } else {
+            message.member.send(`Ok, I've marked you present from ${startDate} until ${endDate}.  \n\nTo undo this, type: !absent ${startDate} ${endDate} `);
+        }
     }
 
     show(message) {
