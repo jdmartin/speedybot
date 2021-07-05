@@ -19,9 +19,9 @@ module.exports = {
         **strats**: Did you read the strat?
         **xkcd**: Read a random comic and feel better...\n
         __Attendance-related Commands__:
+        The commands !absent and !present assume you have a start date and an end date (defaults to same as start date if not given)
         The basic format for both !absent and !present is this: 
-        \t!command YYYY-MM-DD YYYY-MM-DD 
-        (the first is the start date, and the second is the end date. This is optional, with the same as start being assumed)
+        \t\t!command YYYY-MM-DD YYYY-MM-DD 
         
         **absences**: See known absences.
         **absent**: Let us know you won't be raiding. (Example: !absent 2021-07-04)
