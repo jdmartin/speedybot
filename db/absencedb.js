@@ -167,9 +167,9 @@ class DatabaseTools {
         }
 
         //Process a comment, if supplied.
-        let process_args = arguments;
+        let process_args = arguments.splice(0, 1);
         console.log(process_args);
-        
+
         if (args[1]) {
             var safe_reason = SqlString.escape(args[1]);
         } else {
