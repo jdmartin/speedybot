@@ -3,10 +3,12 @@ const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
 const utils = require("../utils/speedyutils.js");
 const client = utils.client;
+const tools = new DataFormattingTools();
 var parseISO = require('date-fns/parseISO');
 var isValid = require('date-fns/isValid');
 var format = require('date-fns/format');
 var SqlString = require('sqlstring');
+
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
     if (err) {
@@ -24,14 +26,16 @@ class CreateDatabase {
     }
 }
 
-class DatabaseTools {
+class DataFormattingTools {
     makeFriendlyDates(date) {
         //Ensures that dates are in the appropriate time zone (locally) by adding an ugly ISO timestamp.
         let friendlyDateTemp = date + 'T20:52:29.478Z';
         let friendlyDate = format(new Date(friendlyDateTemp), 'iii, MMM dd yyyy');
         return (friendlyDate)
     }
+}
 
+class DatabaseTools {
     validateDates(message, start, end) {
         //Make sure given dates are dates.
         if (!isValid(parseISO(start))) {
@@ -53,27 +57,27 @@ class DatabaseTools {
         //Select the appropriate type of response, and shorten if it's a single day.
         if (message.channel.type === 'dm') {
             if (start != end) {
-                message.reply(`Ok, I've marked you ${this_command} from ${this.makeFriendlyDates(start)} until ${this.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
+                message.reply(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
-                message.reply(`Ok, I've marked you ${this_command} on ${this.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
+                message.reply(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
         } else {
             if (start == end) {
-                message.member.send(`Ok, I've marked you ${this_command} from ${this.makeFriendlyDates(start)} until ${this.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
+                message.member.send(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
             } else {
-                message.member.send(`Ok, I've marked you ${this_command} on ${this.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
+                message.member.send(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
         }
         //Handle channel posts for absences and lates. Shorten if only a single day.
         if (this_command === 'absent') {
             if (start != end) {
-                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${this.makeFriendlyDates(start)} until ${this.makeFriendlyDates(end)}. They commented: ${reason}`)
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}. They commented: ${reason}`)
             } else {
-                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent on ${this.makeFriendlyDates(start)}. They commented: ${reason}`)
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent on ${tools.makeFriendlyDates(start)}. They commented: ${reason}`)
             }
         }
         if (this_command === 'late') {
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${this.makeFriendlyDates(start)}. They commented: ${reason}`)
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${tools.makeFriendlyDates(start)}. They commented: ${reason}`)
         }
     }
 
