@@ -54,20 +54,6 @@ client.on("message", message => {
     speedyStats.retrieve(message);
   }
 
-  //Pass author for these commands
-
-  if (command === 'present') {
-    absenceDBHelper.addPresent(message, args);
-  }
-
-  if (command === 'late') {
-    absenceDBHelper.tardy(message, args);
-  }
-
-  if (command === 'ontime') {
-    absenceDBHelper.ontime(message, args);
-  }
-
   //If the command is not in our list of commands...
   if (!client.commands.has(command)) return;
 
