@@ -181,6 +181,11 @@ class DatabaseTools {
                         collector.stop();
                     }
                 })
+                collector.on('end', (collected, reason) => {
+                    if (reason === 'time') {
+                        message.reply('Sorry, I ran out of time. Please try again.');
+                      }        
+                })
             })
         }
     }
