@@ -62,19 +62,21 @@ class DatabaseTools {
         }
         //Make sure dates are good.
         if (this.processDates(message, startDate, endDate)) {
-            message.reply("Ok, I've got the date(s). If you'd like to add a comment, reply to me in the next five minutes.");
-            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
-                max: 1,
-                time: 300000
-            });
-            collector.on('collect', m => {
-                if (m.content) {
-                    var safe_reason = SqlString.escape(m.content);
-                    absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
-                    this.generateResponse(message, "absent", "present", startDate, endDate);
-                    client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${startDate} until ${endDate}. They commented: ${safe_reason}`)
-                    collector.stop();
-                }
+            message.author.send("Ok, I've got the date(s). If you'd like to add a comment, reply to me in the next five minutes.");
+            message.author.createDM().then(dmchannel => {
+                const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, {
+                    max: 1,
+                    time: 300000
+                });
+                collector.on('collect', m => {
+                    if (m.content) {
+                        var safe_reason = SqlString.escape(m.content);
+                        absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
+                        this.generateResponse(message, "absent", "present", startDate, endDate);
+                        client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${startDate} until ${endDate}. They commented: ${safe_reason}`)
+                        collector.stop();
+                    }
+                })
             })
         }
     }
