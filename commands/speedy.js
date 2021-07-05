@@ -21,10 +21,14 @@ module.exports = {
         __Attendance-related Commands__:
         **absences**: See known absences.
         **absent**: Let us know you won't be raiding. (Example: !absent 2021-07-04)
+        **late**: Let us know you're running late. Speedy will ask you for a reason. (Example: !late 2021-07-04)
+        **ontime**: Cancels late. (Example: !ontime 2021-07-04)
         **present**: Cancel an absence. (Example: !present 2021-07-04)\n
-        Some examples which work with either **absent** or **present**:
+        Some examples which work with either **absent**, **late**, **ontime**, or **present**:
         !absent 2021-07-04 (Absent on July 4, 2021)
         !absent 2021-07-06 2021-07-13 (Absent from July 6 until July 13, 2021)
+        !late 2021-07-04 (Late on July 4, 2021)
+        !ontime 2021-07-04 (On-time on July 4, 2021 -- removes the late for that date)
         !present 2021-07-04 (Present on July 4, 2021 -- removes an absence for just that date)
         !present 2021-07-06 2021-07-13 (Present from July 6 until July 13, 2021 -- removes that range of absences)\n
         Want something else? Ask Doolan. ~~ 🐢
