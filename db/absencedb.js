@@ -51,8 +51,11 @@ class DataFormattingTools {
         var g = Date.parse(month + day, year);
         var gMonth = new Date(g).getMonth();
         
-        if (monNum == gMonth) {
-            console.log("Yay!");
+        if (gMonth >= monNum) {
+            console.log("This year");
+        }
+        if (gMonth < monNum) {
+            console.log("Next year!");
         }
         console.log(year, mon, date);
         //If month, day is equal to today: return this year.
