@@ -111,7 +111,7 @@ class DataFormattingTools {
                     return (start);
                 }
                 if ((isValid(parse(start, 'LLL dd, yyyy', new Date())))) {
-                    console.log(parse(start, 'LLL dd, yyyy', new Date()));
+                    return (this.makeFriendlyDates(parse(start, 'LLL dd, yyyy', new Date())));
                 }
                 if (!isValid(parseISO(start))) {
                     message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
