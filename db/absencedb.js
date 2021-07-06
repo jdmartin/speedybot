@@ -170,10 +170,10 @@ class DataEntryTools {
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
                 //Process Comments
                 var comment = args.slice(4).join(' ');
-            } else {
-                //Make sure we have an end date:
-                var endDate = startDate;
-            }
+            } 
+        } else {
+            //Make sure we have an end date:
+            var endDate = startDate;
         }
         console.log(endDate);
         //Make sure there's something in the comment field, even if empty.
