@@ -218,13 +218,14 @@ class DataEntryTools {
     }
 
     tardy(message, args) {
+        var currentYear = tools.determineYear(args[0],args[1]);
         //Make sure we have a date.
-        if (args.length >= 3) {
+        if (args.length >= 2) {
             if (tools.checkIsDate(args)) {
-                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
+                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
                 var startDate = tools.validateDates(message, rebuilt_date, undefined);
                 //Process a comment, if supplied.
-                var comment = args.slice(3).join(' ');
+                var comment = args.slice(2).join(' ');
             }
         }
         if (comment) {
