@@ -177,7 +177,7 @@ class DataEntryTools {
     ontime(message, args) {
         //Make sure we have dates.
         let startDate = args[0];
-        startDate = this.validateDates(message, startDate, undefined);
+        startDate = tools.validateDates(message, startDate, undefined);
         //Make sure given dates are dates.
         //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate))) {
