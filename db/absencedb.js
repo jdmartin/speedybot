@@ -50,11 +50,9 @@ class DataFormattingTools {
     determineYear(month, day) {
         //Create date object in GMT-5
         var d = new Date(new Date()-3600*1000*5);
-        //Set current year, month, and date
+        //Set current year, month
         let year = d.getFullYear();
-        let mon = d.toLocaleString("en-US", {month: "long"});
         let monNum = d.getMonth();
-        let date = d.getDate();
         //Get number of given month for later comparison
         var g = Date.parse(month + day, year);
         var gMonth = new Date(g).getMonth();
