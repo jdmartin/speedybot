@@ -240,7 +240,7 @@ class DataEntryTools {
                 var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
                 var startDate = tools.validateDates(message, rebuilt_date, undefined);
                 //Process a comment, if supplied.
-                var comment = args.slice(4).join(' ');
+                var comment = args.slice(3).join(' ');
             }  
         }
 
