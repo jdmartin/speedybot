@@ -139,7 +139,6 @@ const tools = new DataFormattingTools();
 
 class DataEntryTools {
     addAbsence(message, args) {
-        console.log(args);
         //Make sure we have start and end dates.
         let startDate = tools.validateDates(message, args[0], undefined);
         //Handle special days
@@ -150,18 +149,9 @@ class DataEntryTools {
             } else if (!isValid(parseISO(args[1]))) {
                 var endDate = startDate;
             }
-        }
-        //Process a comment, if supplied.
-        //Absences with an end date:
-        console.log(args);
-        if (isValid(parseISO(args[1]))) {
+            //Process Comments
             var comment = args.slice(2).join(' ');
-        }
-        if (!days.includes(args[1].toLowerCase())) {
-            var comment = args.slice(2).join(' ');
-        }
-        //Absences without an end date:
-        else {
+        } else {
             var comment = args.slice(1).join(' ');
         }
         //Make sure there's something in the comment field, even if empty.
