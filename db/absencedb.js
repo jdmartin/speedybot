@@ -189,6 +189,8 @@ class DataEntryTools {
                 if (args[3] && args[4] && args[5]) {
                     var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
                     var endDate = tools.validateDates(message, undefined, rebuilt_end);
+                } else if (tools.validateDates(message, undefined, args[3])) {
+                    var endDate = args[3];
                 } else {
                     var endDate = startDate;
                 }
