@@ -83,9 +83,6 @@ class DataFormattingTools {
     validateDates(message, start, end) {
         if (start != undefined) {
             //Make sure given dates are dates.
-            if ((isValid(parseISO(start)))) {
-                return (start);
-            }
             if ((isValid(parse(start, 'LLL dd, yyyy', new Date())))) {
                 let temp_date = parse(start, 'LLL dd, yyyy', new Date());
                 let simple_date = temp_date.toISOString().split('T')[0];
@@ -96,15 +93,11 @@ class DataFormattingTools {
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
-            if (!isValid(parseISO(start))) {
-                message.reply("Sorry, I need a start date in either format YYYY-MM-DD or MMM dd, yyyy");
-                return;
-            }
+            //Request date in proper format.
+            message.reply("Sorry, I need a start date in the format MMM dd, yyyy");
+            return;
         }
         if (end != undefined) {
-            if ((isValid(parseISO(end)))) {
-                    return (end);
-                }
             if ((isValid(parse(end, 'LLL dd, yyyy', new Date())))) {
                 let temp_date = parse(end, 'LLL dd, yyyy', new Date());
                 let simple_date = temp_date.toISOString().split('T')[0];
@@ -115,29 +108,17 @@ class DataFormattingTools {
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
-            if (!isValid(parseISO(end))) {
-                message.reply("Sorry, I need an end date in the format YYYY-MM-DD or MMM dd, yyyy. If none is given, I'll assume it's the same as the start date.");
-            }
+            message.reply("Sorry, I need an end date in the format MMM dd, yyyy. If none is given, I'll assume it's the same as the start date.");
+            return;
         }
     }
 }
-
 
 const tools = new DataFormattingTools();
 
 class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
-        if (args.length == 1) {
-            var startDate = tools.validateDates(message, args[0], undefined);
-            var endDate = startDate;
-            //Process Comments
-            var comment = args.slice(1).join(' ');
-        }
-        if (args.length == 2) {
-            var startDate = tools.validateDates(message, args[0], undefined);
-            var endDate = tools.validateDates(message, undefined, args[1]);
-        }
         if (args.length >= 3) {
             if (tools.checkIsDate(args[0], args[1], args[2])) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
@@ -153,14 +134,9 @@ class DataEntryTools {
                 //Process Comments
                 var comment = args.slice(6).join(' ');
             }
-        } else if (tools.validateDates(message, undefined, args[3])) {
-            var endDate = args[3];
-            //Process Comments
-            var comment = args.slice(4).join(' ');
         } else {
             var endDate = startDate;
         }
-
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
             var safe_reason = SqlString.escape(comment);
@@ -176,14 +152,6 @@ class DataEntryTools {
 
     addPresent(message, args) {
         //Make sure we have start and end dates.
-        if (args.length == 1) {
-            var startDate = tools.validateDates(message, args[0], undefined);
-            var endDate = startDate;
-        }
-        if (args.length == 2) {
-            var startDate = tools.validateDates(message, args[0], undefined);
-            var endDate = tools.validateDates(message, undefined, args[1]);
-        }
         if (args.length >= 3) {
             if (tools.checkIsDate(args)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
@@ -191,8 +159,6 @@ class DataEntryTools {
                 if (args[3] && args[4] && args[5]) {
                     var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
                     var endDate = tools.validateDates(message, undefined, rebuilt_end);
-                } else if (tools.validateDates(message, undefined, args[3])) {
-                    var endDate = args[3];
                 } else {
                     var endDate = startDate;
                 }
@@ -209,9 +175,6 @@ class DataEntryTools {
 
     ontime(message, args) {
         //Make sure we have dates.
-        if (args.length < 3) {
-            var startDate = tools.validateDates(message, args[0], undefined);
-        }
         if (args.length == 3) {
             if (tools.checkIsDate(args)) {
                 var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
@@ -227,11 +190,6 @@ class DataEntryTools {
 
     tardy(message, args) {
         //Make sure we have a date.
-        if (args.length < 3) {
-            var startDate = tools.validateDates(message, args[0], undefined);
-            //Process a comment, if supplied.
-            var comment = args.slice(1).join(' ');
-        }
         if (args.length >= 3) {
             if (tools.checkIsDate(args)) {
                 var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
