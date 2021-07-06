@@ -77,7 +77,7 @@ class DataFormattingTools {
     makeFriendlyDates(date) {
         //Ensures that dates are in the appropriate time zone (locally) by adding an ugly ISO timestamp.
         let friendlyDateTemp = date + offset;
-        let friendlyDate = format(new Date(friendlyDateTemp), 'iii, MMM dd yyyy');
+        let friendlyDate = format(new Date(friendlyDateTemp), 'iii. MMM. dd, yyyy');
         return (friendlyDate)
     }
 
@@ -94,13 +94,8 @@ class DataFormattingTools {
             return;
         }
         if (end != undefined) {
-            if ((isValid(parse(end, 'LLL dd, yyyy', new Date())))) {
-                let temp_date = parse(end, 'LLL dd, yyyy', new Date());
-                let simple_date = temp_date.toISOString().split('T')[0];
-                return (simple_date);
-            }
-            if ((isValid(parse(end, 'LLL dd yyyy', new Date())))) {
-                let temp_date = parse(end, 'LLL dd yyyy', new Date());
+            if ((isValid(parse(end, 'LLLL dd, yyyy', new Date())))) {
+                let temp_date = parse(end, 'LLLL dd, yyyy', new Date());
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
