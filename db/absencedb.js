@@ -57,34 +57,41 @@ class DataFormattingTools {
     }
 
     generateResponse(message, this_command, undo_command, start, end, reason) {
+        //Create some helpers and ensure needed parts:
+        var friendlyStart = tools.makeFriendlyDates(start);
+        var friendlyStartUndo = format(new Date(start + offset), 'MMM dd yyyy');
         //Make certain there's an end value.
         if (!end) {
             end = start;
+            var friendlyEnd = tools.makeFriendlyDates(end);
+            var friendlyEndUndo = format(new Date(end + offset), 'MMM dd yyyy');
         }
+
+
         //Select the appropriate type of response, and shorten if it's a single day.
         if (message.channel.type === 'dm') {
             if (start != end) {
-                message.reply(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${format(new Date(start + offset), 'MMM dd yyyy')} ${format(new Date(end + offset), 'MMM dd yyyy')} `);
+                message.reply(`Ok, I've marked you ${this_command} from ${friendlyStart} until ${friendlyEnd}.  \n\nTo undo this, type: !${undo_command} ${friendlyStartUndo} ${friendlyEndUndo} `);
             } else {
-                message.reply(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${format(new Date(start + offset), 'MMM dd yyyy')}`);
+                message.reply(`Ok, I've marked you ${this_command} on ${friendlyStart}.  \n\nTo undo this, type: !${undo_command} ${friendlyStartUndo}`);
             }
         } else {
             if (start != end) {
-                message.member.send(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${format(new Date(start + offset), 'MMM dd yyyy')} ${format(new Date(end + offset), 'MMM dd yyyy')} `);
+                message.member.send(`Ok, I've marked you ${this_command} from ${friendlyStart} until ${friendlyEnd}.  \n\nTo undo this, type: !${undo_command} ${friendlyStartUndo} ${friendlyEndUndo} `);
             } else {
-                message.member.send(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${format(new Date(start + offset), 'MMM dd yyyy')}`);
+                message.member.send(`Ok, I've marked you ${this_command} on ${friendlyStart}.  \n\nTo undo this, type: !${undo_command} ${friendlyStartUndo}`);
             }
         }
         //Handle channel posts for absences and lates. Shorten if only a single day.
         if (this_command === 'absent') {
             if (start != end) {
-                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}. They commented: ${reason}`)
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`)
             } else {
-                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent on ${tools.makeFriendlyDates(start)}. They commented: ${reason}`)
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent on ${friendlyStart}. They commented: ${reason}`)
             }
         }
         if (this_command === 'late') {
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${tools.makeFriendlyDates(start)}. They commented: ${reason}`)
+            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${friendlyStart}. They commented: ${reason}`)
         }
     }
 
