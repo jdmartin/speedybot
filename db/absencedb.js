@@ -99,7 +99,7 @@ class DataFormattingTools {
     validateDates(message, start, end) {
         //Handle special days
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
-        if (days.includes(start)) {
+        if (days.includes(start.toLowerCase())) {
             var new_start = this.calculateDate(start);
             return (new_start);
         } else {
