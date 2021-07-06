@@ -58,6 +58,12 @@ class DataFormattingTools {
         }
     }
 
+    checkIsDate(args) {
+        if ((parse(args[0], 'LLL')) && (parse(args[1], 'dd' || 'dd,')) && (parse(args[2], 'yyyy'))) {
+            console.log("yes");
+        }
+    }
+
     generateResponse(message, this_command, undo_command, start, end, reason) {
         //Make certain there's an end value.
         if (!end) {
@@ -198,6 +204,7 @@ class DataEntryTools {
 
     ontime(message, args) {
         //Make sure we have dates.
+        tools.checkIsDate(args);
         if (args[0] && args[1] && args[2]) {
             var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
             var startDate = tools.validateDates(message, rebuilt_date, undefined);
