@@ -191,7 +191,7 @@ class DataEntryTools {
 
     ontime(message, args) {
         //Make sure we have dates.
-        let startDate = tools.validateDates(message, args[0], undefined);
+        let startDate = tools.validateDates(message, args, undefined);
         //Only update db if we have a valid date.
         if (isValid(parseISO(startDate))) {
             absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
