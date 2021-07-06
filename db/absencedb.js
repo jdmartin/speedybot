@@ -210,10 +210,11 @@ class DataEntryTools {
             if (tools.checkIsDate(args)) {
                 var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
                 var startDate = tools.validateDates(message, rebuilt_date, undefined);
-            } else {
-                var startDate = tools.validateDates(message, args[0], undefined);
             }
+        else {
+            var startDate = tools.validateDates(message, args[0], undefined);
         }
+    }
         
         //Only update db if we have a valid date.
         if (isValid(parseISO(startDate))) {
