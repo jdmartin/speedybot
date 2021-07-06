@@ -41,21 +41,19 @@ class DataFormattingTools {
 
         switch(lower_selection) {
             case 'today':
-                console.log(simple_today);
                 return(simple_today);
             case 'tue':
-                console.log(tuesday);
                 return(tuesday);
             case 'tuesday':
-                return(nextTuesday(parseISO(simple_today)));
+                return(tuesday);
             case 'thu':
-                return(nextThursday(parseISO(simple_today)));
+                return(thursday);
             case 'thursday':
-                return(nextThursday(parseISO(simple_today)));
+                return(thursday);
             case 'sun':
-                return(nextSunday(parseISO(simple_today)));
+                return(sunday);
             case 'sunday':
-                return(nextSunday(parseISO(simple_today)));
+                return(sunday);
         }
     }
 
