@@ -89,6 +89,11 @@ class DataFormattingTools {
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
+            if ((isValid(parse(start, 'LLLL dd yyyy', new Date())))) {
+                let temp_date = parse(start, 'LLLL dd yyyy', new Date());
+                let simple_date = temp_date.toISOString().split('T')[0];
+                return (simple_date);
+            }
             //Request date in proper format.
             message.reply("Sorry, I need a start date in the format MMM dd, yyyy");
             return;
@@ -96,6 +101,11 @@ class DataFormattingTools {
         if (end != undefined) {
             if ((isValid(parse(end, 'LLLL dd, yyyy', new Date())))) {
                 let temp_date = parse(end, 'LLLL dd, yyyy', new Date());
+                let simple_date = temp_date.toISOString().split('T')[0];
+                return (simple_date);
+            }
+            if ((isValid(parse(end, 'LLLL dd yyyy', new Date())))) {
+                let temp_date = parse(end, 'LLLL dd yyyy', new Date());
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
