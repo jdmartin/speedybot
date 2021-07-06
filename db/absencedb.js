@@ -26,6 +26,17 @@ class CreateDatabase {
 }
 
 class DataFormattingTools {
+    calculateDate(date) {
+        const dayOfWeekMap = {
+            Mon: 1, Tue: 2, Wed: 3, Thur: 4, Fri: 5, Sat: 6, Sun: 7,
+        };
+        let today = this.makeFriendlyDates(format(new Date(), "yyyy-MM-dd"));
+        let dayOfWeek = this.makeFriendlyDates(format(new Date(), "EEE"));
+
+        console.log(today, dayOfWeek);
+
+    }
+
     generateResponse(message, this_command, undo_command, start, end, reason) {
         //Make certain there's an end value.
         if (!end) {
@@ -137,6 +148,7 @@ class DataEntryTools {
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
+        tools.calculateDate(startDate);
         //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate))) {
             absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
