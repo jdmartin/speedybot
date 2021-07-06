@@ -31,26 +31,26 @@ class CreateDatabase {
 
 class DataFormattingTools {
     calculateDate(day) {
+        //Get Date in GMT - 5
         let today = new Date(new Date()-3600*1000*5);
-        console.log(today);
         let simple_today = today.toISOString().split('T')[0];
         let lower_selection = day.toLowerCase();
 
         switch(lower_selection) {
             case 'today':
-                console.log(simple_today);
+                return(simple_today);
             case 'tue':
-                console.log(nextTuesday(parseISO(simple_today)));
+                return(nextTuesday(parseISO(simple_today)));
             case 'tuesday':
-                console.log(nextTuesday(parseISO(simple_today)));
+                return(nextTuesday(parseISO(simple_today)));
             case 'thu':
-                console.log(nextThursday(parseISO(simple_today)));
+                return(nextThursday(parseISO(simple_today)));
             case 'thursday':
-                console.log(nextThursday(parseISO(simple_today)));
+                return(nextThursday(parseISO(simple_today)));
             case 'sun':
-                console.log(nextSunday(parseISO(simple_today)));
+                return(nextSunday(parseISO(simple_today)));
             case 'sunday':
-                console.log(nextSunday(parseISO(simple_today)));
+                return(nextSunday(parseISO(simple_today)));
         }
     }
 
