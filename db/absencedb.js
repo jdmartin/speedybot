@@ -143,9 +143,6 @@ class DataEntryTools {
         let startDate = tools.validateDates(message, args[0], undefined);
         //Handle special days
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
-        if (args[1] == undefined) {
-            var comment = args.slice(1).join(' ');
-        }
         if (args[1] != undefined) {
             if (days.includes(args[1].toLowerCase())) {
                 var endDate = tools.validateDates(message, undefined, args[1]);
@@ -155,6 +152,8 @@ class DataEntryTools {
                 var endDate = startDate;
                 //Process Comments
                 var comment = args.slice(2).join(' ');
+            } else {
+                var comment = args.slice(1).join(' ');
             }
         } 
         //Make sure there's something in the comment field, even if empty.
