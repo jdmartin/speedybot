@@ -144,11 +144,11 @@ class DataEntryTools {
             var safe_reason = ' ';
         }
         //Make sure dates are good.
-        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
+        if ((isValid(parseISO(startDate)))) {
             absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
             tools.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
         } else {
-            message.reply("Sorry, check the format and try again.");
+            message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
         }
     }
 
