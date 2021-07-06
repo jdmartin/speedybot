@@ -188,6 +188,7 @@ class DataEntryTools {
         } else {
             var endDate = startDate;
         }
+        console.log(args,endDate);
         //Make sure given dates are dates.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If dates are good, do the update.
