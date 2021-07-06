@@ -97,7 +97,7 @@ class DataFormattingTools {
         //Handle special days
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
         if (days.includes(start)) {
-            let new_start = this.calculateDate(start);
+            var new_start = this.calculateDate(start);
             //Make sure given dates are dates.
             if (!isValid(parseISO(new_start))) {
                 message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
