@@ -163,7 +163,7 @@ class DataEntryTools {
                 //Process Comments
                 var comment = args.slice(4).join(' ');
             } else {
-                var endYear = startYear;
+                var endDate = startDate;
                 var comment = args.slice(2).join(' ');
             }
         } 
