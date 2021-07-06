@@ -99,20 +99,23 @@ class DataFormattingTools {
     validateDates(message, start, end) {
         //Handle special days
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
-
-        if (days.includes(start.toLowerCase())) {
-            var new_start = this.calculateDate(start);
-            return (new_start);
-        } else {
-            //Make sure given dates are dates.
-            if ((isValid(parseISO(start)))) {
-                return (start);
-            }
-            if (!isValid(parseISO(start))) {
-                message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
-                return;
+        
+        if (start != undefined) {
+            if (days.includes(start.toLowerCase())) {
+                var new_start = this.calculateDate(start);
+                return (new_start);
+            } else {
+                //Make sure given dates are dates.
+                if ((isValid(parseISO(start)))) {
+                    return (start);
+                }
+                if (!isValid(parseISO(start))) {
+                    message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
+                    return;
+                }
             }
         }
+
         if (end != undefined) {
             //Handle special days
             if (days.includes(end.toLowerCase())) {
