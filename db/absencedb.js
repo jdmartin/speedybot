@@ -42,6 +42,19 @@ class DataFormattingTools {
         }
     }
 
+    determineYear(month, day) {
+        //Create date object in GMT-5
+        var d = new Date(new Date()-3600*1000*5);
+        //Set current year
+        let year = d.getFullYear();
+        let mon = d.toLocaleString("en-US", {month: "long"});
+        let date = d.getDate();
+        console.log(year, mon, date);
+        //If month, day is equal to today: return this year.
+        //If month, day is after today: return this year.
+        //If month, day is before today: return next year.
+    }
+
     generateResponse(message, this_command, undo_command, start, end, reason) {
         //Make certain there's an end value.
         if (!end) {
@@ -177,6 +190,7 @@ class DataEntryTools {
     }
 
     ontime(message, args) {
+        tools.determineYear("foo","bar");
         //Make sure we have dates.
         if (args.length == 3) {
             if (tools.checkIsDate(args)) {
