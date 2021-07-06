@@ -159,7 +159,7 @@ class DataEntryTools {
             var comment = args.slice(2).join(' ');
         }
         if (!tools.checkIsMonth(args[2])) {
-            var endDate = startDate;
+            var endDate = tools.validateDates(message, rebuilt_start, undefined);
             var comment = args.slice(2).join(' ');
         }
         else if (tools.checkIsMonth(args[2])) {
