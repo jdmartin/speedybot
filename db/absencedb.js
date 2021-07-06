@@ -140,7 +140,7 @@ class DataEntryTools {
         let startDate = tools.validateDates(message, args[0], undefined);
         //Handle special days
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
-        if (days.includes(args[1])) {
+        if (days.includes(args[1].toLowerCase())) {
             var endDate = tools.validateDates(message, undefined, args[1]);
         } else if (!isValid(parseISO(args[1]))) {
             var endDate = startDate;
