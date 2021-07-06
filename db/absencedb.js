@@ -146,11 +146,13 @@ class DataEntryTools {
         if (args[1] != undefined) {
             if (days.includes(args[1].toLowerCase())) {
                 var endDate = tools.validateDates(message, undefined, args[1]);
+                //Process Comments
+                var comment = args.slice(2).join(' ');
             } else if (!isValid(parseISO(args[1]))) {
                 var endDate = startDate;
+                //Process Comments
+                var comment = args.slice(2).join(' ');
             }
-            //Process Comments
-            var comment = args.slice(2).join(' ');
         } else if (args[1] == undefined) {
             var comment = args.slice(1).join(' ');
         }
