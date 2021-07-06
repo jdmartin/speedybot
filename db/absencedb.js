@@ -11,10 +11,6 @@ var nextTuesday = require('date-fns/nextTuesday');
 var nextThursday = require('date-fns/nextThursday');
 var nextSunday = require('date-fns/nextSunday');
 var SqlString = require('sqlstring');
-const {
-    da
-} = require("date-fns/locale");
-
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
     if (err) {
