@@ -155,8 +155,6 @@ class DataEntryTools {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
             }
-            //Make sure we have an end date:
-            var endDate = startDate;
             //Process Comments
             var comment = args.slice(2).join(' ');
         }
@@ -172,7 +170,10 @@ class DataEntryTools {
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
                 //Process Comments
                 var comment = args.slice(4).join(' ');
-            } 
+            } else {
+                //Make sure we have an end date:
+                var endDate = startDate;
+            }
         }
         console.log(endDate);
         //Make sure there's something in the comment field, even if empty.
