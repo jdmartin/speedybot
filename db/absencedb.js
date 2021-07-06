@@ -153,6 +153,8 @@ class DataEntryTools {
                 //Process Comments
                 var comment = args.slice(6).join(' ');
             }
+        } else if (tools.validateDates(message, undefined, args[3])) {
+            var endDate = args[3];
         } else {
             var endDate = startDate;
         }
