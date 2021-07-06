@@ -7,9 +7,7 @@ var parseISO = require('date-fns/parseISO');
 var parse = require('date-fns/parse');
 var isValid = require('date-fns/isValid');
 var format = require('date-fns/format');
-var nextTuesday = require('date-fns/nextTuesday');
-var nextThursday = require('date-fns/nextThursday');
-var nextSunday = require('date-fns/nextSunday');
+var isEqual = require('date-fns/isEqual')
 var SqlString = require('sqlstring');
 const offset = 'T11:52:29.478Z';
 
@@ -43,12 +41,18 @@ class DataFormattingTools {
     }
 
     determineYear(month, day) {
+        let test = month + ' ' + day;
         //Create date object in GMT-5
         var d = new Date(new Date()-3600*1000*5);
         //Set current year
         let year = d.getFullYear();
         let mon = d.toLocaleString("en-US", {month: "long"});
         let date = d.getDate();
+        let today = mon + ' ' + date;
+        
+        if (isEqual(today, test)) {
+            console.log("Yay!");
+        }
         console.log(year, mon, date);
         //If month, day is equal to today: return this year.
         //If month, day is after today: return this year.
@@ -190,7 +194,7 @@ class DataEntryTools {
     }
 
     ontime(message, args) {
-        tools.determineYear("foo","bar");
+        tools.determineYear(args[0],args[1]);
         //Make sure we have dates.
         if (args.length == 3) {
             if (tools.checkIsDate(args)) {
