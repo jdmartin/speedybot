@@ -31,11 +31,8 @@ class CreateDatabase {
 
 class DataFormattingTools {
     calculateDate(day) {
-        let today = new Date().toLocaleDateString();
-        let year = today.getFullYear();
-        let month = today.getMonth();
-        let date = today.getDate();
-        console.log(today, year, month, date);
+        let today = new Date(new Date()-3600*1000*5).toLocaleDateString();
+        console.log(today);
         let simple_today = today.toISOString().split('T')[0];
         let lower_selection = day.toLowerCase();
 
