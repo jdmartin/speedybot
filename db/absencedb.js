@@ -41,6 +41,7 @@ class DataFormattingTools {
                 console.log(simple_today);
                 return(simple_today);
             case 'tue':
+                console.log(nextTuesday(parseISO(simple_today)));
                 return(nextTuesday(parseISO(simple_today)));
             case 'tuesday':
                 return(nextTuesday(parseISO(simple_today)));
