@@ -21,15 +21,15 @@ A tiny, eclectic bot for my guild's Discord channel.
 
 ## attendance-related commands:
 - The basic format for both !absent and !present is this: `!command start_date end_date`
-- The format for the dates is YYYY-MM-DD
+- The format for the dates is Month Date (you can use three letter months, or the whole word, and single digit dates can have a zero before or not)
 - The end_date is optional, and is set to the same as the start_date by default.
 - Comments in !absent and !late can have spaces. Feel free to ramble.
 - Commands:
   - !absences - See known absences.
-  - !absent - Let us know you won't be raiding. (Example: !absent 2021-07-04 Comment)
-  - !late - Let us know you'll be coming late. (Example: !late 2021-07-04 Comment)
+  - !absent - Let us know you won't be raiding. (Example: !absent July 4 Comment)
+  - !late - Let us know you'll be coming late. (Example: !late Jul 04 Comment)
   - !ontime - Cancels !late.
-  - !present - Cancel an absence. (Example: !present 2021-07-04)
+  - !present - Cancel an absence. (Example: !present Jul 4)
 
 ## credits:
 <small>1: Cats from [Random Cat](https://aws.random.cat/)</small>
