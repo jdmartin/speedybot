@@ -101,7 +101,7 @@ class DataFormattingTools {
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
         if (days.includes(start)) {
             var new_start = this.calculateDate(start);
-            return (true);
+            return (new_start);
         }
         //Make sure given dates are dates.
         if (!isValid(parseISO(new_start))) {
