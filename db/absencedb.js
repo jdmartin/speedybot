@@ -32,7 +32,7 @@ class CreateDatabase {
 class DataFormattingTools {
     calculateDate(day) {
         let today = new Date();
-        let simple_today = today.toISOString().split('T')[0];
+        let simple_today = today.toISOString().split('T')[0] + 'T20:52:29.478Z';
         let lower_selection = day.toLowerCase();
 
         switch(lower_selection) {
