@@ -4,6 +4,7 @@ const sqlite3 = require('sqlite3');
 const utils = require("../utils/speedyutils.js");
 const client = utils.client;
 var parseISO = require('date-fns/parseISO');
+var parse = require('date-fns/parse');
 var isValid = require('date-fns/isValid');
 var format = require('date-fns/format');
 var nextTuesday = require('date-fns/nextTuesday');
@@ -108,6 +109,9 @@ class DataFormattingTools {
                 //Make sure given dates are dates.
                 if ((isValid(parseISO(start)))) {
                     return (start);
+                }
+                if ((isValid(parse(start, 'LLL dd, yyyy')))) {
+                    console.log(parse(start, 'LLL dd, yyyy'));
                 }
                 if (!isValid(parseISO(start))) {
                     message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
