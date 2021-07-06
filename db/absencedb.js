@@ -59,7 +59,7 @@ class DataFormattingTools {
     }
 
     checkIsDate(a,b,c) {
-        if ((parse(a, 'LLL', new Date())) && (parse(b, 'dd', new Date())) && (parse(c, 'yyyy', new Date()))) {
+        if (((parse(a, 'LLL', new Date())) || (parse(a, 'LLLL', new Date()))) && (parse(b, 'dd', new Date())) && (parse(c, 'yyyy', new Date()))) {
             return (true);
         } else {
             return (false);
