@@ -30,10 +30,10 @@ class CreateDatabase {
 }
 
 class DataFormattingTools {
-    calculateDate(date, selection) {
+    calculateDate(day) {
         let today = new Date();
         let simple_today = today.toISOString().split('T')[0];
-        let lower_selection = selection.toLowerCase();
+        let lower_selection = day.toLowerCase();
 
         switch(lower_selection) {
             case 'today':
@@ -93,6 +93,11 @@ class DataFormattingTools {
     }
 
     validateDates(message, start, end) {
+        //Handle special days
+        const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
+        if (days.includes(start)) {
+            console.log(this.calculateDate(start));
+        }
         //Make sure given dates are dates.
         if (!isValid(parseISO(start))) {
             message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
@@ -164,7 +169,6 @@ class DataEntryTools {
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
         }
-        tools.calculateDate(startDate, 'tue');
         //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate))) {
             absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
