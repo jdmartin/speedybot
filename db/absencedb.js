@@ -29,32 +29,32 @@ class CreateDatabase {
 }
 
 class DataFormattingTools {
-    calculateDate(day) {
-        //Get Date in GMT - 5
-        let today = new Date(new Date() - 3600 * 1000 * 5);
-        let simple_today = today.toISOString().split('T')[0];
-        let tuesday = nextTuesday(parseISO(simple_today)).toISOString().split('T')[0];
-        let thursday = nextThursday(parseISO(simple_today)).toISOString().split('T')[0];
-        let sunday = nextSunday(parseISO(simple_today)).toISOString().split('T')[0];
-        let lower_selection = day.toLowerCase();
+    // calculateDate(day) {
+    //     //Get Date in GMT - 5
+    //     let today = new Date(new Date() - 3600 * 1000 * 5);
+    //     let simple_today = today.toISOString().split('T')[0];
+    //     let tuesday = nextTuesday(parseISO(simple_today)).toISOString().split('T')[0];
+    //     let thursday = nextThursday(parseISO(simple_today)).toISOString().split('T')[0];
+    //     let sunday = nextSunday(parseISO(simple_today)).toISOString().split('T')[0];
+    //     let lower_selection = day.toLowerCase();
 
-        switch (lower_selection) {
-            case 'today':
-                return (simple_today);
-            case 'tue':
-                return (tuesday);
-            case 'tuesday':
-                return (tuesday);
-            case 'thu':
-                return (thursday);
-            case 'thursday':
-                return (thursday);
-            case 'sun':
-                return (sunday);
-            case 'sunday':
-                return (sunday);
-        }
-    }
+    //     switch (lower_selection) {
+    //         case 'today':
+    //             return (simple_today);
+    //         case 'tue':
+    //             return (tuesday);
+    //         case 'tuesday':
+    //             return (tuesday);
+    //         case 'thu':
+    //             return (thursday);
+    //         case 'thursday':
+    //             return (thursday);
+    //         case 'sun':
+    //             return (sunday);
+    //         case 'sunday':
+    //             return (sunday);
+    //     }
+    // }
 
     checkIsDate(a, b, c) {
         if (parse(a, 'LLL', new Date())) {
@@ -108,58 +108,42 @@ class DataFormattingTools {
     }
 
     validateDates(message, start, end) {
-        //Handle special days
-        const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
-
         if (start != undefined) {
-            if (days.includes(start.toLowerCase())) {
-                var new_start = this.calculateDate(start);
-                return (new_start);
-            } else {
-                //Make sure given dates are dates.
-                if ((isValid(parseISO(start)))) {
-                    return (start);
-                }
-                if ((isValid(parse(start, 'LLL dd, yyyy', new Date())))) {
-                    let temp_date = parse(start, 'LLL dd, yyyy', new Date());
-                    let simple_date = temp_date.toISOString().split('T')[0];
-                    return (simple_date);
-                }
-                if ((isValid(parse(start, 'LLL dd yyyy', new Date())))) {
-                    let temp_date = parse(start, 'LLL dd yyyy', new Date());
-                    let simple_date = temp_date.toISOString().split('T')[0];
-                    return (simple_date);
-                }
-                if (!isValid(parseISO(start))) {
-                    message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
-                    return;
-                }
+            //Make sure given dates are dates.
+            if ((isValid(parseISO(start)))) {
+                return (start);
+            }
+            if ((isValid(parse(start, 'LLL dd, yyyy', new Date())))) {
+                let temp_date = parse(start, 'LLL dd, yyyy', new Date());
+                let simple_date = temp_date.toISOString().split('T')[0];
+                return (simple_date);
+            }
+            if ((isValid(parse(start, 'LLL dd yyyy', new Date())))) {
+                let temp_date = parse(start, 'LLL dd yyyy', new Date());
+                let simple_date = temp_date.toISOString().split('T')[0];
+                return (simple_date);
+            }
+            if (!isValid(parseISO(start))) {
+                message.reply("Sorry, I need a start date in either format YYYY-MM-DD or MMM dd, yyyy");
+                return;
             }
         }
-
         if (end != undefined) {
-            //Handle special days
-            if (days.includes(end.toLowerCase())) {
-                var new_end = this.calculateDate(end);
-                return (new_end);
-            } else {
-                //Make sure given dates are dates.
-                if ((isValid(parseISO(end)))) {
+            if ((isValid(parseISO(end)))) {
                     return (end);
                 }
-                if ((isValid(parse(end, 'LLL dd, yyyy', new Date())))) {
-                    let temp_date = parse(end, 'LLL dd, yyyy', new Date());
-                    let simple_date = temp_date.toISOString().split('T')[0];
-                    return (simple_date);
-                }
-                if ((isValid(parse(end, 'LLL dd yyyy', new Date())))) {
-                    let temp_date = parse(end, 'LLL dd yyyy', new Date());
-                    let simple_date = temp_date.toISOString().split('T')[0];
-                    return (simple_date);
-                }
-                if (!isValid(parseISO(end))) {
-                    message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
-                }
+            if ((isValid(parse(end, 'LLL dd, yyyy', new Date())))) {
+                let temp_date = parse(end, 'LLL dd, yyyy', new Date());
+                let simple_date = temp_date.toISOString().split('T')[0];
+                return (simple_date);
+            }
+            if ((isValid(parse(end, 'LLL dd yyyy', new Date())))) {
+                let temp_date = parse(end, 'LLL dd yyyy', new Date());
+                let simple_date = temp_date.toISOString().split('T')[0];
+                return (simple_date);
+            }
+            if (!isValid(parseISO(end))) {
+                message.reply("Sorry, I need an end date in the format YYYY-MM-DD or MMM dd, yyyy. If none is given, I'll assume it's the same as the start date.");
             }
         }
     }
@@ -235,7 +219,6 @@ class DataEntryTools {
                 }
             }
         }
-
         //Make sure given dates are dates.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If dates are good, do the update.
