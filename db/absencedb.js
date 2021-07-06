@@ -153,6 +153,8 @@ class DataEntryTools {
             var comment = args.slice(2).join(' ');
         }
         if (args[2] && args[3]) {
+            //Make sure we have an end date:
+            var endDate = startDate;
             //Make sure end year is equal or greater to start year.
             if (tools.getCurrentYear() >= startYear) {
                 var endYear = tools.determineYear(args[2],args[3]);
