@@ -97,25 +97,43 @@ class DataFormattingTools {
         //Handle special days
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
         if (days.includes(start)) {
-            choice = this.calculateDate(start);
-        }
-        //Make sure given dates are dates.
-        if (!isValid(parseISO(choice))) {
-            message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
-            return;
-        }
-        if (end != undefined) {
-            if (!isValid(parseISO(end))) {
-                message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
+            start = this.calculateDate(start);
+            //Make sure given dates are dates.
+            if (!isValid(parseISO(start))) {
+                message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
+                return;
             }
-            if ((isValid(parseISO(start))) && (isValid(parseISO(end)))) {
-                return (true);
-            }
+            if (end != undefined) {
+                if (!isValid(parseISO(end))) {
+                    message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
+                }
+                if ((isValid(parseISO(start))) && (isValid(parseISO(end)))) {
+                    return (true);
+                }
+            } else {
+                if ((isValid(parseISO(start)))) {
+                    return (true);
+                }
+            } 
         } else {
-            if ((isValid(parseISO(start)))) {
-                return (true);
+            //Make sure given dates are dates.
+            if (!isValid(parseISO(start))) {
+                message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
+                return;
             }
-        }        
+            if (end != undefined) {
+                if (!isValid(parseISO(end))) {
+                    message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
+                }
+                if ((isValid(parseISO(start))) && (isValid(parseISO(end)))) {
+                    return (true);
+                }
+            } else {
+                if ((isValid(parseISO(start)))) {
+                    return (true);
+                }
+            }           
+        }
     }
 }
 
