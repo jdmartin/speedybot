@@ -178,15 +178,17 @@ class DataEntryTools {
 
     addPresent(message, args) {
         //Make sure we have start and end dates.
-        if (args.length >= 3) {
-            if (tools.checkIsDate(args[0], args[1], args[2])) {
-                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
+        if (args.length >= 2) {
+            var startYear = tools.determineYear(args[0],args[1]);
+            if (tools.checkIsDate(args[0], args[1], startYear)) {
+                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
             }
         }
         if (args[3] && args[4] && args[5]) {
-            if (tools.checkIsDate(args[3], args[4], args[5])) {
-                var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
+            var endYear = tools.determineYear(args[3],args[4]);
+            if (tools.checkIsDate(args[3], args[4], endYear)) {
+                var rebuilt_end = args[3] + ' ' + args[4] + ' ' + endYear;
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
             }
         } else {
