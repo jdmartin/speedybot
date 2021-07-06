@@ -149,8 +149,6 @@ const tools = new DataFormattingTools();
 class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
-        var endDate = args[2] + ' ' + args[3];
-        console.log("First ", endDate);
         if (tools.checkIsMonth(args[0])) {
             var startYear = tools.determineYear(args[0],args[1]);
             if (tools.checkIsDate(args[0], args[1], startYear)) {
@@ -159,18 +157,21 @@ class DataEntryTools {
             }
             //Process Comments
             var comment = args.slice(2).join(' ');
-        }
-        if (tools.checkIsMonth(args[2])) {
-            //Make sure end year is equal or greater to start year.
-            if (tools.getCurrentYear() >= startYear) {
-                var endYear = tools.determineYear(args[2],args[3]);
+
+            if (tools.checkIsMonth(args[2])) {
+                //Make sure end year is equal or greater to start year.
+                if (tools.getCurrentYear() >= startYear) {
+                    var endYear = tools.determineYear(args[2],args[3]);
+                } else {
+                    var endYear = startYear;
+                }
+                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
+                var endDate = tools.validateDates(message, undefined, rebuilt_end);
+                //Process Comments
+                var comment = args.slice(4).join(' ');
             } else {
-                var endYear = startYear;
+                var endDate = startDate;
             }
-            var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
-            var endDate = tools.validateDates(message, undefined, rebuilt_end);
-            //Process Comments
-            var comment = args.slice(4).join(' ');
         }
         console.log(endDate);
         //Make sure there's something in the comment field, even if empty.
