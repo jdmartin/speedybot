@@ -112,7 +112,8 @@ class DataFormattingTools {
                 }
                 if ((isValid(parse(start, 'LLL dd, yyyy', new Date())))) {
                     let temp_date = parse(start, 'LLL dd, yyyy', new Date());
-                    return(temp_date.split('T')[0]);
+                    let simple_date = temp_date.toISOString().split('T')[0];
+                    return(simple_date);
                 }
                 if (!isValid(parseISO(start))) {
                     message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
