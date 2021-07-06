@@ -168,6 +168,7 @@ class DataEntryTools {
             if (tools.checkIsDate(args[2], args[3], endYear)) {
                 var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
+                console.log(tools.validateDates(message, undefined, rebuilt_end));
                 //Process Comments
                 var comment = args.slice(4).join(' ');
             }
