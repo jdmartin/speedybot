@@ -193,14 +193,13 @@ class DataEntryTools {
 
     addPresent(message, args) {
         //Make sure we have start and end dates.
-        if (args.length < 2) {
+        if (args.length == 1) {
             var startDate = tools.validateDates(message, args[0], undefined);
-            if (args[1]) {
-                var endDate = tools.validateDates(message, undefined, args[1]);
-            }
-            if (!args[1]) {
-                endDate = startDate;
-            }
+            var endDate = startDate;
+        }
+        if (args.length == 2) {
+            var startDate = tools.validateDates(message, args[0], undefined);
+            var endDate = tools.validateDates(message, undefined, args[1]);
         }
         if (args.length >= 3) {
             if (tools.checkIsDate(args)) {
