@@ -41,16 +41,14 @@ class DataFormattingTools {
     }
 
     determineYear(month, day) {
-        let test = month + ' ' + day;
         //Create date object in GMT-5
         var d = new Date(new Date()-3600*1000*5);
         //Set current year
         let year = d.getFullYear();
         let mon = d.toLocaleString("en-US", {month: "long"});
         let date = d.getDate();
-        let today = mon + ' ' + date;
         
-        if (isEqual(today, test)) {
+        if (isEqual((mon,date), (month,day))) {
             console.log("Yay!");
         }
         console.log(year, mon, date);
