@@ -85,7 +85,7 @@ class DataFormattingTools {
         if (start != undefined) {
             //Make sure given dates are dates.
             if ((isValid(parse(start, 'LLLL dd, yyyy', new Date())))) {
-                let temp_date = parse(start, 'LLL dd, yyyy', new Date());
+                let temp_date = parse(start, 'LLLL dd, yyyy', new Date());
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
