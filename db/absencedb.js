@@ -190,16 +190,16 @@ class DataEntryTools {
                 //Process Comments
                 var comment = args.slice(3).join(' ');
             }
-            if (args[3] && args[4] && args[5]) {
-                if (tools.checkIsDate(args[3],args[4],args[5])) {            
-                    var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
-                    var endDate = tools.validateDates(message, undefined, rebuilt_end);
-                    //Process Comments
-                    var comment = args.slice(5).join(' ');
-                } 
+        }
+        if (args[3] && args[4] && args[5]) {
+            if (tools.checkIsDate(args[3],args[4],args[5])) {            
+                var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
+                var endDate = tools.validateDates(message, undefined, rebuilt_end);
+                //Process Comments
+                var comment = args.slice(5).join(' ');
+            } 
             } else {
                 var endDate = startDate;
-                
             }
          
         //Make sure there's something in the comment field, even if empty.
