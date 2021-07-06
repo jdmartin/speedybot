@@ -58,8 +58,8 @@ class DataFormattingTools {
         }
     }
 
-    checkIsDate(one, two, three) {
-        if ((parse(one, 'LLL')) && (parse(two, 'dd')) && (parse(three, 'yyyy'))) {
+    checkIsDate(a,b,c) {
+        if ((parse(a, 'LLL')) && (parse(b, 'dd')) && (parse(c, 'yyyy'))) {
             console.log("yes");
         } else {
             console.log("no");
