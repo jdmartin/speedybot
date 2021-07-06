@@ -66,8 +66,6 @@ class DataFormattingTools {
             var friendlyEnd = tools.makeFriendlyDates(end);
             var friendlyEndUndo = format(new Date(end + offset), 'MMM dd yyyy');
         }
-
-
         //Select the appropriate type of response, and shorten if it's a single day.
         if (message.channel.type === 'dm') {
             if (start != end) {
@@ -177,16 +175,18 @@ class DataEntryTools {
     addPresent(message, args) {
         //Make sure we have start and end dates.
         if (args.length >= 3) {
-            if (tools.checkIsDate(args)) {
+            if (tools.checkIsDate(args[0], args[1], args[2])) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
-                if (args[3] && args[4] && args[5]) {
-                    var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
-                    var endDate = tools.validateDates(message, undefined, rebuilt_end);
-                } else {
-                    var endDate = startDate;
-                }
             }
+        }
+        if (args[3] && args[4] && args[5]) {
+            if (tools.checkIsDate(args[3], args[4], args[5])) {
+                var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
+                var endDate = tools.validateDates(message, undefined, rebuilt_end);
+            }
+        } else {
+            var endDate = startDate;
         }
         //Make sure given dates are dates.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
