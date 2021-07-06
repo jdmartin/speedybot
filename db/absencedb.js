@@ -150,6 +150,7 @@ class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
         var endDate = args[2] + ' ' + args[3];
+        console.log("First ", endDate);
         if (tools.checkIsMonth(args[0])) {
             var startYear = tools.determineYear(args[0],args[1]);
             if (tools.checkIsDate(args[0], args[1], startYear)) {
