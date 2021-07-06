@@ -232,15 +232,17 @@ class DataEntryTools {
         //Make sure we have a date.
         if (args.length < 3) {
             var startDate = tools.validateDates(message, args[0], undefined);
+            //Process a comment, if supplied.
+            var comment = args.slice(1).join(' ');
         }
-        if (args.length == 3) {
+        if (args.length >= 3) {
             if (tools.checkIsDate(args)) {
                 var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
                 var startDate = tools.validateDates(message, rebuilt_date, undefined);
+                //Process a comment, if supplied.
+                var comment = args.slice(4).join(' ');
             }  
         }
-        //Process a comment, if supplied.
-        let comment = args.slice(1).join(' ');
 
         if (comment) {
             var safe_reason = SqlString.escape(comment);
