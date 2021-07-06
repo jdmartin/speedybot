@@ -50,17 +50,14 @@ class DataFormattingTools {
         //Get number of given month for later comparison
         var g = Date.parse(month + day, year);
         var gMonth = new Date(g).getMonth();
-        
+        //If month is equal to or after this month: return this year.
+        //If month is before this month: return next year.
         if (gMonth >= monNum) {
-            console.log("This year");
+            console.log(year);
         }
         if (gMonth < monNum) {
             console.log(year + 1);
-        }
-        console.log(year, mon, date);
-        //If month, day is equal to today: return this year.
-        //If month, day is after today: return this year.
-        //If month, day is before today: return next year.
+        }        
     }
 
     generateResponse(message, this_command, undo_command, start, end, reason) {
