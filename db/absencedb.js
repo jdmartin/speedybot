@@ -165,10 +165,12 @@ class DataEntryTools {
             } else {
                 var endYear = startYear;
             }
-            var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
-            var endDate = tools.validateDates(message, undefined, rebuilt_end);
-            //Process Comments
-            var comment = args.slice(4).join(' ');
+            if (tools.checkIsDate(args[2], args[3], endYear)) {
+                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
+                var endDate = tools.validateDates(message, undefined, rebuilt_end);
+                //Process Comments
+                var comment = args.slice(4).join(' ');
+            }
         }
         if (endDate == undefined) {
             endDate = startDate;
