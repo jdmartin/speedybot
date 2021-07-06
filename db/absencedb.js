@@ -110,7 +110,7 @@ class DataFormattingTools {
                 if ((isValid(parseISO(start)))) {
                     return (start);
                 }
-                if ((isValid(parse(start, 'LLL dd, yyyy', new Date()))) | (isValid(parse(start, 'LLL dd yyyy', new Date())))) {
+                if ((isValid(parse(start, 'LLL dd, yyyy', new Date()))) || (isValid(parse(start, 'LLL dd yyyy', new Date())))) {
                     let temp_date = parse(start, 'LLL dd, yyyy', new Date());
                     let simple_date = temp_date.toISOString().split('T')[0];
                     return(simple_date);
