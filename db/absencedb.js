@@ -28,9 +28,9 @@ class CreateDatabase {
 
 class DataFormattingTools {
     checkIsDate(a, b, c) {
-        if (parse(a, 'LLLL', new Date())) {
-            if (parse(b, 'dd', new Date())) {
-                if ((parse(c, 'yyyy', new Date()))) {
+        if (parse(a, 'LLLL', new Date())) { //Month Check
+            if (parse(b, 'dd', new Date())) { //Day Check
+                if ((parse(c, 'yyyy', new Date()))) { //Year Check 
                     return (true);
                 }
             }
