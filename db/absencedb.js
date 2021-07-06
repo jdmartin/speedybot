@@ -130,7 +130,7 @@ class DataFormattingTools {
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
-            message.reply("Sorry, I need an end date in the format 'Month Day'. If none is given, I'll assume it's the same as the start date.");
+            message.reply("Sorry, I need an end date in the format 'Month Day'.");
             return;
         }
     }
@@ -141,7 +141,7 @@ const tools = new DataFormattingTools();
 class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
-        if (args.length >= 2) {
+        if (args[0] && args[1]) {
             var startYear = tools.determineYear(args[0],args[1]);
             if (tools.checkIsDate(args[0], args[1], startYear)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
