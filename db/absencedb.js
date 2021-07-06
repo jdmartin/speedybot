@@ -30,7 +30,7 @@ class CreateDatabase {
 
 class DataFormattingTools {
     calculateDate(date) {
-        let today = nextTuesday(date);
+        let today = nextTuesday(parseISO(date));
 
         console.log(today);
 
