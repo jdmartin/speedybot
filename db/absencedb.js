@@ -185,10 +185,10 @@ class DataEntryTools {
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
             }
         }
-        if (args[3] && args[4] && args[5]) {
-            var endYear = tools.determineYear(args[3],args[4]);
-            if (tools.checkIsDate(args[3], args[4], endYear)) {
-                var rebuilt_end = args[3] + ' ' + args[4] + ' ' + endYear;
+        if (args[2] && args[3]) {
+            var endYear = tools.determineYear(args[2],args[3]);
+            if (tools.checkIsDate(args[2], args[3], endYear)) {
+                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
             }
         } else {
