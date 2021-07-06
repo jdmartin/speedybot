@@ -111,7 +111,7 @@ class DataFormattingTools {
                     return (start);
                 }
                 if ((isValid(parse(start, 'LLL dd, yyyy', new Date())))) {
-                    return (this.makeFriendlyDates(parse(start, 'LLL dd, yyyy', new Date())));
+                    return ((parse(start, 'LLL dd, yyyy', new Date())).split('T')[0]);
                 }
                 if (!isValid(parseISO(start))) {
                     message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
