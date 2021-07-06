@@ -37,19 +37,19 @@ class DataFormattingTools {
 
         switch(lower_selection) {
             case 'today':
-                return(simple_today);
+                console.log(simple_today);
             case 'tue':
-                return(nextTuesday(parseISO(date)));
+                console.log(nextTuesday(parseISO(date)));
             case 'tuesday':
-                return(nextTuesday(parseISO(date)));
+                console.log(nextTuesday(parseISO(date)));
             case 'thu':
-                return(nextThursday(parseISO(date)));
+                console.log(nextThursday(parseISO(date)));
             case 'thursday':
-                return(nextThursday(parseISO(date)));
+                console.log(nextThursday(parseISO(date)));
             case 'sun':
-                return(nextSunday(parseISO(date)));
+                console.log(nextSunday(parseISO(date)));
             case 'sunday':
-                return(nextSunday(parseISO(date)));
+                console.log(nextSunday(parseISO(date)));
         }
     }
 
