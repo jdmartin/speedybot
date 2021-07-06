@@ -239,10 +239,6 @@ class DataEntryTools {
                 var startDate = tools.validateDates(message, rebuilt_date, undefined);
             }  
         }
-        //Make sure given dates are dates.
-        if (!isValid(parseISO(startDate))) {
-            message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
-        }
         //Process a comment, if supplied.
         let comment = args.slice(1).join(' ');
 
