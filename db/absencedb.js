@@ -45,9 +45,12 @@ class DataFormattingTools {
         //Set current year, month, and date
         let year = d.getFullYear();
         let mon = d.toLocaleString("en-US", {month: "long"});
+        let monNum = d.getMonth();
         let date = d.getDate();
+        //Get number of given month for later comparison
+        var g = Date.parse(month + day, year).getMonth();
         
-        if ((mon == month) && (date == day)) {
+        if ((monNum == g) {
             console.log("Yay!");
         }
         console.log(year, mon, date);
@@ -198,7 +201,7 @@ class DataEntryTools {
     }
 
     ontime(message, args) {
-        //tools.determineYear(args[0],args[1]);
+        tools.determineYear(args[0],args[1]);
         //Make sure we have dates.
         if (args.length == 3) {
             if (tools.checkIsDate(args)) {
