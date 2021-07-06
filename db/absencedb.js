@@ -76,7 +76,7 @@ class DataFormattingTools {
 
     makeFriendlyDates(date) {
         //Ensures that dates are in the appropriate time zone (locally) by adding an ugly ISO timestamp.
-        let friendlyDateTemp = date + 'T20:52:29.478Z';
+        let friendlyDateTemp = date + offset;
         let friendlyDate = format(new Date(friendlyDateTemp), 'iii, MMM dd yyyy');
         return (friendlyDate)
     }
