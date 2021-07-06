@@ -196,7 +196,7 @@ class DataEntryTools {
                 var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
                 //Process Comments
-                var comment = args.slice(5).join(' ');
+                var comment = args.slice(6).join(' ');
             } 
             } else {
                 var endDate = startDate;
