@@ -230,11 +230,15 @@ class DataEntryTools {
 
     tardy(message, args) {
         //Make sure we have a date.
-        if (args.length == 3) {
-            tools.checkIsDate(args);
+        if (args.length < 3) {
+            var startDate = tools.validateDates(message, args[0], undefined);
         }
-        let startDate = tools.validateDates(message, args[0], undefined);
-
+        if (args.length == 3) {
+            if (tools.checkIsDate(args)) {
+                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
+                var startDate = tools.validateDates(message, rebuilt_date, undefined);
+            }  
+        }
         //Make sure given dates are dates.
         if (!isValid(parseISO(startDate))) {
             message.reply("Sorry, I need a date in the format YYYY-MM-DD.");
