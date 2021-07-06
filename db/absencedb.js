@@ -60,9 +60,9 @@ class DataFormattingTools {
 
     checkIsDate(a,b,c) {
         if ((parse(a, 'LLL', new Date())) && (parse(b, 'dd', new Date())) && (parse(c, 'yyyy', new Date()))) {
-            console.log("yes");
+            return (true);
         } else {
-            console.log("no");
+            return (false);
         }
     }
 
@@ -207,11 +207,12 @@ class DataEntryTools {
     ontime(message, args) {
         //Make sure we have dates.
         if (args.length == 3) {
-            tools.checkIsDate(args);
-            var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
-            var startDate = tools.validateDates(message, rebuilt_date, undefined);
-        } else {
-            var startDate = tools.validateDates(message, args[0], undefined);
+            if (tools.checkIsDate(args)) {
+                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
+                var startDate = tools.validateDates(message, rebuilt_date, undefined);
+            } else {
+                var startDate = tools.validateDates(message, args[0], undefined);
+            }
         }
         
         //Only update db if we have a valid date.
@@ -223,6 +224,8 @@ class DataEntryTools {
 
     tardy(message, args) {
         //Make sure we have a date.
+        if (args.length == 3) {
+            tools.checkIsDate(args);
         let startDate = tools.validateDates(message, args[0], undefined);
 
         //Make sure given dates are dates.
