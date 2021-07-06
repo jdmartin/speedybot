@@ -48,7 +48,7 @@ class DataFormattingTools {
         let mon = d.toLocaleString("en-US", {month: "long"});
         let date = d.getDate();
         
-        if (isEqual((mon,date), (month,day))) {
+        if ((mon = month) && (date = day)) {
             console.log("Yay!");
         }
         console.log(year, mon, date);
