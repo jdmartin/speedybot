@@ -10,6 +10,7 @@ var nextTuesday = require('date-fns/nextTuesday');
 var nextThursday = require('date-fns/nextThursday');
 var nextSunday = require('date-fns/nextSunday');
 var SqlString = require('sqlstring');
+const { da } = require("date-fns/locale");
 
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
@@ -29,11 +30,27 @@ class CreateDatabase {
 }
 
 class DataFormattingTools {
-    calculateDate(date) {
-        let today = nextTuesday(parseISO(date));
+    calculateDate(date, selection) {
+        let today = new Date();
+        let simple_today = today.toISOString().split('T')[0];
+        let lower_selection = selection.toLowerCase();
 
-        console.log(today);
-
+        switch(lower_selection) {
+            case 'today':
+                return(simple_today);
+            case 'tue':
+                return(nextTuesday(parseISO(date)));
+            case 'tuesday':
+                return(nextTuesday(parseISO(date)));
+            case 'thu':
+                return(nextThursday(parseISO(date)));
+            case 'thursday':
+                return(nextThursday(parseISO(date)));
+            case 'sun':
+                return(nextSunday(parseISO(date)));
+            case 'sunday':
+                return(nextSunday(parseISO(date)));
+        }
     }
 
     generateResponse(message, this_command, undo_command, start, end, reason) {
