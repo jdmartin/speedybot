@@ -97,9 +97,9 @@ class DataFormattingTools {
         //Handle special days
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
         if (days.includes(start)) {
-            start = this.calculateDate(start);
+            new_start = this.calculateDate(start);
             //Make sure given dates are dates.
-            if (!isValid(parseISO(start))) {
+            if (!isValid(parseISO(new_start))) {
                 message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
                 return;
             }
@@ -107,11 +107,11 @@ class DataFormattingTools {
                 if (!isValid(parseISO(end))) {
                     message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
                 }
-                if ((isValid(parseISO(start))) && (isValid(parseISO(end)))) {
+                if ((isValid(parseISO(new_start))) && (isValid(parseISO(end)))) {
                     return (true);
                 }
             } else {
-                if ((isValid(parseISO(start)))) {
+                if ((isValid(parseISO(new_start)))) {
                     return (true);
                 }
             } 
