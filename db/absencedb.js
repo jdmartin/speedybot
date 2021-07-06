@@ -169,8 +169,11 @@ class DataEntryTools {
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
                 //Process Comments
                 var comment = args.slice(4).join(' ');
-            } else {
+            }
+
+            if (!tools.checkIsMonth(args[2])) {
                 var endDate = startDate;
+                var comment = args.slice(2).join(' ');
             }
         }
         console.log(endDate);
