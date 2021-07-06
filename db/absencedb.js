@@ -152,7 +152,7 @@ class DataEntryTools {
         }
         //Process a comment, if supplied.
         //Absences with an end date:
-        if (isValid(parseISO(endDate))) {
+        if (isValid(parseISO(args[1]))) {
             var comment = args.slice(2).join(' ');
         }
         //Absences without an end date:
