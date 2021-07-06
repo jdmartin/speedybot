@@ -203,9 +203,11 @@ class DataEntryTools {
         if (args.length >= 3) {
             if (tools.checkIsDate(args)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
+                console.log("rebuilt start ", rebuilt_start);
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
                 if (args[3] && args[4] && args[5]) {
                     var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
+                    console.log("rebuilt end ", rebuilt_end);
                     var endDate = tools.validateDates(message, undefined, rebuilt_end);
                 } else {
                     var endDate = startDate;
