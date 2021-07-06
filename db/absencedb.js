@@ -6,6 +6,9 @@ const client = utils.client;
 var parseISO = require('date-fns/parseISO');
 var isValid = require('date-fns/isValid');
 var format = require('date-fns/format');
+var nextTuesday = require('date-fns/nextTuesday');
+var nextThursday = require('date-fns/nextThursday');
+var nextSunday = require('date-fns/nextSunday');
 var SqlString = require('sqlstring');
 
 
@@ -27,13 +30,9 @@ class CreateDatabase {
 
 class DataFormattingTools {
     calculateDate(date) {
-        const dayOfWeekMap = {
-            Mon: 1, Tue: 2, Wed: 3, Thur: 4, Fri: 5, Sat: 6, Sun: 7,
-        };
-        let today = this.makeFriendlyDates(format(new Date(), "yyyy-MM-dd"));
-        let dayOfWeek = this.makeFriendlyDates(format(new Date(), "EEE"));
+        let today = nextTuesday(date);
 
-        console.log(today, dayOfWeek);
+        console.log(today);
 
     }
 
