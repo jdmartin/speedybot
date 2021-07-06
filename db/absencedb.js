@@ -173,20 +173,33 @@ const tools = new DataFormattingTools();
 class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
-        let startDate = tools.validateDates(message, args[0], undefined);
-        //Handle special days
-        const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
-        if (args[1] != undefined) {
-            if (days.includes(args[1].toLowerCase())) {
-                var endDate = tools.validateDates(message, undefined, args[1]);
+        if (args.length == 1) {
+            var startDate = tools.validateDates(message, args[0], undefined);
+            var endDate = startDate;
+            //Process Comments
+            var comment = args.slice(1).join(' ');
+        }
+        if (args.length == 2) {
+            var startDate = tools.validateDates(message, args[0], undefined);
+            var endDate = tools.validateDates(message, undefined, args[1]);
+        }
+        if (args.length >= 3) {
+            if (tools.checkIsDate(args)) {
+                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
+                var startDate = tools.validateDates(message, rebuilt_start, undefined);
+                if (args[3] && args[4] && args[5]) {
+                    var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
+                    var endDate = tools.validateDates(message, undefined, rebuilt_end);
+                } else {
+                    var endDate = startDate;
+                }
                 //Process Comments
                 var comment = args.slice(2).join(' ');
-            } else if (!isValid(parseISO(args[1]))) {
-                var endDate = startDate;
-                //Process Comments
-                var comment = args.slice(1).join(' ');
-            } 
-        } 
+            }
+        }
+        
+        let startDate = tools.validateDates(message, args[0], undefined);
+         
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
             var safe_reason = SqlString.escape(comment);
@@ -213,11 +226,9 @@ class DataEntryTools {
         if (args.length >= 3) {
             if (tools.checkIsDate(args)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
-                console.log("rebuilt start ", rebuilt_start);
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
                 if (args[3] && args[4] && args[5]) {
                     var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
-                    console.log("rebuilt end ", rebuilt_end);
                     var endDate = tools.validateDates(message, undefined, rebuilt_end);
                 } else {
                     var endDate = startDate;
