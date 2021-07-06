@@ -3,12 +3,12 @@ const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
 const utils = require("../utils/speedyutils.js");
 const client = utils.client;
+const offset = 'T11:52:29.478Z';
 var parseISO = require('date-fns/parseISO');
 var parse = require('date-fns/parse');
 var isValid = require('date-fns/isValid');
 var format = require('date-fns/format');
 var SqlString = require('sqlstring');
-const offset = 'T11:52:29.478Z';
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
     if (err) {
