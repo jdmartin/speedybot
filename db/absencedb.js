@@ -143,6 +143,9 @@ class DataEntryTools {
         let startDate = tools.validateDates(message, args[0], undefined);
         //Handle special days
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
+        if (args[1] == undefined) {
+            var comment = args.slice(1).join(' ');
+        }
         if (args[1] != undefined) {
             if (days.includes(args[1].toLowerCase())) {
                 var endDate = tools.validateDates(message, undefined, args[1]);
@@ -153,16 +156,13 @@ class DataEntryTools {
                 //Process Comments
                 var comment = args.slice(2).join(' ');
             }
-        } else if (args[1] == undefined) {
-            var comment = args.slice(1).join(' ');
-        }
+        } 
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
             var safe_reason = SqlString.escape(comment);
         } else {
             var safe_reason = ' ';
         }
-
         //Make sure dates are good.
         if ((isValid(parseISO(startDate)))) {
             absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
