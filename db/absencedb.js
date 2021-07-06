@@ -162,6 +162,9 @@ class DataEntryTools {
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
                 //Process Comments
                 var comment = args.slice(4).join(' ');
+            } else {
+                var endYear = startYear;
+                var comment = args.slice(2).join(' ');
             }
         } 
         //Make sure there's something in the comment field, even if empty.
