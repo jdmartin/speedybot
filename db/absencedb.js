@@ -32,7 +32,10 @@ class CreateDatabase {
 class DataFormattingTools {
     calculateDate(day) {
         let today = new Date().toLocaleDateString();
-        console.log(today);
+        let year = today.getFullYear();
+        let month = today.getMonth();
+        let date = today.getDate();
+        console.log(today, year, month, date);
         let simple_today = today.toISOString().split('T')[0];
         let lower_selection = day.toLowerCase();
 
