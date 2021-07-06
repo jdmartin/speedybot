@@ -138,12 +138,14 @@ class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
         let startDate = tools.validateDates(message, args[0], undefined);
-        if (args[1]) {
-            var endDate = tools.validateDates(message, undefined, args[1]);
-        }
-        if (!isValid(parseISO(args[1]))) {
+        //Handle special days
+        const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
+        if (days.includes(args[1])) {
+            let endDate = tools.validateDates(message, undefined, args[1]);
+        } else if (!isValid(parseISO(args[1]))) {
             endDate = startDate;
         }
+        
         //Process a comment, if supplied.
         //Absences with an end date:
         if (isValid(parseISO(args[1]))) {
