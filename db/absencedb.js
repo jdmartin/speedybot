@@ -168,11 +168,11 @@ class DataEntryTools {
 
     addPresent(message, args) {
         //Make sure we have start and end dates.
-        if (!args[1]) {
-            endDate = args[0];
-        }
         let startDate = tools.validateDates(message, args[0], undefined);
         let endDate = tools.validateDates(message, undefined, args[1]);
+        if (!args[1]) {
+            endDate = startDate;
+        }
         //Make sure given dates are dates.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If dates are good, do the update.
