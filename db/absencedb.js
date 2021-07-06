@@ -29,33 +29,6 @@ class CreateDatabase {
 }
 
 class DataFormattingTools {
-    // calculateDate(day) {
-    //     //Get Date in GMT - 5
-    //     let today = new Date(new Date() - 3600 * 1000 * 5);
-    //     let simple_today = today.toISOString().split('T')[0];
-    //     let tuesday = nextTuesday(parseISO(simple_today)).toISOString().split('T')[0];
-    //     let thursday = nextThursday(parseISO(simple_today)).toISOString().split('T')[0];
-    //     let sunday = nextSunday(parseISO(simple_today)).toISOString().split('T')[0];
-    //     let lower_selection = day.toLowerCase();
-
-    //     switch (lower_selection) {
-    //         case 'today':
-    //             return (simple_today);
-    //         case 'tue':
-    //             return (tuesday);
-    //         case 'tuesday':
-    //             return (tuesday);
-    //         case 'thu':
-    //             return (thursday);
-    //         case 'thursday':
-    //             return (thursday);
-    //         case 'sun':
-    //             return (sunday);
-    //         case 'sunday':
-    //             return (sunday);
-    //     }
-    // }
-
     checkIsDate(a, b, c) {
         if (parse(a, 'LLL', new Date())) {
             if (parse(b, 'dd', new Date())) {
