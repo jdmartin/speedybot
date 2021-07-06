@@ -152,6 +152,7 @@ class DataEntryTools {
             //Process Comments
             var comment = args.slice(2).join(' ');
         } else {
+            var endDate = startDate;
             var comment = args.slice(1).join(' ');
         }
         //Make sure there's something in the comment field, even if empty.
