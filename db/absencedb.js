@@ -166,7 +166,8 @@ class DataEntryTools {
             var endDate = startDate;
             console.log(endDate);
             var comment = args.slice(2).join(' ');
-        } 
+            }
+        }
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
             var safe_reason = SqlString.escape(comment);
