@@ -30,8 +30,7 @@ module.exports = {
         !absent Jul 6 2021 Jul 13 2021 Working on stuff. (Absent from July 6 until July 13, 2021 with reason.)
         !late July 4 2021 Running Marathon (Late on July 4, 2021 with reason.)
         !ontime Jul 4, 2021 (On-time on July 4, 2021 -- removes the late for that date)
-        !present July 4, 2021 (Present on July 4, 2021 -- removes an absence for just that date)
-        !present Jul 6 2021 July 13 2021 (Present from July 6 until July 13, 2021 -- removes that range of absences)\n
+        !present July 4, 2021 (Present on July 4, 2021 -- removes an absence for just that date)\n
         Want something else? Ask Doolan. ~~ 🐢
     `)
 
