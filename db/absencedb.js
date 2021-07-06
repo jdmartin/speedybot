@@ -39,6 +39,14 @@ class DataFormattingTools {
         }
     }
 
+    checkIsMonth(a) {
+        if (parse(a, 'LLLL', new Date())) {
+            return (true);
+        } else {
+            return (false);
+        }
+    }
+
     determineYear(month, day) {
         //Create date object in GMT-5
         var d = new Date(new Date()-3600*1000*5);
@@ -141,7 +149,7 @@ const tools = new DataFormattingTools();
 class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
-        if (args.length >= 2) {
+        if (tools.checkIsMonth(args[0])) {
             var startYear = tools.determineYear(args[0],args[1]);
             if (tools.checkIsDate(args[0], args[1], startYear)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
@@ -152,9 +160,7 @@ class DataEntryTools {
             //Process Comments
             var comment = args.slice(2).join(' ');
         }
-        if (args[2] && args[3]) {
-            //Make sure we have an end date:
-            var endDate = startDate;
+        if (tools.checkIsMonth(args[2])) {
             //Make sure end year is equal or greater to start year.
             if (tools.getCurrentYear() >= startYear) {
                 var endYear = tools.determineYear(args[2],args[3]);
