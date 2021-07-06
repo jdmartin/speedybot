@@ -174,6 +174,7 @@ class DataEntryTools {
         }
         if (endDate == undefined) {
             endDate = startDate;
+            var comment = args.slice(2).join(' ');
         }
         console.log(endDate);
         //Make sure there's something in the comment field, even if empty.
