@@ -40,7 +40,7 @@ class DataFormattingTools {
     }
 
     checkIsMonth(a) {
-        if (parse(a, 'LLLL', new Date())) {
+        if (isValid(parse(a, 'LLLL', new Date()))) {
             return (true);
         } else {
             return (false);
