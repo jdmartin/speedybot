@@ -207,7 +207,7 @@ class DataEntryTools {
     ontime(message, args) {
         console.log(args);
         //Make sure we have dates.
-        if (args[0] && args[1] && args[2]) {
+        if (args[0] != undefined && args[1] != undefined && args[2] != undefined) {
             tools.checkIsDate(args[0], args[1], args[2]);
             var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
             var startDate = tools.validateDates(message, rebuilt_date, undefined);
