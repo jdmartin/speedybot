@@ -96,7 +96,7 @@ class DataFormattingTools {
         //Handle special days
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
         if (days.includes(start)) {
-            console.log(this.calculateDate(start));
+            start = this.calculateDate(start);
         }
         //Make sure given dates are dates.
         if (!isValid(parseISO(start))) {
