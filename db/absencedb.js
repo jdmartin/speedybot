@@ -115,32 +115,22 @@ class DataFormattingTools {
     validateDates(message, start, end) {
         if (start != undefined) {
             //Make sure given dates are dates.
-            if ((isValid(parse(start, 'LLLL dd, yyyy', new Date())))) {
-                let temp_date = parse(start, 'LLLL dd, yyyy', new Date());
-                let simple_date = temp_date.toISOString().split('T')[0];
-                return (simple_date);
-            }
             if ((isValid(parse(start, 'LLLL dd yyyy', new Date())))) {
                 let temp_date = parse(start, 'LLLL dd yyyy', new Date());
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
             //Request date in proper format.
-            message.reply("Sorry, I need a start date in the format 'Month Day, Year'");
+            message.reply("Sorry, I need a start date in the format 'Month Day'");
             return;
         }
         if (end != undefined) {
-            if ((isValid(parse(end, 'LLLL dd, yyyy', new Date())))) {
-                let temp_date = parse(end, 'LLLL dd, yyyy', new Date());
-                let simple_date = temp_date.toISOString().split('T')[0];
-                return (simple_date);
-            }
             if ((isValid(parse(end, 'LLLL dd yyyy', new Date())))) {
                 let temp_date = parse(end, 'LLLL dd yyyy', new Date());
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
-            message.reply("Sorry, I need an end date in the format 'Month Day, Year'. If none is given, I'll assume it's the same as the start date.");
+            message.reply("Sorry, I need an end date in the format 'Month Day'. If none is given, I'll assume it's the same as the start date.");
             return;
         }
     }
