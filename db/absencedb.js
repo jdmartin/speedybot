@@ -155,6 +155,8 @@ class DataEntryTools {
             }
         } else if (tools.validateDates(message, undefined, args[3])) {
             var endDate = args[3];
+            //Process Comments
+            var comment = args.slice(4).join(' ');
         } else {
             var endDate = startDate;
         }
