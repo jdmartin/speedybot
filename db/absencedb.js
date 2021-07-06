@@ -195,7 +195,7 @@ class DataEntryTools {
         }
         if (args[2] && args[3]) {
             //Make sure end year is equal or greater to start year.
-            if (getCurrentYear >= startYear) {
+            if (tools.getCurrentYear() >= startYear) {
                 var endYear = tools.determineYear(args[2],args[3]);
             } else {
                 var endYear = startYear;
