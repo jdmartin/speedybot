@@ -94,13 +94,8 @@ class DataFormattingTools {
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
-            if ((isValid(parse(start, 'LLLL dd yyyy', new Date())))) {
-                let temp_date = parse(start, 'LLLL dd yyyy', new Date());
-                let simple_date = temp_date.toISOString().split('T')[0];
-                return (simple_date);
-            }
-            if ((isValid(parse(start, 'LLLL dd, yyyy', new Date())))) {
-                let temp_date = parse(start, 'LLLL dd yyyy', new Date());
+            if ((isValid(parse(start, 'MMMMMMMM dd yyyy', new Date())))) {
+                let temp_date = parse(start, 'MMMMMMMM dd yyyy', new Date());
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
