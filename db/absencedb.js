@@ -203,6 +203,7 @@ class DataEntryTools {
     }
 
     ontime(message, args) {
+        console.log(args);
         //Make sure we have dates.
         if (args[0] && args[1] && args[2]) {
             tools.checkIsDate(args[0], args[1], args[2]);
