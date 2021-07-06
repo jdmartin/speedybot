@@ -157,25 +157,24 @@ class DataEntryTools {
             }
             //Process Comments
             var comment = args.slice(2).join(' ');
-
-            if (tools.checkIsMonth(args[2])) {
-                //Make sure end year is equal or greater to start year.
-                if (tools.getCurrentYear() >= startYear) {
-                    var endYear = tools.determineYear(args[2],args[3]);
-                } else {
-                    var endYear = startYear;
-                }
-                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
-                var endDate = tools.validateDates(message, undefined, rebuilt_end);
-                //Process Comments
-                var comment = args.slice(4).join(' ');
-            }
-
-            if (!tools.checkIsMonth(args[2])) {
-                var endDate = startDate;
-                var comment = args.slice(2).join(' ');
-            }
         }
+        if (!tools.checkIsMonth(args[2])) {
+            var endDate = startDate;
+            var comment = args.slice(2).join(' ');
+        }
+        else if (tools.checkIsMonth(args[2])) {
+            //Make sure end year is equal or greater to start year.
+            if (tools.getCurrentYear() >= startYear) {
+                var endYear = tools.determineYear(args[2],args[3]);
+            } else {
+                var endYear = startYear;
+            }
+            var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
+            var endDate = tools.validateDates(message, undefined, rebuilt_end);
+            //Process Comments
+            var comment = args.slice(4).join(' ');
+        }
+        
         console.log(endDate);
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
