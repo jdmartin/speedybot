@@ -197,8 +197,6 @@ class DataEntryTools {
                 var comment = args.slice(2).join(' ');
             }
         }
-        
-        let startDate = tools.validateDates(message, args[0], undefined);
          
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
