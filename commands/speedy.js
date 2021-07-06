@@ -17,14 +17,14 @@ module.exports = {
         **sheep**: Need CC? Speedy's got you.
         **speedysource**: View my source code.
         **strats**: Did you read the strat?
-        **xkcd**: Read a random comic and feel better...\n
+        **xkcd**: Read a random comic...\n
         __Attendance-related Commands__:
         **absences**: See known absences.
         **absent**: Let us know you won't be raiding. (Example: !absent 2021-07-04 Comment)
         **late**: Let us know you're running late. (Example: !late 2021-07-04 Comment)
         **ontime**: Cancels late. (Example: !ontime 2021-07-04)
         **present**: Cancel an absence. (Example: !present 2021-07-04)\n
-        Some examples which work with either **absent**, **late**, **ontime**, or **present**:
+        Some examples:
         (N.B. You can use commas or not after days, and you can use either three-letter months or the whole word.)
         !absent July 4, 2021 (Absent on July 4, 2021)
         !absent Jul 6 2021 Jul 13 2021 Working on stuff. (Absent from July 6 until July 13, 2021 with reason.)
