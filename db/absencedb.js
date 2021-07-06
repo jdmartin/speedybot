@@ -7,7 +7,6 @@ var parseISO = require('date-fns/parseISO');
 var parse = require('date-fns/parse');
 var isValid = require('date-fns/isValid');
 var format = require('date-fns/format');
-var isEqual = require('date-fns/isEqual')
 var SqlString = require('sqlstring');
 const offset = 'T11:52:29.478Z';
 
@@ -29,7 +28,7 @@ class CreateDatabase {
 
 class DataFormattingTools {
     checkIsDate(a, b, c) {
-        if (parse(a, 'LLL', new Date())) {
+        if (parse(a, 'LLLL', new Date())) {
             if (parse(b, 'dd', new Date())) {
                 if ((parse(c, 'yyyy', new Date()))) {
                     return (true);
@@ -43,7 +42,7 @@ class DataFormattingTools {
     determineYear(month, day) {
         //Create date object in GMT-5
         var d = new Date(new Date()-3600*1000*5);
-        //Set current year
+        //Set current year, month, and date
         let year = d.getFullYear();
         let mon = d.toLocaleString("en-US", {month: "long"});
         let date = d.getDate();
