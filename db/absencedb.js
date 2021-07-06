@@ -50,7 +50,7 @@ class DataFormattingTools {
         //Get number of given month for later comparison
         var g = Date.parse(month + day, year).getMonth();
         
-        if ((monNum == g) {
+        if (monNum == g) {
             console.log("Yay!");
         }
         console.log(year, mon, date);
