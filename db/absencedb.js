@@ -201,14 +201,18 @@ class DataEntryTools {
             var startDate = tools.validateDates(message, args[0], undefined);
             var endDate = tools.validateDates(message, undefined, args[1]);
         }
-        if (args.length >= 3) {
+        if (args.length == 3) {
             if (tools.checkIsDate(args)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
+                var endDate = startDate;
+            }
+        }
+        if (args.length == 6) {
                 var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
-            }        
-        }
+        }        
+        
         
         //Make sure given dates are dates.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
