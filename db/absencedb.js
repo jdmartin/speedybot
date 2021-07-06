@@ -137,12 +137,13 @@ const tools = new DataFormattingTools();
 class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
-        let startDate = args[0];
-        let endDate = args[1];
+        let startDate = tools.validateDates(message, args[0], undefined);
+        if (args[1]) {
+            var endDate = tools.validateDates(message, undefined, args[1]);
+        }
         if (!isValid(parseISO(args[1]))) {
             endDate = startDate;
         }
-
         //Process a comment, if supplied.
         //Absences with an end date:
         if (isValid(parseISO(args[1]))) {
@@ -151,7 +152,6 @@ class DataEntryTools {
         } else {
             var comment = args.slice(1).join(' ');
         }
-
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
             var safe_reason = SqlString.escape(comment);
@@ -160,7 +160,7 @@ class DataEntryTools {
         }
 
         //Make sure dates are good.
-        if (tools.validateDates(message, startDate, endDate)) {
+        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
             tools.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
         }                
