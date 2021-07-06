@@ -163,9 +163,7 @@ class DataEntryTools {
                 //Process Comments
                 var comment = args.slice(4).join(' ');
             }
-        } else {
-            var endDate = startDate;
-        }
+        } 
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
             var safe_reason = SqlString.escape(comment);
