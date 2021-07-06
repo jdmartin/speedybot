@@ -31,7 +31,7 @@ class CreateDatabase {
 
 class DataFormattingTools {
     calculateDate(day) {
-        let today = new Date(new Date()-3600*1000*5).toLocaleDateString();
+        let today = new Date(new Date()-3600*1000*5);
         console.log(today);
         let simple_today = today.toISOString().split('T')[0];
         let lower_selection = day.toLowerCase();
