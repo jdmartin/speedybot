@@ -11,7 +11,7 @@ var nextTuesday = require('date-fns/nextTuesday');
 var nextThursday = require('date-fns/nextThursday');
 var nextSunday = require('date-fns/nextSunday');
 var SqlString = require('sqlstring');
-const offset = 'T20:52:29.478Z';
+const offset = 'T11:52:29.478Z';
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
     if (err) {
@@ -52,13 +52,13 @@ class DataFormattingTools {
             if (start != end) {
                 message.reply(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${format(new Date(start + offset), 'MMM dd yyyy')} ${format(new Date(end + offset), 'MMM dd yyyy')} `);
             } else {
-                message.reply(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
+                message.reply(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${format(new Date(start + offset), 'MMM dd yyyy')}`);
             }
         } else {
             if (start != end) {
-                message.member.send(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${start} ${end} `);
+                message.member.send(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${format(new Date(start + offset), 'MMM dd yyyy')} ${format(new Date(end + offset), 'MMM dd yyyy')} `);
             } else {
-                message.member.send(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
+                message.member.send(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${format(new Date(start + offset), 'MMM dd yyyy')}`);
             }
         }
         //Handle channel posts for absences and lates. Shorten if only a single day.
