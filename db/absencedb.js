@@ -63,9 +63,9 @@ class DataFormattingTools {
         //Make certain there's an end value.
         if (!end) {
             end = start;
-            var friendlyEnd = tools.makeFriendlyDates(end);
-            var friendlyEndUndo = format(new Date(end + offset), 'MMM dd yyyy');
         }
+        var friendlyEnd = tools.makeFriendlyDates(end);
+        var friendlyEndUndo = format(new Date(end + offset), 'MMM dd yyyy');
         //Select the appropriate type of response, and shorten if it's a single day.
         if (message.channel.type === 'dm') {
             if (start != end) {
@@ -188,7 +188,6 @@ class DataEntryTools {
         } else {
             var endDate = startDate;
         }
-        console.log(args,endDate);
         //Make sure given dates are dates.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If dates are good, do the update.
