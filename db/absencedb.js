@@ -77,7 +77,7 @@ class DataFormattingTools {
     makeFriendlyDates(date) {
         //Ensures that dates are in the appropriate time zone (locally) by adding an ugly ISO timestamp.
         let friendlyDateTemp = date + offset;
-        let friendlyDate = format(new Date(friendlyDateTemp), 'iii. MMM. dd, yyyy');
+        let friendlyDate = format(new Date(friendlyDateTemp), 'iii. MMMM dd, yyyy');
         return (friendlyDate)
     }
 
@@ -95,7 +95,7 @@ class DataFormattingTools {
                 return (simple_date);
             }
             //Request date in proper format.
-            message.reply("Sorry, I need a start date in the format MMM dd, yyyy");
+            message.reply("Sorry, I need a start date in the format 'Month Day, Year'");
             return;
         }
         if (end != undefined) {
@@ -109,7 +109,7 @@ class DataFormattingTools {
                 let simple_date = temp_date.toISOString().split('T')[0];
                 return (simple_date);
             }
-            message.reply("Sorry, I need an end date in the format MMM dd, yyyy. If none is given, I'll assume it's the same as the start date.");
+            message.reply("Sorry, I need an end date in the format 'Month Day, Year'. If none is given, I'll assume it's the same as the start date.");
             return;
         }
     }
