@@ -11,7 +11,9 @@ var nextTuesday = require('date-fns/nextTuesday');
 var nextThursday = require('date-fns/nextThursday');
 var nextSunday = require('date-fns/nextSunday');
 var SqlString = require('sqlstring');
-const { da } = require("date-fns/locale");
+const {
+    da
+} = require("date-fns/locale");
 
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
@@ -33,32 +35,32 @@ class CreateDatabase {
 class DataFormattingTools {
     calculateDate(day) {
         //Get Date in GMT - 5
-        let today = new Date(new Date()-3600*1000*5);
+        let today = new Date(new Date() - 3600 * 1000 * 5);
         let simple_today = today.toISOString().split('T')[0];
         let tuesday = nextTuesday(parseISO(simple_today)).toISOString().split('T')[0];
         let thursday = nextThursday(parseISO(simple_today)).toISOString().split('T')[0];
         let sunday = nextSunday(parseISO(simple_today)).toISOString().split('T')[0];
         let lower_selection = day.toLowerCase();
 
-        switch(lower_selection) {
+        switch (lower_selection) {
             case 'today':
-                return(simple_today);
+                return (simple_today);
             case 'tue':
-                return(tuesday);
+                return (tuesday);
             case 'tuesday':
-                return(tuesday);
+                return (tuesday);
             case 'thu':
-                return(thursday);
+                return (thursday);
             case 'thursday':
-                return(thursday);
+                return (thursday);
             case 'sun':
-                return(sunday);
+                return (sunday);
             case 'sunday':
-                return(sunday);
+                return (sunday);
         }
     }
 
-    checkIsDate(a,b,c) {
+    checkIsDate(a, b, c) {
         if (parse(a, 'LLL', new Date())) {
             if (parse(b, 'dd', new Date())) {
                 if ((parse(c, 'yyyy', new Date()))) {
@@ -112,7 +114,7 @@ class DataFormattingTools {
     validateDates(message, start, end) {
         //Handle special days
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
-        
+
         if (start != undefined) {
             if (days.includes(start.toLowerCase())) {
                 var new_start = this.calculateDate(start);
@@ -125,12 +127,12 @@ class DataFormattingTools {
                 if ((isValid(parse(start, 'LLL dd, yyyy', new Date())))) {
                     let temp_date = parse(start, 'LLL dd, yyyy', new Date());
                     let simple_date = temp_date.toISOString().split('T')[0];
-                    return(simple_date);
+                    return (simple_date);
                 }
                 if ((isValid(parse(start, 'LLL dd yyyy', new Date())))) {
                     let temp_date = parse(start, 'LLL dd yyyy', new Date());
                     let simple_date = temp_date.toISOString().split('T')[0];
-                    return(simple_date);
+                    return (simple_date);
                 }
                 if (!isValid(parseISO(start))) {
                     message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
@@ -152,12 +154,12 @@ class DataFormattingTools {
                 if ((isValid(parse(end, 'LLL dd, yyyy', new Date())))) {
                     let temp_date = parse(end, 'LLL dd, yyyy', new Date());
                     let simple_date = temp_date.toISOString().split('T')[0];
-                    return(simple_date);
+                    return (simple_date);
                 }
                 if ((isValid(parse(end, 'LLL dd yyyy', new Date())))) {
                     let temp_date = parse(end, 'LLL dd yyyy', new Date());
                     let simple_date = temp_date.toISOString().split('T')[0];
-                    return(simple_date);
+                    return (simple_date);
                 }
                 if (!isValid(parseISO(end))) {
                     message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
@@ -184,7 +186,7 @@ class DataEntryTools {
             var endDate = tools.validateDates(message, undefined, args[1]);
         }
         if (args.length >= 3) {
-            if (tools.checkIsDate(args[0],args[1],args[2])) {
+            if (tools.checkIsDate(args[0], args[1], args[2])) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
                 //Process Comments
@@ -192,16 +194,16 @@ class DataEntryTools {
             }
         }
         if (args[3] && args[4] && args[5]) {
-            if (tools.checkIsDate(args[3],args[4],args[5])) {            
+            if (tools.checkIsDate(args[3], args[4], args[5])) {
                 var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
                 //Process Comments
                 var comment = args.slice(6).join(' ');
-            } 
-            } else {
-                var endDate = startDate;
             }
-         
+        } else {
+            var endDate = startDate;
+        }
+
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
             var safe_reason = SqlString.escape(comment);
@@ -212,7 +214,7 @@ class DataEntryTools {
         if ((isValid(parseISO(startDate)))) {
             absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
             tools.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
-        }                
+        }
     }
 
     addPresent(message, args) {
@@ -236,8 +238,8 @@ class DataEntryTools {
                     var endDate = startDate;
                 }
             }
-        }  
-        
+        }
+
         //Make sure given dates are dates.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If dates are good, do the update.
@@ -256,7 +258,7 @@ class DataEntryTools {
             if (tools.checkIsDate(args)) {
                 var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
                 var startDate = tools.validateDates(message, rebuilt_date, undefined);
-            }        
+            }
         }
         //Only update db if we have a valid date.
         if (isValid(parseISO(startDate))) {
@@ -278,7 +280,7 @@ class DataEntryTools {
                 var startDate = tools.validateDates(message, rebuilt_date, undefined);
                 //Process a comment, if supplied.
                 var comment = args.slice(3).join(' ');
-            }  
+            }
         }
         if (comment) {
             var safe_reason = SqlString.escape(comment);
