@@ -226,6 +226,7 @@ class DataEntryTools {
         //Make sure we have a date.
         if (args.length == 3) {
             tools.checkIsDate(args);
+        }
         let startDate = tools.validateDates(message, args[0], undefined);
 
         //Make sure given dates are dates.
