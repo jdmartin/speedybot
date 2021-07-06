@@ -184,19 +184,23 @@ class DataEntryTools {
             var endDate = tools.validateDates(message, undefined, args[1]);
         }
         if (args.length >= 3) {
-            if (tools.checkIsDate(args)) {
+            if (tools.checkIsDate(args[0],args[1],args[2])) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
-                if (args[3] && args[4] && args[5]) {
+                //Process Comments
+                var comment = args.slice(3).join(' ');
+            }
+            if (args[3] && args[4] && args[5]) {
+                if (tools.checkIsDate(args[3],args[4],args[5])) {            
                     var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
                     var endDate = tools.validateDates(message, undefined, rebuilt_end);
-                } else {
-                    var endDate = startDate;
-                }
-                //Process Comments
-                var comment = args.slice(2).join(' ');
+                    //Process Comments
+                    var comment = args.slice(5).join(' ');
+                } 
+            } else {
+                var endDate = startDate;
+                
             }
-        }
          
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
