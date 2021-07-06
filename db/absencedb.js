@@ -168,13 +168,13 @@ class DataEntryTools {
 
     addPresent(message, args) {
         //Make sure we have start and end dates.
-        let startDate = args[0];
-        let endDate = args[1];
         if (!args[1]) {
             endDate = startDate;
         }
+        let startDate = tools.validateDates(message, args[0], undefined);
+        let endDate = tools.validateDates(message, undefined, args[1]);
         //Make sure given dates are dates.
-        if (tools.validateDates(message, startDate, endDate)) {
+        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If dates are good, do the update.
             absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
             //Send message to confirm.
