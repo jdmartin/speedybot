@@ -169,7 +169,7 @@ class DataEntryTools {
     addPresent(message, args) {
         //Make sure we have start and end dates.
         if (!args[1]) {
-            endDate = startDate;
+            endDate = args[0];
         }
         let startDate = tools.validateDates(message, args[0], undefined);
         let endDate = tools.validateDates(message, undefined, args[1]);
