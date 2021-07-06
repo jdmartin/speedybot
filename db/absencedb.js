@@ -60,6 +60,14 @@ class DataFormattingTools {
         }        
     }
 
+    getCurrentYear() {
+        //Create date object in GMT-5
+        var d = new Date(new Date()-3600*1000*5);
+        //Set current year, month, and date
+        let year = d.getFullYear();
+        return(year);
+    }
+
     generateResponse(message, this_command, undo_command, start, end, reason) {
         //Create some helpers and ensure needed parts:
         var friendlyStart = tools.makeFriendlyDates(start);
@@ -186,7 +194,12 @@ class DataEntryTools {
             }
         }
         if (args[2] && args[3]) {
-            var endYear = tools.determineYear(args[2],args[3]);
+            //Make sure end year is equal or greater to start year.
+            if (getCurrentYear >= startYear) {
+                var endYear = tools.determineYear(args[2],args[3]);
+            } else {
+                var endYear = startYear;
+            }
             if (tools.checkIsDate(args[2], args[3], endYear)) {
                 var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
