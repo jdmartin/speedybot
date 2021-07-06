@@ -177,13 +177,12 @@ class DataEntryTools {
     ontime(message, args) {
         //Make sure we have dates.
         let startDate = args[0];
+        startDate = this.validateDates(message, startDate, undefined);
         //Make sure given dates are dates.
-        if (tools.validateDates(message, startDate, undefined)) {
-            //Only update db if we have valid start and end dates.
-            if (isValid(parseISO(startDate))) {
-                absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
-                message.author.send(`Ok, I've got you down as on-time on ${tools.makeFriendlyDates(startDate)}. See you then!`)
-            }
+        //Only update db if we have valid start and end dates.
+        if (isValid(parseISO(startDate))) {
+            absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
+            message.author.send(`Ok, I've got you down as on-time on ${tools.makeFriendlyDates(startDate)}. See you then!`)
         }
     }
 
