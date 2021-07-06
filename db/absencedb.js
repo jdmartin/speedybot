@@ -146,11 +146,11 @@ class DataEntryTools {
             if (tools.checkIsDate(args[0], args[1], startYear)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
-                //Make sure we have an end date:
-                var endDate = startDate;
-                //Process Comments
-                var comment = args.slice(2).join(' ');
             }
+            //Make sure we have an end date:
+            var endDate = startDate;
+            //Process Comments
+            var comment = args.slice(2).join(' ');
         }
         if (args[2] && args[3]) {
             //Make sure end year is equal or greater to start year.
