@@ -192,7 +192,7 @@ class DataEntryTools {
     }
 
     ontime(message, args) {
-        tools.determineYear(args[0],args[1]);
+        //tools.determineYear(args[0],args[1]);
         //Make sure we have dates.
         if (args.length == 3) {
             if (tools.checkIsDate(args)) {
