@@ -55,7 +55,7 @@ class DataFormattingTools {
             console.log("This year");
         }
         if (gMonth < monNum) {
-            console.log("Next year!");
+            console.log(year + 1);
         }
         console.log(year, mon, date);
         //If month, day is equal to today: return this year.
