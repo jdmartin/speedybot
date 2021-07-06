@@ -193,13 +193,24 @@ class DataEntryTools {
 
     addPresent(message, args) {
         //Make sure we have start and end dates.
-        let startDate = tools.validateDates(message, args[0], undefined);
-        if (args[1]) {
-            var endDate = tools.validateDates(message, undefined, args[1]);
+        if (args.length < 2) {
+            var startDate = tools.validateDates(message, args[0], undefined);
+            if (args[1]) {
+                var endDate = tools.validateDates(message, undefined, args[1]);
+            }
+            if (!args[1]) {
+                endDate = startDate;
+            }
         }
-        if (!args[1]) {
-            endDate = startDate;
+        if (args.length >= 3) {
+            if (tools.checkIsDate(args)) {
+                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
+                var startDate = tools.validateDates(message, rebuilt_start, undefined);
+                var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
+                var endDate = tools.validateDates(message, undefined, rebuilt_end);
+            }        
         }
+        
         //Make sure given dates are dates.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If dates are good, do the update.
@@ -220,7 +231,6 @@ class DataEntryTools {
                 var startDate = tools.validateDates(message, rebuilt_date, undefined);
             }        
         }
-        
         //Only update db if we have a valid date.
         if (isValid(parseISO(startDate))) {
             absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
@@ -243,12 +253,12 @@ class DataEntryTools {
                 var comment = args.slice(3).join(' ');
             }  
         }
-
         if (comment) {
             var safe_reason = SqlString.escape(comment);
         } else {
             var safe_reason = ' ';
         }
+        //Only update db if we have a valid date.
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
             tools.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
