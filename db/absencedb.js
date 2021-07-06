@@ -99,27 +99,34 @@ class DataFormattingTools {
     validateDates(message, start, end) {
         //Handle special days
         const days = ['today', 'tue', 'tuesday', 'thu', 'thursday', 'sun', 'sunday'];
+
         if (days.includes(start.toLowerCase())) {
             var new_start = this.calculateDate(start);
             return (new_start);
         } else {
             //Make sure given dates are dates.
+            if ((isValid(parseISO(start)))) {
+                return (start);
+            }
             if (!isValid(parseISO(start))) {
                 message.reply("Sorry, I need a start date in the format YYYY-MM-DD.");
                 return;
             }
-            if (end != undefined) {
+        }
+        if (end != undefined) {
+            //Handle special days
+            if (days.includes(end.toLowerCase())) {
+                var new_end = this.calculateDate(end);
+                return (new_end);
+            } else {
+                //Make sure given dates are dates.
+                if ((isValid(parseISO(end)))) {
+                    return (end);
+                }
                 if (!isValid(parseISO(end))) {
                     message.reply("Sorry, I need an end date in the format YYYY-MM-DD. If none is given, I'll assume it's the same as the start date.");
                 }
-                if ((isValid(parseISO(new_start))) && (isValid(parseISO(end)))) {
-                    return (true);
-                }
-            } else {
-                if ((isValid(parseISO(start)))) {
-                    return (start);
-                }
-            } 
+            }
         }
     }
 }
@@ -178,8 +185,7 @@ class DataEntryTools {
     ontime(message, args) {
         //Make sure we have dates.
         let startDate = tools.validateDates(message, args[0], undefined);
-        //Make sure given dates are dates.
-        //Only update db if we have valid start and end dates.
+        //Only update db if we have a valid date.
         if (isValid(parseISO(startDate))) {
             absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
             message.author.send(`Ok, I've got you down as on-time on ${tools.makeFriendlyDates(startDate)}. See you then!`)
@@ -188,7 +194,7 @@ class DataEntryTools {
 
     tardy(message, args) {
         //Make sure we have a date.
-        let startDate = args[0];
+        let startDate = tools.validateDates(message, args[0], undefined);
 
         //Make sure given dates are dates.
         if (!isValid(parseISO(startDate))) {
