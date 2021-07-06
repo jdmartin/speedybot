@@ -149,6 +149,7 @@ const tools = new DataFormattingTools();
 class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
+        var endDate = args[0] + ' ' + args[1];
         if (tools.checkIsMonth(args[0])) {
             var startYear = tools.determineYear(args[0],args[1]);
             if (tools.checkIsDate(args[0], args[1], startYear)) {
@@ -159,7 +160,7 @@ class DataEntryTools {
             var comment = args.slice(2).join(' ');
         }
         if (!tools.checkIsMonth(args[2])) {
-            var endDate = tools.validateDates(message, rebuilt_start, undefined);
+            var endDate = startDate;
             var comment = args.slice(2).join(' ');
         }
         else if (tools.checkIsMonth(args[2])) {
