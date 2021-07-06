@@ -53,10 +53,10 @@ class DataFormattingTools {
         //If month is equal to or after this month: return this year.
         //If month is before this month: return next year.
         if (gMonth >= monNum) {
-            console.log(year);
+            return(year);
         }
         if (gMonth < monNum) {
-            console.log(year + 1);
+            return(year + 1);
         }        
     }
 
@@ -202,11 +202,11 @@ class DataEntryTools {
     }
 
     ontime(message, args) {
-        tools.determineYear(args[0],args[1]);
+        var currentYear = tools.determineYear(args[0],args[1]);
         //Make sure we have dates.
         if (args.length == 3) {
             if (tools.checkIsDate(args)) {
-                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + args[2];
+                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
                 var startDate = tools.validateDates(message, rebuilt_date, undefined);
             }
         }
