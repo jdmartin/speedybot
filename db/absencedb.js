@@ -151,10 +151,8 @@ class DataEntryTools {
             } else if (!isValid(parseISO(args[1]))) {
                 var endDate = startDate;
                 //Process Comments
-                var comment = args.slice(2).join(' ');
-            } else {
                 var comment = args.slice(1).join(' ');
-            }
+            } 
         } 
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
