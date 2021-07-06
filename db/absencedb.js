@@ -141,7 +141,7 @@ const tools = new DataFormattingTools();
 class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
-        if (args[0] && args[1]) {
+        if (args.length >= 2) {
             var startYear = tools.determineYear(args[0],args[1]);
             if (tools.checkIsDate(args[0], args[1], startYear)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
@@ -165,6 +165,7 @@ class DataEntryTools {
             } 
         } else {
             var endDate = startDate;
+            console.log(endDate);
             var comment = args.slice(2).join(' ');
         } 
         //Make sure there's something in the comment field, even if empty.
