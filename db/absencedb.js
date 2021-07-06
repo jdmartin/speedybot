@@ -59,7 +59,6 @@ class DataFormattingTools {
     }
 
     checkIsDate(a,b,c) {
-        var outcome = ''
         if (parse(a, 'LLL', new Date())) {
             if (parse(b, 'dd', new Date())) {
                 if ((parse(c, 'yyyy', new Date()))) {
@@ -205,7 +204,7 @@ class DataEntryTools {
             if (tools.checkIsDate(args)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + args[2];
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
-                if (args[4] && args[5] && args[6]) {
+                if (args[3] && args[4] && args[5]) {
                     var rebuilt_end = args[3] + ' ' + args[4] + ' ' + args[5];
                     var endDate = tools.validateDates(message, undefined, rebuilt_end);
                 } else {
