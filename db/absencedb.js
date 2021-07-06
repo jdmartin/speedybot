@@ -116,8 +116,8 @@ class DataFormattingTools {
                     return (true);
                 }
             } else {
-                if ((isValid(parseISO(new_start)))) {
-                    return (true);
+                if ((isValid(parseISO(start)))) {
+                    return (start);
                 }
             } 
         }
@@ -177,8 +177,7 @@ class DataEntryTools {
 
     ontime(message, args) {
         //Make sure we have dates.
-        let startDate = args[0];
-        startDate = tools.validateDates(message, startDate, undefined);
+        let startDate = tools.validateDates(message, args[0], undefined);
         //Make sure given dates are dates.
         //Only update db if we have valid start and end dates.
         if (isValid(parseISO(startDate))) {
