@@ -168,7 +168,6 @@ class DataEntryTools {
             if (tools.checkIsDate(args[2], args[3], endYear)) {
                 var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
-                console.log(tools.validateDates(message, undefined, rebuilt_end));
                 //Process Comments
                 var comment = args.slice(4).join(' ');
             }
@@ -177,7 +176,6 @@ class DataEntryTools {
             endDate = startDate;
             var comment = args.slice(2).join(' ');
         }
-        console.log(endDate);
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
             var safe_reason = SqlString.escape(comment);
@@ -195,14 +193,14 @@ class DataEntryTools {
 
     addPresent(message, args) {
         //Make sure we have start and end dates.
-        if (args.length >= 2) {
+        if (tools.checkIsMonth(args[0])) {
             var startYear = tools.determineYear(args[0],args[1]);
             if (tools.checkIsDate(args[0], args[1], startYear)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
             }
         }
-        if (args[2] && args[3]) {
+        if (tools.checkIsMonth(args[2])) {
             //Make sure end year is equal or greater to start year.
             if (tools.getCurrentYear() >= startYear) {
                 var endYear = tools.determineYear(args[2],args[3]);
@@ -228,7 +226,7 @@ class DataEntryTools {
     ontime(message, args) {
         var currentYear = tools.determineYear(args[0],args[1]);
         //Make sure we have dates.
-        if (args.length >= 2) {
+        if (tools.checkIsMonth(args[0])) {
             if (tools.checkIsDate(args)) {
                 var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
                 var startDate = tools.validateDates(message, rebuilt_date, undefined);
@@ -244,7 +242,7 @@ class DataEntryTools {
     tardy(message, args) {
         var currentYear = tools.determineYear(args[0],args[1]);
         //Make sure we have a date.
-        if (args.length >= 2) {
+        if (tools.checkIsMonth(args[0])) {
             if (tools.checkIsDate(args)) {
                 var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
                 var startDate = tools.validateDates(message, rebuilt_date, undefined);
