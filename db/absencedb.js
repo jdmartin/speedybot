@@ -39,17 +39,17 @@ class DataFormattingTools {
             case 'today':
                 console.log(simple_today);
             case 'tue':
-                console.log(nextTuesday(parseISO(date)));
+                console.log(nextTuesday(parseISO(simple_today)));
             case 'tuesday':
-                console.log(nextTuesday(parseISO(date)));
+                console.log(nextTuesday(parseISO(simple_today)));
             case 'thu':
-                console.log(nextThursday(parseISO(date)));
+                console.log(nextThursday(parseISO(simple_today)));
             case 'thursday':
-                console.log(nextThursday(parseISO(date)));
+                console.log(nextThursday(parseISO(simple_today)));
             case 'sun':
-                console.log(nextSunday(parseISO(date)));
+                console.log(nextSunday(parseISO(simple_today)));
             case 'sunday':
-                console.log(nextSunday(parseISO(date)));
+                console.log(nextSunday(parseISO(simple_today)));
         }
     }
 
