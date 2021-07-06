@@ -49,7 +49,7 @@ class DataFormattingTools {
         //Select the appropriate type of response, and shorten if it's a single day.
         if (message.channel.type === 'dm') {
             if (start != end) {
-                message.reply(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${format(new Date(start), 'MMM dd yyyy')} ${format(new Date(end), 'MMM dd yyyy')} `);
+                message.reply(`Ok, I've marked you ${this_command} from ${tools.makeFriendlyDates(start)} until ${tools.makeFriendlyDates(end)}.  \n\nTo undo this, type: !${undo_command} ${format(new Date(start + 'T20:52:29.478Z'), 'MMM dd yyyy')} ${format(new Date(end + 'T20:52:29.478Z'), 'MMM dd yyyy')} `);
             } else {
                 message.reply(`Ok, I've marked you ${this_command} on ${tools.makeFriendlyDates(start)}.  \n\nTo undo this, type: !${undo_command} ${start}`);
             }
