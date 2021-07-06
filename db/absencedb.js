@@ -34,6 +34,9 @@ class DataFormattingTools {
         //Get Date in GMT - 5
         let today = new Date(new Date()-3600*1000*5);
         let simple_today = today.toISOString().split('T')[0];
+        let tuesday = nextTuesday(parseISO(simple_today)).toISOString().split('T')[0];
+        let thursday = nextThursday(parseISO(simple_today)).toISOString().split('T')[0];
+        let sunday = nextSunday(parseISO(simple_today)).toISOString().split('T')[0];
         let lower_selection = day.toLowerCase();
 
         switch(lower_selection) {
@@ -41,8 +44,8 @@ class DataFormattingTools {
                 console.log(simple_today);
                 return(simple_today);
             case 'tue':
-                console.log(nextTuesday(parseISO(simple_today)));
-                return(nextTuesday(parseISO(simple_today)));
+                console.log(tuesday);
+                return(tuesday);
             case 'tuesday':
                 return(nextTuesday(parseISO(simple_today)));
             case 'thu':
