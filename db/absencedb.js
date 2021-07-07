@@ -246,8 +246,6 @@ class DataEntryTools {
             if (tools.checkIsDate(args[0], args[1], startYear)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
-                var shortStart = startDate.slice(4);
-                console.log(shortStart);
             }
         }
         if (tools.checkIsMonth(args[2])) {
@@ -267,7 +265,7 @@ class DataEntryTools {
         //Make sure given dates are dates.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If dates are good, do the update.
-            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start LIKE "%${shortStart}" AND end = "${endDate}")`);
+            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
             //Send message to confirm.
             tools.generateResponse(message, "present", "absent", startDate, endDate);
         }
