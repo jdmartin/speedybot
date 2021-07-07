@@ -47,6 +47,21 @@ class DataFormattingTools {
         }
     }
 
+    checkIsCurrentMonth(a) {
+        //Create date object in GMT-5
+        var d = new Date(new Date() - 3600 * 1000 * 5);
+        //Set current month
+        let monNum = d.getMonth();
+        //Get number of given month for later comparison
+        var gMonth = parse(a, 'LLLL', new Date());
+        //Compare values
+        if (gMonth == monNum) {
+            return (true);
+        } else {
+            return (false);
+        }
+    }
+
     determineYear(month, day) {
         //Create date object in GMT-5
         var d = new Date(new Date() - 3600 * 1000 * 5);
@@ -224,6 +239,7 @@ class DataEntryTools {
     }
 
     ontime(message, args) {
+        console.log(tools.checkIsCurrentMonth(args[0]));
         var currentYear = tools.determineYear(args[0], args[1]);
         //Make sure we have dates.
         if (tools.checkIsMonth(args[0])) {
