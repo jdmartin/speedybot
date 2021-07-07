@@ -88,13 +88,13 @@ class DataFormattingTools {
     generateResponse(message, this_command, undo_command, start, end, reason) {
         //Create some helpers and ensure needed parts:
         var friendlyStart = tools.makeFriendlyDates(start);
-        var friendlyStartUndo = format(new Date(start + offset), 'MMM dd yyyy');
+        var friendlyStartUndo = format(new Date(start + offset), 'MMM dd');
         //Make certain there's an end value.
         if (!end) {
             end = start;
         }
         var friendlyEnd = tools.makeFriendlyDates(end);
-        var friendlyEndUndo = format(new Date(end + offset), 'MMM dd yyyy');
+        var friendlyEndUndo = format(new Date(end + offset), 'MMM dd');
         //Select the appropriate type of response, and shorten if it's a single day.
         if (message.channel.type === 'dm') {
             if (start != end) {
@@ -156,7 +156,7 @@ class DataFormattingTools {
 const tools = new DataFormattingTools();
 
 class DataEntryTools {
-    addAbsence(message, args) {
+    absent(message, args) {
         //Make sure we have start and end dates.
         if (tools.checkIsMonth(args[0])) {
             var startYear = tools.determineYear(args[0], args[1]);
@@ -200,38 +200,6 @@ class DataEntryTools {
         }
     }
 
-    addPresent(message, args) {
-        //Make sure we have start and end dates.
-        if (tools.checkIsMonth(args[0])) {
-            var startYear = tools.determineYear(args[0], args[1]);
-            if (tools.checkIsDate(args[0], args[1], startYear)) {
-                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
-                var startDate = tools.validateDates(message, rebuilt_start, undefined);
-            }
-        }
-        if (tools.checkIsMonth(args[2])) {
-            //Make sure end year is equal or greater to start year.
-            if (tools.getCurrentYear() >= startYear) {
-                var endYear = tools.determineYear(args[2], args[3]);
-            } else {
-                var endYear = startYear;
-            }
-            if (tools.checkIsDate(args[2], args[3], endYear)) {
-                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
-                var endDate = tools.validateDates(message, undefined, rebuilt_end);
-            }
-        } else {
-            var endDate = startDate;
-        }
-        //Make sure given dates are dates.
-        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
-            //If dates are good, do the update.
-            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
-            //Send message to confirm.
-            tools.generateResponse(message, "present", "absent", startDate, endDate);
-        }
-    }
-
     late(message, args) {
         var currentYear = tools.determineYear(args[0], args[1]);
         //Make sure we have a date.
@@ -268,6 +236,38 @@ class DataEntryTools {
         if (isValid(parseISO(startDate))) {
             absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
             message.author.send(`Ok, I've got you down as on-time on ${tools.makeFriendlyDates(startDate)}. See you then!`)
+        }
+    }
+
+    present(message, args) {
+        //Make sure we have start and end dates.
+        if (tools.checkIsMonth(args[0])) {
+            var startYear = tools.determineYear(args[0], args[1]);
+            if (tools.checkIsDate(args[0], args[1], startYear)) {
+                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
+                var startDate = tools.validateDates(message, rebuilt_start, undefined);
+            }
+        }
+        if (tools.checkIsMonth(args[2])) {
+            //Make sure end year is equal or greater to start year.
+            if (tools.getCurrentYear() >= startYear) {
+                var endYear = tools.determineYear(args[2], args[3]);
+            } else {
+                var endYear = startYear;
+            }
+            if (tools.checkIsDate(args[2], args[3], endYear)) {
+                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
+                var endDate = tools.validateDates(message, undefined, rebuilt_end);
+            }
+        } else {
+            var endDate = startDate;
+        }
+        //Make sure given dates are dates.
+        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
+            //If dates are good, do the update.
+            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
+            //Send message to confirm.
+            tools.generateResponse(message, "present", "absent", startDate, endDate);
         }
     }
 }
