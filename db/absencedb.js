@@ -288,7 +288,7 @@ class DataDisplayTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date " + tools.makeFriendlyDates(row.start) + "\nEnd Date " + tools.makeFriendlyDates(row.end) + "\nComments " + row.comment,
+                    value: "\t\tStart Date: " + tools.makeFriendlyDates(row.start) + "\nEnd Date: " + tools.makeFriendlyDates(row.end) + "\nComments: " + row.comment,
                     inline: false
                 })
             });
@@ -308,7 +308,7 @@ class DataDisplayTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date " + tools.makeFriendlyDates(row.start) + "\nComments " + row.comment,
+                    value: "\t\tDate: " + tools.makeFriendlyDates(row.start) + "\nComments: " + row.comment,
                     inline: false
                 })
             });
