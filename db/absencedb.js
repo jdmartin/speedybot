@@ -225,7 +225,6 @@ class DataEntryTools {
     }
 
     ontime(message, args) {
-        console.log(tools.checkIsCurrentMonth(args[0]));
         var currentYear = tools.determineYear(args[0], args[1]);
         //Make sure we have dates.
         if (tools.checkIsMonth(args[0])) {
