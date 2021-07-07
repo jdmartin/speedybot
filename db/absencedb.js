@@ -53,17 +53,28 @@ class DataFormattingTools {
         //Set current year, month
         let year = d.getFullYear();
         let monNum = d.getMonth();
+        let date = d.getDate();
         //Get number of given month for later comparison
         var g = Date.parse(month + day, year);
         var gMonth = new Date(g).getMonth();
+        var gDate = new Date(g).getDate();
         //If month is equal to or after this month: return this year.
-        //If month is before this month: return next year.
-        if (gMonth >= monNum) {
+        if (gMonth > monNum) {
             return(year);
         }
+        //If month is before this month: return next year.
         if (gMonth < monNum) {
             return(year + 1);
-        }        
+        }
+        //If it's this month, check if date is before, equal, or after today.
+        if (gMonth == monNum) {
+            if (gDate < date) {
+                return(year + 1);
+            }
+            if (gDate >= date) {
+                return(year);
+            }
+        }   
     }
 
     getCurrentYear() {
