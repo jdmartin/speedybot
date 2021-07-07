@@ -4,6 +4,7 @@ const sqlite3 = require('sqlite3');
 const utils = require("../utils/speedyutils.js");
 const client = utils.client;
 const offset = 'T11:52:29.478Z';
+var fnsMonth = require('date-fns/getMonth');
 var parseISO = require('date-fns/parseISO');
 var parse = require('date-fns/parse');
 var isValid = require('date-fns/isValid');
@@ -53,7 +54,8 @@ class DataFormattingTools {
         //Set current month
         let monNum = d.getMonth();
         //Get number of given month for later comparison
-        var gMonth = parse(a, 'LLLL', new Date());
+        var givenMonth = parse(a, 'LLLL', new Date());
+        var gMonth = fnsMonth(givenMonth);
         //Compare values
         if (gMonth == monNum) {
             return (true);
