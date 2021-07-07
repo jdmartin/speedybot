@@ -246,6 +246,8 @@ class DataEntryTools {
             if (tools.checkIsDate(args[0], args[1], startYear)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
+                var shortStart = startDate.slice(4);
+                console.log(shortStart);
             }
         }
         if (tools.checkIsMonth(args[2])) {
