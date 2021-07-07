@@ -267,7 +267,7 @@ class DataEntryTools {
         //Make sure given dates are dates.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If dates are good, do the update.
-            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
+            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start LIKE "%${shortStart}" AND end = "${endDate}")`);
             //Send message to confirm.
             tools.generateResponse(message, "present", "absent", startDate, endDate);
         }
