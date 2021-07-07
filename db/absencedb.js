@@ -49,40 +49,40 @@ class DataFormattingTools {
 
     determineYear(month, day) {
         //Create date object in GMT-5
-        var d = new Date(new Date()-3600*1000*5);
+        var d = new Date(new Date() - 3600 * 1000 * 5);
         //Set current year, month
         let year = d.getFullYear();
         let monNum = d.getMonth();
         let date = d.getDate();
-        //Get number of given month for later comparison
+        //Get number of given month and given date for later comparison
         var g = Date.parse(month + day, year);
         var gMonth = new Date(g).getMonth();
         var gDate = new Date(g).getDate();
         //If month is equal to or after this month: return this year.
         if (gMonth > monNum) {
-            return(year);
+            return (year);
         }
         //If month is before this month: return next year.
         if (gMonth < monNum) {
-            return(year + 1);
+            return (year + 1);
         }
         //If it's this month, check if date is before, equal, or after today.
         if (gMonth == monNum) {
             if (gDate < date) {
-                return(year + 1);
+                return (year + 1);
             }
             if (gDate >= date) {
-                return(year);
+                return (year);
             }
-        }   
+        }
     }
 
     getCurrentYear() {
         //Create date object in GMT-5
-        var d = new Date(new Date()-3600*1000*5);
-        //Set current year, month, and date
+        var d = new Date(new Date() - 3600 * 1000 * 5);
+        //Set current year and return it.
         let year = d.getFullYear();
-        return(year);
+        return (year);
     }
 
     generateResponse(message, this_command, undo_command, start, end, reason) {
@@ -159,7 +159,7 @@ class DataEntryTools {
     addAbsence(message, args) {
         //Make sure we have start and end dates.
         if (tools.checkIsMonth(args[0])) {
-            var startYear = tools.determineYear(args[0],args[1]);
+            var startYear = tools.determineYear(args[0], args[1]);
             if (tools.checkIsDate(args[0], args[1], startYear)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
@@ -170,7 +170,7 @@ class DataEntryTools {
         if (tools.checkIsMonth(args[2])) {
             //Make sure end year is equal or greater to start year.
             if (tools.getCurrentYear() >= startYear) {
-                var endYear = tools.determineYear(args[2],args[3]);
+                var endYear = tools.determineYear(args[2], args[3]);
             } else {
                 var endYear = startYear;
             }
@@ -203,7 +203,7 @@ class DataEntryTools {
     addPresent(message, args) {
         //Make sure we have start and end dates.
         if (tools.checkIsMonth(args[0])) {
-            var startYear = tools.determineYear(args[0],args[1]);
+            var startYear = tools.determineYear(args[0], args[1]);
             if (tools.checkIsDate(args[0], args[1], startYear)) {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
@@ -212,7 +212,7 @@ class DataEntryTools {
         if (tools.checkIsMonth(args[2])) {
             //Make sure end year is equal or greater to start year.
             if (tools.getCurrentYear() >= startYear) {
-                var endYear = tools.determineYear(args[2],args[3]);
+                var endYear = tools.determineYear(args[2], args[3]);
             } else {
                 var endYear = startYear;
             }
@@ -232,24 +232,8 @@ class DataEntryTools {
         }
     }
 
-    ontime(message, args) {
-        var currentYear = tools.determineYear(args[0],args[1]);
-        //Make sure we have dates.
-        if (tools.checkIsMonth(args[0])) {
-            if (tools.checkIsDate(args)) {
-                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
-                var startDate = tools.validateDates(message, rebuilt_date, undefined);
-            }
-        }
-        //Only update db if we have a valid date.
-        if (isValid(parseISO(startDate))) {
-            absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
-            message.author.send(`Ok, I've got you down as on-time on ${tools.makeFriendlyDates(startDate)}. See you then!`)
-        }
-    }
-
-    tardy(message, args) {
-        var currentYear = tools.determineYear(args[0],args[1]);
+    late(message, args) {
+        var currentYear = tools.determineYear(args[0], args[1]);
         //Make sure we have a date.
         if (tools.checkIsMonth(args[0])) {
             if (tools.checkIsDate(args)) {
@@ -268,6 +252,22 @@ class DataEntryTools {
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
             tools.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
+        }
+    }
+
+    ontime(message, args) {
+        var currentYear = tools.determineYear(args[0], args[1]);
+        //Make sure we have dates.
+        if (tools.checkIsMonth(args[0])) {
+            if (tools.checkIsDate(args)) {
+                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
+                var startDate = tools.validateDates(message, rebuilt_date, undefined);
+            }
+        }
+        //Only update db if we have a valid date.
+        if (isValid(parseISO(startDate))) {
+            absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
+            message.author.send(`Ok, I've got you down as on-time on ${tools.makeFriendlyDates(startDate)}. See you then!`)
         }
     }
 }
