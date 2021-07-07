@@ -48,22 +48,6 @@ class DataFormattingTools {
         }
     }
 
-    checkIsCurrentMonth(a) {
-        //Create date object in GMT-5
-        var d = new Date(new Date() - 3600 * 1000 * 5);
-        //Set current month
-        let monNum = d.getMonth();
-        //Get number of given month for later comparison
-        var givenMonth = parse(a, 'LLLL', new Date());
-        var gMonth = fnsMonth(givenMonth);
-        //Compare values
-        if (gMonth == monNum) {
-            return (true);
-        } else {
-            return (false);
-        }
-    }
-
     determineYear(month, day) {
         //Create date object in GMT-5
         var d = new Date(new Date() - 3600 * 1000 * 5);
@@ -258,7 +242,6 @@ class DataEntryTools {
     }
 
     present(message, args) {
-        //Make sure we have start and end dates.
         if (tools.checkIsMonth(args[0])) {
             var startYear = tools.determineYear(args[0], args[1]);
             if (tools.checkIsDate(args[0], args[1], startYear)) {
