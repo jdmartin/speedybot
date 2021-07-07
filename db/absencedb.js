@@ -244,8 +244,7 @@ class DataEntryTools {
         if (tools.checkIsMonth(args[0])) {
             var startYear = tools.determineYear(args[0], args[1]);
             if (tools.checkIsDate(args[0], args[1], startYear)) {
-                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
-                var startDate = tools.validateDates(message, rebuilt_start, undefined);
+                var startDate = args[0] + '-' + args[1];
             }
         }
         if (tools.checkIsMonth(args[2])) {
@@ -256,8 +255,7 @@ class DataEntryTools {
                 var endYear = startYear;
             }
             if (tools.checkIsDate(args[2], args[3], endYear)) {
-                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
-                var endDate = tools.validateDates(message, undefined, rebuilt_end);
+                var endDate = args[2] + '-' + args[3]
             }
         } else {
             var endDate = startDate;
@@ -265,7 +263,7 @@ class DataEntryTools {
         //Make sure given dates are dates.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If dates are good, do the update.
-            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
+            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start LIKE "%-${startDate}" AND end LIKE "%-${endDate}")`);
             //Send message to confirm.
             tools.generateResponse(message, "present", "absent", startDate, endDate);
         }
