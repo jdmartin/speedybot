@@ -1,6 +1,7 @@
 module.exports = {
     name: 'xkcd',
     description: 'Get a random xkcd comic!',
+    notes: 'Comics from https://xkcd.com/',
     execute(message, args) {
         const fetch = require('node-fetch');
 

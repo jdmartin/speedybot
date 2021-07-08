@@ -1,6 +1,7 @@
 module.exports = {
     name: 'cats',
     description: 'See a random cat!',
+    notes: 'Cats from https://aws.random.cat/',
     execute(message, args) {
         const fetch = require('node-fetch');
         (async function () {
