@@ -102,8 +102,8 @@ class DataEntryTools {
     ontime(message, args) {
         var currentYear =  dateTools.determineYear(args[0], args[1]);
         //Make sure we have dates.
-        if (dateToolscheckIsMonth(args[0])) {
-            if (dateToolscheckIsDate(args)) {
+        if (dateTools.checkIsMonth(args[0])) {
+            if (dateTools.checkIsDate(args)) {
                 var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
                 var startDate = dateTools.validateDates(message, rebuilt_date, undefined);
             }
