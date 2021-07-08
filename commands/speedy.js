@@ -30,10 +30,10 @@ module.exports = {
             **xkcd**: Read a random comic...\n
             __Attendance-related Commands__:
             **absences**: See known absences.
-            **absent**: Let us know you won't be raiding. (Example: !absent 2021-07-04 Comment)
-            **late**: Let us know you're running late. (Example: !late 2021-07-04 Comment)
-            **ontime**: Cancels late. (Example: !ontime 2021-07-04)
-            **present**: Cancel an absence. (Example: !present 2021-07-04)\n
+            **absent**: Let us know you won't be raiding.
+            **late**: Let us know you're running late.
+            **ontime**: Cancels late.
+            **present**: Cancel an absence.\n
             To find out how these work, type \`!speedy [name of command]\`\n
             Want something else? Ask Doolan. ~~ 🐢
         `)
