@@ -148,7 +148,7 @@ class DataEntryTools {
 
     generateResponse(message, this_command, undo_command, start, end, reason) {
         //Create some helpers and ensure needed parts:
-        var friendlyStart = tools.makeFriendlyDates(start);
+        var friendlyStart = dateTools.makeFriendlyDates(start);
         var friendlyStartUndo = format(new Date(start + offset), 'MMM dd');
         //Make certain there's an end value.
         if (!end) {
