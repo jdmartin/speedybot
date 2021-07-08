@@ -4,6 +4,9 @@ module.exports = {
     aliases: ['help'],
     usage: '[command name]',
     execute(message, args) {
+        const data = [];
+		const { commands } = message.client;
+        
         if (!args.length) {
             const response = (`Hello!  Here are some things I can do (commands work here or in chat):\n
             __Remember: All commands start with a **!**__\n
