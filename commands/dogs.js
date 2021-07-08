@@ -1,6 +1,8 @@
 module.exports = {
     name: 'dogs',
     description: 'See a random dog!',
+    aliases: ['dog'],
+    usage: '[optional dog breed]',
     execute(ds_message, args) {
         const fetch = require('node-fetch');
         const dogsDict = {
