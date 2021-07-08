@@ -31,7 +31,7 @@ class CreateDatabase {
     }
 }
 
-class DataEntryTools {
+class AttendanceTools {
     absent(message, args) {
         //Make sure we have start and end dates.
         if (dateTools.checkIsMonth(args[0])) {
@@ -230,7 +230,7 @@ class DataDisplayTools {
 }
 
 module.exports = {
+    AttendanceTools,
     CreateDatabase,
     DataDisplayTools,
-    DataEntryTools,
 };
