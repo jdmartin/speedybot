@@ -53,6 +53,18 @@ client.on("message", message => {
     speedyStats.retrieve(message);
   }
 
+  //Placeholder shortcut for !help -- TODO
+  if (command === 'help') {
+    try {
+      client.commands.get(command).execute(message, args);
+      speedyDBHelper.success(command);
+    } catch (error) {
+      console.error(error);
+      message.reply('there was an error trying to execute that command!');
+      speedyDBHelper.error(command);
+    }
+  }
+
   //If the command is not in our list of commands...
   if (!client.commands.has(command)) return;
 
