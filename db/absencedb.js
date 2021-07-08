@@ -5,7 +5,7 @@ const utils = require("../utils/speedyutils.js");
 const client = utils.client;
 const offset = 'T11:52:29.478Z';
 //Date-related
-var eachDayOfInterval = require('date-fns/eachDayOfInterval')
+var eachDayOfInterval = require('date-fns/eachDayOfInterval'); 
 var parseISO = require('date-fns/parseISO');
 var parse = require('date-fns/parse');
 var isValid = require('date-fns/isValid');
@@ -261,8 +261,6 @@ class DataEntryTools {
                 var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
             }
-            let dayRange = eachDayOfInterval((startYear, args[0], args[1]), (endYear, args[2], args[3]));
-            console.log(dayRange);
         } else {
             var endDate = startDate;
         }
