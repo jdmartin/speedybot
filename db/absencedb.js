@@ -50,6 +50,13 @@ class DataFormattingTools {
         }
     }
 
+    determineMonth(monthName, day, year) {
+        //Get number of given month and given date for later comparison
+        var g = Date.parse(month + day, year);
+        var gMonth = new Date(g).getMonth();
+        return(gMonth);
+    }
+
     determineYear(month, day) {
         //Create date object in GMT-5
         var d = new Date(new Date() - 3600 * 1000 * 5);
@@ -249,6 +256,7 @@ class DataEntryTools {
                 var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
                 var startDate = tools.validateDates(message, rebuilt_start, undefined);
             }
+            console.log(tools.determineMonth(args[0], args[1], startYear));
         }
         if (tools.checkIsMonth(args[2])) {
             //Make sure end year is equal or greater to start year.
@@ -261,6 +269,7 @@ class DataEntryTools {
                 var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
             }
+            console.log(tools.determineMonth(args[2], args[3], endYear));
         } else {
             var endDate = startDate;
         }
