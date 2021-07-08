@@ -25,7 +25,7 @@ module.exports = {
             **late**: Let us know you're running late.
             **ontime**: Cancels late.
             **present**: Cancel an absence.\n
-            To find out how these work, type \`!speedy [name of command]\`\n
+            To find out how these work, type \`!help [name of command]\`\n
             Want something else? Ask Doolan. ~~ 🐢
         `)
             if (message.channel.type === 'dm') {
