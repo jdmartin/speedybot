@@ -2,7 +2,7 @@ module.exports = {
     name: 'speedy',
     description: 'Learn more about Speedybot commands!',
     aliases: ['help'],
-    usage: '[optional command name to find out more about that command. Example: !speedy cats to find out how to use cats.]',
+    usage: '[optional command name]',
     execute(message, args) {
         const data = [];
 		const { commands } = message.client;
