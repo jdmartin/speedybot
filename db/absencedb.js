@@ -4,11 +4,13 @@ const sqlite3 = require('sqlite3');
 const utils = require("../utils/speedyutils.js");
 const client = utils.client;
 const offset = 'T11:52:29.478Z';
-var fnsMonth = require('date-fns/getMonth');
+//Date-related
+var eachDayOfInterval = require('date-fns/eachDayOfInterval')
 var parseISO = require('date-fns/parseISO');
 var parse = require('date-fns/parse');
 var isValid = require('date-fns/isValid');
 var format = require('date-fns/format');
+//Other Tools
 var SqlString = require('sqlstring');
 
 let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
@@ -259,6 +261,8 @@ class DataEntryTools {
                 var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
             }
+            let dayRange = eachDayOfInterval(startDate, endDate);
+            console.log(dayRange);
         } else {
             var endDate = startDate;
         }
