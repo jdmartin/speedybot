@@ -261,7 +261,7 @@ class DataEntryTools {
                 var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
                 var endDate = tools.validateDates(message, undefined, rebuilt_end);
             }
-            let dayRange = eachDayOfInterval(startDate, endDate);
+            let dayRange = eachDayOfInterval((startYear, args[0], args[1]), (endYear, args[2], args[3]));
             console.log(dayRange);
         } else {
             var endDate = startDate;
