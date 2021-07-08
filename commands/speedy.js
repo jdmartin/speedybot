@@ -1,3 +1,7 @@
+//Load the config file.
+require("dotenv").config();
+const prefix = process.env.prefix;
+
 module.exports = {
     name: 'speedy',
     description: 'Learn more about Speedybot commands!',
@@ -53,7 +57,7 @@ module.exports = {
 
             if (command.aliases) data.push(`**Aliases:** ${command.aliases.join(', ')}`);
             if (command.description) data.push(`**Description:** ${command.description}`);
-    		if (command.usage) data.push(`**Usage:** !${command.name} ${command.usage}`);
+    		if (command.usage) data.push(`**Usage:** ${prefix}${command.name} ${command.usage}`);
             if (command.notes) data.push(`**Notes:** ${command.notes}`);
 
             if (message.channel.type === 'dm') {
