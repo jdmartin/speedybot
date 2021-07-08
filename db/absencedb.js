@@ -70,7 +70,7 @@ class DataEntryTools {
         //Make sure dates are good.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
-            tools.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
+            this.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
         } else {
             message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
         }
@@ -95,7 +95,7 @@ class DataEntryTools {
         //Only update db if we have a valid date.
         if (isValid(parseISO(startDate))) {
             absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            tools.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
+            this.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
         }
     }
 
@@ -142,7 +142,7 @@ class DataEntryTools {
             //If dates are good, do the update.
             absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
             //Send message to confirm.
-            tools.generateResponse(message, "present", "absent", startDate, endDate);
+            this.generateResponse(message, "present", "absent", startDate, endDate);
         }
     }
 
