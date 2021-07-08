@@ -1,6 +1,8 @@
 module.exports = {
     name: 'strats',
     description: 'Did you read the strat?',
+    usage: '[optional raid name]',
+    notes: 'Right now, the only optional name is: nathria',
     execute(message, args) {
         const Discord = require("discord.js");
         const sanctum = new Discord.MessageEmbed()

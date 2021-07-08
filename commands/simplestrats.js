@@ -1,6 +1,8 @@
 module.exports = {
     name: 'simplestrats',
     description: 'Did you read the strat?',
+    usage: '[optional raid name]',
+    notes: 'Right now, the only optional name is: nathria',
     execute(message, args) {
         const sanctum = (`Hello! Here are links to Evie's raid strats:\n
         __Sanctum of Domination__\n
