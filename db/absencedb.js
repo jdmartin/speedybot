@@ -100,7 +100,7 @@ class DataEntryTools {
     }
 
     ontime(message, args) {
-        var currentYear = dateToolsdetermineYear(args[0], args[1]);
+        var currentYear =  dateTools.determineYear(args[0], args[1]);
         //Make sure we have dates.
         if (dateToolscheckIsMonth(args[0])) {
             if (dateToolscheckIsDate(args)) {
