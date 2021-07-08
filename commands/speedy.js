@@ -1,8 +1,8 @@
 module.exports = {
     name: 'speedy',
-    description: 'Speedy!',
+    description: 'Learn more about Speedybot commands!',
     aliases: ['help'],
-    usage: '[command name]',
+    usage: '[optional command name to find out more about that command. Example: !speedy cats to find out how to use cats.]',
     execute(message, args) {
         const data = [];
 		const { commands } = message.client;
