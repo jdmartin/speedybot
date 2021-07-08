@@ -52,7 +52,7 @@ class DataFormattingTools {
 
     determineMonth(monthName, day, year) {
         //Get number of given month and given date for later comparison
-        var g = Date.parse(month + day, year);
+        var g = Date.parse(monthName + day, year);
         var gMonth = new Date(g).getMonth();
         return(gMonth);
     }
