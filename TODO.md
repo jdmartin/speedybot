@@ -1,1 +1,1 @@
-- Better handling of dog breeds. Spaghetti code makes me sad.
+- Implement alias system.
