@@ -2,14 +2,15 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
 const utils = require("../utils/speedyutils.js");
+const dateTools = require("../utils/datetools.js");
 const client = utils.client;
-const offset = 'T11:52:29.478Z';
+
 //Date-related
-var eachDayOfInterval = require('date-fns/eachDayOfInterval'); 
+const offset = 'T11:52:29.478Z'; 
 var parseISO = require('date-fns/parseISO');
-var parse = require('date-fns/parse');
 var isValid = require('date-fns/isValid');
 var format = require('date-fns/format');
+
 //Other Tools
 var SqlString = require('sqlstring');
 
@@ -29,71 +30,119 @@ class CreateDatabase {
     }
 }
 
-class DataFormattingTools {
-    checkIsDate(a, b, c) {
-        if (parse(a, 'LLLL', new Date())) { //Month Check
-            if (parse(b, 'dd', new Date())) { //Day Check
-                if ((parse(c, 'yyyy', new Date()))) { //Year Check 
-                    return (true);
-                }
+class DataEntryTools {
+    absent(message, args) {
+        //Make sure we have start and end dates.
+        if (dateTools.checkIsMonth(args[0])) {
+            var startYear = dateTools.determineYear(args[0], args[1]);
+            if (dateTools.checkIsDate(args[0], args[1], startYear)) {
+                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
+                var startDate = dateTools.validateDates(message, rebuilt_start, undefined);
+            }
+            //Process Comments
+            var comment = args.slice(2).join(' ');
+        }
+        if (dateTools.checkIsMonth(args[2])) {
+            //Make sure end year is equal or greater to start year.
+            if (dateTools.getCurrentYear() >= startYear) {
+                var endYear = dateTools.determineYear(args[2], args[3]);
+            } else {
+                var endYear = startYear;
+            }
+            if (dateTools.checkIsDate(args[2], args[3], endYear)) {
+                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
+                var endDate = dateTools.validateDates(message, undefined, rebuilt_end);
+                //Process Comments
+                var comment = args.slice(4).join(' ');
+            }
+        }
+        if (endDate == undefined) {
+            endDate = startDate;
+            var comment = args.slice(2).join(' ');
+        }
+        //Make sure there's something in the comment field, even if empty.
+        if (comment) {
+            var safe_reason = SqlString.escape(comment);
+        } else {
+            var safe_reason = ' ';
+        }
+        //Make sure dates are good.
+        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
+            absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
+            tools.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
+        } else {
+            message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
+        }
+    }
+
+    late(message, args) {
+        var currentYear = dateTools.determineYear(args[0], args[1]);
+        //Make sure we have a date.
+        if (dateTools.checkIsMonth(args[0])) {
+            if (dateTools.checkIsDate(args)) {
+                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
+                var startDate = dateTools.validateDates(message, rebuilt_date, undefined);
+                //Process a comment, if supplied.
+                var comment = args.slice(2).join(' ');
+            }
+        }
+        if (comment) {
+            var safe_reason = SqlString.escape(comment);
+        } else {
+            var safe_reason = ' ';
+        }
+        //Only update db if we have a valid date.
+        if (isValid(parseISO(startDate))) {
+            absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
+            tools.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
+        }
+    }
+
+    ontime(message, args) {
+        var currentYear = dateToolsdetermineYear(args[0], args[1]);
+        //Make sure we have dates.
+        if (dateToolscheckIsMonth(args[0])) {
+            if (dateToolscheckIsDate(args)) {
+                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
+                var startDate = dateTools.validateDates(message, rebuilt_date, undefined);
+            }
+        }
+        //Only update db if we have a valid date.
+        if (isValid(parseISO(startDate))) {
+            absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
+            message.author.send(`Ok, I've got you down as on-time on ${dateTools.makeFriendlyDates(startDate)}. See you then!`)
+        }
+    }
+
+    present(message, args) {
+        if (dateTools.checkIsMonth(args[0])) {
+            var startYear = dateTools.determineYear(args[0], args[1]);
+            if (dateTools.checkIsDate(args[0], args[1], startYear)) {
+                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
+                var startDate = dateTools.validateDates(message, rebuilt_start, undefined);
+            }
+        }
+        if (dateTools.checkIsMonth(args[2])) {
+            //Make sure end year is equal or greater to start year.
+            if (dateTools.getCurrentYear() >= startYear) {
+                var endYear = dateTools.determineYear(args[2], args[3]);
+            } else {
+                var endYear = startYear;
+            }
+            if (dateTools.checkIsDate(args[2], args[3], endYear)) {
+                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
+                var endDate = dateTools.validateDates(message, undefined, rebuilt_end);
             }
         } else {
-            return (false);
+            var endDate = startDate;
         }
-    }
-
-    checkIsMonth(a) {
-        if (isValid(parse(a, 'LLLL', new Date()))) {
-            return (true);
-        } else {
-            return (false);
+        //Make sure given dates are dates.
+        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
+            //If dates are good, do the update.
+            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
+            //Send message to confirm.
+            tools.generateResponse(message, "present", "absent", startDate, endDate);
         }
-    }
-
-    determineMonth(monthName, day, year) {
-        //Get number of given month and given date for later comparison
-        var g = Date.parse(monthName + day, year);
-        var gMonth = new Date(g).getMonth();
-        //Format Date 
-        return(gMonth);
-    }
-
-    determineYear(month, day) {
-        //Create date object in GMT-5
-        var d = new Date(new Date() - 3600 * 1000 * 5);
-        //Set current year, month
-        let year = d.getFullYear();
-        let monNum = d.getMonth();
-        let date = d.getDate();
-        //Get number of given month and given date for later comparison
-        var g = Date.parse(month + day, year);
-        var gMonth = new Date(g).getMonth();
-        var gDate = new Date(g).getDate();
-        //If month is equal to or after this month: return this year.
-        if (gMonth > monNum) {
-            return (year);
-        }
-        //If month is before this month: return next year.
-        if (gMonth < monNum) {
-            return (year + 1);
-        }
-        //If it's this month, check if date is before, equal, or after today.
-        if (gMonth == monNum) {
-            if (gDate < date) {
-                return (year + 1);
-            }
-            if (gDate >= date) {
-                return (year);
-            }
-        }
-    }
-
-    getCurrentYear() {
-        //Create date object in GMT-5
-        var d = new Date(new Date() - 3600 * 1000 * 5);
-        //Set current year and return it.
-        let year = d.getFullYear();
-        return (year);
     }
 
     generateResponse(message, this_command, undo_command, start, end, reason) {
@@ -104,7 +153,7 @@ class DataFormattingTools {
         if (!end) {
             end = start;
         }
-        var friendlyEnd = tools.makeFriendlyDates(end);
+        var friendlyEnd = dateTools.makeFriendlyDates(end);
         var friendlyEndUndo = format(new Date(end + offset), 'MMM dd');
         //Select the appropriate type of response, and shorten if it's a single day.
         if (message.channel.type === 'dm') {
@@ -132,154 +181,6 @@ class DataFormattingTools {
             client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${friendlyStart}. They commented: ${reason}`)
         }
     }
-
-    makeFriendlyDates(date) {
-        //Ensures that dates are in the appropriate time zone (locally) by adding an ugly ISO timestamp.
-        let friendlyDateTemp = date + offset;
-        let friendlyDate = format(new Date(friendlyDateTemp), 'iii. MMMM dd, yyyy');
-        return (friendlyDate)
-    }
-
-    validateDates(message, start, end) {
-        if (start != undefined) {
-            //Make sure given dates are dates.
-            if ((isValid(parse(start, 'LLLL dd yyyy', new Date())))) {
-                let temp_date = parse(start, 'LLLL dd yyyy', new Date());
-                let simple_date = temp_date.toISOString().split('T')[0];
-                return (simple_date);
-            }
-            //Request date in proper format.
-            message.reply("Sorry, I need a start date in the format 'Month Day'");
-            return;
-        }
-        if (end != undefined) {
-            if ((isValid(parse(end, 'LLLL dd yyyy', new Date())))) {
-                let temp_date = parse(end, 'LLLL dd yyyy', new Date());
-                let simple_date = temp_date.toISOString().split('T')[0];
-                return (simple_date);
-            }
-            message.reply("Sorry, I need an end date in the format 'Month Day'.");
-            return;
-        }
-    }
-}
-
-const tools = new DataFormattingTools();
-
-class DataEntryTools {
-    absent(message, args) {
-        //Make sure we have start and end dates.
-        if (tools.checkIsMonth(args[0])) {
-            var startYear = tools.determineYear(args[0], args[1]);
-            if (tools.checkIsDate(args[0], args[1], startYear)) {
-                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
-                var startDate = tools.validateDates(message, rebuilt_start, undefined);
-            }
-            //Process Comments
-            var comment = args.slice(2).join(' ');
-        }
-        if (tools.checkIsMonth(args[2])) {
-            //Make sure end year is equal or greater to start year.
-            if (tools.getCurrentYear() >= startYear) {
-                var endYear = tools.determineYear(args[2], args[3]);
-            } else {
-                var endYear = startYear;
-            }
-            if (tools.checkIsDate(args[2], args[3], endYear)) {
-                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
-                var endDate = tools.validateDates(message, undefined, rebuilt_end);
-                //Process Comments
-                var comment = args.slice(4).join(' ');
-            }
-        }
-        if (endDate == undefined) {
-            endDate = startDate;
-            var comment = args.slice(2).join(' ');
-        }
-        //Make sure there's something in the comment field, even if empty.
-        if (comment) {
-            var safe_reason = SqlString.escape(comment);
-        } else {
-            var safe_reason = ' ';
-        }
-        //Make sure dates are good.
-        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
-            absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
-            tools.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
-        } else {
-            message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
-        }
-    }
-
-    late(message, args) {
-        var currentYear = tools.determineYear(args[0], args[1]);
-        //Make sure we have a date.
-        if (tools.checkIsMonth(args[0])) {
-            if (tools.checkIsDate(args)) {
-                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
-                var startDate = tools.validateDates(message, rebuilt_date, undefined);
-                //Process a comment, if supplied.
-                var comment = args.slice(2).join(' ');
-            }
-        }
-        if (comment) {
-            var safe_reason = SqlString.escape(comment);
-        } else {
-            var safe_reason = ' ';
-        }
-        //Only update db if we have a valid date.
-        if (isValid(parseISO(startDate))) {
-            absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            tools.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
-        }
-    }
-
-    ontime(message, args) {
-        var currentYear = tools.determineYear(args[0], args[1]);
-        //Make sure we have dates.
-        if (tools.checkIsMonth(args[0])) {
-            if (tools.checkIsDate(args)) {
-                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
-                var startDate = tools.validateDates(message, rebuilt_date, undefined);
-            }
-        }
-        //Only update db if we have a valid date.
-        if (isValid(parseISO(startDate))) {
-            absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
-            message.author.send(`Ok, I've got you down as on-time on ${tools.makeFriendlyDates(startDate)}. See you then!`)
-        }
-    }
-
-    present(message, args) {
-        if (tools.checkIsMonth(args[0])) {
-            var startYear = tools.determineYear(args[0], args[1]);
-            if (tools.checkIsDate(args[0], args[1], startYear)) {
-                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
-                var startDate = tools.validateDates(message, rebuilt_start, undefined);
-            }
-        }
-        if (tools.checkIsMonth(args[2])) {
-            //Make sure end year is equal or greater to start year.
-            if (tools.getCurrentYear() >= startYear) {
-                var endYear = tools.determineYear(args[2], args[3]);
-            } else {
-                var endYear = startYear;
-            }
-            if (tools.checkIsDate(args[2], args[3], endYear)) {
-                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
-                var endDate = tools.validateDates(message, undefined, rebuilt_end);
-            }
-        } else {
-            var endDate = startDate;
-        }
-        //Make sure given dates are dates.
-        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
-            //If dates are good, do the update.
-            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
-            //Send message to confirm.
-            tools.generateResponse(message, "present", "absent", startDate, endDate);
-        }
-    }
 }
 
 class DataDisplayTools {
@@ -298,7 +199,7 @@ class DataDisplayTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date: " + tools.makeFriendlyDates(row.start) + "\nEnd Date: " + tools.makeFriendlyDates(row.end) + "\nComments: " + row.comment,
+                    value: "\t\tStart Date: " + dateTools.makeFriendlyDates(row.start) + "\nEnd Date: " + dateTools.makeFriendlyDates(row.end) + "\nComments: " + row.comment,
                     inline: false
                 })
             });
@@ -318,7 +219,7 @@ class DataDisplayTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tDate: " + tools.makeFriendlyDates(row.start) + "\nComments: " + row.comment,
+                    value: "\t\tDate: " + dateTools.makeFriendlyDates(row.start) + "\nComments: " + row.comment,
                     inline: false
                 })
             });
