@@ -56,12 +56,12 @@ client.on("message", message => {
   //Placeholder shortcut for !help -- TODO
   if (command === 'help') {
     try {
-      client.commands.get(command).execute(message, args);
-      speedyDBHelper.success(command);
+      client.commands.get('speedy').execute(message, args);
+      speedyDBHelper.success('speedy');
     } catch (error) {
       console.error(error);
       message.reply('there was an error trying to execute that command!');
-      speedyDBHelper.error(command);
+      speedyDBHelper.error('speedy');
     }
   }
 
