@@ -3,6 +3,8 @@ var parse = require('date-fns/parse');
 var isValid = require('date-fns/isValid');
 var format = require('date-fns/format');
 
+const offset = 'T11:52:29.478Z';
+
 class dateTools {
     checkIsDate(a, b, c) {
         if (parse(a, 'LLLL', new Date())) { //Month Check

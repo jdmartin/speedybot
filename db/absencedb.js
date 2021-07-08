@@ -2,7 +2,8 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
 const utils = require("../utils/speedyutils.js");
-const dateTools = require("../utils/datetools.js");
+const dates = require("../utils/datetools.js");
+const dateTools = new dates.dateTools();
 const client = utils.client;
 
 //Date-related
