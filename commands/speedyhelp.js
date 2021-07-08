@@ -1,6 +1,7 @@
 module.exports = {
     name: 'speedyhelp',
     description: 'How can Speedy help you?',
+    notes: "This advice is to help you see embeds in Discord.  You don't _have_ to do this.",
     execute(message, args) {
         const advice = (`Hello!  So, here's a bit of help:\n
         __Setup__\n
