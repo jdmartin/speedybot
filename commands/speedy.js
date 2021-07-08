@@ -34,13 +34,7 @@ module.exports = {
             **late**: Let us know you're running late. (Example: !late 2021-07-04 Comment)
             **ontime**: Cancels late. (Example: !ontime 2021-07-04)
             **present**: Cancel an absence. (Example: !present 2021-07-04)\n
-            Some examples:
-            (N.B. You can use commas or not after days, and you can use either three-letter months or the whole word.)
-            !absent July 4, 2021 (Absent on July 4, 2021)
-            !absent Jul 6 2021 Jul 13 2021 Working on stuff. (Absent from July 6 until July 13, 2021 with reason.)
-            !late July 4 2021 Running Marathon (Late on July 4, 2021 with reason.)
-            !ontime Jul 4, 2021 (On-time on July 4, 2021 -- removes the late for that date)
-            !present July 4, 2021 (Present on July 4, 2021 -- removes an absence for just that date)\n
+            To find out how these work, type !speedy [name of command]\n
             Want something else? Ask Doolan. ~~ 🐢
         `)
             if (message.channel.type === 'dm') {
