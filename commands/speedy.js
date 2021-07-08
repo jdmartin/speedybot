@@ -54,6 +54,7 @@ module.exports = {
             if (command.aliases) data.push(`**Aliases:** ${command.aliases.join(', ')}`);
             if (command.description) data.push(`**Description:** ${command.description}`);
     		if (command.usage) data.push(`**Usage:** !${command.name} ${command.usage}`);
+            if (command.notes) data.push(`**Notes:** ${command.notes}`);
 
             if (message.channel.type === 'dm') {
                 message.reply(data, { split: true })

@@ -3,6 +3,7 @@ module.exports = {
     description: 'See a random dog!',
     aliases: ['dog'],
     usage: '[optional dog breed]',
+    notes: 'These are the breeds you can use: cardigan, corgi, germanshepherd, husky, pembroke, and poodle',
     execute(ds_message, args) {
         const fetch = require('node-fetch');
         const dogsDict = {
