@@ -1,6 +1,6 @@
 module.exports = {
     name: 'strats',
-    description: 'Get all the links to strats for the current raid.',
+    description: 'Get all the links to strats for the current raid, or for an older raid.',
     usage: '[optional raid name]',
     notes: 'Right now, the only optional name is: nathria',
     execute(message, args) {
