@@ -11,6 +11,7 @@ module.exports = {
         **The Nine**: https://discord.com/channels/308622057707536385/308626596623810562/861108293966495747
         **Ner'zhul**: https://discord.com/channels/308622057707536385/308626596623810562/861108398400471060
         **Soulrender Dormazain**: https://discord.com/channels/308622057707536385/308626596623810562/861748064217858109
+        **Painsmith**: https://discord.com/channels/308622057707536385/308626596623810562/862858655089819659
         
         
         Want Nathria? Try !simplestrats nathria
