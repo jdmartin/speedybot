@@ -32,7 +32,7 @@ class CreateDatabase {
 }
 
 class AbsenceDBTools {
-    foo() {
+    static foo() {
         console.log("Yay!");
     }
 }
