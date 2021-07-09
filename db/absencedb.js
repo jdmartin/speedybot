@@ -32,9 +32,7 @@ class CreateDatabase {
 }
 
 class AbsenceDBTools {
-    static foo() {
-        console.log("Yay!");
-    }
+    //Placeholder
 }
 
 class AttendanceTools {
@@ -106,7 +104,6 @@ class AttendanceTools {
     }
 
     ontime(message, args) {
-        console.log(AbsenceDBTools.foo());
         var currentYear =  dateTools.determineYear(args[0], args[1]);
         //Make sure we have dates.
         if (dateTools.checkIsMonth(args[0])) {
