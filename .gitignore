@@ -353,3 +353,4 @@ MigrationBackup/
 config.json
 .venv
 .env
+db/absence.db

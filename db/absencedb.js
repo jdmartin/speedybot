@@ -5,13 +5,15 @@ const utils = require("../utils/speedyutils.js");
 const dates = require("../utils/datetools.js");
 const dateTools = new dates.dateTools();
 const client = utils.client;
-
 //Date-related
-const offset = 'T11:52:29.478Z'; 
-var parseISO = require('date-fns/parseISO');
-var isValid = require('date-fns/isValid');
+const offset = 'T11:52:29.478Z';
+var eachDayOfInterval = require('date-fns/eachDayOfInterval')
 var format = require('date-fns/format');
-
+var isTuesday = require('date-fns/isTuesday')
+var isThursday = require('date-fns/isThursday')
+var isSunday = require('date-fns/isSunday');
+var isValid = require('date-fns/isValid');
+var parseISO = require('date-fns/parseISO');
 //Other Tools
 var SqlString = require('sqlstring');
 
@@ -25,55 +27,59 @@ let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
 class CreateDatabase {
     startup() {
         absencedb.serialize(function () {
-            absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start` TEXT, `end` TEXT, `comment` TEXT)");
-            absencedb.run("CREATE TABLE IF NOT EXISTS `latecomers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start` TEXT, `comment` TEXT)");
+            absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date`, `comment` TEXT)");
+            absencedb.run("CREATE TABLE IF NOT EXISTS `latecomers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `start_date`, `comment` TEXT)");
         });
     }
 }
 
-class AbsenceDBTools {
-    //Placeholder
-}
-
 class AttendanceTools {
+    //Commands absent, late, ontime, and present for scheduling.
+
     absent(message, args) {
         //Make sure we have start and end dates.
         if (dateTools.checkIsMonth(args[0])) {
             var startYear = dateTools.determineYear(args[0], args[1]);
             if (dateTools.checkIsDate(args[0], args[1], startYear)) {
-                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
-                var startDate = dateTools.validateDates(message, rebuilt_start, undefined);
+                var startDay = args[1];
+                var combinedStartDate = args[0] + " " + startDay + " " + startYear;
+                var startDate = dateTools.validateDates(message, combinedStartDate, undefined);
             }
             //Process Comments
             var comment = args.slice(2).join(' ');
         }
         if (dateTools.checkIsMonth(args[2])) {
             //Make sure end year is equal or greater to start year.
+            ///HMM
             if (dateTools.getCurrentYear() >= startYear) {
                 var endYear = dateTools.determineYear(args[2], args[3]);
             } else {
                 var endYear = startYear;
             }
             if (dateTools.checkIsDate(args[2], args[3], endYear)) {
-                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
-                var endDate = dateTools.validateDates(message, undefined, rebuilt_end);
+                var endDay = args[3];
+                var combinedEndDate = args[2] + " " + endDay + " " + endYear;
+                var endDate = dateTools.validateDates(message, undefined, combinedEndDate);
                 //Process Comments
                 var comment = args.slice(4).join(' ');
             }
-        }
-        if (endDate == undefined) {
-            endDate = startDate;
+        } else {
+            var endDate = startDate;
             var comment = args.slice(2).join(' ');
         }
+
         //Make sure there's something in the comment field, even if empty.
         if (comment) {
             var safe_reason = SqlString.escape(comment);
         } else {
             var safe_reason = ' ';
         }
+
         //Make sure dates are good.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
-            absencedb.run(`INSERT INTO absences(name, start, end, comment) VALUES ("${message.author.username}", "${startDate}", "${endDate}", "${safe_reason}")`);
+            //If we have a range of days, let's store them individually... 
+            //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
+            this.processDBUpdate(message, "absent", startDate, endDate, safe_reason);
             this.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
         } else {
             message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
@@ -81,50 +87,15 @@ class AttendanceTools {
     }
 
     late(message, args) {
-        var currentYear = dateTools.determineYear(args[0], args[1]);
+        var startYear = dateTools.determineYear(args[0], args[1]);
         //Make sure we have a date.
         if (dateTools.checkIsMonth(args[0])) {
             if (dateTools.checkIsDate(args)) {
-                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
-                var startDate = dateTools.validateDates(message, rebuilt_date, undefined);
+                var startDay = args[1];
+                let combinedDate = args[0] + " " + startDay + " " + startYear;
+                var startDate = dateTools.validateDates(message, combinedDate, undefined);
                 //Process a comment, if supplied.
                 var comment = args.slice(2).join(' ');
-            }
-        }
-        if (comment) {
-            var safe_reason = SqlString.escape(comment);
-        } else {
-            var safe_reason = ' ';
-        }
-        //Only update db if we have a valid date.
-        if (isValid(parseISO(startDate))) {
-            absencedb.run(`INSERT INTO latecomers(name, start, comment) VALUES ("${message.author.username}", "${startDate}", "${safe_reason}")`);
-            this.generateResponse(message, "late", "ontime", startDate, undefined, safe_reason);
-        }
-    }
-
-    ontime(message, args) {
-        var currentYear =  dateTools.determineYear(args[0], args[1]);
-        //Make sure we have dates.
-        if (dateTools.checkIsMonth(args[0])) {
-            if (dateTools.checkIsDate(args)) {
-                var rebuilt_date = args[0] + ' ' + args[1] + ' ' + currentYear;
-                var startDate = dateTools.validateDates(message, rebuilt_date, undefined);
-            }
-        }
-        //Only update db if we have a valid date.
-        if (isValid(parseISO(startDate))) {
-            absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start = "${startDate}")`);
-            message.author.send(`Ok, I've got you down as on-time on ${dateTools.makeFriendlyDates(startDate)}. See you then!`)
-        }
-    }
-
-    present(message, args) {
-        if (dateTools.checkIsMonth(args[0])) {
-            var startYear = dateTools.determineYear(args[0], args[1]);
-            if (dateTools.checkIsDate(args[0], args[1], startYear)) {
-                var rebuilt_start = args[0] + ' ' + args[1] + ' ' + startYear;
-                var startDate = dateTools.validateDates(message, rebuilt_start, undefined);
             }
         }
         if (dateTools.checkIsMonth(args[2])) {
@@ -135,21 +106,188 @@ class AttendanceTools {
                 var endYear = startYear;
             }
             if (dateTools.checkIsDate(args[2], args[3], endYear)) {
-                var rebuilt_end = args[2] + ' ' + args[3] + ' ' + endYear;
-                var endDate = dateTools.validateDates(message, undefined, rebuilt_end);
+                var endDay = args[3];
+                var combinedEndDate = args[2] + " " + endDay + " " + endYear;
+                var endDate = dateTools.validateDates(message, undefined, combinedEndDate);
+                //Process Comments
+                var comment = args.slice(4).join(' ');
+            }
+        } else {
+            var endDate = startDate;
+            var comment = args.slice(2).join(' ');
+        }
+
+        //Make sure there's something in the comment field, even if empty.
+        if (comment) {
+            var safe_reason = SqlString.escape(comment);
+        } else {
+            var safe_reason = ' ';
+        }
+        //Only update db if we have a valid date.
+        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
+            //If we have a range of days, let's store them individually... 
+            //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
+            this.processDBUpdate(message, "late", startDate, endDate, safe_reason);
+            this.generateResponse(message, "late", "ontime", startDate, endDate, safe_reason);
+        } else {
+            message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
+        }
+    }
+
+    ontime(message, args) {
+        //Make sure we have a date.
+        var startYear = dateTools.determineYear(args[0], args[1]);
+        if (dateTools.checkIsMonth(args[0])) {
+            if (dateTools.checkIsDate(args)) {
+                var startDay = args[1];
+                let combinedDate = args[0] + " " + startDay + " " + startYear;
+                var startDate = dateTools.validateDates(message, combinedDate, undefined);
+            }
+        }
+        if (dateTools.checkIsMonth(args[2])) {
+            //Make sure end year is equal or greater to start year.
+            if (dateTools.getCurrentYear() >= startYear) {
+                var endYear = dateTools.determineYear(args[2], args[3]);
+            } else {
+                var endYear = startYear;
+            }
+            if (dateTools.checkIsDate(args[2], args[3], endYear)) {
+                var endDay = args[3];
+                var combinedEndDate = args[2] + " " + endDay + " " + endYear;
+                var endDate = dateTools.validateDates(message, undefined, combinedEndDate);
             }
         } else {
             var endDate = startDate;
         }
-        //Make sure given dates are dates.
-        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
-            //If dates are good, do the update.
-            absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start = "${startDate}" AND end = "${endDate}")`);
-            //Send message to confirm.
-            this.generateResponse(message, "present", "absent", startDate, endDate);
+        //Only update db if we have a valid date.
+        if (isValid(parseISO(startDate))) {
+            this.processDBUpdate(message, "ontime", startDate, endDate, undefined);
+            if (startDate != endDate) {
+                message.author.send(`Ok, I've got you down as on-time from ${dateTools.makeFriendlyDates(startDate)} until ${dateTools.makeFriendlyDates(endDate)}. See you then!`);
+            } else {
+                message.author.send(`Ok, I've got you down as on-time on ${dateTools.makeFriendlyDates(startDate)}. See you then!`);
+            }
         }
     }
 
+    present(message, args) {
+        //Make sure we have start and end dates.
+        var startYear = dateTools.determineYear(args[0], args[1]);
+        if (dateTools.checkIsMonth(args[0])) {
+            if (dateTools.checkIsDate(args[0], args[1], startYear)) {
+                var startDay = args[1];
+                var combinedStartDate = args[0] + " " + startDay + " " + startYear;
+                var startDate = dateTools.validateDates(message, combinedStartDate, undefined);
+            }
+        }
+        if (dateTools.checkIsMonth(args[2])) {
+            //Make sure end year is equal or greater to start year.
+            if (dateTools.getCurrentYear() >= startYear) {
+                var endYear = dateTools.determineYear(args[2], args[3]);
+            } else {
+                var endYear = startYear;
+            }
+            if (dateTools.checkIsDate(args[2], args[3], endYear)) {
+                var endDay = args[3];
+                var combinedEndDate = args[2] + " " + endDay + " " + endYear;
+                var endDate = dateTools.validateDates(message, undefined, combinedEndDate);
+            }
+        } else {
+            var endDate = startDate;
+        }
+        //Make sure dates are good.
+        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
+            //If we have a range of days, let's store them individually... 
+            //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
+            this.processDBUpdate(message, "present", startDate, endDate, undefined);
+            this.generateResponse(message, "present", "absent", startDate, endDate, undefined);
+        } else {
+            message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
+        }
+    }
+
+    //command addAbsence, addLate, addOntime, and addPresent, processDBUpdate, for updating the db.
+    addAbsence(message, sy, sm, sd, end, safe_reason) {
+        absencedb.run(`INSERT INTO absences(name, start_year, start_month, start_day, end_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${end}", "${safe_reason}")`);
+    }
+
+    addPresent(message, sm, sd) {
+        absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
+    }
+
+    addLate(message, sy, sm, sd, start, safe_reason) {
+        absencedb.run(`INSERT INTO latecomers(name, start_year, start_month, start_day, start_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${start}", "${safe_reason}")`);
+    }
+
+    addOntime(message, sm, sd) {
+        absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
+    }
+
+    processDBUpdate(message, kind, startDate, endDate, safe_reason) {
+        //Make sure there's a comment:
+        if (safe_reason == undefined) {
+            safe_reason = '';
+        }
+
+        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
+            //If we have a range of days, let's store them individually... 
+            //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
+            //Setup some useful variables.
+            let startDay = startDate.split('-')[2];
+            let endDay = endDate.split('-')[2];
+            //If no range of dates:
+            if (endDay == startDay) {
+                if (isTuesday(parseISO(startDate)) || isThursday(parseISO(startDate)) || isSunday(parseISO(startDate))) {
+                    let newYear = startDate.split('-')[0];
+                    let newMonth = startDate.split('-')[1];
+                    let newDay = startDate.split('-')[2];
+                    let newDate = newYear + "-" + newMonth + "-" + newDay;
+                    if (kind === 'absent') {
+                        this.addAbsence(message, newYear, newMonth, newDay, newDate, safe_reason);
+                    }
+                    if (kind === 'present') {
+                        this.addPresent(message, newMonth, newDay);
+                    }
+                    if (kind === 'late') {
+                        this.addLate(message, newYear, newMonth, newDay, newDate, safe_reason);
+                    }
+                    if (kind === 'ontime') {
+                        this.addOntime(message, newMonth, newDay);
+                    }
+                }
+            }
+            //Do we have a range of dates?
+            if (endDay > startDay) {
+                const result = eachDayOfInterval({
+                    start: new Date(parseISO(startDate)),
+                    end: new Date(parseISO(endDate))
+                });
+                for (let i = 0; i < result.length; i++) {
+                    let short_item = result[i].toISOString().split('T')[0];
+                    if (isTuesday(parseISO(short_item)) || isThursday(parseISO(short_item)) || isSunday(parseISO(short_item))) {
+                        let newYear = short_item.split('-')[0];
+                        let newMonth = short_item.split('-')[1];
+                        let newDay = short_item.split('-')[2];
+                        let newDate = newYear + "-" + newMonth + "-" + newDay;
+                        if (kind === 'absent') {
+                            this.addAbsence(message, newYear, newMonth, newDay, newDate, safe_reason);
+                        }
+                        if (kind === 'present') {
+                            this.addPresent(message, newMonth, newDay);
+                        }
+                        if (kind === 'late') {
+                            this.addLate(message, newYear, newMonth, newDay, newDate, safe_reason);
+                        }
+                        if (kind === 'ontime') {
+                            this.addOntime(message, newMonth, newDay);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //command generateResponse for notifying the user of what has been done.
     generateResponse(message, this_command, undo_command, start, end, reason) {
         //Create some helpers and ensure needed parts:
         var friendlyStart = dateTools.makeFriendlyDates(start);
@@ -186,12 +324,13 @@ class AttendanceTools {
             client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${friendlyStart}. They commented: ${reason}`)
         }
     }
+
 }
 
 class DataDisplayTools {
     show(message) {
         //Get all absences for today and later.
-        let sql = `SELECT * FROM absences WHERE end >= date('now','-1 day') ORDER BY name`;
+        let sql = `SELECT * FROM absences WHERE end_date >= date('now','-1 day') ORDER BY name`;
 
         absencedb.all(sql, [], (err, rows) => {
             if (err) {
@@ -204,14 +343,14 @@ class DataDisplayTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tStart Date: " + dateTools.makeFriendlyDates(row.start) + "\nEnd Date: " + dateTools.makeFriendlyDates(row.end) + "\nComments: " + row.comment,
+                    value: "\t\tDate: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
                     inline: false
                 })
             });
             message.reply(embed);
         });
         //Get all tardiness from today and later.
-        let late_sql = `SELECT * FROM latecomers WHERE start >= date('now','-1 day') ORDER BY name`;
+        let late_sql = `SELECT * FROM latecomers WHERE start_date >= date('now','-1 day') ORDER BY name`;
 
         absencedb.all(late_sql, [], (err, rows) => {
             if (err) {
@@ -224,7 +363,7 @@ class DataDisplayTools {
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
-                    value: "\t\tDate: " + dateTools.makeFriendlyDates(row.start) + "\nComments: " + row.comment,
+                    value: "\t\tDate: " + dateTools.makeFriendlyDates(row.start_date) + "\nComments: " + row.comment,
                     inline: false
                 })
             });
