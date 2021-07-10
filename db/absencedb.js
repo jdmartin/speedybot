@@ -244,7 +244,7 @@ class AttendanceTools {
                 }
             }
             //Do we have a range of dates?
-            if (endDay > startDay) {
+            if (endDay > startDay || endMonth != startMonth) {
                 const result = eachDayOfInterval({
                     start: new Date(parseISO(startDate)),
                     end: new Date(parseISO(endDate))
