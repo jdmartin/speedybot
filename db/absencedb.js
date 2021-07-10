@@ -327,9 +327,9 @@ class DataDisplayTools {
             }
             const data = [];
             data.push(`**Name:** ${rows[0].name}`).join(',');
-            rows.forEach((row) => {
-                data.push(row.end_date);
-            });
+            //rows.forEach((row) => {
+            data.push(rows.map(row => row.end_date).join(', '));
+            //});
             console.log(data);
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
