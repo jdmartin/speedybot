@@ -320,11 +320,11 @@ class DataDisplayTools {
     show(message) {
         //Get all absences for today and later.
         let sql = `SELECT name, group_concat(end_date) FROM absences WHERE end_date >= date('now','-1 day') ORDER BY name DESC, end_date`;
-        console.log(sql);
         absencedb.all(sql, [], (err, rows) => {
             if (err) {
                 throw err;
             }
+            console.log(rows);
             const data = [];
             const rowData = rows;
             data.push(`**Name:** ${rows[0].name}`);
