@@ -30,7 +30,7 @@ absence.startup();
 
 //Database Cleanup
 const dbclean = new absencedb.DatabaseCleanup();
-cron.schedule('* 55 18 * * *', () => {
+cron.schedule('* 59 18 * * *', () => {
   dbclean.cleanAbsences();
   dbclean.cleanLatecomers();
 });
