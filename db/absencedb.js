@@ -335,7 +335,6 @@ class DataDisplayTools {
                 });
             rows.forEach((row) => {
                 embed.addFields({
-                    name: "foo",
                     value: "\t\tDate: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
                     inline: false
                 })
