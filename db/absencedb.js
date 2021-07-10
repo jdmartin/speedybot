@@ -329,9 +329,10 @@ class DataDisplayTools {
                 .setColor(0xFFFFFF)
                 .setTitle("Upcoming absences")
                 .setFooter("These absences are known to the Inifite Speedyflight. Use this information wisely.")
+                embed.addFields({name: rows[0].name});
             rows.forEach((row) => {
                 embed.addFields({
-                    name: row.name,
+                    name: "foo",
                     value: "\t\tDate: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
                     inline: false
                 })
