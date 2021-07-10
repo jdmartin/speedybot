@@ -327,7 +327,7 @@ class DataDisplayTools {
             }
             const data = [];
             const rowData = rows;
-            data.push(`**Name:** ${rows[0].name}`).join(',');
+            data.push(`**Name:** ${rows[0].name}`);
             //rows.forEach((row) => {
             data.push(rowData.map(row => row.end_date).join(', '));
             //});
