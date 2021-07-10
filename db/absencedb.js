@@ -339,7 +339,7 @@ class DataDisplayTools {
             message.reply(embed);
         });
         //Get all tardiness from today and later.
-        let late_sql = `SELECT * FROM latecomers WHERE start_date >= date('now','-1 day') ORDER BY name`;
+        let late_sql = `SELECT * FROM latecomers WHERE start_date >= date('now','-1 day') ORDER BY end_date ASC, name;`;
 
         absencedb.all(late_sql, [], (err, rows) => {
             if (err) {
