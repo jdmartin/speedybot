@@ -251,7 +251,6 @@ class AttendanceTools {
                     start: new Date(parseISO(startDate)),
                     end: new Date(parseISO(endDate))
                 });
-                console.log(result);
                 for (let i = 0; i < result.length; i++) {
                     let short_item = result[i].toISOString().split('T')[0];
                     if (isTuesday(parseISO(short_item)) || isThursday(parseISO(short_item)) || isSunday(parseISO(short_item))) {
