@@ -325,21 +325,19 @@ class DataDisplayTools {
             if (err) {
                 throw err;
             }
+            const data = [];
+            data.push(`**Name:** ${rows[0].name}`);
+            rows.ForEach((row) => {
+                data.push(`${row.end_date('\n')}`);
+            });
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
                 .setTitle("Upcoming absences")
                 .setFooter("These absences are known to the Inifite Speedyflight. Use this information wisely.")
                 embed.addFields({
                     name: "Player:",
-                    value: rows[0].name, 
-                });
-            rows.forEach((row) => {
-                embed.addFields({
-                    name: "foo",
-                    value: "\t\tDate: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
-                    inline: false
-                })
-            });
+                    value: (data, { split: true }),
+                    });
             message.reply(embed);
         });
         //Get all tardiness from today and later.
