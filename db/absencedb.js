@@ -365,7 +365,7 @@ class DatabaseCleanup {
     cleanAbsences() {
         //Expire entries that occurred more than one month ago.
         let sql = `DELETE * FROM absences WHERE end_date < date('now', '-1 month');`
-        absencedb.all(late_sql, [], (err, rows) => {
+        absencedb.all(sql, [], (err, rows) => {
             if (err) {
                 throw err;
             }
@@ -375,7 +375,7 @@ class DatabaseCleanup {
     cleanLatecomers() {
         //Expire entries that occurred more than one month ago.
         let sql = `DELETE * FROM absences WHERE start_date < date('now', '-1 month');`
-        absencedb.all(late_sql, [], (err, rows) => {
+        absencedb.all(sql, [], (err, rows) => {
             if (err) {
                 throw err;
             }
