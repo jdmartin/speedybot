@@ -208,7 +208,7 @@ class AttendanceTools {
 
     //command addAbsence, addLate, addOntime, and addPresent, processDBUpdate, for updating the db.
     addAbsence(message, sy, sm, sd, end, safe_reason) {
-        absencedb.run(`INSERT INTO absences(name, start_year, start_month, start_day, end_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${end}", ?)`, SqlString(safe_reason));
+        absencedb.run(`INSERT INTO absences(name, start_year, start_month, start_day, end_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${end}", ?)`, SqlString.escape(safe_reason));
     }
 
     addPresent(message, sm, sd) {
