@@ -1,6 +1,9 @@
 //Load the config file.
 require("dotenv").config();
 
+//Libraries
+var cron = require('node-cron');
+
 //Load helper files
 const speedydb = require("./db/speedydb.js");
 const absencedb = require("./db/absencedb.js");
@@ -24,6 +27,13 @@ speedy.startup();
 //Initialize the absences database:
 const absence = new absencedb.CreateDatabase();
 absence.startup();
+
+//Database Cleanup
+const dbclean = new absencedb.DatabaseCleanup();
+cron.schedule('* 55 18 * * *', () => {
+  dbclean.cleanAbsences();
+  dbclean.cleanLatecomers();
+});
 
 //Once that's done, let's move on to main.
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
