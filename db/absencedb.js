@@ -319,27 +319,27 @@ class AttendanceTools {
 class DataDisplayTools {
     show(message) {
         //Get all absences for today and later.
-        let sql = `SELECT name, group_concat(end_date) FROM absences WHERE end_date >= date('now','-1 day') ORDER BY name DESC, end_date`;
+        let sql = `SELECT * FROM absences WHERE end_date >= date('now','-1 day') ORDER BY name DESC, end_date`;
+
         absencedb.all(sql, [], (err, rows) => {
             if (err) {
                 throw err;
             }
-            console.log(rows);
-            const data = [];
-            const rowData = rows;
-            data.push(`**Name:** ${rows[0].name}`);
-            //rows.forEach((row) => {
-            data.push(rowData.map(row => row.end_date).join(', '));
-            //});
-            console.log(data);
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
                 .setTitle("Upcoming absences")
                 .setFooter("These absences are known to the Inifite Speedyflight. Use this information wisely.")
                 embed.addFields({
                     name: "Player:",
-                    value: (data, { split: true }),
-                    });
+                    value: rows[0].name, 
+                });
+            rows.forEach((row) => {
+                embed.addFields({
+                    name: "foo",
+                    value: "\t\tDate: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
+                    inline: false
+                })
+            });
             message.reply(embed);
         });
         //Get all tardiness from today and later.
