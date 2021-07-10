@@ -326,9 +326,10 @@ class DataDisplayTools {
                 throw err;
             }
             const data = [];
+            const rowData = rows;
             data.push(`**Name:** ${rows[0].name}`).join(',');
             //rows.forEach((row) => {
-            data.push(rows.map(row => row.end_date).join(', '));
+            data.push(rowData.map(row => row.end_date).join(', '));
             //});
             console.log(data);
             const embed = new Discord.MessageEmbed()
