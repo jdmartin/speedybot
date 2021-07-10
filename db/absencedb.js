@@ -319,7 +319,7 @@ class AttendanceTools {
 class DataDisplayTools {
     show(message) {
         //Get all absences for today and later.
-        let sql = `SELECT * FROM absences WHERE end_date >= date('now','-1 day') ORDER BY name DESC, end_date`;
+        let sql = `SELECT * FROM absences WHERE end_date >= date('now','-1 day') ORDER BY name`;
 
         absencedb.all(sql, [], (err, rows) => {
             if (err) {
@@ -329,12 +329,9 @@ class DataDisplayTools {
                 .setColor(0xFFFFFF)
                 .setTitle("Upcoming absences")
                 .setFooter("These absences are known to the Inifite Speedyflight. Use this information wisely.")
-                embed.addFields({
-                    name: "Player:",
-                    value: rows[0].name, 
-                });
             rows.forEach((row) => {
                 embed.addFields({
+                    name: row.name,
                     value: "\t\tDate: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
                     inline: false
                 })
