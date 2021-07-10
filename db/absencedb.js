@@ -328,7 +328,7 @@ class DataDisplayTools {
             const data = [];
             data.push(`**Name:** ${rows[0].name}`);
             rows.forEach((row) => {
-                data.push(row.end_date('\n'));
+                data.push(row.end_date);
             });
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
