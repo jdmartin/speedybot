@@ -328,7 +328,7 @@ class DataDisplayTools {
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
                 .setTitle("Upcoming absences")
-                .setFooter("These absences are known to the Inifite Speedyflight. Use this information wisely.")
+                .setFooter("These absences are known to the Infinite Speedyflight. Use this information wisely.")
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
@@ -348,7 +348,7 @@ class DataDisplayTools {
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
                 .setTitle("Upcoming tardiness")
-                .setFooter("This tardiness is known to the Inifite Speedyflight. Use this information wisely.")
+                .setFooter("This tardiness is known to the Infinite Speedyflight. Use this information wisely.")
             rows.forEach((row) => {
                 embed.addFields({
                     name: row.name,
