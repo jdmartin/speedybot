@@ -68,19 +68,12 @@ class AttendanceTools {
             var comment = args.slice(2).join(' ');
         }
 
-        //Make sure there's something in the comment field, even if empty.
-        if (comment) {
-            var safe_reason = SqlString.escape(comment);
-        } else {
-            var safe_reason = ' ';
-        }
-
         //Make sure dates are good.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If we have a range of days, let's store them individually... 
             //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-            this.processDBUpdate(message, "absent", startDate, endDate, safe_reason);
-            this.generateResponse(message, "absent", "present", startDate, endDate, safe_reason);
+            this.processDBUpdate(message, "absent", startDate, endDate, comment);
+            this.generateResponse(message, "absent", "present", startDate, endDate, comment);
         } else {
             message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
         }
@@ -117,18 +110,12 @@ class AttendanceTools {
             var comment = args.slice(2).join(' ');
         }
 
-        //Make sure there's something in the comment field, even if empty.
-        if (comment) {
-            var safe_reason = SqlString.escape(comment);
-        } else {
-            var safe_reason = ' ';
-        }
         //Only update db if we have a valid date.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If we have a range of days, let's store them individually... 
             //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-            this.processDBUpdate(message, "late", startDate, endDate, safe_reason);
-            this.generateResponse(message, "late", "ontime", startDate, endDate, safe_reason);
+            this.processDBUpdate(message, "late", startDate, endDate, comment);
+            this.generateResponse(message, "late", "ontime", startDate, endDate, comment);
         } else {
             message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
         }
@@ -207,26 +194,26 @@ class AttendanceTools {
     }
 
     //command addAbsence, addLate, addOntime, and addPresent, processDBUpdate, for updating the db.
-    addAbsence(message, sy, sm, sd, end, safe_reason) {
-        absencedb.run(`INSERT INTO absences(name, start_year, start_month, start_day, end_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${end}", ?)`, SqlString.escape(safe_reason));
+    addAbsence(message, sy, sm, sd, end, comment) {
+        absencedb.run(`INSERT INTO absences(name, start_year, start_month, start_day, end_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${end}", ?)`, SqlString.escape(comment));
     }
 
     addPresent(message, sm, sd) {
         absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
     }
 
-    addLate(message, sy, sm, sd, start, safe_reason) {
-        absencedb.run(`INSERT INTO latecomers(name, start_year, start_month, start_day, start_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${start}", "${safe_reason}")`);
+    addLate(message, sy, sm, sd, start, comment) {
+        absencedb.run(`INSERT INTO latecomers(name, start_year, start_month, start_day, start_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${start}", ?)`, SqlString.escape(comment));
     }
 
     addOntime(message, sm, sd) {
         absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
     }
 
-    processDBUpdate(message, kind, startDate, endDate, safe_reason) {
+    processDBUpdate(message, kind, startDate, endDate, comment) {
         //Make sure there's a comment:
-        if (safe_reason == undefined) {
-            safe_reason = '';
+        if (comment == undefined) {
+            comment = '';
         }
 
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
@@ -243,13 +230,13 @@ class AttendanceTools {
                     let newDay = startDate.split('-')[2];
                     let newDate = newYear + "-" + newMonth + "-" + newDay;
                     if (kind === 'absent') {
-                        this.addAbsence(message, newYear, newMonth, newDay, newDate, safe_reason);
+                        this.addAbsence(message, newYear, newMonth, newDay, newDate, comment);
                     }
                     if (kind === 'present') {
                         this.addPresent(message, newMonth, newDay);
                     }
                     if (kind === 'late') {
-                        this.addLate(message, newYear, newMonth, newDay, newDate, safe_reason);
+                        this.addLate(message, newYear, newMonth, newDay, newDate, comment);
                     }
                     if (kind === 'ontime') {
                         this.addOntime(message, newMonth, newDay);
@@ -270,13 +257,13 @@ class AttendanceTools {
                         let newDay = short_item.split('-')[2];
                         let newDate = newYear + "-" + newMonth + "-" + newDay;
                         if (kind === 'absent') {
-                            this.addAbsence(message, newYear, newMonth, newDay, newDate, safe_reason);
+                            this.addAbsence(message, newYear, newMonth, newDay, newDate, comment);
                         }
                         if (kind === 'present') {
                             this.addPresent(message, newMonth, newDay);
                         }
                         if (kind === 'late') {
-                            this.addLate(message, newYear, newMonth, newDay, newDate, safe_reason);
+                            this.addLate(message, newYear, newMonth, newDay, newDate, comment);
                         }
                         if (kind === 'ontime') {
                             this.addOntime(message, newMonth, newDay);
