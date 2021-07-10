@@ -327,7 +327,7 @@ class DataDisplayTools {
             }
             const data = [];
             data.push(`**Name:** ${rows[0].name}`);
-            rows.ForEach((row) => {
+            rows.forEach((row) => {
                 data.push(`${row.end_date('\n')}`);
             });
             const embed = new Discord.MessageEmbed()
