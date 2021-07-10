@@ -330,6 +330,7 @@ class DataDisplayTools {
             rows.forEach((row) => {
                 data.push(row.end_date + ',');
             });
+            console.log(data);
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
                 .setTitle("Upcoming absences")
