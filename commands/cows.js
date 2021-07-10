@@ -1,6 +1,8 @@
 module.exports = {
 	name: 'cows',
 	description: 'Moo!',
+	usage: '',
+	notes: '',
 	execute(message, args) {
         var fs = require('fs');
         var files = fs.readdirSync('resources/images/cows/');
