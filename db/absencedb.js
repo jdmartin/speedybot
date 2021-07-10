@@ -225,7 +225,7 @@ class AttendanceTools {
             let endDay = endDate.split('-')[2];
             let endMonth = endDate.split('-')[1];
             //If no range of dates:
-            if (endDay == startDay) {
+            if ((endDay == startDay) && (endMonth == startMonth)) {
                 if (isTuesday(parseISO(startDate)) || isThursday(parseISO(startDate)) || isSunday(parseISO(startDate))) {
                     let newYear = startDate.split('-')[0];
                     let newMonth = startDate.split('-')[1];
