@@ -221,7 +221,9 @@ class AttendanceTools {
             //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
             //Setup some useful variables.
             let startDay = startDate.split('-')[2];
+            let startMonth = startDate.split('-')[1];
             let endDay = endDate.split('-')[2];
+            let endMonth = endDate.split('-')[1];
             //If no range of dates:
             if (endDay == startDay) {
                 if (isTuesday(parseISO(startDate)) || isThursday(parseISO(startDate)) || isSunday(parseISO(startDate))) {
