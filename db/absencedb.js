@@ -5,7 +5,6 @@ const utils = require("../utils/speedyutils.js");
 const dates = require("../utils/datetools.js");
 const dateTools = new dates.dateTools();
 const client = utils.client;
-const names = new utils.NameTools();
 //Date-related
 const offset = 'T11:52:29.478Z';
 var eachDayOfInterval = require('date-fns/eachDayOfInterval')
@@ -28,8 +27,8 @@ let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
 class CreateDatabase {
     startup() {
         absencedb.serialize(function () {
-            absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `nickname` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date`, `comment` TEXT)");
-            absencedb.run("CREATE TABLE IF NOT EXISTS `latecomers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `nickname` TEXT,`start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `start_date`, `comment` TEXT)");
+            absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date`, `comment` TEXT)");
+            absencedb.run("CREATE TABLE IF NOT EXISTS `latecomers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `start_date`, `comment` TEXT)");
         });
     }
 }
@@ -68,13 +67,11 @@ class AttendanceTools {
             var endDate = startDate;
             var comment = args.slice(2).join(' ');
         }
-        //Get a nickname
-        var nickname = names.getNickname(message);
         //Make sure dates are good.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If we have a range of days, let's store them individually... 
             //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-            this.processDBUpdate(message, nickname, "absent", startDate, endDate, comment);
+            this.processDBUpdate(message, "absent", startDate, endDate, comment);
             this.generateResponse(message, "absent", "present", startDate, endDate, comment);
         } else {
             message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
@@ -111,13 +108,11 @@ class AttendanceTools {
             var endDate = startDate;
             var comment = args.slice(2).join(' ');
         }
-        //Grab that nickname
-        var nickname = names.getNickname(message);
         //Only update db if we have a valid date.
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If we have a range of days, let's store them individually... 
             //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-            this.processDBUpdate(message, nickname, "late", startDate, endDate, comment);
+            this.processDBUpdate(message, "late", startDate, endDate, comment);
             this.generateResponse(message, "late", "ontime", startDate, endDate, comment);
         } else {
             message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
@@ -197,23 +192,23 @@ class AttendanceTools {
     }
 
     //command addAbsence, addLate, addOntime, and addPresent, processDBUpdate, for updating the db.
-    addAbsence(message, nickname, sy, sm, sd, end, comment) {
-        absencedb.run(`INSERT INTO absences(name, nickname, start_year, start_month, start_day, end_date, comment) VALUES ("${message.author.username}", "${nickname}", "${sy}", "${sm}", "${sd}", "${end}", ?)`, SqlString.escape(comment));
+    addAbsence(message, sy, sm, sd, end, comment) {
+        absencedb.run(`INSERT INTO absences(name, start_year, start_month, start_day, end_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${end}", ?)`, SqlString.escape(comment));
     }
 
     addPresent(message, sm, sd) {
         absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
     }
 
-    addLate(message, nickname, sy, sm, sd, start, comment) {
-        absencedb.run(`INSERT INTO latecomers(name, nickname, start_year, start_month, start_day, start_date, comment) VALUES ("${message.author.username}", "${nickname}", "${sy}", "${sm}", "${sd}", "${start}", ?)`, SqlString.escape(comment));
+    addLate(message, sy, sm, sd, start, comment) {
+        absencedb.run(`INSERT INTO latecomers(name, start_year, start_month, start_day, start_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${start}", ?)`, SqlString.escape(comment));
     }
 
     addOntime(message, sm, sd) {
         absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
     }
 
-    processDBUpdate(message, nickname, kind, startDate, endDate, comment) {
+    processDBUpdate(message, kind, startDate, endDate, comment) {
         //Make sure there's a comment:
         if (comment == undefined) {
             comment = '';
@@ -235,13 +230,13 @@ class AttendanceTools {
                     let newDay = startDate.split('-')[2];
                     let newDate = newYear + "-" + newMonth + "-" + newDay;
                     if (kind === 'absent') {
-                        this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, comment);
+                        this.addAbsence(message, newYear, newMonth, newDay, newDate, comment);
                     }
                     if (kind === 'present') {
                         this.addPresent(message, newMonth, newDay);
                     }
                     if (kind === 'late') {
-                        this.addLate(message, nickname, newYear, newMonth, newDay, newDate, comment);
+                        this.addLate(message, newYear, newMonth, newDay, newDate, comment);
                     }
                     if (kind === 'ontime') {
                         this.addOntime(message, newMonth, newDay);
@@ -262,13 +257,13 @@ class AttendanceTools {
                         let newDay = short_item.split('-')[2];
                         let newDate = newYear + "-" + newMonth + "-" + newDay;
                         if (kind === 'absent') {
-                            this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, comment);
+                            this.addAbsence(message, newYear, newMonth, newDay, newDate, comment);
                         }
                         if (kind === 'present') {
                             this.addPresent(message, newMonth, newDay);
                         }
                         if (kind === 'late') {
-                            this.addLate(message, nickname, newYear, newMonth, newDay, newDate, comment);
+                            this.addLate(message, newYear, newMonth, newDay, newDate, comment);
                         }
                         if (kind === 'ontime') {
                             this.addOntime(message, newMonth, newDay);
@@ -334,7 +329,7 @@ class DataDisplayTools {
                 .setFooter("These absences are known to the Infinite Speedyflight. Use this information wisely.")
             rows.forEach((row) => {
                 embed.addFields({
-                    name: row.name + '  (' + row.nickname + ')',
+                    name: row.name,
                     value: "\t\tDate: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
                     inline: false
                 })
@@ -354,7 +349,7 @@ class DataDisplayTools {
                 .setFooter("This tardiness is known to the Infinite Speedyflight. Use this information wisely.")
             rows.forEach((row) => {
                 embed.addFields({
-                    name: row.name + '  (' + row.nickname + ')',
+                    name: row.name,
                     value: "\t\tDate: " + dateTools.makeFriendlyDates(row.start_date) + "\nComments: " + row.comment,
                     inline: false
                 })

@@ -14,26 +14,8 @@ class CreateCommandSet {
     }
 }
 
-class NameTools {
-    getGuildData(message) {
-        const guild = client.guilds.cache.get(`${process.env.guild_id}`);
-        return guild.members.fetch(message.author.id);
-    }
-
-    getNickname(message) {
-        //Grab that nickname
-        if (message.channel.type != 'dm') {
-            return (message.nickname);
-        }
-        if (message.channel.type === 'dm') {
-            return ("[Capt. Placeholder]");
-        }
-    }
-}
-
 module.exports = {
     client: client,
     commandFiles: commandFiles,
-    CreateCommandSet,
-    NameTools
+    CreateCommandSet
 };
