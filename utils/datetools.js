@@ -1,4 +1,3 @@
-var eachDayOfInterval = require('date-fns/eachDayOfInterval'); 
 var parse = require('date-fns/parse');
 var isValid = require('date-fns/isValid');
 var format = require('date-fns/format');
