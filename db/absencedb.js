@@ -2,8 +2,10 @@ require("dotenv").config();
 const Discord = require("discord.js");
 const sqlite3 = require('sqlite3');
 const utils = require("../utils/speedyutils.js");
+const nameutils = require("../utils/nameutils.js");
 const dates = require("../utils/datetools.js");
 const dateTools = new dates.dateTools();
+const getNicknames = nameutils.asyncGetName;
 const client = utils.client;
 //Date-related
 const offset = 'T11:52:29.478Z';
@@ -27,8 +29,8 @@ let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
 class CreateDatabase {
     startup() {
         absencedb.serialize(function () {
-            absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date`, `comment` TEXT)");
-            absencedb.run("CREATE TABLE IF NOT EXISTS `latecomers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `start_date`, `comment` TEXT)");
+            absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date`, `comment` TEXT)");
+            absencedb.run("CREATE TABLE IF NOT EXISTS `latecomers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `start_date`, `comment` TEXT)");
         });
     }
 }
@@ -67,15 +69,18 @@ class AttendanceTools {
             var endDate = startDate;
             var comment = args.slice(2).join(' ');
         }
-        //Make sure dates are good.
-        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
-            //If we have a range of days, let's store them individually... 
-            //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-            this.processDBUpdate(message, "absent", startDate, endDate, comment);
-            this.generateResponse(message, "absent", "present", startDate, endDate, comment);
-        } else {
-            message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
-        }
+        //Get the nickname
+        var nickname = getNicknames(message);
+            nickname.then((result) => {
+                if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
+                    //If we have a range of days, let's store them individually... 
+                    //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
+                    this.processDBUpdate(message, result.nickname, "absent", startDate, endDate, comment);
+                    this.generateResponse(message, "absent", "present", startDate, endDate, comment);
+                } else {
+                    message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
+                }
+            });
     }
 
     late(message, args) {
@@ -108,15 +113,18 @@ class AttendanceTools {
             var endDate = startDate;
             var comment = args.slice(2).join(' ');
         }
-        //Only update db if we have a valid date.
-        if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
-            //If we have a range of days, let's store them individually... 
-            //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-            this.processDBUpdate(message, "late", startDate, endDate, comment);
-            this.generateResponse(message, "late", "ontime", startDate, endDate, comment);
-        } else {
-            message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
-        }
+        //Get the nickname
+        var nickname = getNicknames(message);
+        nickname.then((result) => {
+            if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
+                //If we have a range of days, let's store them individually... 
+                //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
+                this.processDBUpdate(message, result.nickname, "late", startDate, endDate, comment);
+                this.generateResponse(message, "late", "ontime", startDate, endDate, comment);
+            } else {
+                message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
+            }
+        });
     }
 
     ontime(message, args) {
@@ -146,7 +154,7 @@ class AttendanceTools {
         }
         //Only update db if we have a valid date.
         if (isValid(parseISO(startDate))) {
-            this.processDBUpdate(message, "ontime", startDate, endDate, undefined);
+            this.processDBUpdate(message, undefined, "ontime", startDate, endDate, undefined);
             if (startDate != endDate) {
                 message.author.send(`Ok, I've got you down as on-time from ${dateTools.makeFriendlyDates(startDate)} until ${dateTools.makeFriendlyDates(endDate)}. See you then!`);
             } else {
@@ -184,7 +192,7 @@ class AttendanceTools {
         if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
             //If we have a range of days, let's store them individually... 
             //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-            this.processDBUpdate(message, "present", startDate, endDate, undefined);
+            this.processDBUpdate(message, undefined, "present", startDate, endDate, undefined);
             this.generateResponse(message, "present", "absent", startDate, endDate, undefined);
         } else {
             message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
@@ -192,23 +200,33 @@ class AttendanceTools {
     }
 
     //command addAbsence, addLate, addOntime, and addPresent, processDBUpdate, for updating the db.
-    addAbsence(message, sy, sm, sd, end, comment) {
-        absencedb.run(`INSERT INTO absences(name, start_year, start_month, start_day, end_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${end}", ?)`, SqlString.escape(comment));
+    addAbsence(message, nickname, sy, sm, sd, end, comment) {
+        if (nickname) {
+            var identity = nickname;
+        } else {
+            var identity = message.author.username;
+        }
+        absencedb.run(`INSERT INTO absences(name, discord_name, start_year, start_month, start_day, end_date, comment) VALUES ("${identity}", "${message.author.username}", "${sy}", "${sm}", "${sd}", "${end}", ?)`, SqlString.escape(comment));
     }
 
     addPresent(message, sm, sd) {
-        absencedb.run(`DELETE FROM absences WHERE (name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
+        absencedb.run(`DELETE FROM absences WHERE (discord_name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
     }
 
-    addLate(message, sy, sm, sd, start, comment) {
-        absencedb.run(`INSERT INTO latecomers(name, start_year, start_month, start_day, start_date, comment) VALUES ("${message.author.username}", "${sy}", "${sm}", "${sd}", "${start}", ?)`, SqlString.escape(comment));
+    addLate(message, nickname, sy, sm, sd, start, comment) {
+        if (nickname) {
+            var identity = nickname;
+        } else {
+            var identity = message.author.username;
+        }
+        absencedb.run(`INSERT INTO latecomers(name, discord_name, start_year, start_month, start_day, start_date, comment) VALUES ("${identity}", "${message.author.username}", "${sy}", "${sm}", "${sd}", "${start}", ?)`, SqlString.escape(comment));
     }
 
     addOntime(message, sm, sd) {
-        absencedb.run(`DELETE FROM latecomers WHERE (name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
+        absencedb.run(`DELETE FROM latecomers WHERE (discord_name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
     }
 
-    processDBUpdate(message, kind, startDate, endDate, comment) {
+    processDBUpdate(message, nickname, kind, startDate, endDate, comment) {
         //Make sure there's a comment:
         if (comment == undefined) {
             comment = '';
@@ -230,13 +248,13 @@ class AttendanceTools {
                     let newDay = startDate.split('-')[2];
                     let newDate = newYear + "-" + newMonth + "-" + newDay;
                     if (kind === 'absent') {
-                        this.addAbsence(message, newYear, newMonth, newDay, newDate, comment);
+                        this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, comment);
                     }
                     if (kind === 'present') {
                         this.addPresent(message, newMonth, newDay);
                     }
                     if (kind === 'late') {
-                        this.addLate(message, newYear, newMonth, newDay, newDate, comment);
+                        this.addLate(message, nickname, newYear, newMonth, newDay, newDate, comment);
                     }
                     if (kind === 'ontime') {
                         this.addOntime(message, newMonth, newDay);
@@ -257,13 +275,13 @@ class AttendanceTools {
                         let newDay = short_item.split('-')[2];
                         let newDate = newYear + "-" + newMonth + "-" + newDay;
                         if (kind === 'absent') {
-                            this.addAbsence(message, newYear, newMonth, newDay, newDate, comment);
+                            this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, comment);
                         }
                         if (kind === 'present') {
                             this.addPresent(message, newMonth, newDay);
                         }
                         if (kind === 'late') {
-                            this.addLate(message, newYear, newMonth, newDay, newDate, comment);
+                            this.addLate(message, nickname, newYear, newMonth, newDay, newDate, comment);
                         }
                         if (kind === 'ontime') {
                             this.addOntime(message, newMonth, newDay);
@@ -302,16 +320,20 @@ class AttendanceTools {
         //Handle channel posts for absences and lates. Shorten if only a single day.
         if (this_command === 'absent') {
             if (start != end) {
-                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`)
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`);
             } else {
-                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent on ${friendlyStart}. They commented: ${reason}`)
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be absent on ${friendlyStart}. They commented: ${reason}`);
             }
         }
         if (this_command === 'late') {
-            client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${friendlyStart}. They commented: ${reason}`)
+            if (start != end) {
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late to raid from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`);
+            } else {
+                client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${friendlyStart}. They commented: ${reason}`);
+            }
+            
         }
     }
-
 }
 
 class DataDisplayTools {
@@ -385,5 +407,5 @@ module.exports = {
     AttendanceTools,
     CreateDatabase,
     DatabaseCleanup,
-    DataDisplayTools,
+    DataDisplayTools
 };
