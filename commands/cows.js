@@ -1,4 +1,5 @@
-import speedyutils from '../utils/speedyutils';
+const utils = require("../utils/speedyutils.js");
+const speedyutils = new utils.SpeedyTools();
 const shuffleArray = speedyutils.shuffleArray;
 
 module.exports = {
