@@ -12,6 +12,8 @@ module.exports = {
         **Ner'zhul**: https://discord.com/channels/308622057707536385/308626596623810562/861108398400471060
         **Soulrender Dormazain**: https://discord.com/channels/308622057707536385/308626596623810562/861748064217858109
         **Painsmith**: https://discord.com/channels/308622057707536385/308626596623810562/862858655089819659
+        **Fatescribe**: https://discord.com/channels/308622057707536385/308626596623810562/865345466396966932
+        **Guardian**: https://discord.com/channels/308622057707536385/308626596623810562/865354245535301662
         
         
         Want Nathria? Try !simplestrats nathria
