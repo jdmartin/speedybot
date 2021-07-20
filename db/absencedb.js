@@ -356,8 +356,7 @@ class DataDisplayTools {
                     inline: false
                 })
             });
-            console.log(embed, {split:true});
-            message.reply(embed, { split: true });
+            message.reply(embed);
         });
         //Get all tardiness from today and later.
         let late_sql = `SELECT * FROM latecomers WHERE start_date >= date('now','-1 day') ORDER BY start_date ASC, name;`;
@@ -377,7 +376,7 @@ class DataDisplayTools {
                     inline: false
                 })
             });
-            message.reply(embed, { split: true });
+            message.reply(embed);
         });
     }
 }
