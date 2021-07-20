@@ -15,16 +15,13 @@ class CreateCommandSet {
 }
 
 class SpeedyTools {
-    shuffleArray(givenArray) {
-        for(let i = givenArray.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * i)
-            const temp = givenArray[i]
-            givenArray[i] = givenArray[j]
-            givenArray[j] = temp
-          }
-        return (givenArray);
-    }
+    getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+      }
 }
+
 module.exports = {
     client: client,
     commandFiles: commandFiles,

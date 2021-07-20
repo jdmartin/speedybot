@@ -1,6 +1,6 @@
-const utils = require("../utils/speedyutils.js");
-const speedyutils = new utils.SpeedyTools();
-const shuffleArray = speedyutils.shuffleArray;
+const speedyutils = require('../utils/speedyutils');
+const utils = new speedyutils.SpeedyTools();
+const getRandomIntInclusive = utils.getRandomIntInclusive;
 
 module.exports = {
 	name: 'sheep',
@@ -10,7 +10,7 @@ module.exports = {
 	execute(message, args) {
         var fs = require('fs');
         var files = fs.readdirSync('resources/images/sheep/');
-		let chosenFile = shuffleArray(files)[0];
+		let chosenFile = files[getRandomIntInclusive(0,files.length - 1)];
 		message.reply("+1 sheep:", {files: [`resources/images/sheep/${chosenFile}`]});
 	},
 };
