@@ -356,6 +356,7 @@ class DataDisplayTools {
                     inline: false
                 })
             });
+            console.log(embed, {split:true});
             message.reply(embed, { split: true });
         });
         //Get all tardiness from today and later.
