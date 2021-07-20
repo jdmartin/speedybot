@@ -14,8 +14,20 @@ class CreateCommandSet {
     }
 }
 
+class SpeedyTools {
+    shuffleArray(givenArray) {
+        for(let i = givenArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * i)
+            const temp = givenArray[i]
+            givenArray[i] = givenArray[j]
+            givenArray[j] = temp
+          }
+        return (givenArray);
+    }
+}
 module.exports = {
     client: client,
     commandFiles: commandFiles,
-    CreateCommandSet
+    CreateCommandSet,
+    SpeedyTools
 };

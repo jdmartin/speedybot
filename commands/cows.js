@@ -1,3 +1,6 @@
+import speedyutils from '../utils/speedyutils';
+const shuffleArray = speedyutils.shuffleArray;
+
 module.exports = {
 	name: 'cows',
 	description: 'Moo!',
@@ -6,7 +9,7 @@ module.exports = {
 	execute(message, args) {
         var fs = require('fs');
         var files = fs.readdirSync('resources/images/cows/');
-		let chosenFile = files[Math.floor(Math.random() * files.length)];
+		let chosenFile = shuffleArray(files)[0];
 		message.reply("Moooooooo:", {files: [`resources/images/cows/${chosenFile}`]});
 	},
 };
