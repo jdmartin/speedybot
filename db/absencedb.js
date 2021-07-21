@@ -345,30 +345,7 @@ class DataDisplayTools {
             if (err) {
                 throw err;
             }
-            const numberOfEntries = rows.length;
-            for (let j = numberOfEntries; j <= numberOfEntries; j - 40) {
-                let i = j;
-                console.log(i);
-            }
 
-            if (numberOfEntries < 41) {
-                const embed = new Discord.MessageEmbed()
-                .setColor(0xFFFFFF)
-                .setTitle("Upcoming absences")
-                .setFooter("These absences are known to the Infinite Speedyflight. Use this information wisely.")
-            rows.forEach((row) => {
-                embed.addFields({
-                    name: row.name,
-                    value: "\t\tDate: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
-                    inline: false
-                })
-            });
-            message.reply(embed);
-            }
-            if (rows.length > 40 && rows.length < 81) {
-                rowSetOne = rows.slice(1,40);
-                rowSetOne = rows.slice(41,80);
-            }
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
                 .setTitle("Upcoming absences")
