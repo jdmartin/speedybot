@@ -343,7 +343,7 @@ class DataDisplayTools {
         }
         //Get just the user's absences.
         if (lowerArgZero == 'mine') {
-            var sql = `SELECT * FROM absences WHERE end_date >= date('now','-1 day') AND discord_name = "\`${message.author.username}\`" ORDER BY end_date ASC, name;`;
+            var sql = `SELECT * FROM absences WHERE end_date >= date('now','-1 day') AND discord_name = "${message.author.username}" ORDER BY end_date ASC, name;`;
         } else {
             //Get all absences for today and later.
             var sql = `SELECT * FROM absences WHERE end_date BETWEEN date('now','-1 day') AND date('now','+15 days') ORDER BY end_date ASC, name;`;
