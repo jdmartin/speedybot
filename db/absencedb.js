@@ -347,7 +347,8 @@ class DataDisplayTools {
             }
             const numberOfEntries = rows.length;
             for (let j = numberOfEntries; j <= numberOfEntries; j - 40) {
-                console.log(j);
+                let i = j;
+                console.log(i);
             }
 
             if (numberOfEntries < 41) {
