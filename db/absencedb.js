@@ -338,8 +338,11 @@ class AttendanceTools {
 
 class DataDisplayTools {
     show(message, args) {
+        if (args[0]) {
+            var lowerArgZero = args[0].toLowerCase();
+        }
         //Get just the user's absences.
-        if (args[0].toLowerCase() == 'mine') {
+        if (lowerArgZero == 'mine') {
             var sql = `SELECT * FROM absences WHERE end_date >= date('now','-1 day') AND discord_name = "\`${message.author.username}\`" ORDER BY end_date ASC, name;`;
         } else {
             //Get all absences for today and later.
