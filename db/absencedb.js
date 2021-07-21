@@ -345,6 +345,8 @@ class DataDisplayTools {
             if (err) {
                 throw err;
             }
+
+            console.log("ROWS", rows.length);
             const embed = new Discord.MessageEmbed()
                 .setColor(0xFFFFFF)
                 .setTitle("Upcoming absences")
