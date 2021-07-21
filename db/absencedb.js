@@ -338,11 +338,13 @@ class AttendanceTools {
 
 class DataDisplayTools {
     show(message, args) {
+        //Convert arg0 for string matching
         if (args[0]) {
             var lowerArgZero = args[0].toLowerCase();
         }
+
         //Get just the user's absences.
-        if (lowerArgZero == 'mine') {
+        if (lowerArgZero === 'mine') {
             var sql = `SELECT * FROM absences WHERE end_date >= date('now','-1 day') AND discord_name = "${message.author.username}" ORDER BY end_date ASC, name;`;
         } else {
             //Get all absences for today and later.
@@ -368,7 +370,12 @@ class DataDisplayTools {
             message.reply(embed);
         });
         //Get all tardiness from today and later.
-        let late_sql = `SELECT * FROM latecomers WHERE start_date BETWEEN date('now','-1 day') AND date('now', '+15 days') ORDER BY start_date ASC, name;`;
+        if (lowerArgZero === 'mine') {
+            var late_sql = `SELECT * FROM latecomers WHERE start_date <= date('now','-1 day') AND discord_name = "${message.author.username}" ORDER BY start_date ASC, name;`;
+        } else {
+            var late_sql = `SELECT * FROM latecomers WHERE start_date BETWEEN date('now','-1 day') AND date('now', '+15 days') ORDER BY start_date ASC, name;`;
+        }
+        
 
         absencedb.all(late_sql, [], (err, rows) => {
             if (err) {
