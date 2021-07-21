@@ -362,7 +362,8 @@ class DataDisplayTools {
                 .setFooter("These absences are known to the Infinite Speedyflight. Use this information wisely.")
             rows.forEach((row) => {
                 embed.addFields({
-                    name: row.name, value: "\t\tDate: " + dateTools.makeFriendlyDates(row.end_date) + "\t\tComments: " + row.comment,
+                    name: row.name,
+                    value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + "**|** Comments: " + row.comment,
                     inline: false
                 })
             });
