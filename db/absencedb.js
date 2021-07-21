@@ -339,7 +339,7 @@ class AttendanceTools {
 class DataDisplayTools {
     show(message) {
         //Get all absences for today and later.
-        let sql = `SELECT * FROM absences WHERE end_date >= date('now','-1 day') ORDER BY end_date ASC, name;`;
+        let sql = `SELECT * FROM absences WHERE end_date >= date('now','-1 day') and end_date <= date('now','+2 weeks') ORDER BY end_date ASC, name;`;
 
         absencedb.all(sql, [], (err, rows) => {
             if (err) {
