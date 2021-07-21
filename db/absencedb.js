@@ -371,7 +371,7 @@ class DataDisplayTools {
         });
         //Get all tardiness from today and later.
         if (lowerArgZero === 'mine') {
-            var late_sql = `SELECT * FROM latecomers WHERE start_date <= date('now','-1 day') AND discord_name = "${message.author.username}" ORDER BY start_date ASC, name;`;
+            var late_sql = `SELECT * FROM latecomers WHERE start_date >= date('now','-1 day') AND discord_name = "${message.author.username}" ORDER BY start_date ASC, name;`;
         } else {
             var late_sql = `SELECT * FROM latecomers WHERE start_date BETWEEN date('now','-1 day') AND date('now', '+15 days') ORDER BY start_date ASC, name;`;
         }
