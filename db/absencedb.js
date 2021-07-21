@@ -389,7 +389,7 @@ class DataDisplayTools {
                 embed.addFields({
                     name: row.name,
                     value: "\t\tDate: " + dateTools.makeFriendlyDates(row.start_date) + "\t\tComments: " + row.comment,
-                    inline: false
+                    inline: true
                 })
             });
             message.reply(embed);
