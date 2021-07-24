@@ -32,7 +32,7 @@ A tiny, eclectic bot for my guild's Discord channel.
   - !present - Cancel an absence. (Example: !present Jul 4)
 
 ## credits:
-<small>1: Cats from [Cat as a Service](https://cataas.com/#/)</small>
+<small>1: Cats from [The Cat API](https://thecatapi.com/)</small>
 
 <small>2: Dogs from [Dog CEO](https://dog.ceo/dog-api/)</small>
 
