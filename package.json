@@ -7,6 +7,7 @@
     "helmet": "^4.4.1",
     "node-cron": "^3.0.0",
     "node-fetch": "^2.6.1",
+    "query-string": "^7.0.1",
     "sqlite3": "^5.0.2",
     "sqlstring": "^2.3.2"
   }
