@@ -18,7 +18,7 @@ module.exports = {
 
         async function getTheCat() {
             var query_params = {
-                'mime_types': 'jpg,jpeg,png', // we only want static images as Discord doesn't like gifs
+                'mime_types': 'jpg,png', // we only want static images as Discord doesn't like gifs
                 'limit': 1 // only need one
             }
             // convert this obejc to query string 
