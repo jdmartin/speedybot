@@ -2,7 +2,7 @@ module.exports = {
     name: 'cats',
     description: 'See a random cat!',
     usage: '',
-    notes: 'Cats from https://aws.random.cat/ and https://thecatapi.com/',
+    notes: 'Cats from https://thecatapi.com/',
     execute(message) {
         const fetch = require('node-fetch');
         const querystring = require('query-string');
