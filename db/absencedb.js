@@ -66,16 +66,16 @@ class AttendanceTools {
         }
         //Get the nickname
         var nickname = getNicknames(message);
-            nickname.then((result) => {
-                if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
-                    //If we have a range of days, let's store them individually... 
-                    //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-                    this.processDBUpdate(message, result.nickname, "absent", startDate, endDate, comment);
-                    this.generateResponse(message, "absent", "present", startDate, endDate, comment);
-                } else {
-                    message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
-                }
-            });
+        nickname.then((result) => {
+            if ((isValid(parseISO(startDate))) && (isValid(parseISO(endDate)))) {
+                //If we have a range of days, let's store them individually... 
+                //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
+                this.processDBUpdate(message, result.nickname, "absent", startDate, endDate, comment);
+                this.generateResponse(message, "absent", "present", startDate, endDate, comment);
+            } else {
+                message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
+            }
+        });
     }
 
     late(message, args) {
@@ -330,7 +330,7 @@ class AttendanceTools {
             } else {
                 client.channels.cache.get(`${process.env.attendance_channel}`).send(`${message.author.username} will be late on ${friendlyStart}. They commented: ${reason}`);
             }
-            
+
         }
     }
 }

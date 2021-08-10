@@ -32,7 +32,7 @@ class DatabaseTools {
 
 class GetStats {
     retrieve(message) {
-        var sql = statsdb.prepare(`SELECT DISTINCT Name name, Count count, Errors errors FROM commands ORDER BY name`);
+        var sql = statsdb.prepare('SELECT DISTINCT Name name, Count count, Errors errors FROM commands ORDER BY name');
         var allStats = sql.all();
         const embed = new Discord.MessageEmbed()
             .setColor(0xFFFFFF)
