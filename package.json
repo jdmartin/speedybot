@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "better-sqlite3": "^7.4.3",
     "date-fns": "^2.22.1",
     "discord.js": "^12.5.1",
     "dotenv": "^10.0.0",
@@ -8,7 +9,6 @@
     "node-cron": "^3.0.0",
     "node-fetch": "^2.6.1",
     "query-string": "^7.0.1",
-    "sqlite3": "^5.0.2",
     "sqlstring": "^2.3.2"
   }
 }

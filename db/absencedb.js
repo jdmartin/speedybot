@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Discord = require("discord.js");
-const sqlite3 = require('sqlite3');
+const sqlite3 = require('better-sqlite3');
 const utils = require("../utils/speedyutils.js");
 const nameutils = require("../utils/nameutils.js");
 const dates = require("../utils/datetools.js");
@@ -19,19 +19,14 @@ var parseISO = require('date-fns/parseISO');
 //Other Tools
 var SqlString = require('sqlstring');
 
-let absencedb = new sqlite3.Database('./db/absence.db', (err) => {
-    if (err) {
-        console.error(err.message);
-    }
-    console.log('Connected to the absence database.');
-});
+let absencedb = new sqlite3('./db/absence.db');
 
 class CreateDatabase {
     startup() {
-        absencedb.serialize(function () {
-            absencedb.run("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date`, `comment` TEXT)");
-            absencedb.run("CREATE TABLE IF NOT EXISTS `latecomers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `start_date`, `comment` TEXT)");
-        });
+        var absenceDBPrep = absencedb.prepare("CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date`, `comment` TEXT)");
+        var lateDBPrep = absencedb.prepare("CREATE TABLE IF NOT EXISTS `latecomers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `start_date`, `comment` TEXT)");
+        absenceDBPrep.run();
+        lateDBPrep.run();
     }
 }
 
@@ -206,11 +201,13 @@ class AttendanceTools {
         } else {
             var identity = message.author.username;
         }
-        absencedb.run(`INSERT INTO absences(name, discord_name, start_year, start_month, start_day, end_date, comment) VALUES ("${identity}", "${message.author.username}", "${sy}", "${sm}", "${sd}", "${end}", ?)`, SqlString.escape(comment));
+        var absencePrep = absencedb.prepare('INSERT INTO absences(name, discord_name, start_year, start_month, start_day, end_date, comment) VALUES (?,?,?,?,?,?,?)');
+        absencePrep.run(identity, message.author.username, sy, sm, sd, end, comment);
     }
 
     addPresent(message, sm, sd) {
-        absencedb.run(`DELETE FROM absences WHERE (discord_name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
+        var presentPrep = absencedb.prepare('DELETE FROM absences WHERE (discord_name = ? AND start_month = ? AND start_day = ?)');
+        presentPrep.run(message.author.username, sm, sd);
     }
 
     addLate(message, nickname, sy, sm, sd, start, comment) {
@@ -219,11 +216,13 @@ class AttendanceTools {
         } else {
             var identity = message.author.username;
         }
-        absencedb.run(`INSERT INTO latecomers(name, discord_name, start_year, start_month, start_day, start_date, comment) VALUES ("${identity}", "${message.author.username}", "${sy}", "${sm}", "${sd}", "${start}", ?)`, SqlString.escape(comment));
+        var latePrep = absencedb.prepare('INSERT INTO latecomers(name, discord_name, start_year, start_month, start_day, start_date, comment) VALUES (?,?,?,?,?,?,?)');
+        latePrep.run(identity, message.author.username, sy, sm, sd, start, comment);
     }
 
     addOntime(message, sm, sd) {
-        absencedb.run(`DELETE FROM latecomers WHERE (discord_name = "${message.author.username}" AND start_month = "${sm}" AND start_day = "${sd}")`);
+        var ontimePrep = absencedb.prepare('DELETE FROM latecomers WHERE (discord_name = ? AND start_month = ? AND start_day = ?)');
+        ontimePrep.run(message.author.username, sm, sd);
     }
 
     processDBUpdate(message, nickname, kind, startDate, endDate, comment) {
@@ -248,13 +247,13 @@ class AttendanceTools {
                     let newDay = startDate.split('-')[2];
                     let newDate = newYear + "-" + newMonth + "-" + newDay;
                     if (kind === 'absent') {
-                        this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, comment);
+                        this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
                     }
                     if (kind === 'present') {
                         this.addPresent(message, newMonth, newDay);
                     }
                     if (kind === 'late') {
-                        this.addLate(message, nickname, newYear, newMonth, newDay, newDate, comment);
+                        this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
                     }
                     if (kind === 'ontime') {
                         this.addOntime(message, newMonth, newDay);
@@ -275,13 +274,13 @@ class AttendanceTools {
                         let newDay = short_item.split('-')[2];
                         let newDate = newYear + "-" + newMonth + "-" + newDay;
                         if (kind === 'absent') {
-                            this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, comment);
+                            this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
                         }
                         if (kind === 'present') {
                             this.addPresent(message, newMonth, newDay);
                         }
                         if (kind === 'late') {
-                            this.addLate(message, nickname, newYear, newMonth, newDay, newDate, comment);
+                            this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
                         }
                         if (kind === 'ontime') {
                             this.addOntime(message, newMonth, newDay);
@@ -345,77 +344,62 @@ class DataDisplayTools {
 
         //Get just the user's absences.
         if (lowerArgZero === 'mine') {
-            var sql = `SELECT * FROM absences WHERE end_date >= date('now','-1 day') AND discord_name = "${message.author.username}" ORDER BY end_date ASC, name;`;
+            var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date >= date('now','-1 day') AND discord_name = ? ORDER BY end_date ASC, name");
+            var absResults = sql.all(message.author.username);
         } else {
             //Get all absences for today and later.
-            var sql = `SELECT * FROM absences WHERE end_date BETWEEN date('now','-1 day') AND date('now','+15 days') ORDER BY end_date ASC, name;`;
+            var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date BETWEEN date('now','-1 day') AND date('now','+15 days') ORDER BY end_date ASC, name");
+            var absResults = sql.all();
         }
-        
-        absencedb.all(sql, [], (err, rows) => {
-            if (err) {
-                throw err;
-            }
 
-            const embed = new Discord.MessageEmbed()
-                .setColor(0xFFFFFF)
-                .setTitle("Upcoming absences")
-                .setFooter("These absences are known to the Infinite Speedyflight. Use this information wisely.")
-            rows.forEach((row) => {
-                embed.addFields({
-                    name: row.name,
-                    value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
-                    inline: false
-                })
-            });
-            message.reply(embed);
+        const absentEmbed = new Discord.MessageEmbed()
+            .setColor(0xFFFFFF)
+            .setTitle("Upcoming absences")
+            .setFooter("These absences are known to the Infinite Speedyflight. Use this information wisely.")
+        absResults.forEach((row) => {
+            absentEmbed.addFields({
+                name: row.name,
+                value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
+                inline: false
+            })
         });
+        message.reply(absentEmbed);
+
         //Get all tardiness from today and later.
         if (lowerArgZero === 'mine') {
-            var late_sql = `SELECT * FROM latecomers WHERE start_date >= date('now','-1 day') AND discord_name = "${message.author.username}" ORDER BY start_date ASC, name;`;
+            var late_sql = absencedb.prepare(`SELECT * FROM latecomers WHERE start_date >= date('now','-1 day') AND discord_name = ? ORDER BY start_date ASC, name`);
+            var lateResults = late_sql.all(message.author.username);
         } else {
-            var late_sql = `SELECT * FROM latecomers WHERE start_date BETWEEN date('now','-1 day') AND date('now', '+15 days') ORDER BY start_date ASC, name;`;
+            var late_sql = absencedb.prepare("SELECT * FROM latecomers WHERE start_date BETWEEN date('now','-1 day') AND date('now', '+15 days') ORDER BY start_date ASC, name");
+            var lateResults = late_sql.all();
         }
-        
 
-        absencedb.all(late_sql, [], (err, rows) => {
-            if (err) {
-                throw err;
-            }
-            const embed = new Discord.MessageEmbed()
-                .setColor(0xFFFFFF)
-                .setTitle("Upcoming tardiness")
-                .setFooter("This tardiness is known to the Infinite Speedyflight. Use this information wisely.")
-            rows.forEach((row) => {
-                embed.addFields({
-                    name: row.name,
-                    value: "Date: " + dateTools.makeFriendlyDates(row.start_date) + "\nComments: " + row.comment,
+        const lateEmbed = new Discord.MessageEmbed()
+            .setColor(0xFFFFFF)
+            .setTitle("Upcoming tardiness")
+            .setFooter("This tardiness is known to the Infinite Speedyflight. Use this information wisely.")
+        lateResults.forEach((row) => {
+            lateEmbed.addFields({
+                name: row.name,
+                value: "Date: " + dateTools.makeFriendlyDates(row.start_date) + "\nComments: " + row.comment,
 
-                })
-            });
-            message.reply(embed);
+            })
         });
+        message.reply(lateEmbed);
     }
 }
 
 class DatabaseCleanup {
     cleanAbsences() {
         //Expire entries that occurred more than one month ago.
-        let sql = `DELETE FROM absences WHERE end_date < date('now', '-1 month');`;
-        absencedb.all(sql, [], (err, rows) => {
-            if (err) {
-                throw err;
-            }
-        });
+        let sql = absencedb.prepare("DELETE FROM absences WHERE end_date < date('now', '-1 month')");
+        sql.run();
     }
 
     cleanLatecomers() {
         //Expire entries that occurred more than one month ago.
-        let sql = `DELETE FROM latecomers WHERE start_date < date('now', '-1 month');`;
-        absencedb.all(sql, [], (err, rows) => {
-            if (err) {
-                throw err;
-            }
-        });
+        let sql = absencedb.prepare("DELETE FROM latecomers WHERE start_date < date('now', '-1 month')");
+        sql.run();
     }
 }
 
