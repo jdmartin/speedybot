@@ -8,7 +8,6 @@ const dateTools = new dates.dateTools();
 const getNicknames = nameutils.asyncGetName;
 const client = utils.client;
 //Date-related
-const offset = 'T11:52:29.478Z';
 var eachDayOfInterval = require('date-fns/eachDayOfInterval')
 var format = require('date-fns/format');
 var isTuesday = require('date-fns/isTuesday')
@@ -295,13 +294,13 @@ class AttendanceTools {
     generateResponse(message, this_command, undo_command, start, end, reason) {
         //Create some helpers and ensure needed parts:
         var friendlyStart = dateTools.makeFriendlyDates(start);
-        var friendlyStartUndo = format(new Date(start + offset), 'MMM dd');
+        var friendlyStartUndo = format(new Date(start), 'MMM dd');
         //Make certain there's an end value.
         if (!end) {
             end = start;
         }
         var friendlyEnd = dateTools.makeFriendlyDates(end);
-        var friendlyEndUndo = format(new Date(end + offset), 'MMM dd');
+        var friendlyEndUndo = format(new Date(end), 'MMM dd');
         //Select the appropriate type of response, and shorten if it's a single day.
         if (message.channel.type === 'dm') {
             if (start != end) {
