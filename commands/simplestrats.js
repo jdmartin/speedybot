@@ -14,6 +14,11 @@ module.exports = {
         **Painsmith**: https://discord.com/channels/308622057707536385/308626596623810562/862858655089819659
         **Fatescribe**: https://discord.com/channels/308622057707536385/308626596623810562/865345466396966932
         **Guardian**: https://discord.com/channels/308622057707536385/308626596623810562/865354245535301662
+        **Kel'Thuzad**: https://discord.com/channels/308622057707536385/308626596623810562/878071037298880542
+        __Sylvanas__
+        **Phase 1**: https://discord.com/channels/308622057707536385/308626596623810562/878071137840554004
+        **Phase 2**: https://discord.com/channels/308622057707536385/308626596623810562/878071205238808587
+        **Phase 3**: https://discord.com/channels/308622057707536385/308626596623810562/878071279859687476
         
         
         Want Nathria? Try !simplestrats nathria
