@@ -17,6 +17,15 @@ class dateTools {
         }
     }
 
+    checkIsDayOfMonth(day) {
+        if (day >= 1 && day <= 31) {
+            return (true);
+        }
+        else {
+            return (false);
+        }
+    }
+
     checkIsMonth(a) {
         if (isValid(parse(a, 'LLLL', new Date()))) {
             return (true);
