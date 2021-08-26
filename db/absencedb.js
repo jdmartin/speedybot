@@ -45,7 +45,7 @@ class AttendanceTools {
             //Process Comments
             var comment = args.slice(2).join(' ');
         }
-        if (dateTools.checkIsMonth(args[2])) {
+        if (dateTools.checkIsMonth(args[2]) && dateTools.checkIsDayOfMonth(args[3])) {
             //Make sure end year is equal or greater to start year.
             ///HMM
             if (dateTools.getCurrentYear() >= startYear) {
@@ -90,7 +90,7 @@ class AttendanceTools {
                 var comment = args.slice(2).join(' ');
             }
         }
-        if (dateTools.checkIsMonth(args[2])) {
+        if (dateTools.checkIsMonth(args[2]) && dateTools.checkIsDayOfMonth(args[3])) {
             //Make sure end year is equal or greater to start year.
             if (dateTools.getCurrentYear() >= startYear) {
                 var endYear = dateTools.determineYear(args[2], args[3]);
