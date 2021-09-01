@@ -372,6 +372,9 @@ class DataDisplayTools {
         if (lowerArgZero === 'mine') {
             var late_sql = absencedb.prepare(`SELECT * FROM latecomers WHERE start_date >= date('now','-1 day') AND discord_name = ? ORDER BY start_date ASC, name`);
             var lateResults = late_sql.all(message.author.username);
+        } else if (lowerArgZero === 'today') {
+            var sql = absencedb.prepare("SELECT * FROM latecomers WHERE start_date BETWEEN date('now','-1 day') AND date('now') ORDER BY start_date ASC, name");
+            var absResults = late_sql.all();
         } else {
             var late_sql = absencedb.prepare("SELECT * FROM latecomers WHERE start_date BETWEEN date('now','-1 day') AND date('now', '+15 days') ORDER BY start_date ASC, name");
             var lateResults = late_sql.all();
