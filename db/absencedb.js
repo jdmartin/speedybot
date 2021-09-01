@@ -346,6 +346,9 @@ class DataDisplayTools {
         if (lowerArgZero === 'mine') {
             var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date >= date('now','-1 day') AND discord_name = ? ORDER BY end_date ASC, name");
             var absResults = sql.all(message.author.username);
+        } else if (lowerArgZero === 'today') {
+            var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date BETWEEN date('now','-1 day') AND date('now') ORDER BY end_date ASC, name");
+            var absResults = sql.all();
         } else {
             //Get all absences for today and later.
             var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date BETWEEN date('now','-1 day') AND date('now','+15 days') ORDER BY end_date ASC, name");
