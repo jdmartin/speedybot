@@ -344,14 +344,14 @@ class DataDisplayTools {
 
         //Get just the user's absences.
         if (lowerArgZero === 'mine') {
-            var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date >= date('now','-1 day') AND discord_name = ? ORDER BY end_date ASC, name");
+            var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date >= date('now','localtime') AND discord_name = ? ORDER BY end_date ASC, name");
             var absResults = sql.all(message.author.username);
         } else if (lowerArgZero === 'today') {
-            var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date = date('now','-1 day') ORDER BY end_date ASC, name");
+            var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date = date('now','localtime') ORDER BY end_date ASC, name");
             var absResults = sql.all();
         } else {
             //Get all absences for today and later.
-            var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date BETWEEN date('now','-1 day') AND date('now','+15 days') ORDER BY end_date ASC, name");
+            var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date BETWEEN date('now','localtime') AND date('now','+15 days') ORDER BY end_date ASC, name");
             var absResults = sql.all();
         }
 
@@ -370,13 +370,13 @@ class DataDisplayTools {
 
         //Get all tardiness from today and later.
         if (lowerArgZero === 'mine') {
-            var late_sql = absencedb.prepare(`SELECT * FROM latecomers WHERE start_date >= date('now','-1 day') AND discord_name = ? ORDER BY start_date ASC, name`);
+            var late_sql = absencedb.prepare(`SELECT * FROM latecomers WHERE start_date >= date('now','localtime') AND discord_name = ? ORDER BY start_date ASC, name`);
             var lateResults = late_sql.all(message.author.username);
         } else if (lowerArgZero === 'today') {
-            var late_sql = absencedb.prepare("SELECT * FROM latecomers WHERE start_date = date('now','-1 day') ORDER BY start_date ASC, name");
+            var late_sql = absencedb.prepare("SELECT * FROM latecomers WHERE start_date = date('now','localtime') ORDER BY start_date ASC, name");
             var lateResults = late_sql.all();
         } else {
-            var late_sql = absencedb.prepare("SELECT * FROM latecomers WHERE start_date BETWEEN date('now','-1 day') AND date('now', '+15 days') ORDER BY start_date ASC, name");
+            var late_sql = absencedb.prepare("SELECT * FROM latecomers WHERE start_date BETWEEN date('now','localtime') AND date('now', '+15 days') ORDER BY start_date ASC, name");
             var lateResults = late_sql.all();
         }
 
