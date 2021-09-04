@@ -45,10 +45,10 @@ class GetStats {
                 inline: true
             })
         });
-        if (message.channel.type === 'dm') {
-            message.channel.send(embed);
+        if (message.channel.type === 'DM') {
+            message.channel.send({embeds: [embed]});
         } else {
-            message.member.send(embed);
+            message.member.send({embeds: [embed]});
         }
     }
 }

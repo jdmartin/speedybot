@@ -19,8 +19,8 @@ module.exports = {
         🐢
     `)
     
-        if (message.channel.type === 'dm') {
-            message.reply(advice)
+        if (message.channel.type === 'DM') {
+            message.channel.send(advice)
         } else {
             message.member.send(advice)
         }

@@ -1,9 +1,12 @@
+const {
+    SlashCommandBuilder
+} = require('@discordjs/builders');
+
 module.exports = {
-    name: 'xkcd',
-    description: 'Get a random xkcd comic!',
-    usage: '',
-    notes: 'Comics from https://xkcd.com/',
-    execute(message) {
+    data: new SlashCommandBuilder()
+        .setName('xkcd')
+        .setDescription('Get a random xkcd comic!'),
+    async execute(interaction) {
         const fetch = require('node-fetch');
 
         (async function () {
@@ -13,7 +16,7 @@ module.exports = {
 
             const choice = Math.round(Math.random() * (num - 1) + 1);
             
-            message.channel.send(`Here's a random comic from xkcd.com: https://xkcd.com/${choice}/\n`); 
+            interaction.reply(`Here's a random comic from xkcd.com: https://xkcd.com/${choice}/\n`); 
         })();
     },
 };

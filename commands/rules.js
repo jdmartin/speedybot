@@ -3,8 +3,9 @@ module.exports = {
     description: 'Rules for Raiding!',
     usage: '',
     notes: '',
-    execute(message, args) {
-        message.reply('Here are the raid rules:', {
+    execute(message) {
+        message.channel.send({
+            content: 'Here are the raid rules:',
             files: [
                 "./resources/images/rules.png"
             ]

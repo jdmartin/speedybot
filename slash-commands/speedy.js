@@ -1,9 +1,13 @@
+const {
+    SlashCommandBuilder
+} = require('@discordjs/builders');
+
 module.exports = {
-    name: 'speedy',
-    description: 'Learn more about Speedybot commands!',
-    usage: '[optional command name]',
-    execute(message, args) {
-            const response = (`Hello!  Here are some things I can do (commands work here or in chat):\n
+    data: new SlashCommandBuilder()
+        .setName('speedy')
+        .setDescription('Learn more about Speedybot commands!'),
+    async execute(interaction) {
+        const response = (`Hello!  Here are some things I can do (commands work here or in chat):\n
             __Remember: All commands start with a **!**__\n
             **adventure**: Want a real Adventure?
             **askspeedy**: Need a *guaranteed* helpful answer? Ask away.
@@ -28,10 +32,6 @@ module.exports = {
             To find out how these work, type \`!help [name of command]\`\n
             Want something else? Ask Doolan. ~~ 🐢
         `)
-            if (message.channel.type === 'DM') {
-                message.channel.send(response)
-            } else {
-                message.member.send(response)
-            }
+            interaction.reply({content: response, ephemeral: true});
     },
 };

@@ -3,7 +3,7 @@ module.exports = {
 	description: 'Go on an Adventure!',
 	usage: '',
 	notes: '',
-	execute(message, args) {
-		message.reply(`This adventure, Speedy craves: https://quuxplusone.github.io/Advent/index.html`);
+	execute(message) {
+		message.channel.send(`This adventure, Speedy craves: https://quuxplusone.github.io/Advent/index.html`);
 	},
 };

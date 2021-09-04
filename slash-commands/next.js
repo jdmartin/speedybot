@@ -1,7 +1,12 @@
+const {
+    SlashCommandBuilder
+} = require('@discordjs/builders');
+
 module.exports = {
-    name: 'next',
-    description: 'What are we doing?',
-    async execute(message) {
+    data: new SlashCommandBuilder()
+        .setName('next')
+        .setDescription('What are we doing?'),
+    async execute(interaction) {
         const {
             MessageEmbed
         } = require("discord.js");
@@ -26,16 +31,6 @@ module.exports = {
                 value: "Don't forget to check the #annoucements channel for more stuff!\n",
                 inline: false
             })
-        if (message.channel.type === 'DM') {
-            message.reply({
-                content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplenext` or `!speedyhelp`.)",
-                embeds: [embed]
-            });
-        } else {
-            message.member.send({
-                content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplenext` or `!speedyhelp`.)",
-                embeds: [embed]
-            });
-        }
-    }
+            interaction.reply({content:"It\'s dangerous to go alone!  Take these:\n\n(If you don\'t see anything, try `!simplenext` or `!speedyhelp`).", embeds: [embed], ephemeral: true});
+    },
 };

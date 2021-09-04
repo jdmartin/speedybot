@@ -1,9 +1,20 @@
+const {
+    SlashCommandBuilder
+} = require('@discordjs/builders');
+
 module.exports = {
-    name: 'strats',
-    description: 'Get all the links to strats for the current raid, or for an older raid.',
-    usage: '[optional raid name]',
-    notes: 'Right now, the only optional name is: nathria',
-    execute(message, args) {
+    data: new SlashCommandBuilder()
+        .setName('strats')
+        .setDescription('Get all the links to strats for the current raid, or for an older raid.')
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('sanctum')
+                .setDescription('Strats for Sanctum of Domination'))
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('nathria')
+                .setDescription('Strats for Castle Nathria')),
+    async execute(interaction) {
         const {
             MessageEmbed
         } = require("discord.js");
@@ -48,16 +59,10 @@ module.exports = {
                 name: "Heroic",
                 value: "[Shriekwing](https://discord.com/channels/308622057707536385/308626596623810562/821981070320861184)\n[Huntsman](https://discord.com/channels/308622057707536385/308626596623810562/821981177593331713)\n[Destroyer](https://discord.com/channels/308622057707536385/308626596623810562/821981301858631680)\n[Darkvein](https://discord.com/channels/308622057707536385/308626596623810562/821981414957514753)\n[Xy'Mox](https://discord.com/channels/308622057707536385/308626596623810562/821981523372539954)"
             })
-        if (!args.length) {
-            message.channel.send({
-                content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [sanctum]
-            });
-        } else if (args[0].toLowerCase() === 'nathria') {
-            message.channel.send({
-                content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [nathria]
-            });
+        if (interaction.options.getSubcommand().toLowerCase() === 'sanctum') {
+            interaction.reply({content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)", embeds: [sanctum], ephemeral: true});
+        } else if (interaction.options.getSubcommand().toLowerCase() === 'nathria') {
+            interaction.reply({content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)", embeds: [nathria], ephemeral: true});
         }
     },
 };

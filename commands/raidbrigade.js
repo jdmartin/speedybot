@@ -3,8 +3,8 @@ module.exports = {
 	description: 'What\'s the code?',
 	usage: '',
 	notes: '',
-	execute(message, args) {
+	execute(message) {
         require("dotenv").config();
-		message.reply(`Here's the code for the in-game Raid Brigade channel: **${process.env.raidbrigcode}**\nNot sure how to use it? See this: https://worldofwarcraft.com/en-us/invite/K9P9EZpT39q?region=US&faction=Alliance`);
+		message.channel.send(`Here's the code for the in-game Raid Brigade channel: **${process.env.raidbrigcode}**\nNot sure how to use it? See this: https://worldofwarcraft.com/en-us/invite/K9P9EZpT39q?region=US&faction=Alliance`);
 	},
 };

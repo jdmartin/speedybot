@@ -4,7 +4,7 @@ module.exports = {
 	aliases: ['log'],
 	usage: '',
 	notes: '',
-	execute(message, args) {
-		message.reply(`Our logs are here: https://www.warcraftlogs.com/guild/reports-list/41907/`);
+	execute(message) {
+		message.channel.send(`Our logs are here: https://www.warcraftlogs.com/guild/reports-list/41907/`);
 	},
 };
