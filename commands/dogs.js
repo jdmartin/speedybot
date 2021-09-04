@@ -20,7 +20,7 @@ module.exports = {
                 const {
                     message
                 } = await fetch('https://dog.ceo/api/breeds/image/random').then(response => response.json());
-                ds_message.reply(message);
+                ds_message.channel.send(message);
             })();
         } else if (args[0] in (dogsDict)) {
             (async function () {
@@ -28,7 +28,7 @@ module.exports = {
                 const {
                     message
                 } = await fetch(`https://dog.ceo/api/breed/${breed}/images/random`).then(response => response.json());
-                ds_message.reply(message);
+                ds_message.channel.send(message);
             })();
         } else {
             ds_message.reply("Sorry, I don't understand. Try `!dogs` for a random dog, `!dogs corgi` for a corgi, `!dogs cardigan` for a cardigan corgi, `!dogs pembroke` for a Pembroke corgi, `!dogs poodle` for a poodle, `!dogs germanshepherd` for a german shepherd, or `!dogs husky` for a husky.")

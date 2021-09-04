@@ -1,9 +1,12 @@
+const {
+    SlashCommandBuilder
+} = require('@discordjs/builders');
+
 module.exports = {
-    name: 'cats',
-    description: 'See a random cat!',
-    usage: '',
-    notes: 'Cats from https://thecatapi.com/',
-    execute(message) {
+    data: new SlashCommandBuilder()
+        .setName('cats')
+        .setDescription('See a random cat!'),
+    async execute(interaction) {
         const fetch = require('node-fetch');
         const querystring = require('query-string');
         //Kick Off
@@ -13,7 +16,7 @@ module.exports = {
             var result = await getTheCat();
             var theBody = result[0].url;
 
-            message.channel.send(theBody);
+            return interaction.reply(theBody);
         }
 
         async function getTheCat() {
@@ -33,5 +36,5 @@ module.exports = {
                 console.log(error);
             }
         }
-    }
-}
+    },
+};

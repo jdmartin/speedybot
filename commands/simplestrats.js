@@ -49,14 +49,14 @@ module.exports = {
     `)
 
         if (!args.length) {
-            if (message.channel.type === 'dm') {
-                message.reply(sanctum)
+            if (message.channel.type === 'DM') {
+                message.channel.send(sanctum)
             } else {
                 message.member.send(sanctum)
             }
         } else if (args[0].toLowerCase() === 'nathria') {
-            if (message.channel.type === 'dm') {
-                message.reply(nathria)
+            if (message.channel.type === 'DM') {
+                message.channel.send(nathria)
             } else {
                 message.member.send(nathria)
             }

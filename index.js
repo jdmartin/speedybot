@@ -8,6 +8,7 @@ var cron = require('node-cron');
 const speedydb = require("./db/speedydb.js");
 const absencedb = require("./db/absencedb.js");
 const utils = require("./utils/speedyutils.js");
+const slash = require("./utils/deploy-slash-commands");
 const heart = require("./utils/heartbeat.js");
 
 //Get some essential variables from the helper files:
@@ -17,6 +18,10 @@ const prefix = process.env.prefix;
 //Load commands into array
 const speedyutils = new utils.CreateCommandSet();
 speedyutils.generateSet();
+
+//Load our slash commands
+const slashutils = new slash.DeploySlashCommands();
+slashutils.begin();
 
 //Initialize the statistics database and get helper for stats:
 const speedy = new speedydb.CreateDatabase();
@@ -38,7 +43,7 @@ cron.schedule('01 01 00 * * *', () => {
 //Once that's done, let's move on to main.
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
   client.user.setStatus("online");
-  client.user.setActivity("you. | say !speedy", {
+  client.user.setActivity("you. | say !speedy or /speedy", {
     type: "LISTENING"
   });
   console.log('Speedy Standing By!');
@@ -48,7 +53,24 @@ client.once("ready", () => { // prints "Ready!" to the console once the bot is o
   heartbeat.startBeating();
 });
 
-client.on("message", message => {
+//Handle slash commands, which are 'interactions'
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
+  
+  const command = client.slashCommands.get(interaction.commandName);
+
+	if (!command) return;
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
+});
+
+//Handle prefixed commands, which come from messages.
+client.on("messageCreate", message => {
   //Make sure the message doesn't come from a bot.
   if (message.author.bot) return;
   //Make sure the message starts with the prefix.

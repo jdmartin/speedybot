@@ -12,7 +12,7 @@ module.exports = {
         🐢
     `)
     
-        if (message.channel.type === 'dm') {
+        if (message.channel.type === 'DM') {
             message.reply(strats)
         } else {
             message.member.send(strats)

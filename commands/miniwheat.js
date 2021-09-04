@@ -7,7 +7,7 @@ module.exports = {
 	description: 'Flip a Mini-Wheat!',
 	usage: '',
 	notes: '',
-	execute(message, args) {
+	execute(message) {
 		let outcomes = ["frosted", "plain"];
 		message.reply(`Your mini-wheat lands on the **${outcomes[getRandomIntInclusive(0,outcomes.length - 1)]}** side!`);
 	},

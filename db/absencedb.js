@@ -303,7 +303,7 @@ class AttendanceTools {
         var friendlyEnd = dateTools.makeFriendlyDates(end);
         var friendlyEndUndo = format(new Date(end + offset), 'MMM dd');
         //Select the appropriate type of response, and shorten if it's a single day.
-        if (message.channel.type === 'dm') {
+        if (message.channel.type === 'DM') {
             if (start != end) {
                 message.reply(`Ok, I've marked you ${this_command} from ${friendlyStart} until ${friendlyEnd}.  \n\nTo undo this, type: !${undo_command} ${friendlyStartUndo} ${friendlyEndUndo} `);
             } else {
@@ -366,7 +366,6 @@ class DataDisplayTools {
                 inline: false
             })
         });
-        message.reply(absentEmbed);
 
         //Get all tardiness from today and later.
         if (lowerArgZero === 'mine') {
@@ -391,7 +390,7 @@ class DataDisplayTools {
 
             })
         });
-        message.reply(lateEmbed);
+        message.channel.send({embeds: [absentEmbed, lateEmbed]});
     }
 }
 
