@@ -63,8 +63,10 @@ client.on('interactionCreate', async interaction => {
 
 	try {
 		await command.execute(interaction);
+    speedyDBHelper.success(interaction.commandName);
 	} catch (error) {
 		console.error(error);
+    speedyDBHelper.error(interaction.commandName);
 		return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 	}
 });
