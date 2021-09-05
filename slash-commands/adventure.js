@@ -9,7 +9,7 @@ module.exports = {
     async execute(interaction) {
         return interaction.reply({
             content: `This adventure, Speedy craves: https://quuxplusone.github.io/Advent/index.html`,
-            ephemeral: false
+            ephemeral: true
         });
     },
 };
