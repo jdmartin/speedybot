@@ -5,7 +5,7 @@ module.exports = {
     usage: '[optional dog breed]',
     notes: 'These are the breeds you can use: cardigan, corgi, germanshepherd, husky, pembroke, and poodle.\nDogs courtesy of https://dog.ceo/dog-api/',
     execute(ds_message, args) {
-        const fetch = require('node-fetch');
+        const https = require("https");
         const dogsDict = {
             corgi: 'corgi',
             cardigan: 'corgi/cardigan',
@@ -17,18 +17,34 @@ module.exports = {
 
         if (!args.length) {
             (async function () {
-                const {
-                    message
-                } = await fetch('https://dog.ceo/api/breeds/image/random').then(response => response.json());
-                ds_message.channel.send(message);
+                https.get('https://dog.ceo/api/breeds/image/random', res => {
+                    res.setEncoding("utf8");
+                    let body = '';
+                    res.on("data", data => {
+                        body += data;
+                    });
+                    res.on("end", () => {
+                        var bodyParsed = JSON.parse(body);
+                        let message = bodyParsed.message;
+                        ds_message.channel.send(message);
+                    });
+                })
             })();
         } else if (args[0] in (dogsDict)) {
             (async function () {
                 const breed = dogsDict[args[0]];
-                const {
-                    message
-                } = await fetch(`https://dog.ceo/api/breed/${breed}/images/random`).then(response => response.json());
-                ds_message.channel.send(message);
+                https.get(`https://dog.ceo/api/breed/${breed}/images/random`, res => {
+                    res.setEncoding("utf8");
+                    let body = '';
+                    res.on("data", data => {
+                        body += data;
+                    });
+                    res.on("end", () => {
+                        var bodyParsed = JSON.parse(body);
+                        let message = bodyParsed.message;
+                        ds_message.channel.send(message);
+                    });
+                })
             })();
         } else {
             ds_message.reply("Sorry, I don't understand. Try `!dogs` for a random dog, `!dogs corgi` for a corgi, `!dogs cardigan` for a cardigan corgi, `!dogs pembroke` for a Pembroke corgi, `!dogs poodle` for a poodle, `!dogs germanshepherd` for a german shepherd, or `!dogs husky` for a husky.")

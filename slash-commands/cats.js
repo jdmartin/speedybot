@@ -7,16 +7,13 @@ module.exports = {
         .setName('cats')
         .setDescription('See a random cat!'),
     async execute(interaction) {
-        const fetch = require('node-fetch');
+        const https = require("https");
         const querystring = require('query-string');
         //Kick Off
-        showTheCat();
+        getTheCat();
 
-        async function showTheCat() {
-            var result = await getTheCat();
-            var theBody = result[0].url;
-
-            return interaction.reply(theBody);
+        async function showTheCat(catUrl) {
+            interaction.reply(catUrl);
         }
 
         async function getTheCat() {
@@ -28,10 +25,17 @@ module.exports = {
             let queryString = querystring.stringify(query_params);
             try {
                 var theCatUrl = 'https://api.thecatapi.com/v1/images/search?api_key=' + process.env.CAT_API_KEY + '&' + queryString;
-                const response = await fetch(theCatUrl);
-                const data = await response.json();
-                return (data);
-
+                https.get(theCatUrl, res => {
+                    res.setEncoding("utf8");
+                    let body = '';
+                    res.on("data", data => {
+                        body += data;
+                    });
+                    res.on("end", () => {
+                        var bodyParsed = JSON.parse(body);
+                        showTheCat(bodyParsed[0].url);
+                    });
+                });
             } catch (error) {
                 console.log(error);
             }
