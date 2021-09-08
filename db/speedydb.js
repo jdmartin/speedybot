@@ -10,6 +10,7 @@ class CreateDatabase {
     startup() {
         var bootup = statsdb.prepare("CREATE TABLE `commands` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `count` INT, `errors` INT)");
         bootup.run();
+        
         var slash_bootup = statsdb.prepare("CREATE TABLE `slash_commands` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `count` INT, `errors` INT)");
         slash_bootup.run();
 
