@@ -41,7 +41,7 @@ cron.schedule('01 01 00 * * *', () => {
 });
 
 //Database Vacuuming
-cron.schedule('01 01 03 * * 0', () => {
+cron.schedule('01 01 03 * * *', () => {
   dbclean.vacuumDatabases();
 });
 
