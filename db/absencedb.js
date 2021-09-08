@@ -406,6 +406,11 @@ class DatabaseCleanup {
         let sql = absencedb.prepare("DELETE FROM latecomers WHERE start_date < date('now', '-14 days')");
         sql.run();
     }
+
+    vacuumDatabases() {
+        let sql = absencedb.prepare("VACUUM");
+        sql.run();
+    }
 }
 
 module.exports = {

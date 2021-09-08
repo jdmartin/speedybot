@@ -40,6 +40,11 @@ cron.schedule('01 01 00 * * *', () => {
   dbclean.cleanLatecomers();
 });
 
+//Database Vacuuming
+cron.schedule('01 01 03 * * 0', () => {
+  dbclean.vacuumDatabases();
+});
+
 //Once that's done, let's move on to main.
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
   client.user.setStatus("online");
