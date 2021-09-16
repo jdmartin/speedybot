@@ -184,7 +184,7 @@ class AttendanceTools {
         }
 
         //Make sure we have start and end dates.
-        var startYear = dateTools.determineYear(args[0], args[1]);
+        var startYear = dateTools.determineYear(shortMonth, args[1]);
         if (dateTools.checkIsMonth(shortMonth)) {
             if (dateTools.checkIsDate(shortMonth, args[1], startYear)) {
                 var startDay = args[1];
