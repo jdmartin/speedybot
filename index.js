@@ -48,7 +48,7 @@ cron.schedule('01 01 03 * * *', () => {
 //Once that's done, let's move on to main.
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
   client.user.setStatus("online");
-  client.user.setActivity("you. | say !speedy or /speedy", {
+  client.user.setActivity("you. | say /speedy", {
     type: "LISTENING"
   });
   console.log('Speedy Standing By!');
