@@ -4,13 +4,13 @@ module.exports = {
     usage: '[optional raid name]',
     notes: 'Right now, the only optional name is: nathria',
     execute(message, args) {
-        const sanctum = (`Hello! Here are links to Evie's raid strats:\n
+        const sanctum = (`Hello!  Here are links to Evie's raid strats:\n
         __Sanctum of Domination__\n
         **The Tarragrue**: https://discord.com/channels/308622057707536385/308626596623810562/861108078976172072
         **Eye of the Jailer**: https://discord.com/channels/308622057707536385/308626596623810562/861108185917161473
         **The Nine**: https://discord.com/channels/308622057707536385/308626596623810562/861108293966495747
         **Ner'zhul**: https://discord.com/channels/308622057707536385/308626596623810562/861108398400471060
-        **Soulrender Dormazain**: https://discord.com/channels/308622057707536385/308626596623810562/861748064217858109
+        **Dormazain**: https://discord.com/channels/308622057707536385/308626596623810562/861748064217858109
         **Painsmith**: https://discord.com/channels/308622057707536385/308626596623810562/862858655089819659
         **Fatescribe**: https://discord.com/channels/308622057707536385/308626596623810562/865345466396966932
         **Guardian**: https://discord.com/channels/308622057707536385/308626596623810562/865354245535301662
@@ -19,7 +19,9 @@ module.exports = {
         **Phase 1**: https://discord.com/channels/308622057707536385/308626596623810562/878071137840554004
         **Phase 2**: https://discord.com/channels/308622057707536385/308626596623810562/878071205238808587
         **Phase 3**: https://discord.com/channels/308622057707536385/308626596623810562/878071279859687476
-        
+        __Notes__
+        **Dormazain**: https://discord.com/channels/308622057707536385/308626596623810562/900823247287902309
+        **Sylvanas Swirlys**: https://discord.com/channels/308622057707536385/308626596623810562/893341077585670176
         
         Want Nathria? Try !simplestrats nathria
         🐢

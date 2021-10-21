@@ -31,7 +31,12 @@ module.exports = {
             })
             .addFields({
                 name: "Sylvanas",
-                value: "[Phase One](https://discord.com/channels/308622057707536385/308626596623810562/878071137840554004)\n[Phase Two](https://discord.com/channels/308622057707536385/308626596623810562/878071205238808587)\n[Phase Three](https://discord.com/channels/308622057707536385/308626596623810562/878071279859687476)\n\nWant Nathria? Use `!strats nathria`",
+                value: "[Phase One](https://discord.com/channels/308622057707536385/308626596623810562/878071137840554004)\n[Phase Two](https://discord.com/channels/308622057707536385/308626596623810562/878071205238808587)\n[Phase Three](https://discord.com/channels/308622057707536385/308626596623810562/878071279859687476)",
+                inline: true
+            })
+            .addFields({
+                name: "Notes:",
+                value: "[Dormazain](https://discord.com/channels/308622057707536385/308626596623810562/900823247287902309)\n[Sylvanas Swirlys](https://discord.com/channels/308622057707536385/308626596623810562/893341077585670176)\n\nWant Nathria? Use `!strats nathria`",
                 inline: true
             })
         const nathria = new MessageEmbed()
