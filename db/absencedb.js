@@ -42,25 +42,25 @@ class AttendanceTools {
 
         //Make sure we have start and end dates.
         if (dateTools.checkIsMonth(shortMonth)) {
-            var startYear = dateTools.determineYear(shortMonth, args[1]);
-            if (dateTools.checkIsDate(shortMonth, args[1], startYear)) {
-                var startDay = args[1];
+            var startYear = dateTools.determineYear(shortMonth, args[1].replace(/\D/g, ""));
+            if (dateTools.checkIsDate(shortMonth, args[1].replace(/\D/g, ""), startYear)) {
+                var startDay = args[1].replace(/\D/g, "");
                 var combinedStartDate = shortMonth + " " + startDay + " " + startYear;
                 var startDate = dateTools.validateDates(message, combinedStartDate, undefined);
             }
             //Process Comments
             var comment = args.slice(2).join(' ');
         }
-        if (dateTools.checkIsMonth(shortEndMonth) && dateTools.checkIsDayOfMonth(args[3])) {
+        if (dateTools.checkIsMonth(shortEndMonth) && dateTools.checkIsDayOfMonth(args[3].replace(/\D/g, ""))) {
             //Make sure end year is equal or greater to start year.
             ///HMM
             if (dateTools.getCurrentYear() >= startYear) {
-                var endYear = dateTools.determineYear(shortEndMonth, args[3]);
+                var endYear = dateTools.determineYear(shortEndMonth, args[3].replace(/\D/g, ""));
             } else {
                 var endYear = startYear;
             }
-            if (dateTools.checkIsDate(shortEndMonth, args[3], endYear)) {
-                var endDay = args[3];
+            if (dateTools.checkIsDate(shortEndMonth, args[3].replace(/\D/g, ""), endYear)) {
+                var endDay = args[3].replace(/\D/g, "");
                 var combinedEndDate = shortEndMonth + " " + endDay + " " + endYear;
                 var endDate = dateTools.validateDates(message, undefined, combinedEndDate);
                 //Process Comments
@@ -91,26 +91,26 @@ class AttendanceTools {
             var shortEndMonth = args[2].substring(0,3);
         }
 
-        var startYear = dateTools.determineYear(shortMonth, args[1]);
+        var startYear = dateTools.determineYear(shortMonth, args[1].replace(/\D/g, ""));
         //Make sure we have a date.
         if (dateTools.checkIsMonth(shortMonth)) {
             if (dateTools.checkIsDate(args)) {
-                var startDay = args[1];
+                var startDay = args[1].replace(/\D/g, "");
                 let combinedDate = shortMonth + " " + startDay + " " + startYear;
                 var startDate = dateTools.validateDates(message, combinedDate, undefined);
                 //Process a comment, if supplied.
                 var comment = args.slice(2).join(' ');
             }
         }
-        if (dateTools.checkIsMonth(shortEndMonth) && dateTools.checkIsDayOfMonth(args[3])) {
+        if (dateTools.checkIsMonth(shortEndMonth) && dateTools.checkIsDayOfMonth(args[3].replace(/\D/g, ""))) {
             //Make sure end year is equal or greater to start year.
             if (dateTools.getCurrentYear() >= startYear) {
-                var endYear = dateTools.determineYear(shortEndMonth, args[3]);
+                var endYear = dateTools.determineYear(shortEndMonth, args[3].replace(/\D/g, ""));
             } else {
                 var endYear = startYear;
             }
-            if (dateTools.checkIsDate(shortEndMonth, args[3], endYear)) {
-                var endDay = args[3];
+            if (dateTools.checkIsDate(shortEndMonth, args[3].replace(/\D/g, ""), endYear)) {
+                var endDay = args[3].replace(/\D/g, "");
                 var combinedEndDate = shortEndMonth + " " + endDay + " " + endYear;
                 var endDate = dateTools.validateDates(message, undefined, combinedEndDate);
                 //Process Comments
@@ -142,10 +142,10 @@ class AttendanceTools {
         }
 
         //Make sure we have a date.
-        var startYear = dateTools.determineYear(shortMonth, args[1]);
+        var startYear = dateTools.determineYear(shortMonth, args[1].replace(/\D/g, ""));
         if (dateTools.checkIsMonth(shortMonth)) {
             if (dateTools.checkIsDate(args)) {
-                var startDay = args[1];
+                var startDay = args[1].replace(/\D/g, "");
                 let combinedDate = shortMonth + " " + startDay + " " + startYear;
                 var startDate = dateTools.validateDates(message, combinedDate, undefined);
             }
@@ -153,12 +153,12 @@ class AttendanceTools {
         if (dateTools.checkIsMonth(shortEndMonth)) {
             //Make sure end year is equal or greater to start year.
             if (dateTools.getCurrentYear() >= startYear) {
-                var endYear = dateTools.determineYear(shortEndMonth, args[3]);
+                var endYear = dateTools.determineYear(shortEndMonth, args[3].replace(/\D/g, ""));
             } else {
                 var endYear = startYear;
             }
-            if (dateTools.checkIsDate(shortEndMonth, args[3], endYear)) {
-                var endDay = args[3];
+            if (dateTools.checkIsDate(shortEndMonth, args[3].replace(/\D/g, ""), endYear)) {
+                var endDay = args[3].replace(/\D/g, "");
                 var combinedEndDate = shortEndMonth + " " + endDay + " " + endYear;
                 var endDate = dateTools.validateDates(message, undefined, combinedEndDate);
             }
@@ -184,10 +184,10 @@ class AttendanceTools {
         }
 
         //Make sure we have start and end dates.
-        var startYear = dateTools.determineYear(shortMonth, args[1]);
+        var startYear = dateTools.determineYear(shortMonth, args[1].replace(/\D/g, ""));
         if (dateTools.checkIsMonth(shortMonth)) {
-            if (dateTools.checkIsDate(shortMonth, args[1], startYear)) {
-                var startDay = args[1];
+            if (dateTools.checkIsDate(shortMonth, args[1].replace(/\D/g, ""), startYear)) {
+                var startDay = args[1].replace(/\D/g, "");
                 var combinedStartDate = shortMonth + " " + startDay + " " + startYear;
                 var startDate = dateTools.validateDates(message, combinedStartDate, undefined);
             }
@@ -195,12 +195,12 @@ class AttendanceTools {
         if (dateTools.checkIsMonth(shortEndMonth)) {
             //Make sure end year is equal or greater to start year.
             if (dateTools.getCurrentYear() >= startYear) {
-                var endYear = dateTools.determineYear(shortEndMonth, args[3]);
+                var endYear = dateTools.determineYear(shortEndMonth, args[3].replace(/\D/g, ""));
             } else {
                 var endYear = startYear;
             }
-            if (dateTools.checkIsDate(shortEndMonth, args[3], endYear)) {
-                var endDay = args[3];
+            if (dateTools.checkIsDate(shortEndMonth, args[3].replace(/\D/g, ""), endYear)) {
+                var endDay = args[3].replace(/\D/g, "");
                 var combinedEndDate = shortEndMonth + " " + endDay + " " + endYear;
                 var endDate = dateTools.validateDates(message, undefined, combinedEndDate);
             }
