@@ -18,13 +18,13 @@ class Heartbeat {
         app.use(helmet.xssFilter());
 
 
-        app.get('/', (req, res) => {
+        app.get(process.env.HEARTBEAT_PATH, (req, res) => {
             res.set('Cache-control', 'public, max-age=86400')
             res.send('🐢')
         })
 
         app.listen(port, 'localhost', () => {
-            console.log(`Heartbeat beating on http://localhost:${port}`)
+            console.log(`Heartbeat beating on http://localhost:${port}${process.env.HEARTBEAT_PATH}`)
         })
     }
 };
