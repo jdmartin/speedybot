@@ -3,14 +3,14 @@ module.exports = {
     description: 'What are we doing?',
     async execute(message) {
         const {
-            MessageEmbed
-        } = require("discord.js");
-        const embed = new MessageEmbed()
+            Embed,
+        } = require("@discordjs/builders");
+        const embed = new Embed()
+            .setAuthor({name: "🐢"})
+            .setFooter({text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed..." })
             .setTitle("Evie's Announcements!")
             .setColor(0xFFFFFF)
-            .setAuthor("🐢")
-            .setDescription("")
-            .setFooter("SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...")
+            //.setDescription("")
             .addFields({
                 name: "Immediate",
                 value: "[Posted July 6](https://discord.com/channels/308622057707536385/308625441546043402/862183558839533579)\n",
@@ -26,6 +26,7 @@ module.exports = {
                 value: "Don't forget to check the #annoucements channel for more stuff!\n",
                 inline: false
             })
+            
         if (message.channel.type === 'DM') {
             message.reply({
                 content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplenext` or `!speedyhelp`.)",

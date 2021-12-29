@@ -16,14 +16,14 @@ module.exports = {
                 .setDescription('Strats for Castle Nathria')),
     async execute(interaction) {
         const {
-            MessageEmbed
-        } = require("discord.js");
-        const sanctum = new MessageEmbed()
+            Embed
+        } = require("@discordjs/builders");
+        const sanctum = new Embed()
             .setTitle("Evie's Strats!")
             .setColor(0xFFFFFF)
-            .setAuthor("🏹")
+            .setAuthor({name: "🏹"})
             .setDescription("__Sanctum of Domination__")
-            .setFooter("SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...")
+            .setFooter({text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed..."})
             .addFields({
                 name: "Bosses",
                 value: "[The Tarragrue](https://discord.com/channels/308622057707536385/308626596623810562/861108078976172072)\n[Eye of the Jailer](https://discord.com/channels/308622057707536385/308626596623810562/861108185917161473)\n[The Nine](https://discord.com/channels/308622057707536385/308626596623810562/861108293966495747)\n[Ner'zhul](https://discord.com/channels/308622057707536385/308626596623810562/861108398400471060)\n[Soulrender Dormazain](https://discord.com/channels/308622057707536385/308626596623810562/861748064217858109)\n[Painsmith](https://discord.com/channels/308622057707536385/308626596623810562/862858655089819659)\n[Fatescribe](https://discord.com/channels/308622057707536385/308626596623810562/865345466396966932)\n[Guardian](https://discord.com/channels/308622057707536385/308626596623810562/865354245535301662)\n[Kel'Thuzad](https://discord.com/channels/308622057707536385/308626596623810562/878071037298880542)",
@@ -39,12 +39,12 @@ module.exports = {
                 value: "[Dormazain](https://discord.com/channels/308622057707536385/308626596623810562/900823247287902309)\n[Sylvanas Swirlys](https://discord.com/channels/308622057707536385/308626596623810562/893341077585670176)\n\nWant Nathria? Use `!strats nathria`",
                 inline: true
             })
-        const nathria = new MessageEmbed()
+        const nathria = new Embed()
             .setTitle("Evie's Strats!")
             .setColor(0xFFFFFF)
-            .setAuthor("🧛‍♀️")
+            .setAuthor({name: "🧛‍♀️"})
             .setDescription("__Castle Nathria__")
-            .setFooter("SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...")
+            .setFooter({text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed..."})
             .addFields({
                 name: "Bosses",
                 value: "[Shriekwing](https://discord.com/channels/308622057707536385/308626596623810562/793739928093065236)\n[Huntsman](https://discord.com/channels/308622057707536385/308626596623810562/793740029323247646)\n[Destroyer](https://discord.com/channels/308622057707536385/308626596623810562/793740126454284328)\n[Darkvein](https://discord.com/channels/308622057707536385/308626596623810562/796565645612285972)\n[Xy'Mox](https://discord.com/channels/308622057707536385/308626596623810562/795513357817479219)",

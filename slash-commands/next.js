@@ -8,14 +8,13 @@ module.exports = {
         .setDescription('What are we doing?'),
     async execute(interaction) {
         const {
-            MessageEmbed
-        } = require("discord.js");
-        const embed = new MessageEmbed()
+            Embed
+        } = require("@discordjs/builders");
+        const embed = new Embed()
             .setTitle("Evie's Announcements!")
             .setColor(0xFFFFFF)
-            .setAuthor("🐢")
-            .setDescription("")
-            .setFooter("SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...")
+            .setAuthor({name: "🐢"})
+            .setFooter({text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed..." })
             .addFields({
                 name: "Immediate",
                 value: "[Posted July 6](https://discord.com/channels/308622057707536385/308625441546043402/862183558839533579)\n",
