@@ -15,7 +15,9 @@ module.exports = {
             .addChoice('german shepherd', 'germanshepherd')
             .addChoice('husky', 'husky')
             .addChoice('pembroke', 'pembroke')
+            .addChoice('pitbull', 'pitbull')
             .addChoice('poodle', 'poodle/standard')
+            .addChoice('pug', 'pug')
             .addChoice('random', 'random')),
 
     async execute(interaction) {
