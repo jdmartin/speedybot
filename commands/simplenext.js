@@ -4,7 +4,7 @@ module.exports = {
     execute(message, args) {
         const strats = (`Hello!  Here are links to Evie's raid annoucements:\n
         __Immediate__\n
-        **Posted July 6**: https://discord.com/channels/308622057707536385/308625441546043402/862183558839533579\n
+        **Posted Dec 31**: https://discord.com/channels/308622057707536385/308625441546043402/926545217849557003\n
         __Planning__
         **The Burning Reconquista**: https://discord.com/channels/308622057707536385/308625441546043402/839871852045664337\n
         __Reminders__

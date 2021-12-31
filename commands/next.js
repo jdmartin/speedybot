@@ -13,7 +13,7 @@ module.exports = {
             //.setDescription("")
             .addFields({
                 name: "Immediate",
-                value: "[Posted July 6](https://discord.com/channels/308622057707536385/308625441546043402/862183558839533579)\n",
+                value: "[Posted Dec 31](https://discord.com/channels/308622057707536385/308625441546043402/926545217849557003)\n",
                 inline: false
             })
             .addFields({
