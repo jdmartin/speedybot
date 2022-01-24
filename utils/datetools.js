@@ -109,6 +109,35 @@ class dateTools {
             return;
         }
     }
+
+    validateGivenDate(date) {
+        if ((isValid(parse(date, 'LLLL dd yyyy', new Date())))) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    validateSlashDates(start, end) {
+        if (start != undefined) {
+            //Make sure given dates are dates.
+            if ((isValid(parse(start, 'LLLL dd yyyy', new Date())))) {
+                let temp_date = parse(start, 'LLLL dd yyyy', new Date());
+                let simple_date = temp_date.toISOString().split('T')[0];
+                return (simple_date);
+            }
+            return;
+        }
+        if (end != undefined) {
+            if ((isValid(parse(end, 'LLLL dd yyyy', new Date())))) {
+                let temp_date = parse(end, 'LLLL dd yyyy', new Date());
+                let simple_date = temp_date.toISOString().split('T')[0];
+                return (simple_date);
+            }
+            return;
+        }
+    }
 }
 
 module.exports = {
