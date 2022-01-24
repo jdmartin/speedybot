@@ -77,20 +77,26 @@ module.exports = {
         var startDate = dateTools.validateSlashDates(combinedStartDate);
         var endDate = dateTools.validateSlashDates(combinedEndDate);
 
-        absenceTools.processDBUpdate(name, nickname, "late", startDate, endDate, comment);
-        absenceTools.generateResponse(name, "late", startDate, endDate, comment);
+        if ((dateTools.validateGivenDate(combinedStartDate)) && (dateTools.validateGivenDate(combinedEndDate))) {
+            absenceTools.processDBUpdate(name, nickname, "late", startDate, endDate, comment);
+            absenceTools.generateResponse(name, "late", startDate, endDate, comment);
 
-
-        if (startDate == endDate) {
-            interaction.reply({
-                content: `You have been marked late on ${start_month} ${start_date}. To undo this, type \`/ontime ${start_month} ${start_date}\``,
-                ephemeral: true
-            });
+            if (startDate == endDate) {
+                interaction.reply({
+                    content: `You have been marked late on ${start_month} ${start_date}. To undo this, type \`/ontime ${start_month} ${start_date}\``,
+                    ephemeral: true
+                });
+            } else {
+                interaction.reply({
+                    content: `You have been marked late from ${start_month} ${start_date} until ${end_month} ${end_date}. To undo this, type \`/ontime ${start_month} ${start_date} ${end_month} ${end_date}\``,
+                    ephemeral: true
+                });
+            }
         } else {
             interaction.reply({
-                content: `You have been marked late from ${start_month} ${start_date} until ${end_month} ${end_date}. To undo this, type \`/ontime ${start_month} ${start_date} ${end_month} ${end_date}\``,
+                content: "Sorry, one of the dates isn't quite right. Please check and try again (or complain to Doolan)",
                 ephemeral: true
-            });
+            })
         }
     },
 };

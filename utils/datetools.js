@@ -110,6 +110,15 @@ class dateTools {
         }
     }
 
+    validateGivenDate(date) {
+        if ((isValid(parse(date, 'LLLL dd yyyy', new Date())))) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     validateSlashDates(start, end) {
         if (start != undefined) {
             //Make sure given dates are dates.

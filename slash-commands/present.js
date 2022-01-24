@@ -73,19 +73,26 @@ module.exports = {
         var startDate = dateTools.validateSlashDates(combinedStartDate);
         var endDate = dateTools.validateSlashDates(combinedEndDate);
 
-        absenceTools.processDBUpdate(name, nickname, "present", startDate, endDate, comment);
-        absenceTools.generateResponse(name, "present", startDate, endDate, comment);
+        if ((dateTools.validateGivenDate(combinedStartDate)) && (dateTools.validateGivenDate(combinedEndDate))) {
+            absenceTools.processDBUpdate(name, nickname, "present", startDate, endDate, comment);
+            absenceTools.generateResponse(name, "present", startDate, endDate, comment);
 
-        if (startDate == endDate) {
-            interaction.reply({
-                content: `You have been marked present on ${start_month} ${start_date}. To undo this, type \`/absent ${start_month} ${start_date}\``,
-                ephemeral: true
-            });
+            if (startDate == endDate) {
+                interaction.reply({
+                    content: `You have been marked present on ${start_month} ${start_date}. To undo this, type \`/absent ${start_month} ${start_date}\``,
+                    ephemeral: true
+                });
+            } else {
+                interaction.reply({
+                    content: `You have been marked present from ${start_month} ${start_date} until ${end_month} ${end_date}. To undo this, type \`/absent ${start_month} ${start_date} ${end_month} ${end_date}\``,
+                    ephemeral: true
+                });
+            }
         } else {
             interaction.reply({
-                content: `You have been marked present from ${start_month} ${start_date} until ${end_month} ${end_date}. To undo this, type \`/absent ${start_month} ${start_date} ${end_month} ${end_date}\``,
+                content: "Sorry, one of the dates isn't quite right. Please check and try again (or complain to Doolan)",
                 ephemeral: true
-            });
+            })
         }
     },
 };
