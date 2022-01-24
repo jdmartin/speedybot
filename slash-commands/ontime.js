@@ -12,8 +12,8 @@ const absenceTools = new absence.AttendanceTools();
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('absent')
-        .setDescription('Tell us you will miss raid!')
+        .setName('ontime')
+        .setDescription('Tell us you will not miss raid!')
         .addStringOption(option =>
             option.setName('start_month')
             .setDescription('The starting month')
@@ -53,10 +53,6 @@ module.exports = {
         .addIntegerOption(option =>
             option.setName('end_date')
             .setDescription('last day of absence period')
-            .setRequired(true))
-        .addStringOption(option =>
-            option.setName('comment')
-            .setDescription('Reason? Can be very short, but not blank.')
             .setRequired(true)),
 
     async execute(interaction) {
@@ -77,17 +73,17 @@ module.exports = {
         var startDate = dateTools.validateSlashDates(combinedStartDate);
         var endDate = dateTools.validateSlashDates(combinedEndDate);
 
-        absenceTools.processDBUpdate(name, nickname, "absent", startDate, endDate, comment);
-        absenceTools.generateResponse(name, "absent", startDate, endDate, comment);
+        absenceTools.processDBUpdate(name, nickname, "ontime", startDate, endDate, comment);
+        absenceTools.generateResponse(name, "ontime", startDate, endDate, comment);
 
         if (startDate == endDate) {
             interaction.reply({
-                content: `You have been marked absent on ${start_month} ${start_date}. To undo this, type \`/present ${start_month} ${start_date}\``,
+                content: `You have been marked on-time on ${start_month} ${start_date}. To undo this, type \`/late ${start_month} ${start_date}\``,
                 ephemeral: true
             });
         } else {
             interaction.reply({
-                content: `You have been marked absent from ${start_month} ${start_date} until ${end_month} ${end_date}. To undo this, type \`/present ${start_month} ${start_date} ${end_month} ${end_date}\``,
+                content: `You have been marked on-time from ${start_month} ${start_date} until ${end_month} ${end_date}. To undo this, type \`/late ${start_month} ${start_date} ${end_month} ${end_date}\``,
                 ephemeral: true
             });
         }

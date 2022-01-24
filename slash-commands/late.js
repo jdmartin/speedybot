@@ -12,8 +12,8 @@ const absenceTools = new absence.AttendanceTools();
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('absent')
-        .setDescription('Tell us you will miss raid!')
+        .setName('late')
+        .setDescription('Tell us you will be late for raid!')
         .addStringOption(option =>
             option.setName('start_month')
             .setDescription('The starting month')
@@ -77,17 +77,18 @@ module.exports = {
         var startDate = dateTools.validateSlashDates(combinedStartDate);
         var endDate = dateTools.validateSlashDates(combinedEndDate);
 
-        absenceTools.processDBUpdate(name, nickname, "absent", startDate, endDate, comment);
-        absenceTools.generateResponse(name, "absent", startDate, endDate, comment);
+        absenceTools.processDBUpdate(name, nickname, "late", startDate, endDate, comment);
+        absenceTools.generateResponse(name, "late", startDate, endDate, comment);
+
 
         if (startDate == endDate) {
             interaction.reply({
-                content: `You have been marked absent on ${start_month} ${start_date}. To undo this, type \`/present ${start_month} ${start_date}\``,
+                content: `You have been marked late on ${start_month} ${start_date}. To undo this, type \`/ontime ${start_month} ${start_date}\``,
                 ephemeral: true
             });
         } else {
             interaction.reply({
-                content: `You have been marked absent from ${start_month} ${start_date} until ${end_month} ${end_date}. To undo this, type \`/present ${start_month} ${start_date} ${end_month} ${end_date}\``,
+                content: `You have been marked late from ${start_month} ${start_date} until ${end_month} ${end_date}. To undo this, type \`/ontime ${start_month} ${start_date} ${end_month} ${end_date}\``,
                 ephemeral: true
             });
         }
