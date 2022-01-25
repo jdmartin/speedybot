@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@discordjs/rest": "^0.2.0-canary.0",
+    "@discordjs/rest": "^0.3.0",
     "better-sqlite3": "^7.4.3",
     "date-fns": "^2.22.1",
     "discord-api-types": "^0.26.0",
