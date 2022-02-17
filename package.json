@@ -6,7 +6,7 @@
     "discord-api-types": "^0.27.0",
     "discord.js": "^13.1.0",
     "dotenv": "^16.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "helmet": "^5.0.1",
     "node-cron": "^3.0.0",
     "query-string": "^7.0.1",
