@@ -8,6 +8,10 @@ module.exports = {
         .setDescription('Get all the links to strats for the current raid, or for an older raid.')
         .addSubcommand(subcommand =>
             subcommand
+                .setName('sepulchre')
+                .setDescription('Strats for Sepulchre of the First Ones'))
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName('sanctum')
                 .setDescription('Strats for Sanctum of Domination'))
         .addSubcommand(subcommand =>
@@ -18,6 +22,17 @@ module.exports = {
         const {
             Embed
         } = require("@discordjs/builders");
+        const sepulchre = new Embed()
+            .setTitle("Evie's Strats!")
+            .setColor(0xFFFFFF)
+            .setAuthor({name: "⛓"})
+            .setDescription("__Sepulchre of the First Ones__")
+            .setFooter({text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed..."})
+            .addFields({
+                name: "Bosses",
+                value: "[Vigilant Guardian](https://discord.com/channels/308622057707536385/308626596623810562/947960827326115871)\n[Skolex](https://discord.com/channels/308622057707536385/308626596623810562/948029005741850624)\n[Xy'Mox, take 2](https://discord.com/channels/308622057707536385/308626596623810562/948029093167923210)",
+                inline: true
+            })
         const sanctum = new Embed()
             .setTitle("Evie's Strats!")
             .setColor(0xFFFFFF)
@@ -68,6 +83,8 @@ module.exports = {
             interaction.reply({content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)", embeds: [sanctum], ephemeral: true});
         } else if (interaction.options.getSubcommand().toLowerCase() === 'nathria') {
             interaction.reply({content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)", embeds: [nathria], ephemeral: true});
+        } else if (interaction.options.getSubcommand().toLowerCase() === 'sepulchre') {
+            interaction.reply({content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)", embeds: [sepulchre], ephemeral: true});
         }
     },
 };

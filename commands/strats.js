@@ -2,11 +2,22 @@ module.exports = {
     name: 'strats',
     description: 'Get all the links to strats for the current raid, or for an older raid.',
     usage: '[optional raid name]',
-    notes: 'Right now, the only optional name is: nathria',
+    notes: 'Right now, the only optional names are: nathria and sanctum',
     execute(message, args) {
         const {
             Embed
         } = require("@discordjs/builders");
+        const sepulchre = new Embed()
+            .setTitle("Evie's Strats!")
+            .setColor(0xFFFFFF)
+            .setAuthor({name: "⛓"})
+            .setDescription("__Sepulchre of the First Ones__")
+            .setFooter({text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed..."})
+            .addFields({
+                name: "Bosses",
+                value: "[Vigilant Guardian](https://discord.com/channels/308622057707536385/308626596623810562/947960827326115871)\n[Skolex](https://discord.com/channels/308622057707536385/308626596623810562/948029005741850624)\n[Xy'Mox, take 2](https://discord.com/channels/308622057707536385/308626596623810562/948029093167923210)",
+                inline: true
+            })
         const sanctum = new Embed()
             .setTitle("Evie's Strats!")
             .setColor(0xFFFFFF)
@@ -54,6 +65,11 @@ module.exports = {
                 value: "[Shriekwing](https://discord.com/channels/308622057707536385/308626596623810562/821981070320861184)\n[Huntsman](https://discord.com/channels/308622057707536385/308626596623810562/821981177593331713)\n[Destroyer](https://discord.com/channels/308622057707536385/308626596623810562/821981301858631680)\n[Darkvein](https://discord.com/channels/308622057707536385/308626596623810562/821981414957514753)\n[Xy'Mox](https://discord.com/channels/308622057707536385/308626596623810562/821981523372539954)"
             })
         if (!args.length) {
+            message.channel.send({
+                content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
+                embeds: [sepulchre]
+            });
+        } else if (args[0].toLowerCase() === 'sanctum') {
             message.channel.send({
                 content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
                 embeds: [sanctum]
