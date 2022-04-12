@@ -355,3 +355,4 @@ config.json
 .env
 db/absence.db
 .vscode
+.DS_Store
