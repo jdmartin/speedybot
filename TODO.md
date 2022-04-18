@@ -1,1 +1,2 @@
 - ~~Implement alias system.~~
+- ~~Interactive attendance.~~
