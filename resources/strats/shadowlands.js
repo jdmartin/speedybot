@@ -10,7 +10,12 @@ const sepulchre = new Embed()
     .setFooter({text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed..."})
     .addFields({
         name: "Bosses",
-        value: "[Vigilant Guardian](https://discord.com/channels/308622057707536385/308626596623810562/947960827326115871)\n[Skolex](https://discord.com/channels/308622057707536385/308626596623810562/948029005741850624)\n[Xy'Mox, take 2](https://discord.com/channels/308622057707536385/308626596623810562/955914735956668466)\n[Dausegne](https://discord.com/channels/308622057707536385/308626596623810562/948961279786254447)\n[Pantheon](https://discord.com/channels/308622057707536385/308626596623810562/949042645177622549)\n[Lihuvium](https://discord.com/channels/308622057707536385/308626596623810562/952604140855525527)\n[Halondrus](https://discord.com/channels/308622057707536385/308626596623810562/955979512582135829)\n[Anduin](https://discord.com/channels/308622057707536385/308626596623810562/956592880695271424)\n[Rygelon](https://discord.com/channels/308622057707536385/308626596623810562/966888525184270406)",
+        value: "[Vigilant Guardian](https://discord.com/channels/308622057707536385/308626596623810562/947960827326115871)\n[Skolex](https://discord.com/channels/308622057707536385/308626596623810562/948029005741850624)\n[Xy'Mox, take 2](https://discord.com/channels/308622057707536385/308626596623810562/955914735956668466)\n[Dausegne](https://discord.com/channels/308622057707536385/308626596623810562/948961279786254447)\n[Pantheon](https://discord.com/channels/308622057707536385/308626596623810562/949042645177622549)\n[Lihuvium](https://discord.com/channels/308622057707536385/308626596623810562/952604140855525527)\n[Halondrus](https://discord.com/channels/308622057707536385/308626596623810562/955979512582135829)\n[Anduin](https://discord.com/channels/308622057707536385/308626596623810562/956592880695271424)\n",
+        inline: true
+    })
+    .addFields({
+        name: "Even More Bosses",
+        value: "[Rygelon](https://discord.com/channels/308622057707536385/308626596623810562/966888525184270406)\n[Lords of Dread](https://discord.com/channels/308622057707536385/308626596623810562/969296305472036944)\n[The Jailer](https://discord.com/channels/308622057707536385/308626596623810562/969316069028286474)",
         inline: true
     })
 const sanctum = new Embed()
