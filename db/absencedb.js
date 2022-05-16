@@ -1,5 +1,7 @@
 require("dotenv").config();
-const {MessageEmbed} = require('discord.js');
+const {
+    MessageEmbed
+} = require('discord.js');
 const sqlite3 = require('better-sqlite3');
 const utils = require("../utils/speedyutils.js");
 const nameutils = require("../utils/nameutils.js");
@@ -35,9 +37,9 @@ class AttendanceTools {
 
     absent(message, args) {
         //Just use the first three letters of the month to avoid confusion:
-        let shortMonth = args[0].substring(0,3);
+        let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
-            var shortEndMonth = args[2].substring(0,3);
+            var shortEndMonth = args[2].substring(0, 3);
         }
 
         //Make sure we have start and end dates.
@@ -86,9 +88,9 @@ class AttendanceTools {
 
     late(message, args) {
         //Just use the first three letters of the month to avoid confusion:
-        let shortMonth = args[0].substring(0,3);
+        let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
-            var shortEndMonth = args[2].substring(0,3);
+            var shortEndMonth = args[2].substring(0, 3);
         }
 
         var startYear = dateTools.determineYear(shortMonth, args[1].replace(/\D/g, ""));
@@ -136,9 +138,9 @@ class AttendanceTools {
 
     ontime(message, args) {
         //Just use the first three letters of the month to avoid confusion:
-        let shortMonth = args[0].substring(0,3);
+        let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
-            var shortEndMonth = args[2].substring(0,3);
+            var shortEndMonth = args[2].substring(0, 3);
         }
 
         //Make sure we have a date.
@@ -178,9 +180,9 @@ class AttendanceTools {
 
     present(message, args) {
         //Just use the first three letters of the month to avoid confusion:
-        let shortMonth = args[0].substring(0,3);
+        let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
-            var shortEndMonth = args[2].substring(0,3);
+            var shortEndMonth = args[2].substring(0, 3);
         }
 
         //Make sure we have start and end dates.
@@ -382,7 +384,9 @@ class DataDisplayTools {
         const absentEmbed = new MessageEmbed()
             .setColor(0xFFFFFF)
             .setTitle("Upcoming absences")
-            .setFooter({text: "These absences are known to the Infinite Speedyflight. Use this information wisely."})
+            .setFooter({
+                text: "These absences are known to the Infinite Speedyflight. Use this information wisely."
+            })
         absResults.forEach((row) => {
             absentEmbed.addFields({
                 name: row.name,
@@ -406,7 +410,9 @@ class DataDisplayTools {
         const lateEmbed = new MessageEmbed()
             .setColor(0xFFFFFF)
             .setTitle("Upcoming tardiness")
-            .setFooter({text: "This tardiness is known to the Infinite Speedyflight. Use this information wisely."})
+            .setFooter({
+                text: "This tardiness is known to the Infinite Speedyflight. Use this information wisely."
+            })
         lateResults.forEach((row) => {
             lateEmbed.addFields({
                 name: row.name,
@@ -414,7 +420,9 @@ class DataDisplayTools {
 
             })
         });
-        message.channel.send({embeds: [absentEmbed, lateEmbed]});
+        message.channel.send({
+            embeds: [absentEmbed, lateEmbed]
+        });
     }
 }
 

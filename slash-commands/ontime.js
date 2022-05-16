@@ -1,9 +1,7 @@
+require("dotenv").config();
 const {
     SlashCommandBuilder
 } = require('@discordjs/builders');
-
-require("dotenv").config();
-
 const dates = require("../utils/datetools.js");
 const dateTools = new dates.dateTools();
 

@@ -1,8 +1,9 @@
-const {MessageEmbed} = require('discord.js');
+const {
+    MessageEmbed
+} = require("discord.js");
 const sqlite3 = require('better-sqlite3');
 const statsdb = new sqlite3(':memory:');
 const utils = require('../utils/speedyutils.js');
-
 const commandFiles = utils.commandFiles;
 const slashCommandFiles = utils.slashCommandFiles;
 
@@ -10,7 +11,7 @@ class CreateDatabase {
     startup() {
         var bootup = statsdb.prepare("CREATE TABLE `commands` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `count` INT, `errors` INT)");
         bootup.run();
-        
+
         var slash_bootup = statsdb.prepare("CREATE TABLE `slash_commands` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `count` INT, `errors` INT)");
         slash_bootup.run();
 
@@ -51,18 +52,21 @@ class DatabaseTools {
 }
 
 class GetStats {
+
     retrieve(message) {
         var sql = statsdb.prepare('SELECT DISTINCT Name name, Count count, Errors errors FROM commands ORDER BY name');
         var allStats = sql.all();
         var slash_sql = statsdb.prepare('SELECT DISTINCT Name name, Count count, Errors errors FROM slash_commands ORDER BY name');
         var allSlashStats = slash_sql.all();
 
-        const embed = new MessageEmbed()
+        const statsEmbed = new MessageEmbed()
             .setColor(0xFFFFFF)
             .setTitle("Usage stats since last launch")
-            .setFooter({text: "These statistics are a product of the Inifite Speedyflight. Use Wisely."})
+            .setFooter({
+                text: "These statistics are a product of the Inifite Speedyflight. Use Wisely."
+            })
         allStats.forEach((row) => {
-            embed.addFields({
+            statsEmbed.addFields({
                 name: row.name,
                 value: "\t\tCount: " + row.count + "\t\tErrors " + row.errors,
                 inline: true
@@ -72,7 +76,9 @@ class GetStats {
         const slash_embed = new MessageEmbed()
             .setColor(0xFFFFFF)
             .setTitle("Slash usage stats since last launch")
-            .setFooter({text: "These statistics are a product of the Inifite Speedyflight. Use Wisely."})
+            .setFooter({
+                text: "These statistics are a product of the Inifite Speedyflight. Use Wisely."
+            })
         allSlashStats.forEach((row) => {
             slash_embed.addFields({
                 name: row.name,
@@ -82,9 +88,13 @@ class GetStats {
         });
 
         if (message.channel.type === 'DM') {
-            message.channel.send({embeds: [embed, slash_embed]});
+            message.channel.send({
+                embeds: [statsEmbed, slash_embed]
+            });
         } else {
-            message.member.send({embeds: [embed, slash_embed]});
+            message.member.send({
+                embeds: [statsEmbed, slash_embed]
+            });
         }
     }
 }
@@ -93,5 +103,5 @@ class GetStats {
 module.exports = {
     CreateDatabase,
     DatabaseTools,
-    GetStats
+    GetStats,
 };

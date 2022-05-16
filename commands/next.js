@@ -2,10 +2,16 @@ module.exports = {
     name: 'next',
     description: 'What are we doing?',
     async execute(message) {
-        const { MessageEmbed } = require('discord.js');
+        const {
+            MessageEmbed
+        } = require('discord.js');
         const embed = new MessageEmbed()
-            .setAuthor({name: "🐢"})
-            .setFooter({text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed..." })
+            .setAuthor({
+                name: "🐢"
+            })
+            .setFooter({
+                text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed..."
+            })
             .setTitle("Evie's Announcements!")
             .setColor(0xFFFFFF)
             //.setDescription("")
@@ -24,7 +30,7 @@ module.exports = {
                 value: "Don't forget to check the #annoucements channel for more stuff!\n",
                 inline: false
             })
-            
+
         if (message.channel.type === 'DM') {
             message.reply({
                 content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplenext` or `!speedyhelp`.)",

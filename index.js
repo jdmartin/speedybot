@@ -87,7 +87,7 @@ client.on("messageCreate", message => {
   const args = commandBody.split(' ');
   const command = args.shift().toLowerCase();
 
-  //If the command is xzzyz (for stats):
+  //If the command is xyzzy (for stats):
   if (command === 'xyzzy') {
     speedyStats.retrieve(message);
   }

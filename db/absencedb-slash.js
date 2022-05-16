@@ -1,5 +1,7 @@
 require("dotenv").config();
-const {MessageEmbed} = require('discord.js');
+const {
+    MessageEmbed
+} = require('discord.js');
 const sqlite3 = require('better-sqlite3');
 const utils = require("../utils/speedyutils.js");
 const dates = require("../utils/datetools.js");
@@ -24,7 +26,7 @@ class AttendanceTools {
         var absencePrep = absencedb.prepare('INSERT INTO absences(name, discord_name, start_year, start_month, start_day, end_date, comment) VALUES (?,?,?,?,?,?,?)');
         absencePrep.run(nickname, name, sy, sm, sd, end, comment);
     }
-   
+
     addPresent(name, sm, sd) {
         var presentPrep = absencedb.prepare('DELETE FROM absences WHERE (discord_name = ? AND start_month = ? AND start_day = ?)');
         presentPrep.run(name, sm, sd);
@@ -142,7 +144,7 @@ class AttendanceTools {
 
 class DataDisplayTools {
     show(name, choice) {
- 
+
         //Get just the user's absences.
         if (choice === 'mine') {
             var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date >= date('now','localtime') AND discord_name = ? ORDER BY end_date ASC, name");
@@ -159,7 +161,9 @@ class DataDisplayTools {
         const absentEmbed = new MessageEmbed()
             .setColor(0xFFFFFF)
             .setTitle("Upcoming absences")
-            .setFooter({text: "These absences are known to the Infinite Speedyflight. Use this information wisely."})
+            .setFooter({
+                text: "These absences are known to the Infinite Speedyflight. Use this information wisely."
+            })
         absResults.forEach((row) => {
             absentEmbed.addFields({
                 name: row.name,
@@ -183,7 +187,9 @@ class DataDisplayTools {
         const lateEmbed = new MessageEmbed()
             .setColor(0xFFFFFF)
             .setTitle("Upcoming tardiness")
-            .setFooter({text: "This tardiness is known to the Infinite Speedyflight. Use this information wisely."})
+            .setFooter({
+                text: "This tardiness is known to the Infinite Speedyflight. Use this information wisely."
+            })
         lateResults.forEach((row) => {
             lateEmbed.addFields({
                 name: row.name,
@@ -191,7 +197,10 @@ class DataDisplayTools {
 
             })
         });
-        return {absentEmbed, lateEmbed};
+        return {
+            absentEmbed,
+            lateEmbed
+        };
     }
 }
 
