@@ -13,7 +13,8 @@ module.exports = {
         getTheCat();
 
         async function showTheCat(catUrl) {
-            interaction.reply(catUrl);
+            await interaction.deferReply();
+            interaction.editReply(catUrl);
         }
 
         async function getTheCat() {

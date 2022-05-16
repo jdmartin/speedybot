@@ -10,9 +10,12 @@ module.exports = {
             option.setName('raid_name')
             .setDescription('Name of the Raid')
             .setRequired(true)
-            .addChoice('Sepulchre', 'sepulchre')
-            .addChoice('Sanctum', 'sanctum')
-            .addChoice('Nathria', 'nathria')),
+            .addChoices(
+                {name: 'Sepulchre', value: 'sepulchre'},
+                {name: 'Sanctum', value: 'sanctum'},
+                {name: 'Nathria', value: 'nathria'},
+            )
+        ),
 
     async execute(interaction) {
         const Shadowlands =  require('../resources/strats/shadowlands.js');

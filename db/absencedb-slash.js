@@ -1,5 +1,5 @@
 require("dotenv").config();
-const builder = require("@discordjs/builders");
+const {MessageEmbed} = require('discord.js');
 const sqlite3 = require('better-sqlite3');
 const utils = require("../utils/speedyutils.js");
 const dates = require("../utils/datetools.js");
@@ -156,7 +156,7 @@ class DataDisplayTools {
             var absResults = sql.all();
         }
 
-        const absentEmbed = new builder.Embed()
+        const absentEmbed = new MessageEmbed()
             .setColor(0xFFFFFF)
             .setTitle("Upcoming absences")
             .setFooter({text: "These absences are known to the Infinite Speedyflight. Use this information wisely."})
@@ -180,7 +180,7 @@ class DataDisplayTools {
             var lateResults = late_sql.all();
         }
 
-        const lateEmbed = new builder.Embed()
+        const lateEmbed = new MessageEmbed()
             .setColor(0xFFFFFF)
             .setTitle("Upcoming tardiness")
             .setFooter({text: "This tardiness is known to the Infinite Speedyflight. Use this information wisely."})

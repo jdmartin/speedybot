@@ -1,4 +1,4 @@
-const builder = require("@discordjs/builders");
+const {MessageEmbed} = require('discord.js');
 const sqlite3 = require('better-sqlite3');
 const statsdb = new sqlite3(':memory:');
 const utils = require('../utils/speedyutils.js');
@@ -57,7 +57,7 @@ class GetStats {
         var slash_sql = statsdb.prepare('SELECT DISTINCT Name name, Count count, Errors errors FROM slash_commands ORDER BY name');
         var allSlashStats = slash_sql.all();
 
-        const embed = new builder.Embed()
+        const embed = new MessageEmbed()
             .setColor(0xFFFFFF)
             .setTitle("Usage stats since last launch")
             .setFooter({text: "These statistics are a product of the Inifite Speedyflight. Use Wisely."})
@@ -69,7 +69,7 @@ class GetStats {
             })
         });
 
-        const slash_embed = new builder.Embed()
+        const slash_embed = new MessageEmbed()
             .setColor(0xFFFFFF)
             .setTitle("Slash usage stats since last launch")
             .setFooter({text: "These statistics are a product of the Inifite Speedyflight. Use Wisely."})
