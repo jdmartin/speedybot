@@ -2,10 +2,8 @@ module.exports = {
     name: 'next',
     description: 'What are we doing?',
     async execute(message) {
-        const {
-            Embed,
-        } = require("@discordjs/builders");
-        const embed = new Embed()
+        const { MessageEmbed } = require('discord.js');
+        const embed = new MessageEmbed()
             .setAuthor({name: "🐢"})
             .setFooter({text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed..." })
             .setTitle("Evie's Announcements!")

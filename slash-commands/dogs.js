@@ -10,21 +10,29 @@ module.exports = {
             option.setName('breed')
             .setDescription('The dog breed')
             .setRequired(true)
-            .addChoice('cardigan', 'corgi/cardigan')
-            .addChoice('corgi', 'corgi')
-            .addChoice('german shepherd', 'germanshepherd')
-            .addChoice('husky', 'husky')
-            .addChoice('pembroke', 'pembroke')
-            .addChoice('pitbull', 'pitbull')
-            .addChoice('poodle', 'poodle/standard')
-            .addChoice('pug', 'pug')
-            .addChoice('random', 'random')),
+            .addChoices(
+                {name: 'cardigan', value: 'corgi/cardigan'},
+                {name: 'corgi', value: 'corgi'},
+                {name: 'german shepherd', value: 'germanshepherd'},
+                {name: 'husky', value: 'husky'},
+                {name: 'pembroke', value: 'pembroke'},
+                {name: 'pitbull', value: 'pitbull'},
+                {name: 'poodle', value: 'poodle/standard'},
+                {name: 'pug', value: 'pug'},
+                {name: 'random', value: 'random'},
+            )
+        ),
 
     async execute(interaction) {
         const https = require("https");
         let option = interaction.options.get("breed").value;
         //Kick Off
         getTheDog();
+
+        async function showTheDog(dog) {
+            await interaction.deferReply();
+            interaction.editReply(dog);
+        }
 
         async function getTheDog() {
             if (option === 'random') {
@@ -38,7 +46,7 @@ module.exports = {
                         res.on("end", () => {
                             var bodyParsed = JSON.parse(body);
                             let message = bodyParsed.message;
-                            interaction.reply(message);
+                            showTheDog(message);
                         });
                     })
                 })();
@@ -53,7 +61,7 @@ module.exports = {
                         res.on("end", () => {
                             var bodyParsed = JSON.parse(body);
                             let message = bodyParsed.message;
-                            interaction.reply(message);
+                            showTheDog(message);
                         });
                     })
                 })();

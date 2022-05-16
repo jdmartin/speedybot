@@ -13,9 +13,12 @@ module.exports = {
         option.setName("kind")
         .setDescription('how much do you want to know?')
         .setRequired(true)
-        .addChoice('all', 'all')
-        .addChoice('mine', 'mine')
-        .addChoice('today', 'today')),
+        .addChoices(
+            {name: 'all', value: 'all'},
+            {name: 'mine', value: 'mine'},
+            {name: 'today', value: 'today'},
+        )
+    ),
 
     async execute(interaction) {
         const name = interaction.user.username;

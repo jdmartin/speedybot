@@ -18,18 +18,21 @@ module.exports = {
             option.setName('start_month')
             .setDescription('The starting month')
             .setRequired(true)
-            .addChoice('jan', 'January')
-            .addChoice('feb', 'February')
-            .addChoice('mar', 'March')
-            .addChoice('apr', 'April')
-            .addChoice('may', 'May')
-            .addChoice('jun', 'June')
-            .addChoice('jul', 'July')
-            .addChoice('aug', 'August')
-            .addChoice('sep', 'September')
-            .addChoice('oct', 'October')
-            .addChoice('nov', 'November')
-            .addChoice('dec', 'December'))
+            .addChoices(
+                {name: 'jan', value: 'January'},
+                {name: 'feb', value: 'February'},
+                {name: 'mar', value: 'March'},
+                {name: 'apr', value: 'April'},
+                {name: 'may', value: 'May'},
+                {name: 'jun', value: 'June'},
+                {name: 'jul', value: 'July'},
+                {name: 'aug', value: 'August'},
+                {name: 'sep', value: 'September'},
+                {name: 'oct', value: 'October'},
+                {name: 'nov', value: 'November'},
+                {name: 'dec', value: 'December'},
+            )
+        )
         .addIntegerOption(option =>
             option.setName('start_date')
             .setDescription('first day of absence period')
@@ -38,18 +41,21 @@ module.exports = {
             option.setName('end_month')
             .setDescription('The ending month')
             .setRequired(true)
-            .addChoice('jan', 'January')
-            .addChoice('feb', 'February')
-            .addChoice('mar', 'March')
-            .addChoice('apr', 'April')
-            .addChoice('may', 'May')
-            .addChoice('jun', 'June')
-            .addChoice('jul', 'July')
-            .addChoice('aug', 'August')
-            .addChoice('sep', 'September')
-            .addChoice('oct', 'October')
-            .addChoice('nov', 'November')
-            .addChoice('dec', 'December'))
+            .addChoices(
+                {name: 'jan', value: 'January'},
+                {name: 'feb', value: 'February'},
+                {name: 'mar', value: 'March'},
+                {name: 'apr', value: 'April'},
+                {name: 'may', value: 'May'},
+                {name: 'jun', value: 'June'},
+                {name: 'jul', value: 'July'},
+                {name: 'aug', value: 'August'},
+                {name: 'sep', value: 'September'},
+                {name: 'oct', value: 'October'},
+                {name: 'nov', value: 'November'},
+                {name: 'dec', value: 'December'},
+            )
+        )
         .addIntegerOption(option =>
             option.setName('end_date')
             .setDescription('last day of absence period')

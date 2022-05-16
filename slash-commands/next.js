@@ -7,10 +7,8 @@ module.exports = {
         .setName('next')
         .setDescription('What are we doing?'),
     async execute(interaction) {
-        const {
-            Embed
-        } = require("@discordjs/builders");
-        const embed = new Embed()
+        const { MessageEmbed } = require('discord.js');
+        const embed = new MessageEmbed()
             .setTitle("Evie's Announcements!")
             .setColor(0xFFFFFF)
             .setAuthor({name: "🐢"})
