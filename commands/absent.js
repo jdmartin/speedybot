@@ -6,6 +6,11 @@ module.exports = {
 	execute(message, args) {
         const absencedb = require("../db/absencedb.js");
         const absenceDBHelper = new absencedb.AttendanceTools();
-		absenceDBHelper.absent(message, args);
+		if (args[0] == undefined) {
+			message.reply("Sorry, I need a bit more information than that...");
+		}
+		else {
+			absenceDBHelper.absent(message, args);
+		}
 	},
 };
