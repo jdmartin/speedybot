@@ -8,7 +8,7 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
     "helmet": "^5.0.1",
-    "node-cron": "^3.0.0",
+    "node-schedule": "^2.1.0",
     "query-string": "^7.0.1",
     "sqlstring": "^2.3.2"
   }

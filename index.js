@@ -2,7 +2,7 @@
 require("dotenv").config();
 
 //Libraries
-var cron = require('node-cron');
+const schedule = require('node-schedule');
 
 //Load helper files
 const speedydb = require("./db/speedydb.js");
@@ -35,15 +35,19 @@ absence.startup();
 
 //Database Cleanup
 const dbclean = new absencedb.DatabaseCleanup();
-cron.schedule('01 01 00 * * *', () => {
+const job = schedule.scheduleJob('01 01 00 * * ', function(){
   dbclean.cleanAbsences();
+  console.log("Cleaned Absences");
   dbclean.cleanLatecomers();
+  console.log("Cleaned Latecomers");
 });
 
 //Database Vacuuming
-cron.schedule('01 01 03 * * *', () => {
+const job_two = schedule.scheduleJob('01 01 03 * * ', function(){
   dbclean.vacuumDatabases();
+  console.log("Vacuumed Database");
 });
+
 
 //Once that's done, let's move on to main.
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
