@@ -35,7 +35,7 @@ absence.startup();
 
 //Database Cleanup
 const dbclean = new absencedb.DatabaseCleanup();
-const job = schedule.scheduleJob('01 01 00 * * ', function(){
+const job = schedule.scheduleJob('01 01 01 * * * ', function(){
   dbclean.cleanAbsences();
   console.log("Cleaned Absences");
   dbclean.cleanLatecomers();
@@ -43,7 +43,7 @@ const job = schedule.scheduleJob('01 01 00 * * ', function(){
 });
 
 //Database Vacuuming
-const job_two = schedule.scheduleJob('01 01 03 * * ', function(){
+const job_two = schedule.scheduleJob('02 01 03 * * *', function(){
   dbclean.vacuumDatabases();
   console.log("Vacuumed Database");
 });
