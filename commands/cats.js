@@ -5,7 +5,6 @@ module.exports = {
     notes: 'Cats from https://thecatapi.com/',
     execute(message) {
         const https = require("https");
-        const querystring = require('query-string');
         //Kick Off
         getTheCat();
 
@@ -19,7 +18,7 @@ module.exports = {
                 'limit': 1 // only need one
             }
             // convert this obejct to query string 
-            let queryString = querystring.stringify(query_params);
+            let queryString = encodeURIComponent(query_params);
             try {
                 var theCatUrl = 'https://api.thecatapi.com/v1/images/search?api_key=' + process.env.CAT_API_KEY + '&' + queryString;
                 https.get(theCatUrl, res => {
