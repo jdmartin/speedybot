@@ -1,6 +1,6 @@
 require("dotenv").config();
 const {
-    EmbedBuilder
+    ChannelType, EmbedBuilder
 } = require('discord.js');
 const sqlite3 = require('better-sqlite3');
 const utils = require("../utils/speedyutils.js");
@@ -329,7 +329,7 @@ class AttendanceTools {
         var friendlyEnd = dateTools.makeFriendlyDates(end);
         var friendlyEndUndo = format(new Date(end + offset), 'MMM dd');
         //Select the appropriate type of response, and shorten if it's a single day.
-        if (message.channel.type === 'DM') {
+        if (message.channel.type === ChannelType.DM) {
             if (start != end) {
                 message.reply(`Ok, I've marked you ${this_command} from ${friendlyStart} until ${friendlyEnd}.  \n\nTo undo this, type: !${undo_command} ${friendlyStartUndo} ${friendlyEndUndo} `);
             } else {
