@@ -52,10 +52,8 @@ const job_two = schedule.scheduleJob('02 01 03 * * *', function(){
 
 //Once that's done, let's move on to main.
 client.once("ready", () => { // prints "Ready!" to the console once the bot is online
-  client.user.setStatus("online");
-  client.user.setActivity("you. | say /speedy", {
-    type: "LISTENING"
-  });
+  client.user.setActivity('you. | say /speedy', { type: 2 });
+
   console.log('Speedy Standing By!');
 
   //Start the heartbeat
