@@ -1,6 +1,6 @@
 require("dotenv").config();
 const {
-    MessageEmbed
+    EmbedBuilder
 } = require('discord.js');
 const sqlite3 = require('better-sqlite3');
 const utils = require("../utils/speedyutils.js");
@@ -381,7 +381,7 @@ class DataDisplayTools {
             var absResults = sql.all();
         }
 
-        const absentEmbed = new MessageEmbed()
+        const absentEmbed = new EmbedBuilder()
             .setColor(0xFFFFFF)
             .setTitle("Upcoming absences")
             .setFooter({
@@ -407,7 +407,7 @@ class DataDisplayTools {
             var lateResults = late_sql.all();
         }
 
-        const lateEmbed = new MessageEmbed()
+        const lateEmbed = new EmbedBuilder()
             .setColor(0xFFFFFF)
             .setTitle("Upcoming tardiness")
             .setFooter({
