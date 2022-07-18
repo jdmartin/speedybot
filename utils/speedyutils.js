@@ -1,18 +1,36 @@
 require("dotenv").config();
 const fs = require('fs');
-const { Client, Collection, Intents, MessageEmbed} = require("discord.js");
-const myIntents = new Intents();
-myIntents.add(
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_PRESENCES, 
-    Intents.FLAGS.GUILD_MEMBERS, 
-    Intents.FLAGS.GUILD_MESSAGES, 
-    Intents.FLAGS.GUILD_MESSAGE_REACTIONS, 
-    Intents.FLAGS.GUILD_WEBHOOKS, 
-    Intents.FLAGS.DIRECT_MESSAGES,
-    Intents.FLAGS.DIRECT_MESSAGE_TYPING,
-    Intents.FLAGS.DIRECT_MESSAGE_REACTIONS);
-const client = new Client({ intents: myIntents, partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+
+const {
+    Client,
+    Collection,
+    GatewayIntentBits,
+    Partials
+} = require("discord.js");
+
+const myIntents = [
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.DirectMessageReactions,
+    GatewayIntentBits.DirectMessageTyping,
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.GuildWebhooks,
+    GatewayIntentBits.MessageContent
+]
+
+const myPartials = [
+    Partials.Channel,
+    Partials.Message,
+    Partials.Reaction,
+]
+
+const client = new Client({
+    intents: myIntents,
+    partials: myPartials
+});
 
 const commands = [];
 const commandFiles = fs.readdirSync(require('path').resolve(__dirname, '../commands')).filter(file => file.endsWith('.js'));
@@ -40,7 +58,7 @@ class SpeedyTools {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
-      }
+    }
 }
 
 module.exports = {
