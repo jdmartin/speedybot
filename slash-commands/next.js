@@ -2,7 +2,7 @@ const {
     SlashCommandBuilder
 } = require('@discordjs/builders');
 const {
-    MessageEmbed
+    EmbedBuilder
 } = require('discord.js');
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
         .setName('next')
         .setDescription('What are we doing?'),
     async execute(interaction) {
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setTitle("Evie's Announcements!")
             .setColor(0xFFFFFF)
             .setAuthor({
