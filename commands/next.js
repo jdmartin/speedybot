@@ -3,9 +3,9 @@ module.exports = {
     description: 'What are we doing?',
     async execute(message) {
         const {
-            MessageEmbed
+            EmbedBuilder
         } = require('discord.js');
-        const embed = new MessageEmbed()
+        const embed = new EmbedBuilder()
             .setAuthor({
                 name: "🐢"
             })

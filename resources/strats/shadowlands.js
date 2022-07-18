@@ -1,8 +1,8 @@
 const {
-    MessageEmbed
+    EmbedBuilder
 } = require('discord.js');
 
-const sepulchre = new MessageEmbed()
+const sepulchre = new EmbedBuilder()
     .setTitle("Evie's Strats!")
     .setColor(0xFFFFFF)
     .setAuthor({
@@ -22,7 +22,7 @@ const sepulchre = new MessageEmbed()
         value: "[Rygelon](https://discord.com/channels/308622057707536385/308626596623810562/966888525184270406)\n[Lords of Dread](https://discord.com/channels/308622057707536385/308626596623810562/969296305472036944)\n[The Jailer](https://discord.com/channels/308622057707536385/308626596623810562/969316069028286474)",
         inline: true
     })
-const sanctum = new MessageEmbed()
+const sanctum = new EmbedBuilder()
     .setTitle("Evie's Strats!")
     .setColor(0xFFFFFF)
     .setAuthor({
@@ -47,7 +47,7 @@ const sanctum = new MessageEmbed()
         value: "[Dormazain](https://discord.com/channels/308622057707536385/308626596623810562/900823247287902309)\n[Sylvanas Swirlys](https://discord.com/channels/308622057707536385/308626596623810562/893341077585670176)\n\nWant Nathria? Use `!strats nathria`",
         inline: true
     })
-const nathria = new MessageEmbed()
+const nathria = new EmbedBuilder()
     .setTitle("Evie's Strats!")
     .setColor(0xFFFFFF)
     .setAuthor({
