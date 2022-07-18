@@ -1,5 +1,5 @@
 const {
-    MessageEmbed
+    ChannelType, EmbedBuilder
 } = require("discord.js");
 const sqlite3 = require('better-sqlite3');
 const statsdb = new sqlite3(':memory:');
@@ -59,7 +59,7 @@ class GetStats {
         var slash_sql = statsdb.prepare('SELECT DISTINCT Name name, Count count, Errors errors FROM slash_commands ORDER BY name');
         var allSlashStats = slash_sql.all();
 
-        const statsEmbed = new MessageEmbed()
+        const statsEmbed = new EmbedBuilder()
             .setColor(0xFFFFFF)
             .setTitle("Usage stats since last launch")
             .setFooter({
@@ -73,7 +73,7 @@ class GetStats {
             })
         });
 
-        const slash_embed = new MessageEmbed()
+        const slash_embed = new EmbedBuilder()
             .setColor(0xFFFFFF)
             .setTitle("Slash usage stats since last launch")
             .setFooter({
@@ -86,15 +86,15 @@ class GetStats {
                 inline: true
             })
         });
-
-        if (message.channel.type === 'DM') {
+        
+        if (message.channel.type === ChannelType.DM) {
             message.channel.send({
                 embeds: [statsEmbed, slash_embed]
-            });
+            })
         } else {
             message.member.send({
                 embeds: [statsEmbed, slash_embed]
-            });
+            })
         }
     }
 }

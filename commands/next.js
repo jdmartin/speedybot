@@ -1,3 +1,7 @@
+const {
+    ChannelType
+} = require("discord.js");
+
 module.exports = {
     name: 'next',
     description: 'What are we doing?',
@@ -31,16 +35,16 @@ module.exports = {
                 inline: false
             })
 
-        if (message.channel.type === 'DM') {
-            message.reply({
+        if (message.channel.type === ChannelType.DM) {
+            message.channel.send({
                 content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplenext` or `!speedyhelp`.)",
                 embeds: [embed]
-            });
+            })
         } else {
             message.member.send({
                 content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplenext` or `!speedyhelp`.)",
                 embeds: [embed]
-            });
+            })
         }
     }
 };
