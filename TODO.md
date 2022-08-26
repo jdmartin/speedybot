@@ -1,2 +1,2 @@
 - ~~Implement alias system.~~
-- ~~Interactive attendance.~~
+- ~~Interactive attendance. (Ongoing, Aug '22)~~
