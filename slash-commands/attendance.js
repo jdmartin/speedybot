@@ -2,8 +2,14 @@ const {
     SlashCommandBuilder
 } = require('@discordjs/builders');
 
+const dates = require("../utils/datetools.js");
+const dateTools = new dates.dateTools();
+
 const absence = require("../db/absencedb-slash.js");
 const absenceDBHelper = new absence.DataDisplayTools();
+
+const attendanceTools = require("../utils/attendance-utils.js");
+const attendanceHelper = new attendanceTools.attendanceTools();
 
 const utils = require("../utils/speedyutils.js");
 const client = utils.client;
@@ -17,13 +23,14 @@ module.exports = {
         interaction.reply({
             content: "Ok, check your DMs and we'll do this.",
             ephemeral: true
-        })
+        });
+
         const user = client.users.cache.get(interaction.member.user.id);
 
         const name = interaction.user.username;
 
         const DM = await interaction.user.send({
-            content: `This is where the menu embed will go.`
+            content: `Please choose the number that corresponds to what you want to do.\n  \n\t1. Show/Cancel Existing Entries\n\t2. I'll Be Absent On...\n\t3. I'll Be Late On...\n\t4. Quit`
         });
 
         const collector = DM.channel.createMessageCollector({
@@ -31,7 +38,7 @@ module.exports = {
         });
 
         collector.on('collect', m => { //Triggered when the collector is receiving a new message
-            let goodMenuResponses = ['1', '2', 'cancel'];
+            let goodMenuResponses = ['1', '2', '3', '4'];
 
             if (!goodMenuResponses.includes(m.content) && m.author.bot === false) {
                 DM.channel.send({
@@ -43,11 +50,13 @@ module.exports = {
                     embeds: [response.absentEmbed, response.lateEmbed]
                 });
             } else if (m.content == '2') {
+                collector.stop('choice_two');
+            } else if (m.content == '3') {
                 DM.channel.send({
-                    content: "You pressed 2!"
+                    content: "You pressed 3!"
                 });
-            } else if (m.content == 'cancel') {
-                collector.stop();
+            } else if (m.content == '4') {
+                collector.stop('user');
             }
         });
 
@@ -58,9 +67,11 @@ module.exports = {
                 })
             } else if (reason === 'user') {
                 DM.channel.send({
-                    content: `OK, aborting...`
+                    content: `OK, see you later!`
                 });
-            }
+            } else if (reason === 'choice_two') {
+                attendanceHelper.absenceMenuCollection(DM);
+            } 
         })
     }
 }
