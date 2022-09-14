@@ -2,7 +2,7 @@
   "dependencies": {
     "@discordjs/rest": "^1.0.0",
     "better-sqlite3": "^7.4.3",
-    "date-fns": "^2.22.1",
+    "date-fns": "^2.29.3",
     "discord-api-types": "^0.37.0",
     "discord.js": "^14.0.1",
     "dotenv": "^16.0.0",
