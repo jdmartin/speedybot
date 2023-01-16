@@ -14,11 +14,13 @@ module.exports = {
                 {name: 'Sepulchre', value: 'sepulchre'},
                 {name: 'Sanctum', value: 'sanctum'},
                 {name: 'Nathria', value: 'nathria'},
+                {name: 'Vault', value: 'vault'},
             )
         ),
 
     async execute(interaction) {
         const Shadowlands =  require('../resources/strats/shadowlands.js');
+        const Dragonflight = require('../resources/strats/dragonflight.js');
 
         if (interaction.options.getString('raid_name') === 'sanctum') {
             interaction.reply({content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)", embeds: [Shadowlands.sanctum], ephemeral: true});
@@ -26,6 +28,8 @@ module.exports = {
             interaction.reply({content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)", embeds: [Shadowlands.nathria], ephemeral: true});
         } else if (interaction.options.getString('raid_name') === 'sepulchre') {
             interaction.reply({content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)", embeds: [Shadowlands.sepulchre], ephemeral: true});
+        } else if (interaction.options.getString('raid_name') === 'vault') {
+            interaction.reply({content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)", embeds: [Dragonflight.vault], ephemeral: true});
         }
     },
 };
