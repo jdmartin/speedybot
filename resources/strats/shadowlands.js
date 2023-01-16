@@ -22,6 +22,10 @@ const sepulchre = new EmbedBuilder()
         value: "[Rygelon](https://discord.com/channels/308622057707536385/308626596623810562/966888525184270406)\n[Lords of Dread](https://discord.com/channels/308622057707536385/308626596623810562/969296305472036944)\n[The Jailer](https://discord.com/channels/308622057707536385/308626596623810562/969316069028286474)",
         inline: true
     })
+    .addFields({
+        name: "See Also",
+        value: "[Velocity Corkboard](https://velocitycorkboard.com/)"
+    })
 const sanctum = new EmbedBuilder()
     .setTitle("Evie's Strats!")
     .setColor(0xFFFFFF)
@@ -46,6 +50,10 @@ const sanctum = new EmbedBuilder()
         name: "Notes:",
         value: "[Dormazain](https://discord.com/channels/308622057707536385/308626596623810562/900823247287902309)\n[Sylvanas Swirlys](https://discord.com/channels/308622057707536385/308626596623810562/893341077585670176)\n\nWant Nathria? Use `!strats nathria`",
         inline: true
+    })
+    .addFields({
+        name: "See Also",
+        value: "[Velocity Corkboard](https://velocitycorkboard.com/)"
     })
 const nathria = new EmbedBuilder()
     .setTitle("Evie's Strats!")
@@ -76,7 +84,10 @@ const nathria = new EmbedBuilder()
         name: "Heroic",
         value: "[Shriekwing](https://discord.com/channels/308622057707536385/308626596623810562/821981070320861184)\n[Huntsman](https://discord.com/channels/308622057707536385/308626596623810562/821981177593331713)\n[Destroyer](https://discord.com/channels/308622057707536385/308626596623810562/821981301858631680)\n[Darkvein](https://discord.com/channels/308622057707536385/308626596623810562/821981414957514753)\n[Xy'Mox](https://discord.com/channels/308622057707536385/308626596623810562/821981523372539954)"
     })
-
+    .addFields({
+        name: "See Also",
+        value: "[Velocity Corkboard](https://velocitycorkboard.com/)"
+    })
 module.exports = {
     sanctum: sanctum,
     sepulchre: sepulchre,

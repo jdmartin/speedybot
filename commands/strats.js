@@ -5,8 +5,14 @@ module.exports = {
     notes: 'Right now, the only optional names are: nathria and sanctum',
     execute(message, args) {
         const Shadowlands =  require('../resources/strats/shadowlands.js');
+        const Dragonflight = require('../resources/strats/dragonflight.js');
         
         if (!args.length) {
+            message.channel.send({
+                content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
+                embeds: [Dragonflight.vault]
+            });
+        } else if (args[0].toLowerCase() === 'sepulchre') {
             message.channel.send({
                 content: "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
                 embeds: [Shadowlands.sepulchre]
