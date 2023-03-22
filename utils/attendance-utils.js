@@ -2,6 +2,9 @@ const {
     EmbedBuilder
 } = require('discord.js');
 
+const absence = require("../db/absencedb.js");
+const absenceCreateSingle = new absence.AttendanceTools();
+
 class attendanceTools {
 
     absenceResponses = []
@@ -205,10 +208,12 @@ class attendanceTools {
         });
 
         var comment = '';
+        var theMessage = '';
         
         collector.on('collect', m => { //Triggered when the collector is receiving a new message
             if (m.content && m.author.bot === false) {
                 comment = m.content;
+                theMessage = m;
                 collector.stop('validComment');
             }
         });
@@ -216,7 +221,7 @@ class attendanceTools {
         collector.on('end', (collected, reason) => {
             if (reason === 'validComment') {
                 this.absenceResponses.push(comment);  
-                this.absenceRespond(DM);
+                this.absenceProcessSingle(theMessage);
             } else if (reason === 'time') {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
@@ -225,7 +230,14 @@ class attendanceTools {
         });
     }
 
+    absenceProcessSingle(collected) {
+        if (this.absenceResponses[0] === 'single') {
+            absenceCreateSingle.absent(collected, [this.absenceResponses[1], this.absenceResponses[2], this.absenceResponses[3]])
+        }
+    }
+
     absenceRespond(DM) {
+        console.log(this.absenceResponses.toString());
         DM.channel.send({
             content: this.absenceResponses.toString()
         });
