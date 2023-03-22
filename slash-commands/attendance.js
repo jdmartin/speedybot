@@ -30,7 +30,7 @@ module.exports = {
         const name = interaction.user.username;
 
         const DM = await interaction.user.send({
-            content: `Please choose the number that corresponds to what you want to do.\n  \n\t1. Show/Cancel Existing Entries\n\t2. I'll Be Absent On...\n\t3. I'll Be Late On...\n\t4. Quit`
+            content: `Please choose the number that corresponds to what you want to do.\n  \n\t1. Show/Cancel Existing Entries\n\t2. Add an Absence or say you will be Late...\n\t4. Quit`
         });
 
         const collector = DM.channel.createMessageCollector({
@@ -38,7 +38,7 @@ module.exports = {
         });
 
         collector.on('collect', m => { //Triggered when the collector is receiving a new message
-            let goodMenuResponses = ['1', '2', '3', '4'];
+            let goodMenuResponses = ['1', '2', '4'];
 
             if (!goodMenuResponses.includes(m.content) && m.author.bot === false) {
                 DM.channel.send({
@@ -51,10 +51,6 @@ module.exports = {
                 });
             } else if (m.content == '2') {
                 collector.stop('choice_two');
-            } else if (m.content == '3') {
-                DM.channel.send({
-                    content: "You pressed 3!"
-                });
             } else if (m.content == '4') {
                 collector.stop('user');
             }
