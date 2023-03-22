@@ -49,6 +49,7 @@ module.exports = {
                 DM.channel.send({
                     embeds: [response.absentEmbed, response.lateEmbed]
                 });
+                collector.stop('choice_one');
             } else if (m.content == '2') {
                 collector.stop('choice_two');
             } else if (m.content == '4') {
@@ -65,6 +66,8 @@ module.exports = {
                 DM.channel.send({
                     content: `OK, see you later!`
                 });
+            } else if (reason === 'choice_one') {
+                attendanceHelper.chooseOntimeOrPresent(DM);
             } else if (reason === 'choice_two') {
                 attendanceHelper.absenceMenuCollection(DM);
             } 
