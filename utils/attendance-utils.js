@@ -237,7 +237,6 @@ class attendanceTools {
     }
 
     absenceRespond(DM) {
-        console.log(this.absenceResponses.toString());
         DM.channel.send({
             content: this.absenceResponses.toString()
         });
@@ -250,19 +249,19 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: "Ok, so, is this:\n \n\t1. A One-Off?\n\t2. A Range of Dates?\n\t4. Quit"
+            content: "Ok, so, is this:\n \n\t1. Late Just Once?\n\t2. Late A Bunch Of Times?\n\tQ. Quit"
         });
 
         collector.on('collect', m => { //Triggered when the collector is receiving a new message
-            let goodMenuResponses = ['1', '2', '3', '4', 'Q'];
+            let goodMenuResponses = ['1', '2', 'Q'];
 
             if (!goodMenuResponses.includes(m.content.toUpperCase()) && m.author.bot === false) {
                 DM.channel.send({
                     content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
                 });
-            } else if (m.content == '1' || m.content == '3') {
+            } else if (m.content == '1') {
                 collector.stop('single');
-            } else if (m.content == '2' || m.content == '4') {
+            } else if (m.content == '2') {
                 collector.stop('range');
             } else if (m.content.toUpperCase() == 'Q') {
                 collector.stop();
@@ -274,12 +273,11 @@ class attendanceTools {
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
                 })
             } else if (reason === 'single') {
+                this.lateResponses.push('single');
                 this.lateMonthCollection(DM);
             } else if (reason === 'range') {
-                this.lateResponses.push('bar')
-                DM.channel.send({
-                    content: this.lateResponses[0] + " " + this.lateResponses[1]
-                });
+                this.lateResponses.push('range');
+                this.lateMonthCollection(DM);
             } else if (reason === 'user') {
                 DM.channel.send({
                     content: "Ok, see you!"
@@ -294,9 +292,10 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: `Please choose a month, or enter 'Q' to Quit\n${this.monthMenu}`
+            content: `Please choose a month by number, or enter 'Q' to Quit\n${this.monthMenu}`
         });
-        //TODO: Add some end conditions here!
+
+        var tempMonth = '';
         
         collector.on('collect', m => { //Triggered when the collector is receiving a new message
             let goodMenuResponses = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'Q'];
@@ -308,11 +307,110 @@ class attendanceTools {
             } else if (m.content.toUpperCase() === 'Q') {
                 collector.stop();
             } else if (goodMenuResponses.includes(m.content)) {
-                this.lateResponses.push(this.months[m.content])     
+                tempMonth = m.content;
+                collector.stop('validMonth');
+            }
+        });
+
+        collector.on('end', (collected, reason) => {
+            if (reason === 'validMonth') {
+                this.lateResponses.push(this.months[tempMonth]);  
+                this.lateDayCollection(DM);
+            } else if (reason === 'time') {
                 DM.channel.send({
-                    content: this.lateResponses[0]
+                    content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
+                })
+            } else if (reason === 'user') {
+                DM.channel.send({
+                    content: "Ok, see you!"
                 });
             }
+        });
+    }
+
+    lateDayCollection(DM) {
+        const collector = DM.channel.createMessageCollector({
+            time: 30000
+        });
+
+        DM.channel.send({
+            content: `Enter the day you will be absent (ex. 7), or enter 'Q' to Quit\n`
+        });
+        
+        var tempDay = '';
+        
+        collector.on('collect', m => { //Triggered when the collector is receiving a new message
+            let goodMenuResponses = ['01', '1', '02', '2', '03', '3', '04', '4', '05', '5', '06', '6', '07', '7', '08', '8', '09', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', 'Q'];
+
+            if (!goodMenuResponses.includes(m.content) && m.author.bot === false) {
+                DM.channel.send({
+                    content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
+                });
+            } else if (m.content.toUpperCase() === 'Q') {
+                collector.stop();
+            } else if (goodMenuResponses.includes(m.content)) {
+                tempDay = m.content;
+                collector.stop('validDate');
+            }
+
+            collector.on('end', (collected, reason) => {
+                if (reason === 'validDate') {
+                    this.lateResponses.push(tempDay);
+                    this.lateCommentCollection(DM);     
+                } else if (reason === 'time') {
+                    DM.channel.send({
+                        content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
+                    });
+                } else if (reason === 'user') {
+                    DM.channel.send({
+                        content: "Ok, see you!"
+                    });
+                }
+            });
+        });
+    }
+
+    lateCommentCollection(DM) {
+        const collector = DM.channel.createMessageCollector({
+            time: 30000
+        });
+
+        DM.channel.send({
+            content: `Please enter a comment`
+        });
+
+        var comment = '';
+        var theMessage = '';
+        
+        collector.on('collect', m => { //Triggered when the collector is receiving a new message
+            if (m.content && m.author.bot === false) {
+                comment = m.content;
+                theMessage = m;
+                collector.stop('validComment');
+            }
+        });
+
+        collector.on('end', (collected, reason) => {
+            if (reason === 'validComment') {
+                this.lateResponses.push(comment);  
+                this.lateProcessSingle(theMessage);
+            } else if (reason === 'time') {
+                DM.channel.send({
+                    content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
+                })
+            }
+        });
+    }
+
+    lateProcessSingle(collected) {
+        if (this.lateResponses[0] === 'single') {
+            absenceCreateSingle.late(collected, [this.lateResponses[1], this.lateResponses[2], this.lateResponses[3]])
+        }
+    }
+
+    lateRespond(DM) {
+        DM.channel.send({
+            content: this.lateResponses.toString()
         });
     }
 }
