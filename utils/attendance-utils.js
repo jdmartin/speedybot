@@ -602,6 +602,148 @@ class attendanceTools {
             content: this.ontimeResponses.toString()
         });
     }
+
+    presentSingleOrRangeCollection(DM) {
+        const psr_collector = DM.channel.createMessageCollector({
+            time: 30000
+        });
+
+        DM.channel.send({
+            content: "\nOk, so, is this:\n \n\t1. Cancel One Absence?\n\t2. Cancel a Range of Absences?\n\tQ. Quit"
+        });
+
+        psr_collector.on('collect', m => { //Triggered when the collector is receiving a new message
+            let goodMenuResponses = ['1', '2', 'Q'];
+
+            if (!goodMenuResponses.includes(m.content.toUpperCase()) && m.author.bot === false) {
+                DM.channel.send({
+                    content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
+                });
+            } else if (m.content == '1') {
+                psr_collector.stop('single');
+            } else if (m.content == '2') {
+                psr_collector.stop('range');
+            } else if (m.content.toUpperCase() == 'Q') {
+                psr_collector.stop();
+            }
+        });
+        
+        psr_collector.on('end', (collected, reason) => {
+            if (reason === 'time') {
+                DM.channel.send({
+                    content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
+                })
+            } else if (reason === 'single') {
+                this.presentResponses.push('single');
+                this.presentMonthCollection(DM);
+            } else if (reason === 'range') {
+                this.presentResponses.push('range');
+                this.presentMonthCollection(DM);
+            } else if (reason === 'user') {
+                DM.channel.send({
+                    content: "Ok, see you!"
+                });
+            }
+        });
+    }
+
+    presentMonthCollection(DM) {
+        const pmc_collector = DM.channel.createMessageCollector({
+            time: 30000
+        });
+
+        DM.channel.send({
+            content: `Please choose a month by number, or enter 'Q' to Quit\n${this.monthMenu}`
+        });
+
+        var tempMonth = '';
+        
+        pmc_collector.on('collect', m => { //Triggered when the collector is receiving a new message
+            let goodMenuResponses = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'Q'];
+
+            if (!goodMenuResponses.includes(m.content) && m.author.bot === false) {
+                DM.channel.send({
+                    content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
+                });
+            } else if (m.content.toUpperCase() === 'Q') {
+                pmc_collector.stop();
+            } else if (goodMenuResponses.includes(m.content)) {
+                tempMonth = m.content;
+                pmc_collector.stop('validMonth');
+            }
+        });
+
+        pmc_collector.on('end', (collected, reason) => {
+            if (reason === 'validMonth') {
+                this.presentResponses.push(this.months[tempMonth]);  
+                this.presentDayCollection(DM);
+            } else if (reason === 'time') {
+                DM.channel.send({
+                    content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
+                })
+            } else if (reason === 'user') {
+                DM.channel.send({
+                    content: "Ok, see you!"
+                });
+            }
+        });
+    }
+
+    presentDayCollection(DM) {
+        const pdc_collector = DM.channel.createMessageCollector({
+            time: 30000
+        });
+
+        DM.channel.send({
+            content: `Enter the day you will be on-time (ex. 7), or enter 'Q' to Quit\n`
+        });
+        
+        var tempDay = '';
+        var theMessage = '';
+        
+        pdc_collector.on('collect', m => { //Triggered when the collector is receiving a new message
+            let goodMenuResponses = ['01', '1', '02', '2', '03', '3', '04', '4', '05', '5', '06', '6', '07', '7', '08', '8', '09', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', 'Q'];
+
+            if (!goodMenuResponses.includes(m.content) && m.author.bot === false) {
+                DM.channel.send({
+                    content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
+                });
+            } else if (m.content.toUpperCase() === 'Q') {
+                pdc_collector.stop();
+            } else if (goodMenuResponses.includes(m.content)) {
+                tempDay = m.content;
+                theMessage = m;
+                pdc_collector.stop('validDate');
+            }
+
+            pdc_collector.on('end', (collected, reason) => {
+                if (reason === 'validDate') {
+                    this.presentResponses.push(tempDay);
+                    this.presentProcessSingle(theMessage);     
+                } else if (reason === 'time') {
+                    DM.channel.send({
+                        content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
+                    });
+                } else if (reason === 'user') {
+                    DM.channel.send({
+                        content: "Ok, see you!"
+                    });
+                }
+            });
+        });
+    }
+
+    presentProcessSingle(collected) {
+        if (this.presentResponses[0] === 'single') {
+            absenceCreateSingle.present(collected, [this.presentResponses[1], this.presentResponses[2], this.presentResponses[3]])
+        }
+    }
+
+    presentRespond(DM) {
+        DM.channel.send({
+            content: this.presentResponses.toString()
+        });
+    }
 }
 
 module.exports = {
