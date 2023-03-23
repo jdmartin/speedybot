@@ -71,6 +71,6 @@ module.exports = {
             } else if (reason === 'choice_two') {
                 attendanceHelper.absenceMenuCollection(DM);
             } 
-        })
+        });
     }
 }

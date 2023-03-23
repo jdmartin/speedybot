@@ -52,7 +52,7 @@ class attendanceTools {
             } else if (m.content == '2') {
                 absence_collector.stop('two_chosen');
             } else if (m.content.toUpperCase() == 'Q') {
-                absence_collector.stop();
+                absence_collector.stop('user');
             }
         });
 
@@ -61,13 +61,11 @@ class attendanceTools {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
                 })
-            }
-            else if (reason === 'one_chosen') {
+            } else if (reason === 'one_chosen') {
                 this.absenceSingleOrRangeCollection(DM);
             } else if (reason === 'two_chosen') {
                 this.lateSingleOrRangeCollection(DM);
-            }
-            else if (reason === 'user') {
+            } else if (reason === 'user') {
                 DM.channel.send({
                     content: "Ok, see you!"
                 });
@@ -97,14 +95,14 @@ class attendanceTools {
             } else if (m.content == '2') {
                 collector.stop('range');
             } else if (m.content.toUpperCase() == 'Q') {
-                collector.stop();
+                collector.stop('user');
             }
         });
         collector.on('end', (collected, reason) => {
             if (reason === 'time') {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
-                })
+                });
             } else if (reason === 'single') {
                 this.absenceResponses.push('single');
                 this.absenceMonthCollection(DM);
@@ -138,7 +136,7 @@ class attendanceTools {
                     content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
                 });
             } else if (m.content.toUpperCase() === 'Q') {
-                collector.stop();
+                collector.stop('user');
             } else if (goodMenuResponses.includes(m.content)) {
                 tempMonth = m.content;
                 collector.stop('validMonth');
@@ -180,7 +178,7 @@ class attendanceTools {
                     content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
                 });
             } else if (m.content.toUpperCase() === 'Q') {
-                collector.stop();
+                collector.stop('user');
             } else if (goodMenuResponses.includes(m.content)) {
                 tempDay = m.content;
                 this.counter += 1;
@@ -258,12 +256,6 @@ class attendanceTools {
         }
     }
 
-    absenceRespond(DM) {
-        DM.channel.send({
-            content: this.absenceResponses.toString()
-        });
-    }
-
     //// LATE ////
     lateSingleOrRangeCollection(DM) {
         this.counter = 0;
@@ -287,14 +279,14 @@ class attendanceTools {
             } else if (m.content == '2') {
                 collector.stop('range');
             } else if (m.content.toUpperCase() == 'Q') {
-                collector.stop();
+                collector.stop('user');
             }
         });
         collector.on('end', (collected, reason) => {
             if (reason === 'time') {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
-                })
+                });
             } else if (reason === 'single') {
                 this.lateResponses.push('single');
                 this.lateMonthCollection(DM);
@@ -328,7 +320,7 @@ class attendanceTools {
                     content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
                 });
             } else if (m.content.toUpperCase() === 'Q') {
-                collector.stop();
+                collector.stop('user');
             } else if (goodMenuResponses.includes(m.content)) {
                 tempMonth = m.content;
                 collector.stop('validMonth');
@@ -342,7 +334,7 @@ class attendanceTools {
             } else if (reason === 'time') {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
-                })
+                });
             } else if (reason === 'user') {
                 DM.channel.send({
                     content: "Ok, see you!"
@@ -370,7 +362,7 @@ class attendanceTools {
                     content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
                 });
             } else if (m.content.toUpperCase() === 'Q') {
-                collector.stop();
+                collector.stop('user');
             } else if (goodMenuResponses.includes(m.content)) {
                 tempDay = m.content;
                 this.counter += 1;
@@ -448,12 +440,6 @@ class attendanceTools {
         }
     }
 
-    lateRespond(DM) {
-        DM.channel.send({
-            content: this.lateResponses.toString()
-        });
-    }
-
     //// Ontime and Present ////
     chooseOntimeOrPresent(DM) {
         const ontime_collector = DM.channel.createMessageCollector({
@@ -476,7 +462,7 @@ class attendanceTools {
             } else if (m.content == '2') {
                 ontime_collector.stop('two_chosen');
             } else if (m.content.toUpperCase() == 'Q') {
-                ontime_collector.stop();
+                ontime_collector.stop('user');
             }
         });
 
@@ -484,7 +470,7 @@ class attendanceTools {
             if (reason === 'time') {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
-                })
+                });
             }
             else if (reason === 'one_chosen') {
                 this.ontimeSingleOrRangeCollection(DM);
@@ -521,7 +507,7 @@ class attendanceTools {
             } else if (m.content == '2') {
                 osr_collector.stop('range');
             } else if (m.content.toUpperCase() == 'Q') {
-                osr_collector.stop();
+                osr_collector.stop('user');
             }
         });
         
@@ -529,7 +515,7 @@ class attendanceTools {
             if (reason === 'time') {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
-                })
+                });
             } else if (reason === 'single') {
                 this.ontimeResponses.push('single');
                 this.ontimeMonthCollection(DM);
@@ -563,7 +549,7 @@ class attendanceTools {
                     content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
                 });
             } else if (m.content.toUpperCase() === 'Q') {
-                omc_collector.stop();
+                omc_collector.stop('user');
             } else if (goodMenuResponses.includes(m.content)) {
                 tempMonth = m.content;
                 omc_collector.stop('validMonth');
@@ -577,7 +563,7 @@ class attendanceTools {
             } else if (reason === 'time') {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
-                })
+                });
             } else if (reason === 'user') {
                 DM.channel.send({
                     content: "Ok, see you!"
@@ -606,7 +592,7 @@ class attendanceTools {
                     content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
                 });
             } else if (m.content.toUpperCase() === 'Q') {
-                odc_collector.stop();
+                odc_collector.stop('user');
             } else if (goodMenuResponses.includes(m.content)) {
                 tempDay = m.content;
                 this.counter += 1;
@@ -649,12 +635,6 @@ class attendanceTools {
         }
     }
 
-    ontimeRespond(DM) {
-        DM.channel.send({
-            content: this.ontimeResponses.toString()
-        });
-    }
-
     presentSingleOrRangeCollection(DM) {
         this.counter = 0;
         const psr_collector = DM.channel.createMessageCollector({
@@ -677,7 +657,7 @@ class attendanceTools {
             } else if (m.content == '2') {
                 psr_collector.stop('range');
             } else if (m.content.toUpperCase() == 'Q') {
-                psr_collector.stop();
+                psr_collector.stop('user');
             }
         });
         
@@ -762,7 +742,7 @@ class attendanceTools {
                     content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
                 });
             } else if (m.content.toUpperCase() === 'Q') {
-                pdc_collector.stop();
+                pdc_collector.stop('user');
             } else if (goodMenuResponses.includes(m.content)) {
                 tempDay = m.content;
                 this.counter += 1;
@@ -803,12 +783,6 @@ class attendanceTools {
         if (this.presentResponses[0] === 'range') {
             absenceCreate.present(collected, [this.presentResponses[1], this.presentResponses[2], this.presentResponses[3], this.presentResponses[4]])
         }
-    }
-
-    presentRespond(DM) {
-        DM.channel.send({
-            content: this.presentResponses.toString()
-        });
     }
 }
 
