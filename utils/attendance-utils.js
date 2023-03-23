@@ -76,6 +76,7 @@ class attendanceTools {
     }
 
     absenceSingleOrRangeCollection(DM) {
+        this.counter = 0;
         const collector = DM.channel.createMessageCollector({
             time: 30000
         });
@@ -159,7 +160,6 @@ class attendanceTools {
             }
         });
     }
-
 
     absenceDayCollection(DM) {
         const collector = DM.channel.createMessageCollector({
@@ -266,6 +266,7 @@ class attendanceTools {
 
     //// LATE ////
     lateSingleOrRangeCollection(DM) {
+        this.counter = 0;
         const collector = DM.channel.createMessageCollector({
             time: 30000
         });
@@ -372,13 +373,20 @@ class attendanceTools {
                 collector.stop();
             } else if (goodMenuResponses.includes(m.content)) {
                 tempDay = m.content;
+                this.counter += 1;
                 collector.stop('validDate');
             }
 
             collector.on('end', (collected, reason) => {
                 if (reason === 'validDate') {
                     this.lateResponses.push(tempDay);
-                    this.lateCommentCollection(DM);     
+                    if (this.lateResponses[0] === 'single') {
+                        this.lateCommentCollection(DM);     
+                    } else if (this.lateResponses[0] === 'range' && this.counter < 2) {
+                        this.lateMonthCollection(DM);
+                    } else if (this.lateResponses[0] === 'range' && this.counter == 2) {
+                        this.lateCommentCollection(DM);
+                    }     
                 } else if (reason === 'time') {
                     DM.channel.send({
                         content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
@@ -415,7 +423,11 @@ class attendanceTools {
         collector.on('end', (collected, reason) => {
             if (reason === 'validComment') {
                 this.lateResponses.push(comment);  
-                this.lateProcessSingle(theMessage);
+                if (this.lateResponses[0] === 'single') {
+                    this.lateProcessSingle(theMessage);
+                } else if (this.lateResponses[0] === 'range') {
+                    this.lateProcessRange(theMessage);
+                }
             } else if (reason === 'time') {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
@@ -427,6 +439,12 @@ class attendanceTools {
     lateProcessSingle(collected) {
         if (this.lateResponses[0] === 'single') {
             absenceCreate.late(collected, [this.lateResponses[1], this.lateResponses[2], this.lateResponses[3]])
+        }
+    }
+
+    lateProcessRange(collected) {
+        if (this.lateResponses[0] === 'range') {
+            absenceCreate.late(collected, [this.lateResponses[1], this.lateResponses[2], this.lateResponses[3], this.lateResponses[4], this.lateResponses[5]])
         }
     }
 
