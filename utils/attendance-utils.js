@@ -500,6 +500,7 @@ class attendanceTools {
     }
 
     ontimeSingleOrRangeCollection(DM) {
+        this.counter = 0;
         const osr_collector = DM.channel.createMessageCollector({
             time: 30000
         });
@@ -608,6 +609,7 @@ class attendanceTools {
                 odc_collector.stop();
             } else if (goodMenuResponses.includes(m.content)) {
                 tempDay = m.content;
+                this.counter += 1;
                 theMessage = m;
                 odc_collector.stop('validDate');
             }
@@ -615,7 +617,13 @@ class attendanceTools {
             odc_collector.on('end', (collected, reason) => {
                 if (reason === 'validDate') {
                     this.ontimeResponses.push(tempDay);
-                    this.ontimeProcessSingle(theMessage);     
+                    if (this.ontimeResponses[0] === 'single') {
+                        this.ontimeProcessSingle(theMessage);     
+                    } else if (this.ontimeResponses[0] === 'range' && this.counter < 2) {
+                        this.ontimeMonthCollection(theMessage);
+                    } else if (this.ontimeResponses[0] === 'range' && this.counter == 2) {
+                        this.ontimeProcessRange(theMessage);
+                    }     
                 } else if (reason === 'time') {
                     DM.channel.send({
                         content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
@@ -631,7 +639,13 @@ class attendanceTools {
 
     ontimeProcessSingle(collected) {
         if (this.ontimeResponses[0] === 'single') {
-            absenceCreate.ontime(collected, [this.ontimeResponses[1], this.ontimeResponses[2], this.ontimeResponses[3]])
+            absenceCreate.ontime(collected, [this.ontimeResponses[1], this.ontimeResponses[2]])
+        }
+    }
+
+    ontimeProcessRange(collected) {
+        if (this.ontimeResponses[0] === 'range') {
+            absenceCreate.ontime(collected, [this.ontimeResponses[1], this.ontimeResponses[2], this.ontimeResponses[3], this.ontimeResponses[4]])
         }
     }
 
@@ -642,6 +656,7 @@ class attendanceTools {
     }
 
     presentSingleOrRangeCollection(DM) {
+        this.counter = 0;
         const psr_collector = DM.channel.createMessageCollector({
             time: 30000
         });
@@ -750,6 +765,7 @@ class attendanceTools {
                 pdc_collector.stop();
             } else if (goodMenuResponses.includes(m.content)) {
                 tempDay = m.content;
+                this.counter += 1;
                 theMessage = m;
                 pdc_collector.stop('validDate');
             }
@@ -757,7 +773,13 @@ class attendanceTools {
             pdc_collector.on('end', (collected, reason) => {
                 if (reason === 'validDate') {
                     this.presentResponses.push(tempDay);
-                    this.presentProcessSingle(theMessage);     
+                    if (this.presentResponses[0] === 'single') {
+                        this.presentProcessSingle(theMessage);     
+                    } else if (this.presentResponses[0] === 'range' && this.counter < 2) {
+                        this.presentMonthCollection(theMessage);
+                    } else if (this.presentResponses[0] === 'range' && this.counter == 2) {
+                        this.presentProcessRange(theMessage);
+                    }     
                 } else if (reason === 'time') {
                     DM.channel.send({
                         content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
@@ -773,7 +795,13 @@ class attendanceTools {
 
     presentProcessSingle(collected) {
         if (this.presentResponses[0] === 'single') {
-            absenceCreate.present(collected, [this.presentResponses[1], this.presentResponses[2], this.presentResponses[3]])
+            absenceCreate.present(collected, [this.presentResponses[1], this.presentResponses[2]])
+        }
+    }
+
+    presentProcessRange(collected) {
+        if (this.presentResponses[0] === 'range') {
+            absenceCreate.present(collected, [this.presentResponses[1], this.presentResponses[2], this.presentResponses[3], this.presentResponses[4]])
         }
     }
 
