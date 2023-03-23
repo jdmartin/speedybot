@@ -145,6 +145,8 @@ class AttendanceTools {
 class DataDisplayTools {
     show(name, choice) {
 
+        var absentCount = 0;
+        var lateCount = 0;
         //Get just the user's absences.
         if (choice === 'mine') {
             var sql = absencedb.prepare("SELECT * FROM absences WHERE end_date >= date('now','localtime') AND discord_name = ? ORDER BY end_date ASC, name");
@@ -170,6 +172,7 @@ class DataDisplayTools {
                 value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
                 inline: false
             })
+            absentCount += 1;
         });
 
         //Get all tardiness from today and later.
@@ -194,12 +197,14 @@ class DataDisplayTools {
             lateEmbed.addFields({
                 name: row.name,
                 value: "Date: " + dateTools.makeFriendlyDates(row.start_date) + "\nComments: " + row.comment,
-
             })
+            lateCount += 1;
         });
         return {
             absentEmbed,
-            lateEmbed
+            lateEmbed,
+            absentCount,
+            lateCount
         };
     }
 }

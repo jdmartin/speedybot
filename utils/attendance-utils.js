@@ -37,7 +37,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: "\n \nWhat would you like to do?\n \n\t1. Add an Absence \n\t2. Say I'll Be Late\n\tQ. Quit"
+            content: "\n \nWhat would you like to do?\n \n\t1. Add an **Absence** \n\t2. Say I'll Be **Late**\n\tQ. **Quit**"
         });
 
         absence_collector.on('collect', m => { //Triggered when the collector is receiving a new message
@@ -81,7 +81,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: "\nOk, so, is this:\n \n\t1. A Single Absence?\n\t2. A Range of Absences?\n\tQ. Quit"
+            content: "\nOk, so, is this:\n \n\t1. A **Single** Absence?\n\t2. A **Range** of Absences?\n\tQ. **Quit**"
         });
 
         collector.on('collect', m => { //Triggered when the collector is receiving a new message
@@ -124,7 +124,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: `Please choose a month by number, or enter 'Q' to Quit\n${this.monthMenu}`
+            content: `Please choose a month by **number**, or enter 'Q' to **Quit**\n${this.monthMenu}`
         });
 
         var tempMonth = '';
@@ -166,7 +166,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: `Enter the day you will be absent (ex. 7), or enter 'Q' to Quit\n`
+            content: `Enter the **day** you will be absent (ex. 7), or enter 'Q' to **Quit**\n`
         });
         
         var tempDay = '';
@@ -266,7 +266,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: "\nOk, so, is this:\n \n\t1. Late Just Once?\n\t2. Late A Bunch Of Times?\n\tQ. Quit"
+            content: "\nOk, so, is this:\n \n\t1. Late Just **Once**?\n\t2. Late A **Bunch Of Times**?\n\tQ. **Quit**"
         });
 
         collector.on('collect', m => { //Triggered when the collector is receiving a new message
@@ -309,7 +309,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: `Please choose a month by number, or enter 'Q' to Quit\n${this.monthMenu}`
+            content: `Please choose a month by **number**, or enter 'Q' to **Quit**\n${this.monthMenu}`
         });
 
         var tempMonth = '';
@@ -351,7 +351,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: `Enter the day you will be absent (ex. 7), or enter 'Q' to Quit\n`
+            content: `Enter the **day** you will be absent (ex. 7), or enter 'Q' to **Quit**\n`
         });
         
         var tempDay = '';
@@ -449,7 +449,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: "\n \nWhat would you like to do?\n \n\t1. Say I'll Be On-Time \n\t2. Say I'll Be Present\n\tQ. Quit"
+            content: "\n \nWhat would you like to do?\n \n\t1. Say I'll Be **On-Time** \n\t2. Say I'll Be **Present**\n\tQ. **Quit**"
         });
 
         ontime_collector.on('collect', m => { //Triggered when the collector is receiving a new message
@@ -495,7 +495,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: "\nOk, so, is this:\n \n\t1. On-time Just Once?\n\t2. On-time A Bunch Of Times?\n\tQ. Quit"
+            content: "\nOk, so, is this:\n \n\t1. On-time Just **Once**?\n\t2. On-time A **Bunch Of Times**?\n\tQ. **Quit**"
         });
 
         osr_collector.on('collect', m => { //Triggered when the collector is receiving a new message
@@ -539,7 +539,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: `Please choose a month by number, or enter 'Q' to Quit\n${this.monthMenu}`
+            content: `Please choose a month by **number**, or enter 'Q' to **Quit**\n${this.monthMenu}`
         });
 
         var tempMonth = '';
@@ -581,7 +581,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: `Enter the day you will be on-time (ex. 7), or enter 'Q' to Quit\n`
+            content: `Enter the **day** you will be on-time (ex. 7), or enter 'Q' to **Quit**\n`
         });
         
         var tempDay = '';
@@ -646,7 +646,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: "\nOk, so, is this:\n \n\t1. Cancel One Absence?\n\t2. Cancel a Range of Absences?\n\tQ. Quit"
+            content: "\nOk, so, is this:\n \n\t1. Cancel **One Absence**?\n\t2. Cancel a **Range of Absences**?\n\tQ. **Quit**"
         });
 
         psr_collector.on('collect', m => { //Triggered when the collector is receiving a new message
@@ -690,7 +690,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: `Please choose a month by number, or enter 'Q' to Quit\n${this.monthMenu}`
+            content: `Please choose a month by **number**, or enter 'Q' to **Quit**\n${this.monthMenu}`
         });
 
         var tempMonth = '';
@@ -732,7 +732,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: `Enter the day you will be on-time (ex. 7), or enter 'Q' to Quit\n`
+            content: `Enter the **day** you will be on-time (ex. 7), or enter 'Q' to **Quit**\n`
         });
         
         var tempDay = '';
@@ -787,6 +787,13 @@ class attendanceTools {
         if (this.presentResponses[0] === 'range') {
             absenceCreate.present(collected, [this.presentResponses[1], this.presentResponses[2], this.presentResponses[3], this.presentResponses[4]])
         }
+    }
+
+    //// Utils ////
+    noAbsencesOrLateFound(DM) {
+        DM.channel.send({
+            content: "Nothing to cancel!  See you later! ~ 🐢"
+        });
     }
 }
 

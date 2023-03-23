@@ -30,29 +30,31 @@ module.exports = {
         const name = interaction.user.username;
 
         const DM = await interaction.user.send({
-            content: `Please choose the number that corresponds to what you want to do.\n  \n\t1. Show/Cancel Existing Entries\n\t2. Add an Absence or say you will be Late...\n\t4. Quit`
+            content: `Please choose the number that corresponds to what you want to do.\n  \n\t1. **Show/Cancel** Existing Entries\n\t2. Say You'll Be **Absent** or **Late**...\n\tQ. **Quit**`
         });
 
         const collector = DM.channel.createMessageCollector({
             time: 30000
         });
 
-        collector.on('collect', m => { //Triggered when the collector is receiving a new message
-            let goodMenuResponses = ['1', '2', '4'];
+        var response = '';
 
-            if (!goodMenuResponses.includes(m.content) && m.author.bot === false) {
+        collector.on('collect', m => { //Triggered when the collector is receiving a new message
+            let goodMenuResponses = ['1', '2', 'Q'];
+
+            if (!goodMenuResponses.includes(m.content.toUpperCase()) && m.author.bot === false) {
                 DM.channel.send({
                     content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`
                 });
             } else if (m.content == '1') {
-                let response = absenceDBHelper.show(name, 'mine');
+                response = absenceDBHelper.show(name, 'mine');
                 DM.channel.send({
                     embeds: [response.absentEmbed, response.lateEmbed]
                 });
                 collector.stop('choice_one');
             } else if (m.content == '2') {
                 collector.stop('choice_two');
-            } else if (m.content == '4') {
+            } else if (m.content.toUpperCase() == 'Q') {
                 collector.stop('user');
             }
         });
@@ -67,7 +69,12 @@ module.exports = {
                     content: `OK, see you later!`
                 });
             } else if (reason === 'choice_one') {
-                attendanceHelper.chooseOntimeOrPresent(DM);
+                if ((response.absentCount || response.lateCount) > 0) {
+                    attendanceHelper.chooseOntimeOrPresent(DM);
+                }
+                else {
+                    attendanceHelper.noAbsencesOrLateFound(DM);
+                }
             } else if (reason === 'choice_two') {
                 attendanceHelper.absenceMenuCollection(DM);
             } 
