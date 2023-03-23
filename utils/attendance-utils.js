@@ -75,6 +75,7 @@ class attendanceTools {
 
     absenceSingleOrRangeCollection(DM) {
         this.counter = 0;
+        this.absenceResponses = [];
         const collector = DM.channel.createMessageCollector({
             time: 30000
         });
@@ -259,6 +260,7 @@ class attendanceTools {
     //// LATE ////
     lateSingleOrRangeCollection(DM) {
         this.counter = 0;
+        this.lateResponses = [];
         const collector = DM.channel.createMessageCollector({
             time: 30000
         });
@@ -487,6 +489,7 @@ class attendanceTools {
 
     ontimeSingleOrRangeCollection(DM) {
         this.counter = 0;
+        this.ontimeResponses = [];
         const osr_collector = DM.channel.createMessageCollector({
             time: 30000
         });
@@ -637,6 +640,7 @@ class attendanceTools {
 
     presentSingleOrRangeCollection(DM) {
         this.counter = 0;
+        this.presentResponses = [];
         const psr_collector = DM.channel.createMessageCollector({
             time: 30000
         });
