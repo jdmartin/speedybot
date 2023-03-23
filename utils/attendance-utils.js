@@ -142,7 +142,7 @@ class attendanceTools {
                 if (m.content.toUpperCase() === "Q") {
                     amc_collector.stop("user");
                 } else if (
-                    this.goodMonthResponses.includes(m.content.toUpperCase())
+                    this.goodMenuResponses.includes(m.content.toUpperCase())
                 ) {
                     tempMonth = m.content;
                     amc_collector.stop("validMonth");
