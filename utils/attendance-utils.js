@@ -3,14 +3,16 @@ const {
 } = require('discord.js');
 
 const absence = require("../db/absencedb.js");
-const absenceCreateSingle = new absence.AttendanceTools();
+const absenceCreate = new absence.AttendanceTools();
 
 class attendanceTools {
 
-    absenceResponses = []
-    lateResponses = []
-    ontimeResponses = []
-    presentResponses = []
+    absenceResponses = [];
+    lateResponses = [];
+    ontimeResponses = [];
+    presentResponses = [];
+
+    counter = 0;
 
     months = {
         "1": 'January',
@@ -158,6 +160,7 @@ class attendanceTools {
         });
     }
 
+
     absenceDayCollection(DM) {
         const collector = DM.channel.createMessageCollector({
             time: 30000
@@ -180,13 +183,20 @@ class attendanceTools {
                 collector.stop();
             } else if (goodMenuResponses.includes(m.content)) {
                 tempDay = m.content;
+                this.counter += 1;
                 collector.stop('validDate');
             }
 
             collector.on('end', (collected, reason) => {
                 if (reason === 'validDate') {
                     this.absenceResponses.push(tempDay);
-                    this.absenceCommentCollection(DM);     
+                    if (this.absenceResponses[0] === 'single') {
+                        this.absenceCommentCollection(DM);     
+                    } else if (this.absenceResponses[0] === 'range' && this.counter < 2) {
+                        this.absenceMonthCollection(DM);
+                    } else if (this.absenceResponses[0] === 'range' && this.counter == 2) {
+                        this.absenceCommentCollection(DM);
+                    }
                 } else if (reason === 'time') {
                     DM.channel.send({
                         content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
@@ -222,8 +232,12 @@ class attendanceTools {
 
         collector.on('end', (collected, reason) => {
             if (reason === 'validComment') {
-                this.absenceResponses.push(comment);  
-                this.absenceProcessSingle(theMessage);
+                this.absenceResponses.push(comment);
+                if (this.absenceResponses[0] === 'single') {
+                    this.absenceProcessSingle(theMessage);
+                } else if (this.absenceResponses[0] === 'range') {
+                    this.absenceProcessRange(theMessage);
+                }
             } else if (reason === 'time') {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`
@@ -234,7 +248,13 @@ class attendanceTools {
 
     absenceProcessSingle(collected) {
         if (this.absenceResponses[0] === 'single') {
-            absenceCreateSingle.absent(collected, [this.absenceResponses[1], this.absenceResponses[2], this.absenceResponses[3]])
+            absenceCreate.absent(collected, [this.absenceResponses[1], this.absenceResponses[2], this.absenceResponses[3]])
+        }
+    }
+
+    absenceProcessRange(collected) {
+        if (this.absenceResponses[0] === 'range') {
+            absenceCreate.absent(collected, [this.absenceResponses[1], this.absenceResponses[2], this.absenceResponses[3], this.absenceResponses[4], this.absenceResponses[5]])
         }
     }
 
@@ -406,7 +426,7 @@ class attendanceTools {
 
     lateProcessSingle(collected) {
         if (this.lateResponses[0] === 'single') {
-            absenceCreateSingle.late(collected, [this.lateResponses[1], this.lateResponses[2], this.lateResponses[3]])
+            absenceCreate.late(collected, [this.lateResponses[1], this.lateResponses[2], this.lateResponses[3]])
         }
     }
 
@@ -593,7 +613,7 @@ class attendanceTools {
 
     ontimeProcessSingle(collected) {
         if (this.ontimeResponses[0] === 'single') {
-            absenceCreateSingle.ontime(collected, [this.ontimeResponses[1], this.ontimeResponses[2], this.ontimeResponses[3]])
+            absenceCreate.ontime(collected, [this.ontimeResponses[1], this.ontimeResponses[2], this.ontimeResponses[3]])
         }
     }
 
@@ -735,7 +755,7 @@ class attendanceTools {
 
     presentProcessSingle(collected) {
         if (this.presentResponses[0] === 'single') {
-            absenceCreateSingle.present(collected, [this.presentResponses[1], this.presentResponses[2], this.presentResponses[3]])
+            absenceCreate.present(collected, [this.presentResponses[1], this.presentResponses[2], this.presentResponses[3]])
         }
     }
 
