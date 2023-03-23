@@ -7,6 +7,7 @@ class attendanceTools {
     Responses = [];
     counter = 0;
     chosenAction = "";
+    bypassList = ["ontime", "present"];
 
     // prettier-ignore
     goodDayResponses = [
@@ -86,8 +87,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content:
-                "\nOk, so, is this:\n \n\t1. A **Single** Date?\n\t2. A **Range** of Dates?\n\tQ. **Quit**",
+            content: "\nOk, so, is this:\n \n\t1. A **Single** Date?\n\t2. A **Range** of Dates?\n\tQ. **Quit**",
         });
 
         asr_collector.on("collect", (m) => {
@@ -139,9 +139,7 @@ class attendanceTools {
             if (m.author.bot === false) {
                 if (m.content.toUpperCase() === "Q") {
                     amc_collector.stop("user");
-                } else if (
-                    this.goodMenuResponses.includes(m.content.toUpperCase())
-                ) {
+                } else if (this.goodMenuResponses.includes(m.content.toUpperCase())) {
                     tempMonth = m.content;
                     amc_collector.stop("validMonth");
                 } else {
@@ -185,9 +183,7 @@ class attendanceTools {
             if (m.author.bot === false) {
                 if (m.content.toUpperCase() === "Q") {
                     adc_collector.stop("user");
-                } else if (
-                    this.goodDayResponses.includes(m.content.toUpperCase())
-                ) {
+                } else if (this.goodDayResponses.includes(m.content.toUpperCase())) {
                     tempDay = m.content;
                     theMessage = m;
                     this.counter += 1;
@@ -201,27 +197,15 @@ class attendanceTools {
                 if (reason === "validDate") {
                     this.Responses.push(tempDay);
                     if (this.Responses[0] === "single") {
-                        if (
-                            this.chosenAction === "ontime" ||
-                            this.chosenAction === "present"
-                        ) {
+                        if (this.bypassList.includes(this.chosenAction)) {
                             this.absenceProcessSingle(theMessage);
                         } else {
                             this.absenceCommentCollection(DM);
                         }
-                    } else if (
-                        this.Responses[0] === "range" &&
-                        this.counter < 2
-                    ) {
+                    } else if (this.Responses[0] === "range" && this.counter < 2) {
                         this.absenceMonthCollection(DM);
-                    } else if (
-                        this.Responses[0] === "range" &&
-                        this.counter == 2
-                    ) {
-                        if (
-                            this.chosenAction === "present" ||
-                            this.chosenAction === "ontime"
-                        ) {
+                    } else if (this.Responses[0] === "range" && this.counter == 2) {
+                        if (this.bypassList.includes(this.chosenAction)) {
                             if (this.Responses[0] === "single") {
                                 this.absenceProcessSingle(theMessage);
                             } else if (this.Responses[0] === "range") {
@@ -285,11 +269,7 @@ class attendanceTools {
 
     absenceProcessSingle(collected) {
         if (this.Responses[0] === "single") {
-            let responceList = [
-                this.Responses[1],
-                this.Responses[2],
-                this.Responses[3],
-            ];
+            let responceList = [this.Responses[1], this.Responses[2], this.Responses[3]];
 
             if (this.chosenAction === "absent") {
                 absenceCreate.absent(collected, responceList);
