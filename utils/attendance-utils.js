@@ -269,16 +269,20 @@ class attendanceTools {
         if (this.Responses[0] === "single") {
             let responceList = [this.Responses[1], this.Responses[2], this.Responses[3]];
 
-            if (this.chosenAction === "absent") {
-                absenceCreate.absent(collected, responceList);
-            } else if (this.chosenAction === "late") {
-                absenceCreate.late(collected, responceList);
-            } else if (this.chosenAction === "ontime") {
-                absenceCreate.ontime(collected, responceList);
-            } else if (this.chosenAction === "present") {
-                absenceCreate.present(collected, responceList);
-            }
-            this.askIfSomethingElse(DM, name);
+            const doTheThing = async () => {
+                if (this.chosenAction === "absent") {
+                    absenceCreate.absent(collected, responceList);
+                } else if (this.chosenAction === "late") {
+                    absenceCreate.late(collected, responceList);
+                } else if (this.chosenAction === "ontime") {
+                    absenceCreate.ontime(collected, responceList);
+                } else if (this.chosenAction === "present") {
+                    absenceCreate.present(collected, responceList);
+                }
+            };
+            doTheThing().then(() => {
+                this.askIfSomethingElse(DM, name);
+            });
         }
     }
 
@@ -292,16 +296,20 @@ class attendanceTools {
                 this.Responses[5],
             ];
 
-            if (this.chosenAction === "absent") {
-                absenceCreate.absent(collected, responceList);
-            } else if (this.chosenAction === "late") {
-                absenceCreate.late(collected, responceList);
-            } else if (this.chosenAction === "ontime") {
-                absenceCreate.ontime(collected, responceList);
-            } else if (this.chosenAction === "present") {
-                absenceCreate.present(collected, responceList);
-            }
-            this.askIfSomethingElse(DM, name);
+            const doTheThing = async () => {
+                if (this.chosenAction === "absent") {
+                    absenceCreate.absent(collected, responceList);
+                } else if (this.chosenAction === "late") {
+                    absenceCreate.late(collected, responceList);
+                } else if (this.chosenAction === "ontime") {
+                    absenceCreate.ontime(collected, responceList);
+                } else if (this.chosenAction === "present") {
+                    absenceCreate.present(collected, responceList);
+                }
+            };
+            doTheThing().then(() => {
+                this.askIfSomethingElse(DM, name);
+            });
         }
     }
 
@@ -427,7 +435,7 @@ class attendanceTools {
                     this.noAbsencesOrLateFound(DM, name);
                 }
             } else if (reason === "two") {
-                this.absenceMenuCollection(DM);
+                this.absenceMenuCollection(DM, name);
             } else if (reason === "time") {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`,
