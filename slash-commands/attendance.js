@@ -13,9 +13,7 @@ const utils = require("../utils/speedyutils.js");
 const client = utils.client;
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName("attendance")
-        .setDescription("Manage your raid attendance!"),
+    data: new SlashCommandBuilder().setName("attendance").setDescription("Manage your raid attendance!"),
 
     async execute(interaction) {
         interaction.reply({
