@@ -210,11 +210,7 @@ class attendanceTools {
                         this.absenceMonthCollection(DM);
                     } else if (this.Responses[0] === "range" && this.counter == 2) {
                         if (this.bypassList.includes(this.chosenAction)) {
-                            if (this.Responses[0] === "single") {
-                                this.absenceProcessSingle(theMessage, DM);
-                            } else if (this.Responses[0] === "range") {
-                                this.absenceProcessRange(theMessage, DM);
-                            }
+                            this.absenceProcessRange(theMessage, DM);
                         } else {
                             this.absenceCommentCollection(DM);
                         }
