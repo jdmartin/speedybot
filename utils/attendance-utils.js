@@ -10,7 +10,6 @@ class attendanceTools {
     counter = 0;
     chosenAction = "";
     bypassList = ["ontime", "present"];
-    name = "";
 
     // prettier-ignore
     goodDayResponses = [
@@ -41,7 +40,6 @@ class attendanceTools {
 
     absenceMenuCollection(DM, name) {
         this.chosenAction = "";
-        this.name = name;
         const absence_collector = DM.channel.createMessageCollector({
             time: 30000,
         });
@@ -74,7 +72,7 @@ class attendanceTools {
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`,
                 });
             } else if (reason === "one_chosen" || reason === "two_chosen") {
-                this.absenceSingleOrRangeCollection(DM);
+                this.absenceSingleOrRangeCollection(DM, name);
             } else if (reason === "user") {
                 DM.channel.send({
                     content: "Ok, see you!",
@@ -83,7 +81,7 @@ class attendanceTools {
         });
     }
 
-    absenceSingleOrRangeCollection(DM) {
+    absenceSingleOrRangeCollection(DM, name) {
         this.counter = 0;
         this.Responses = [];
         const asr_collector = DM.channel.createMessageCollector({
@@ -115,10 +113,10 @@ class attendanceTools {
                 });
             } else if (reason === "single") {
                 this.Responses.push("single");
-                this.absenceMonthCollection(DM);
+                this.absenceMonthCollection(DM, name);
             } else if (reason === "range") {
                 this.Responses.push("range");
-                this.absenceMonthCollection(DM);
+                this.absenceMonthCollection(DM, name);
             } else if (reason === "user") {
                 DM.channel.send({
                     content: "Ok, see you!",
@@ -127,7 +125,7 @@ class attendanceTools {
         });
     }
 
-    absenceMonthCollection(DM) {
+    absenceMonthCollection(DM, name) {
         const amc_collector = DM.channel.createMessageCollector({
             time: 30000,
         });
@@ -155,7 +153,7 @@ class attendanceTools {
         amc_collector.on("end", (collected, reason) => {
             if (reason === "validMonth") {
                 this.Responses.push(this.months[tempMonth]);
-                this.absenceDayCollection(DM);
+                this.absenceDayCollection(DM, name);
             } else if (reason === "time") {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`,
@@ -165,12 +163,12 @@ class attendanceTools {
                     content: "Ok, see you!",
                 });
             } else if (reason === "error") {
-                this.absenceMonthCollection(DM);
+                this.absenceMonthCollection(DM, name);
             }
         });
     }
 
-    absenceDayCollection(DM) {
+    absenceDayCollection(DM, name) {
         const adc_collector = DM.channel.createMessageCollector({
             time: 30000,
         });
@@ -202,17 +200,17 @@ class attendanceTools {
                     this.Responses.push(tempDay);
                     if (this.Responses[0] === "single") {
                         if (this.bypassList.includes(this.chosenAction)) {
-                            this.absenceProcessSingle(theMessage, DM);
+                            this.absenceProcessSingle(theMessage, DM, name);
                         } else {
-                            this.absenceCommentCollection(DM);
+                            this.absenceCommentCollection(DM, name);
                         }
                     } else if (this.Responses[0] === "range" && this.counter < 2) {
-                        this.absenceMonthCollection(DM);
+                        this.absenceMonthCollection(DM, name);
                     } else if (this.Responses[0] === "range" && this.counter == 2) {
                         if (this.bypassList.includes(this.chosenAction)) {
-                            this.absenceProcessRange(theMessage, DM);
+                            this.absenceProcessRange(theMessage, DM, name);
                         } else {
-                            this.absenceCommentCollection(DM);
+                            this.absenceCommentCollection(DM, name);
                         }
                     }
                 } else if (reason === "time") {
@@ -224,13 +222,13 @@ class attendanceTools {
                         content: "Ok, see you!",
                     });
                 } else if (reason === "error") {
-                    this.absenceDayCollection(DM);
+                    this.absenceDayCollection(DM, name);
                 }
             });
         });
     }
 
-    absenceCommentCollection(DM) {
+    absenceCommentCollection(DM, name) {
         const acc_collector = DM.channel.createMessageCollector({
             time: 30000,
         });
@@ -255,9 +253,9 @@ class attendanceTools {
             if (reason === "validComment") {
                 this.Responses.push(comment);
                 if (this.Responses[0] === "single") {
-                    this.absenceProcessSingle(theMessage, DM);
+                    this.absenceProcessSingle(theMessage, DM, name);
                 } else if (this.Responses[0] === "range") {
-                    this.absenceProcessRange(theMessage, DM);
+                    this.absenceProcessRange(theMessage, DM, name);
                 }
             } else if (reason === "time") {
                 DM.channel.send({
@@ -267,7 +265,7 @@ class attendanceTools {
         });
     }
 
-    absenceProcessSingle(collected, DM) {
+    absenceProcessSingle(collected, DM, name) {
         if (this.Responses[0] === "single") {
             let responceList = [this.Responses[1], this.Responses[2], this.Responses[3]];
 
@@ -280,11 +278,11 @@ class attendanceTools {
             } else if (this.chosenAction === "present") {
                 absenceCreate.present(collected, responceList);
             }
-            this.askIfSomethingElse(DM);
+            this.askIfSomethingElse(DM, name);
         }
     }
 
-    absenceProcessRange(collected, DM) {
+    absenceProcessRange(collected, DM, name) {
         if (this.Responses[0] === "range") {
             let responceList = [
                 this.Responses[1],
@@ -303,14 +301,13 @@ class attendanceTools {
             } else if (this.chosenAction === "present") {
                 absenceCreate.present(collected, responceList);
             }
-            this.askIfSomethingElse(DM);
+            this.askIfSomethingElse(DM, name);
         }
     }
 
     //// Ontime and Present ////
     chooseOntimeOrPresent(DM, name) {
         this.chosenAction = "";
-        this.name = name;
         const ontime_collector = DM.channel.createMessageCollector({
             time: 30000,
         });
@@ -343,7 +340,7 @@ class attendanceTools {
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`,
                 });
             } else if (reason === "one_chosen" || reason === "two_chosen") {
-                this.absenceSingleOrRangeCollection(DM);
+                this.absenceSingleOrRangeCollection(DM, name);
             } else if (reason === "user") {
                 DM.channel.send({
                     content: "Ok, see you!",
@@ -354,14 +351,13 @@ class attendanceTools {
 
     //// Utils ////
     noAbsencesOrLateFound(DM, name) {
-        this.name = name;
         DM.channel.send({
             content: "Nothing to cancel! ~ 🐢",
         });
-        this.askIfSomethingElse(DM);
+        this.askIfSomethingElse(DM, name);
     }
 
-    askIfSomethingElse(DM) {
+    askIfSomethingElse(DM, name) {
         const otherwise_collector = DM.channel.createMessageCollector({
             time: 30000,
         });
@@ -388,7 +384,7 @@ class attendanceTools {
                     content:
                         "Please choose the number that corresponds to what you want to do.\n  \n\t1. **Show/Cancel** Existing Entries\n\t2. Say You'll Be **Absent** or **Late**...\n\tQ. **Quit**",
                 });
-                this.handleSomethingElse(DM);
+                this.handleSomethingElse(DM, name);
             } else if (reason === "no") {
                 DM.channel.send({
                     content: "Ok, see you!",
@@ -401,7 +397,7 @@ class attendanceTools {
         });
     }
 
-    handleSomethingElse(DM) {
+    handleSomethingElse(DM, name) {
         var response = "";
         const otherwise_yes_collector = DM.channel.createMessageCollector({
             time: 30000,
@@ -421,14 +417,14 @@ class attendanceTools {
 
         otherwise_yes_collector.on("end", (collected, reason) => {
             if (reason === "one") {
-                response = absenceDBHelper.show(this.name, "mine");
+                response = absenceDBHelper.show(name, "mine");
                 DM.channel.send({
                     embeds: [response.absentEmbed, response.lateEmbed],
                 });
                 if ((response.absentCount || response.lateCount) > 0) {
-                    this.chooseOntimeOrPresent(DM);
+                    this.chooseOntimeOrPresent(DM, name);
                 } else {
-                    this.noAbsencesOrLateFound(DM);
+                    this.noAbsencesOrLateFound(DM, name);
                 }
             } else if (reason === "two") {
                 this.absenceMenuCollection(DM);

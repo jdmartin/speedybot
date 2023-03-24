@@ -69,12 +69,12 @@ module.exports = {
                 });
             } else if (reason === "choice_one") {
                 if ((response.absentCount || response.lateCount) > 0) {
-                    attendanceHelper.chooseOntimeOrPresent(DM);
+                    attendanceHelper.chooseOntimeOrPresent(DM, name);
                 } else {
-                    attendanceHelper.noAbsencesOrLateFound(DM);
+                    attendanceHelper.noAbsencesOrLateFound(DM, name);
                 }
             } else if (reason === "choice_two") {
-                attendanceHelper.absenceMenuCollection(DM);
+                attendanceHelper.absenceMenuCollection(DM, name);
             }
         });
     },
