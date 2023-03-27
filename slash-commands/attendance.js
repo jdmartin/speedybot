@@ -45,7 +45,7 @@ module.exports = {
                         content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`,
                     });
                 } else if (m.content == "1") {
-                    response = absenceDBHelper.show(name, "mine");
+                    response = absenceDBHelper.show(name, "mine", "short");
                     DM.channel.send({
                         embeds: [response.absentEmbed, response.lateEmbed],
                     });
