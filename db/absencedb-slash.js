@@ -204,7 +204,7 @@ class DataDisplayTools {
             absResults.forEach((row) => {
                 absentEmbed.addFields({
                     name: row.name,
-                    value: "Date: " + dateTools.makeFriendlyDates(row.end_date),
+                    value: dateTools.makeFriendlyDates(row.end_date),
                     inline: false,
                 });
                 absentCount += 1;
@@ -241,13 +241,23 @@ class DataDisplayTools {
         const lateEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Upcoming tardiness").setFooter({
             text: "This tardiness is known to the Infinite Speedyflight. Use this information wisely.",
         });
-        lateResults.forEach((row) => {
-            lateEmbed.addFields({
-                name: row.name,
-                value: "Date: " + dateTools.makeFriendlyDates(row.start_date) + "\nComments: " + row.comment,
+        if (length === "short") {
+            lateResults.forEach((row) => {
+                lateEmbed.addFields({
+                    name: row.name,
+                    value: dateTools.makeFriendlyDates(row.start_date),
+                });
+                lateCount += 1;
             });
-            lateCount += 1;
-        });
+        } else {
+            lateResults.forEach((row) => {
+                lateEmbed.addFields({
+                    name: row.name,
+                    value: "Date: " + dateTools.makeFriendlyDates(row.start_date) + "\nComments: " + row.comment,
+                });
+                lateCount += 1;
+            });
+        }
         return {
             absentEmbed,
             lateEmbed,

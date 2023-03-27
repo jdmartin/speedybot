@@ -480,7 +480,7 @@ class attendanceTools {
 
         otherwise_yes_collector.on("end", (collected, reason) => {
             if (reason === "one") {
-                response = absenceDBHelper.show(name, "mine");
+                response = absenceDBHelper.show(name, "mine", "short");
                 DM.channel.send({
                     embeds: [response.absentEmbed, response.lateEmbed],
                 });

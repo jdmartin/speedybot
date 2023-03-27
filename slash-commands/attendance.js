@@ -1,8 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 
-const dates = require("../utils/datetools.js");
-const dateTools = new dates.dateTools();
-
 const absence = require("../db/absencedb-slash.js");
 const absenceDBHelper = new absence.DataDisplayTools();
 
