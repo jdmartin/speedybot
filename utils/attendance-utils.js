@@ -50,6 +50,12 @@ class attendanceTools {
         });
 
         absence_collector.on("collect", (m) => {
+            let validAnswers = ["1", "2", "q", "Q"];
+            if (m.content && m.author.bot === false) {
+                if (!validAnswers.includes(m.content)) {
+                    this.sorryTryAgain(DM, m.content);
+                }
+            }
             //Triggered when the collector is receiving a new message
             switch (m.content) {
                 case "1":
@@ -94,6 +100,12 @@ class attendanceTools {
 
         asr_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
+            let validAnswers = ["1", "2", "q", "Q"];
+            if (m.content && m.author.bot === false) {
+                if (!validAnswers.includes(m.content)) {
+                    this.sorryTryAgain(DM, m.content);
+                }
+            }
             switch (m.content) {
                 case "1":
                     asr_collector.stop("single");
@@ -139,19 +151,24 @@ class attendanceTools {
         amc_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
             if (m.author.bot === false) {
+                if (!this.goodMenuResponses.includes(m.content.toUpperCase())) {
+                    this.sorryTryAgain(DM, m.content);
+                    amc_collector.stop("error");
+                }
                 if (m.content.toUpperCase() === "Q") {
                     amc_collector.stop("user");
-                } else if (this.goodMenuResponses.includes(m.content.toUpperCase())) {
+                }
+                if (this.goodMenuResponses.includes(m.content.toUpperCase())) {
                     tempMonth = m.content;
                     amc_collector.stop("validMonth");
-                } else {
-                    amc_collector.stop("error");
                 }
             }
         });
 
         amc_collector.on("end", (collected, reason) => {
-            if (reason === "validMonth") {
+            if (reason === "error") {
+                this.absenceMonthCollection(DM, name);
+            } else if (reason === "validMonth") {
                 this.Responses.push(this.months[tempMonth]);
                 this.absenceDayCollection(DM, name);
             } else if (reason === "time") {
@@ -162,8 +179,6 @@ class attendanceTools {
                 DM.channel.send({
                     content: "Ok, see you!",
                 });
-            } else if (reason === "error") {
-                this.absenceMonthCollection(DM, name);
             }
         });
     }
@@ -183,48 +198,49 @@ class attendanceTools {
         adc_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
             if (m.author.bot === false) {
-                if (m.content.toUpperCase() === "Q") {
+                if (m.content.toUpperCase === "Q") {
                     adc_collector.stop("user");
-                } else if (this.goodDayResponses.includes(m.content.toUpperCase())) {
+                } else if (!this.goodDayResponses.includes(m.content.toUpperCase())) {
+                    adc_collector.stop("error");
+                } else if (this.goodDayResponses.includes(m.content)) {
                     tempDay = m.content;
                     theMessage = m;
                     this.counter += 1;
                     adc_collector.stop("validDate");
-                } else {
-                    adc_collector.stop("error");
                 }
             }
+        });
 
-            adc_collector.on("end", (collected, reason) => {
-                if (reason === "validDate") {
-                    this.Responses.push(tempDay);
-                    if (this.Responses[0] === "single") {
-                        if (this.bypassList.includes(this.chosenAction)) {
-                            this.absenceProcessSingle(theMessage, DM, name);
-                        } else {
-                            this.absenceCommentCollection(DM, name);
-                        }
-                    } else if (this.Responses[0] === "range" && this.counter < 2) {
-                        this.absenceMonthCollection(DM, name);
-                    } else if (this.Responses[0] === "range" && this.counter == 2) {
-                        if (this.bypassList.includes(this.chosenAction)) {
-                            this.absenceProcessRange(theMessage, DM, name);
-                        } else {
-                            this.absenceCommentCollection(DM, name);
-                        }
+        adc_collector.on("end", (collected, reason) => {
+            if (reason === "validDate") {
+                this.Responses.push(tempDay);
+                if (this.Responses[0] === "single") {
+                    if (this.bypassList.includes(this.chosenAction)) {
+                        this.absenceProcessSingle(theMessage, DM, name);
+                    } else {
+                        this.absenceCommentCollection(DM, name);
                     }
-                } else if (reason === "time") {
-                    DM.channel.send({
-                        content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`,
-                    });
-                } else if (reason === "user") {
-                    DM.channel.send({
-                        content: "Ok, see you!",
-                    });
-                } else if (reason === "error") {
-                    this.absenceDayCollection(DM, name);
+                } else if (this.Responses[0] === "range" && this.counter == 1) {
+                    this.absenceMonthCollection(DM, name);
+                } else if (this.Responses[0] === "range" && this.counter == 2) {
+                    if (this.bypassList.includes(this.chosenAction)) {
+                        this.absenceProcessRange(theMessage, DM, name);
+                    } else {
+                        this.absenceCommentCollection(DM, name);
+                    }
                 }
-            });
+            } else if (reason === "time") {
+                DM.channel.send({
+                    content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`,
+                });
+            } else if (reason === "user") {
+                DM.channel.send({
+                    content: "Ok, see you!",
+                });
+            } else if (reason === "error") {
+                this.sorryTryAgain(DM);
+                this.absenceDayCollection(DM, name);
+            }
         });
     }
 
@@ -327,6 +343,12 @@ class attendanceTools {
 
         ontime_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
+            let validAnswers = ["1", "2", "q", "Q"];
+            if (m.content && m.author.bot === false) {
+                if (!validAnswers.includes(m.content)) {
+                    this.sorryTryAgain(DM, m.content);
+                }
+            }
             switch (m.content) {
                 case "1":
                     this.chosenAction = "ontime";
@@ -358,6 +380,13 @@ class attendanceTools {
     }
 
     //// Utils ////
+    sorryTryAgain(DM) {
+        DM.channel.send({
+            content:
+                "Sorry, I don't know what to do with that input. Please check the instructions and enter something else. ~🐢",
+        });
+    }
+
     noAbsencesOrLateFound(DM, name) {
         DM.channel.send({
             content: "Nothing to cancel! ~ 🐢",
@@ -376,6 +405,12 @@ class attendanceTools {
 
         otherwise_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
+            let validAnswers = ["y", "Y", "n", "N"];
+            if (m.content && m.author.bot === false) {
+                if (!validAnswers.includes(m.content)) {
+                    this.sorryTryAgain(DM);
+                }
+            }
             switch (m.content) {
                 case "y" || "Y":
                     otherwise_collector.stop("yes");
@@ -413,6 +448,12 @@ class attendanceTools {
 
         otherwise_yes_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
+            let validAnswers = ["1", "2"];
+            if (m.content && m.author.bot === false) {
+                if (!validAnswers.includes(m.content)) {
+                    this.sorryTryAgain(DM);
+                }
+            }
             switch (m.content) {
                 case "1":
                     otherwise_yes_collector.stop("one");

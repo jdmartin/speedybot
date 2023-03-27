@@ -207,6 +207,7 @@ class DataDisplayTools {
                     value: "Date: " + dateTools.makeFriendlyDates(row.end_date),
                     inline: false,
                 });
+                absentCount += 1;
             });
         } else {
             absResults.forEach((row) => {
@@ -215,6 +216,7 @@ class DataDisplayTools {
                     value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
                     inline: false,
                 });
+                absentCount += 1;
             });
         }
 
