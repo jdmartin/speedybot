@@ -274,68 +274,26 @@ class AttendanceTools {
         }
 
         if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
-            //If we have a range of days, let's store them individually...
             //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-            //Setup some useful variables.
-            let startDay = startDate.split("-")[2];
-            let startMonth = startDate.split("-")[1];
-            let endDay = endDate.split("-")[2];
-            let endMonth = endDate.split("-")[1];
-            //If no range of dates:
-            if (endDay == startDay && endMonth == startMonth) {
-                if (
-                    isTuesday(parseISO(startDate)) ||
-                    isThursday(parseISO(startDate)) ||
-                    isSunday(parseISO(startDate))
-                ) {
-                    let newYear = startDate.split("-")[0];
-                    let newMonth = startDate.split("-")[1];
-                    let newDay = startDate.split("-")[2];
-                    let newDate = newYear + "-" + newMonth + "-" + newDay;
-                    if (kind === "absent") {
-                        this.addAbsence(
-                            message,
-                            nickname,
-                            newYear,
-                            newMonth,
-                            newDay,
-                            newDate,
-                            SqlString.escape(comment),
-                        );
-                    }
-                    if (kind === "present") {
-                        this.addPresent(message, newMonth, newDay);
-                    }
-                    if (kind === "late") {
-                        this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
-                    }
-                    if (kind === "ontime") {
-                        this.addOntime(message, newMonth, newDay);
-                    }
-                }
-            }
-            //Do we have a range of dates?
-            if (endDay > startDay || endMonth != startMonth) {
-                const result = eachDayOfInterval({
-                    start: new Date(parseISO(startDate)),
-                    end: new Date(parseISO(endDate)),
-                });
-                this.processDBUpdateFilterLoop(result, kind, message, nickname, comment, restriction);
-            }
+            const result = eachDayOfInterval({
+                start: new Date(parseISO(startDate)),
+                end: new Date(parseISO(endDate)),
+            });
+            this.processDBUpdateFilterLoop(result, kind, message, nickname, comment, restriction);
         }
     }
 
     // prettier-ignore
     processDBUpdateFilterLoop(result, kind, message, nickname, comment, restriction) {
         for (let i = 0; i < result.length; i++) {
-            let short_item = result[i].toISOString().split("T")[0];
-            let newYear = short_item.split("-")[0];
-            let newMonth = short_item.split("-")[1];
-            let newDay = short_item.split("-")[2];
-            let newDate = newYear + "-" + newMonth + "-" + newDay;
-            this.filterDBUpdate(restriction, message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind);
+                let short_item = result[i].toISOString().split("T")[0];
+                let newYear = short_item.split("-")[0];
+                let newMonth = short_item.split("-")[1];
+                let newDay = short_item.split("-")[2];
+                let newDate = newYear + "-" + newMonth + "-" + newDay;
+                this.filterDBUpdate(restriction, message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind);
+            }
         }
-    }
 
     // prettier-ignore
     filterDBUpdate(restriction, message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind) {
