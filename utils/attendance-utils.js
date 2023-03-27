@@ -48,11 +48,11 @@ class attendanceTools {
 
         DM.channel.send({
             content:
-                "\n \nWhat would you like to do?\n \n\t1. Add an **Absence** \n\t2. Say I'll Be **Late**\n\tQ. **Quit**",
+                "\n \nWhat would you like to do?\n \n\t1. Add an **Absence** \n\t2. Say I'll Be **Late**\n\tM. **Main Menu**\n\tQ. **Quit**",
         });
 
         absence_collector.on("collect", (m) => {
-            let validAnswers = ["1", "2", "q", "Q"];
+            let validAnswers = ["1", "2", "m", "M", "q", "Q"];
             if (m.content && m.author.bot === false) {
                 if (!validAnswers.includes(m.content)) {
                     this.sorryTryAgain(DM, m.content);
@@ -68,6 +68,8 @@ class attendanceTools {
                     this.chosenAction = "late";
                     absence_collector.stop("two_chosen");
                     break;
+                case "m" || "M":
+                    absence_collector.stop("menu");
                 case "q" || "Q":
                     absence_collector.stop("user");
                     break;
@@ -81,6 +83,8 @@ class attendanceTools {
                 });
             } else if (reason === "one_chosen" || reason === "two_chosen") {
                 this.absenceSingleOrRangeCollection(DM, name);
+            } else if (reason === "menu") {
+                this.backToMainMenu(DM, name);
             } else if (reason === "user") {
                 DM.channel.send({
                     content: "Ok, see you!",
@@ -98,12 +102,12 @@ class attendanceTools {
 
         DM.channel.send({
             content:
-                "\nOk, so, is this:\n \n\t1. A **Single** Date?\n\t2. A **Range** of Dates?\n\n\t3. Recurring (**Tuesdays**)?\n\t4. Recurring (**Thursdays**)?\n\t5. Recurring (**Sundays**)?\n\tQ. **Quit**",
+                "\nOk, so, is this:\n \n\t1. A **Single** Date?\n\t2. A **Range** of Dates?\n\n\t3. Recurring (**Tuesdays**)?\n\t4. Recurring (**Thursdays**)?\n\t5. Recurring (**Sundays**)?\n\t\n\n\tM. **Main Menu**\n\tQ. **Quit**",
         });
 
         asr_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
-            let validAnswers = ["1", "2", "3", "4", "5", "q", "Q"];
+            let validAnswers = ["1", "2", "3", "4", "5", "m", "M", "q", "Q"];
             if (m.content && m.author.bot === false) {
                 if (!validAnswers.includes(m.content)) {
                     this.sorryTryAgain(DM, m.content);
@@ -128,6 +132,9 @@ class attendanceTools {
                     this.restriction = "Sundays";
                     asr_collector.stop("range");
                     break;
+                case "m" || "M":
+                    asr_collector.stop("menu");
+                    break;
                 case "q" || "Q":
                     asr_collector.stop("user");
                     break;
@@ -144,6 +151,8 @@ class attendanceTools {
             } else if (reason === "range") {
                 this.Responses.push("range");
                 this.absenceMonthCollection(DM, name);
+            } else if (reason === "menu") {
+                this.backToMainMenu(DM, name);
             } else if (reason === "user") {
                 DM.channel.send({
                     content: "Ok, see you!",
@@ -354,12 +363,12 @@ class attendanceTools {
 
         DM.channel.send({
             content:
-                "\n \nWhat would you like to do?\n \n\t1. Say I'll Be **On-Time** \n\t2. Say I'll Be **Present**\n\tQ. **Quit**",
+                "\n \nWhat would you like to do?\n \n\t1. Say I'll Be **On-Time** \n\t2. Say I'll Be **Present**\n\tM. **Main Menu**\n\tQ. **Quit**",
         });
 
         ontime_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
-            let validAnswers = ["1", "2", "q", "Q"];
+            let validAnswers = ["1", "2", "m", "M", "q", "Q"];
             if (m.content && m.author.bot === false) {
                 if (!validAnswers.includes(m.content)) {
                     this.sorryTryAgain(DM, m.content);
@@ -374,6 +383,9 @@ class attendanceTools {
                     this.chosenAction = "present";
                     ontime_collector.stop("two_chosen");
                     break;
+                case "m" || "M":
+                    ontime_collector.stop("menu");
+                    break;
                 case "q" || "Q":
                     ontime_collector.stop("user");
                     break;
@@ -387,6 +399,8 @@ class attendanceTools {
                 });
             } else if (reason === "one_chosen" || reason === "two_chosen") {
                 this.absenceSingleOrRangeCollection(DM, name);
+            } else if (reason === "menu") {
+                this.backToMainMenu(DM, name);
             } else if (reason === "user") {
                 DM.channel.send({
                     content: "Ok, see you!",
@@ -396,6 +410,13 @@ class attendanceTools {
     }
 
     //// Utils ////
+    backToMainMenu(DM, name) {
+        DM.channel.send({
+            content:
+                "Please choose the number that corresponds to what you want to do.\n  \n\t1. **Show/Cancel** Existing Entries\n\t2. Say You'll Be **Absent** or **Late**...\n\tQ. **Quit**",
+        });
+        this.handleSomethingElse(DM, name);
+    }
     sorryTryAgain(DM) {
         DM.channel.send({
             content:
@@ -464,7 +485,7 @@ class attendanceTools {
 
         otherwise_yes_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
-            let validAnswers = ["1", "2"];
+            let validAnswers = ["1", "2", "q", "Q"];
             if (m.content && m.author.bot === false) {
                 if (!validAnswers.includes(m.content)) {
                     this.sorryTryAgain(DM);
@@ -476,6 +497,9 @@ class attendanceTools {
                     break;
                 case "2":
                     otherwise_yes_collector.stop("two");
+                    break;
+                case "q" || "Q":
+                    otherwise_yes_collector.stop("user");
                     break;
             }
         });
@@ -496,6 +520,10 @@ class attendanceTools {
             } else if (reason === "time") {
                 DM.channel.send({
                     content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`,
+                });
+            } else if (reason === "user") {
+                DM.channel.send({
+                    content: "Ok, see you!",
                 });
             }
         });
