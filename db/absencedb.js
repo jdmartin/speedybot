@@ -37,7 +37,7 @@ class CreateDatabase {
 class AttendanceTools {
     //Commands absent, late, ontime, and present for scheduling.
 
-    absent(message, args) {
+    absent(message, restriction, args) {
         //Just use the first three letters of the month to avoid confusion:
         let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
@@ -80,7 +80,7 @@ class AttendanceTools {
             if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
                 //If we have a range of days, let's store them individually...
                 //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-                this.processDBUpdate(message, result.nickname, "absent", startDate, endDate, comment);
+                this.processDBUpdate(message, result.nickname, "absent", startDate, endDate, comment, restriction);
                 this.generateResponse(message, "absent", "present", startDate, endDate, comment);
             } else {
                 message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
@@ -88,7 +88,7 @@ class AttendanceTools {
         });
     }
 
-    late(message, args) {
+    late(message, restriction, args) {
         //Just use the first three letters of the month to avoid confusion:
         let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
@@ -130,7 +130,7 @@ class AttendanceTools {
             if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
                 //If we have a range of days, let's store them individually...
                 //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-                this.processDBUpdate(message, result.nickname, "late", startDate, endDate, comment);
+                this.processDBUpdate(message, result.nickname, "late", startDate, endDate, comment, restriction);
                 this.generateResponse(message, "late", "ontime", startDate, endDate, comment);
             } else {
                 message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
@@ -138,7 +138,7 @@ class AttendanceTools {
         });
     }
 
-    ontime(message, args) {
+    ontime(message, restriction, args) {
         //Just use the first three letters of the month to avoid confusion:
         let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
@@ -171,7 +171,7 @@ class AttendanceTools {
         }
         //Only update db if we have a valid date.
         if (isValid(parseISO(startDate))) {
-            this.processDBUpdate(message, undefined, "ontime", startDate, endDate, undefined);
+            this.processDBUpdate(message, undefined, "ontime", startDate, endDate, undefined, restriction);
             if (startDate != endDate) {
                 message.author.send(
                     `Ok, I've got you down as on-time from ${dateTools.makeFriendlyDates(
@@ -186,7 +186,7 @@ class AttendanceTools {
         }
     }
 
-    present(message, args) {
+    present(message, restriction, args) {
         //Just use the first three letters of the month to avoid confusion:
         let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
@@ -221,7 +221,7 @@ class AttendanceTools {
         if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
             //If we have a range of days, let's store them individually...
             //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-            this.processDBUpdate(message, undefined, "present", startDate, endDate, undefined);
+            this.processDBUpdate(message, undefined, "present", startDate, endDate, undefined, restriction);
             this.generateResponse(message, "present", "absent", startDate, endDate, undefined);
         } else {
             message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
@@ -267,7 +267,7 @@ class AttendanceTools {
         ontimePrep.run(message.author.username, sm, sd);
     }
 
-    processDBUpdate(message, nickname, kind, startDate, endDate, comment) {
+    processDBUpdate(message, nickname, kind, startDate, endDate, comment, restriction) {
         //Make sure there's a comment:
         if (comment == undefined) {
             comment = "";
@@ -320,46 +320,92 @@ class AttendanceTools {
                     start: new Date(parseISO(startDate)),
                     end: new Date(parseISO(endDate)),
                 });
-                for (let i = 0; i < result.length; i++) {
-                    let short_item = result[i].toISOString().split("T")[0];
-                    if (
-                        isTuesday(parseISO(short_item)) ||
-                        isThursday(parseISO(short_item)) ||
-                        isSunday(parseISO(short_item))
-                    ) {
-                        let newYear = short_item.split("-")[0];
-                        let newMonth = short_item.split("-")[1];
-                        let newDay = short_item.split("-")[2];
-                        let newDate = newYear + "-" + newMonth + "-" + newDay;
-                        if (kind === "absent") {
-                            this.addAbsence(
-                                message,
-                                nickname,
-                                newYear,
-                                newMonth,
-                                newDay,
-                                newDate,
-                                SqlString.escape(comment),
-                            );
-                        }
-                        if (kind === "present") {
-                            this.addPresent(message, newMonth, newDay);
-                        }
-                        if (kind === "late") {
-                            this.addLate(
-                                message,
-                                nickname,
-                                newYear,
-                                newMonth,
-                                newDay,
-                                newDate,
-                                SqlString.escape(comment),
-                            );
-                        }
-                        if (kind === "ontime") {
-                            this.addOntime(message, newMonth, newDay);
-                        }
-                    }
+                this.processDBUpdateFilterLoop(result, kind, message, nickname, comment, restriction);
+            }
+        }
+    }
+
+    processDBUpdateFilterLoop(result, kind, message, nickname, comment, restriction) {
+        for (let i = 0; i < result.length; i++) {
+            let short_item = result[i].toISOString().split("T")[0];
+            let newYear = short_item.split("-")[0];
+            let newMonth = short_item.split("-")[1];
+            let newDay = short_item.split("-")[2];
+            let newDate = newYear + "-" + newMonth + "-" + newDay;
+            this.doDBUpdate(
+                restriction,
+                message,
+                nickname,
+                newYear,
+                newMonth,
+                newDay,
+                newDate,
+                comment,
+                short_item,
+                kind,
+            );
+        }
+    }
+
+    doDBUpdate(restriction, message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind) {
+        if (restriction === "") {
+            if (isTuesday(parseISO(short_item)) || isThursday(parseISO(short_item)) || isSunday(parseISO(short_item))) {
+                if (kind === "absent") {
+                    this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
+                }
+                if (kind === "present") {
+                    this.addPresent(message, newMonth, newDay);
+                }
+                if (kind === "late") {
+                    this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
+                }
+                if (kind === "ontime") {
+                    this.addOntime(message, newMonth, newDay);
+                }
+            }
+        } else if (restriction === "Tuesdays") {
+            if (isTuesday(parseISO(short_item))) {
+                if (kind === "absent") {
+                    this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
+                }
+                if (kind === "present") {
+                    this.addPresent(message, newMonth, newDay);
+                }
+                if (kind === "late") {
+                    this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
+                }
+                if (kind === "ontime") {
+                    this.addOntime(message, newMonth, newDay);
+                }
+            }
+        } else if (restriction === "Thursdays") {
+            if (isThursday(parseISO(short_item))) {
+                if (kind === "absent") {
+                    this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
+                }
+                if (kind === "present") {
+                    this.addPresent(message, newMonth, newDay);
+                }
+                if (kind === "late") {
+                    this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
+                }
+                if (kind === "ontime") {
+                    this.addOntime(message, newMonth, newDay);
+                }
+            }
+        } else if (restriction === "Sundays") {
+            if (isSunday(parseISO(short_item))) {
+                if (kind === "absent") {
+                    this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
+                }
+                if (kind === "present") {
+                    this.addPresent(message, newMonth, newDay);
+                }
+                if (kind === "late") {
+                    this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
+                }
+                if (kind === "ontime") {
+                    this.addOntime(message, newMonth, newDay);
                 }
             }
         }

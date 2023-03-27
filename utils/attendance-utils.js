@@ -10,6 +10,7 @@ class attendanceTools {
     counter = 0;
     chosenAction = "";
     bypassList = ["ontime", "present"];
+    restriction = "";
 
     // prettier-ignore
     goodDayResponses = [
@@ -95,12 +96,13 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: "\nOk, so, is this:\n \n\t1. A **Single** Date?\n\t2. A **Range** of Dates?\n\tQ. **Quit**",
+            content:
+                "\nOk, so, is this:\n \n\t1. A **Single** Date?\n\t2. A **Range** of Dates?\n\n\t3. Recurring (**Tuesdays**)?\n\t4. Recurring (**Thursdays**)?\n\t5. Recurring (**Sundays**)?\n\tQ. **Quit**",
         });
 
         asr_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
-            let validAnswers = ["1", "2", "q", "Q"];
+            let validAnswers = ["1", "2", "3", "4", "5", "q", "Q"];
             if (m.content && m.author.bot === false) {
                 if (!validAnswers.includes(m.content)) {
                     this.sorryTryAgain(DM, m.content);
@@ -111,6 +113,18 @@ class attendanceTools {
                     asr_collector.stop("single");
                     break;
                 case "2":
+                    asr_collector.stop("range");
+                    break;
+                case "3":
+                    this.restriction = "Tuesdays";
+                    asr_collector.stop("range");
+                    break;
+                case "4":
+                    this.restriction = "Thursdays";
+                    asr_collector.stop("range");
+                    break;
+                case "5":
+                    this.restriction = "Sundays";
                     asr_collector.stop("range");
                     break;
                 case "q" || "Q":
@@ -287,13 +301,13 @@ class attendanceTools {
 
             const doTheThing = async () => {
                 if (this.chosenAction === "absent") {
-                    absenceCreate.absent(collected, responceList);
+                    absenceCreate.absent(collected, this.restriction, responceList);
                 } else if (this.chosenAction === "late") {
-                    absenceCreate.late(collected, responceList);
+                    absenceCreate.late(collected, this.restriction, responceList);
                 } else if (this.chosenAction === "ontime") {
-                    absenceCreate.ontime(collected, responceList);
+                    absenceCreate.ontime(collected, this.restriction, responceList);
                 } else if (this.chosenAction === "present") {
-                    absenceCreate.present(collected, responceList);
+                    absenceCreate.present(collected, this.restriction, responceList);
                 }
             };
             doTheThing().then(() => {
@@ -314,13 +328,13 @@ class attendanceTools {
 
             const doTheThing = async () => {
                 if (this.chosenAction === "absent") {
-                    absenceCreate.absent(collected, responceList);
+                    absenceCreate.absent(collected, this.restriction, responceList);
                 } else if (this.chosenAction === "late") {
-                    absenceCreate.late(collected, responceList);
+                    absenceCreate.late(collected, this.restriction, responceList);
                 } else if (this.chosenAction === "ontime") {
-                    absenceCreate.ontime(collected, responceList);
+                    absenceCreate.ontime(collected, this.restriction, responceList);
                 } else if (this.chosenAction === "present") {
-                    absenceCreate.present(collected, responceList);
+                    absenceCreate.present(collected, this.restriction, responceList);
                 }
             };
             doTheThing().then(() => {
