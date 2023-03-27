@@ -325,6 +325,7 @@ class AttendanceTools {
         }
     }
 
+    // prettier-ignore
     processDBUpdateFilterLoop(result, kind, message, nickname, comment, restriction) {
         for (let i = 0; i < result.length; i++) {
             let short_item = result[i].toISOString().split("T")[0];
@@ -332,82 +333,43 @@ class AttendanceTools {
             let newMonth = short_item.split("-")[1];
             let newDay = short_item.split("-")[2];
             let newDate = newYear + "-" + newMonth + "-" + newDay;
-            this.doDBUpdate(
-                restriction,
-                message,
-                nickname,
-                newYear,
-                newMonth,
-                newDay,
-                newDate,
-                comment,
-                short_item,
-                kind,
-            );
+            this.filterDBUpdate(restriction, message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind);
         }
     }
 
-    doDBUpdate(restriction, message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind) {
+    // prettier-ignore
+    filterDBUpdate(restriction, message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind) {
         if (restriction === "") {
             if (isTuesday(parseISO(short_item)) || isThursday(parseISO(short_item)) || isSunday(parseISO(short_item))) {
-                if (kind === "absent") {
-                    this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
-                }
-                if (kind === "present") {
-                    this.addPresent(message, newMonth, newDay);
-                }
-                if (kind === "late") {
-                    this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
-                }
-                if (kind === "ontime") {
-                    this.addOntime(message, newMonth, newDay);
-                }
+                this.doDBUpdate(message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind);
             }
         } else if (restriction === "Tuesdays") {
             if (isTuesday(parseISO(short_item))) {
-                if (kind === "absent") {
-                    this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
-                }
-                if (kind === "present") {
-                    this.addPresent(message, newMonth, newDay);
-                }
-                if (kind === "late") {
-                    this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
-                }
-                if (kind === "ontime") {
-                    this.addOntime(message, newMonth, newDay);
-                }
+                this.doDBUpdate(message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind);
             }
         } else if (restriction === "Thursdays") {
             if (isThursday(parseISO(short_item))) {
-                if (kind === "absent") {
-                    this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
-                }
-                if (kind === "present") {
-                    this.addPresent(message, newMonth, newDay);
-                }
-                if (kind === "late") {
-                    this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
-                }
-                if (kind === "ontime") {
-                    this.addOntime(message, newMonth, newDay);
-                }
+                this.doDBUpdate(message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind);
             }
         } else if (restriction === "Sundays") {
             if (isSunday(parseISO(short_item))) {
-                if (kind === "absent") {
-                    this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
-                }
-                if (kind === "present") {
-                    this.addPresent(message, newMonth, newDay);
-                }
-                if (kind === "late") {
-                    this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
-                }
-                if (kind === "ontime") {
-                    this.addOntime(message, newMonth, newDay);
-                }
+                this.doDBUpdate(message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind);
             }
+        }
+    }
+
+    doDBUpdate(message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind) {
+        if (kind === "absent") {
+            this.addAbsence(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
+        }
+        if (kind === "present") {
+            this.addPresent(message, newMonth, newDay);
+        }
+        if (kind === "late") {
+            this.addLate(message, nickname, newYear, newMonth, newDay, newDate, SqlString.escape(comment));
+        }
+        if (kind === "ontime") {
+            this.addOntime(message, newMonth, newDay);
         }
     }
 

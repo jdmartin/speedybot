@@ -41,6 +41,7 @@ class attendanceTools {
 
     absenceMenuCollection(DM, name) {
         this.chosenAction = "";
+        this.restriction = "";
         const absence_collector = DM.channel.createMessageCollector({
             time: 30000,
         });
@@ -346,6 +347,7 @@ class attendanceTools {
     //// Ontime and Present ////
     chooseOntimeOrPresent(DM, name) {
         this.chosenAction = "";
+        this.restriction = "";
         const ontime_collector = DM.channel.createMessageCollector({
             time: 30000,
         });
