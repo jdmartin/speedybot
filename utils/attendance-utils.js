@@ -15,11 +15,7 @@ class attendanceTools {
     restriction = "";
 
     // prettier-ignore
-    goodDayResponses = [
-        "01", "1", "02", "2", "03", "3", "04", "4", "05", "5", "06", "6", "07", "7", "08", "8", "09", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "Q",
-    ];
-    // prettier-ignore
-    goodMenuResponses = [
+    goodMonthResponses = [
         "01", "1", "02", "2", "03", "3", "04", "4", "05", "5", "06", "6", "07", "7", "08", "8", "09", "9", "10", "11", "12", "Q",
     ];
 
@@ -177,15 +173,13 @@ class attendanceTools {
         amc_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
             if (m.author.bot === false) {
-                if (!this.goodMenuResponses.includes(m.content.toUpperCase())) {
-                    this.sorryTryAgain(DM, m.content);
-                    amc_collector.stop("error");
-                }
                 if (m.content.toUpperCase() === "Q") {
                     amc_collector.stop("user");
-                }
-                if (this.goodMenuResponses.includes(m.content.toUpperCase())) {
-                    tempMonth = m.content;
+                } else if (!dateHelper.checkIsMonth(m.content)) {
+                    this.sorryTryAgain(DM, m.content);
+                    amc_collector.stop("error");
+                } else if (dateHelper.checkIsMonth(m.content)) {
+                    tempMonth = this.monthFilterGuardrail(m.content);
                     amc_collector.stop("validMonth");
                 }
             }
@@ -235,7 +229,6 @@ class attendanceTools {
                             this.counter += 1;
                             adc_collector.stop("validDate");
                         } else {
-                            console.log("NO RAID");
                             adc_collector.stop("no_raid");
                         }
                     } else if (this.Responses[0] === "range") {
@@ -245,7 +238,6 @@ class attendanceTools {
                         adc_collector.stop("validDate");
                     }
                 } else {
-                    console.log("ERROR");
                     adc_collector.stop("error");
                 }
             }
@@ -446,8 +438,20 @@ class attendanceTools {
 
     invalidRaidDay(DM) {
         DM.channel.send({
-            content: "Sorry, that's not a raid day. Please check the instructions and enter something else. ~🐢",
+            content:
+                "Sorry, that's not a raid day (Tue, Thu, or Sun). Please check the date and enter something else. ~🐢",
         });
+    }
+
+    monthFilterGuardrail(month) {
+        let filterableMonths = ["01", "02", "03", "04", "05", "06", "07", "08", "09"];
+
+        if (filterableMonths.includes(month)) {
+            let newMonth = month.replace("0", "");
+            return newMonth;
+        } else {
+            return month;
+        }
     }
 
     noAbsencesOrLateFound(DM, name) {

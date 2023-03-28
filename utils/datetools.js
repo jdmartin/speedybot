@@ -33,7 +33,7 @@ class dateTools {
     }
 
     checkIsMonth(a) {
-        if (isValid(parse(a, "LLLL", new Date()))) {
+        if (isValid(parse(a, "LLLL", new Date())) || isValid(parse(a, "M", new Date()))) {
             return true;
         } else {
             return false;
@@ -133,7 +133,7 @@ class dateTools {
                 }
             }
             //Request date in proper format.
-            DM.channel.send({ content: "Sorry, I need a start date in the format 'Month Day'" });
+            DM.channel.send({ content: "Sorry, I need a date in the format 'Month Day'" });
             return;
         }
     }
