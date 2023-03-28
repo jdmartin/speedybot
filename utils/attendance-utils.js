@@ -4,6 +4,8 @@ const absence = require("../db/absencedb.js");
 const absenceCreate = new absence.AttendanceTools();
 const absenceSlash = require("../db/absencedb-slash.js");
 const absenceDBHelper = new absenceSlash.DataDisplayTools();
+const dates = require("./datetools.js");
+const dateHelper = new dates.dateTools();
 
 class attendanceTools {
     Responses = [];
@@ -48,7 +50,7 @@ class attendanceTools {
 
         DM.channel.send({
             content:
-                "\n \nWhat would you like to do?\n \n\t1. Add an **Absence** \n\t2. Say I'll Be **Late**\n\tM. **Main Menu**\n\tQ. **Quit**",
+                "\n \nWhat would you like to do?\n \n\t1. Add an **Absence** \n\t2. Say I'll Be **Late**\n\n\tM. **Main Menu**\n\tQ. **Quit**",
         });
 
         absence_collector.on("collect", (m) => {
@@ -102,7 +104,7 @@ class attendanceTools {
 
         DM.channel.send({
             content:
-                "\nOk, so, is this:\n \n\t1. A **Single** Date?\n\t2. A **Range** of Dates?\n\n\t3. Recurring (**Tuesdays**)?\n\t4. Recurring (**Thursdays**)?\n\t5. Recurring (**Sundays**)?\n\t\n\n\tM. **Main Menu**\n\tQ. **Quit**",
+                "\nOk, so, is this:\n \n\t1. A **Single** Date?\n\t2. A **Range** of Dates?\n\n\t3. Recurring (**Tuesdays**)?\n\t4. Recurring (**Thursdays**)?\n\t5. Recurring (**Sundays**)?\n\t\n\tM. **Main Menu**\n\tQ. **Quit**",
         });
 
         asr_collector.on("collect", (m) => {
@@ -222,15 +224,29 @@ class attendanceTools {
         adc_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
             if (m.author.bot === false) {
-                if (m.content.toUpperCase === "Q") {
+                if (m.content.toUpperCase() === "Q") {
                     adc_collector.stop("user");
-                } else if (!this.goodDayResponses.includes(m.content.toUpperCase())) {
+                } else if (dateHelper.checkIsDayOfMonth(m.content)) {
+                    let dayTest = this.testIsRaidDay(DM, m.content);
+                    if (this.Responses[0] === "single") {
+                        if (dayTest === true) {
+                            tempDay = m.content;
+                            theMessage = m;
+                            this.counter += 1;
+                            adc_collector.stop("validDate");
+                        } else {
+                            console.log("NO RAID");
+                            adc_collector.stop("no_raid");
+                        }
+                    } else if (this.Responses[0] === "range") {
+                        tempDay = m.content;
+                        theMessage = m;
+                        this.counter += 1;
+                        adc_collector.stop("validDate");
+                    }
+                } else {
+                    console.log("ERROR");
                     adc_collector.stop("error");
-                } else if (this.goodDayResponses.includes(m.content)) {
-                    tempDay = m.content;
-                    theMessage = m;
-                    this.counter += 1;
-                    adc_collector.stop("validDate");
                 }
             }
         });
@@ -261,6 +277,9 @@ class attendanceTools {
                 DM.channel.send({
                     content: "Ok, see you!",
                 });
+            } else if (reason === "no_raid") {
+                this.invalidRaidDay(DM);
+                this.absenceDayCollection(DM, name);
             } else if (reason === "error") {
                 this.sorryTryAgain(DM);
                 this.absenceDayCollection(DM, name);
@@ -363,7 +382,7 @@ class attendanceTools {
 
         DM.channel.send({
             content:
-                "\n \nWhat would you like to do?\n \n\t1. Say I'll Be **On-Time** \n\t2. Say I'll Be **Present**\n\tM. **Main Menu**\n\tQ. **Quit**",
+                "\n \nWhat would you like to do?\n \n\t1. Say I'll Be **On-Time** \n\t2. Say I'll Be **Present**\n\n\tM. **Main Menu**\n\tQ. **Quit**",
         });
 
         ontime_collector.on("collect", (m) => {
@@ -417,10 +436,17 @@ class attendanceTools {
         });
         this.handleSomethingElse(DM, name);
     }
+
     sorryTryAgain(DM) {
         DM.channel.send({
             content:
                 "Sorry, I don't know what to do with that input. Please check the instructions and enter something else. ~🐢",
+        });
+    }
+
+    invalidRaidDay(DM) {
+        DM.channel.send({
+            content: "Sorry, that's not a raid day. Please check the instructions and enter something else. ~🐢",
         });
     }
 
@@ -429,6 +455,21 @@ class attendanceTools {
             content: "Nothing to cancel! ~ 🐢",
         });
         this.askIfSomethingElse(DM, name);
+    }
+
+    testIsRaidDay(DM, day) {
+        //This is really only needed for single dates, as range does this stuff.
+        let year = dateHelper.determineYear(this.Responses[1], day);
+        let month = this.Responses[1];
+        let combinedStartDate = month + " " + day + " " + year;
+
+        //Returns true or false
+        let theDate = dateHelper.validateRaidDate(DM, combinedStartDate);
+        if (theDate === true) {
+            return true;
+        } else if (theDate === false) {
+            return false;
+        }
     }
 
     askIfSomethingElse(DM, name) {
