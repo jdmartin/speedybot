@@ -415,7 +415,7 @@ class DataDisplayTools {
         } else {
             //Get all absences for today and later.
             var sql = absencedb.prepare(
-                "SELECT * FROM absences WHERE end_date BETWEEN date('now','localtime') AND date('now','+15 days') ORDER BY end_date ASC, name",
+                "SELECT * FROM absences WHERE end_date BETWEEN date('now','localtime') AND date('now','+8 days') ORDER BY end_date ASC, name",
             );
             var absResults = sql.all();
         }
@@ -445,7 +445,7 @@ class DataDisplayTools {
             var lateResults = late_sql.all();
         } else {
             var late_sql = absencedb.prepare(
-                "SELECT * FROM latecomers WHERE start_date BETWEEN date('now','localtime') AND date('now', '+15 days') ORDER BY start_date ASC, name",
+                "SELECT * FROM latecomers WHERE start_date BETWEEN date('now','localtime') AND date('now', '+8 days') ORDER BY start_date ASC, name",
             );
             var lateResults = late_sql.all();
         }
