@@ -468,13 +468,13 @@ class DataDisplayTools {
 class DatabaseCleanup {
     cleanAbsences() {
         //Expire entries that occurred more than one month ago.
-        let sql = absencedb.prepare("DELETE FROM absences WHERE end_date < date('now', '-14 days')");
+        let sql = absencedb.prepare("DELETE FROM absences WHERE end_date < date('now', '-3 days')");
         sql.run();
     }
 
     cleanLatecomers() {
         //Expire entries that occurred more than one month ago.
-        let sql = absencedb.prepare("DELETE FROM latecomers WHERE start_date < date('now', '-14 days')");
+        let sql = absencedb.prepare("DELETE FROM latecomers WHERE start_date < date('now', '-3 days')");
         sql.run();
     }
 
