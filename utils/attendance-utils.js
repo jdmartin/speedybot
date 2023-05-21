@@ -46,7 +46,7 @@ class attendanceTools {
 
         DM.channel.send({
             content:
-                "\n \nWhat would you like to do?\n \n\t1. Add an **Absence** \n\t2. Say I'll Be **Late**\n\n\tM. **Main Menu**\n\tQ. **Quit**",
+                "\n \nWhat would you like to do?\n \n\t1) Add an **Absence** \n\t2) Say I'll Be **Late**\n\n\tM) **Main Menu**\n\tQ. **Quit**",
         });
 
         absence_collector.on("collect", (m) => {
@@ -108,7 +108,7 @@ class attendanceTools {
 
         DM.channel.send({
             content:
-                "\nOk, so, is this:\n \n\t1. A **Single** Date?\n\t2. A **Range** of Dates?\n\n\t3. Recurring (**Tuesdays**)?\n\t4. Recurring (**Thursdays**)?\n\t5. Recurring (**Sundays**)?\n\t\n\tM. **Main Menu**\n\tQ. **Quit**",
+                "\nOk, so, is this:\n \n\t1) A **Single** Date?\n\t2) A **Range** of Dates?\n\n\t3) Recurring (**Tuesdays**)?\n\t4) Recurring (**Thursdays**)?\n\t5) Recurring (**Sundays**)?\n\t\n\tM) **Main Menu**\n\tQ) **Quit**",
         });
 
         asr_collector.on("collect", (m) => {
@@ -412,7 +412,7 @@ class attendanceTools {
 
         DM.channel.send({
             content:
-                "\n \nWhat would you like to do?\n \n\t1. Say I'll Be **On-Time** \n\t2. Say I'll Be **Present**\n\n\tM. **Main Menu**\n\tQ. **Quit**",
+                "\n \nWhat would you like to do?\n \n\t1) Say I'll Be **On-Time** \n\t2) Say I'll Be **Present**\n\n\tM) **Main Menu**\n\tQ) **Quit**",
         });
 
         ontime_collector.on("collect", (m) => {
@@ -470,7 +470,7 @@ class attendanceTools {
     backToMainMenu(DM, name) {
         DM.channel.send({
             content:
-                "Please choose the number that corresponds to what you want to do.\n  \n\t1. **Show/Cancel** Existing Entries\n\t2. Say You'll Be **Absent** or **Late**...\n\tQ. **Quit**",
+                "Please choose the number that corresponds to what you want to do.\n  \n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**...\n\tQ) **Quit**",
         });
         this.handleSomethingElse(DM, name);
     }
@@ -554,7 +554,7 @@ class attendanceTools {
                 case "yes":
                     DM.channel.send({
                         content:
-                            "Please choose the number that corresponds to what you want to do.\n  \n\t1. **Show/Cancel** Existing Entries\n\t2. Say You'll Be **Absent** or **Late**...\n\tQ. **Quit**",
+                            "Please choose the number that corresponds to what you want to do.\n  \n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**...\n\tQ) **Quit**",
                     });
                     this.handleSomethingElse(DM, name);
                     break;

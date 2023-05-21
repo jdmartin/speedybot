@@ -23,7 +23,7 @@ module.exports = {
         const name = interaction.user.username;
 
         const DM = await interaction.user.send({
-            content: `Please choose the number that corresponds to what you want to do.\n  \n\t1. **Show/Cancel** Existing Entries\n\t2. Say You'll Be **Absent** or **Late**...\n\tQ. **Quit**`,
+            content: `Please choose the number that corresponds to what you want to do.\n  \n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**\n\tQ) **Quit**`,
         });
 
         const collector = DM.channel.createMessageCollector({
