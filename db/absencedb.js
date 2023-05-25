@@ -29,8 +29,12 @@ class CreateDatabase {
         var lateDBPrep = absencedb.prepare(
             "CREATE TABLE IF NOT EXISTS `latecomers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `start_date`, `comment` TEXT)",
         );
+        var messagesDBPrep = absencedb.prepare(
+            "CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `discord_name` TEXT, `start_date` TEXT, `end_date` TEXT, `messageID` TEXT, `kind` TEXT)",
+        );
         absenceDBPrep.run();
         lateDBPrep.run();
+        messagesDBPrep.run();
     }
 }
 
@@ -267,6 +271,45 @@ class AttendanceTools {
         ontimePrep.run(message.author.username, sm, sd);
     }
 
+    storeSpeedyMessageDetails(name, start_date, end_date, message_id, kind) {
+        var messagePrep = absencedb.prepare(
+            "INSERT INTO messages(discord_name, start_date, end_date, messageID, kind) VALUES (?,?,?,?,?)",
+        );
+        messagePrep.run(name, start_date, end_date, message_id, kind);
+    }
+
+    async removeSpeedyMessage(name, start_date, end_date, kind) {
+        var selectMessagePrep = absencedb.prepare(
+            "SELECT messageID FROM messages WHERE discord_name = ? AND start_date = ? AND end_date = ? AND kind = ?",
+        );
+
+        // Get the ID of the message that matches the above parameters
+        var result = selectMessagePrep.get(name, start_date, end_date, kind);
+        var messageId = result ? result.messageID : null;
+
+        // Now, delete that message from the attendance channel.
+        var channel = client.channels.cache.get(`${process.env.attendance_channel}`);
+        const messages = await channel.messages.fetch({ limit: 100 });
+
+        // Filter and delete old messages
+        messages
+            .filter((message) => {
+                return message.author.bot && message.id == messageId;
+            })
+            .forEach(async (message) => {
+                try {
+                    await message.delete();
+                    console.log(`Deleted message: ${message.content}`);
+                } catch (error) {
+                    console.error("Error deleting message:", error);
+                }
+            });
+
+        // Now, cleanup the messages table.
+        var cleanupMessagesTablePrep = absencedb.prepare("DELETE FROM messages WHERE messageID = ?");
+        cleanupMessagesTablePrep.run(messageId);
+    }
+
     processDBUpdate(message, nickname, kind, startDate, endDate, comment, restriction) {
         //Make sure there's a comment:
         if (comment == undefined) {
@@ -336,6 +379,7 @@ class AttendanceTools {
         //Create some helpers and ensure needed parts:
         var friendlyStart = dateTools.makeFriendlyDates(start);
         var friendlyStartUndo = format(new Date(start + offset), "MMM dd");
+        var username = message.author.username;
         //Make certain there's an end value.
         if (!end) {
             end = start;
@@ -371,11 +415,17 @@ class AttendanceTools {
                     .get(`${process.env.attendance_channel}`)
                     .send(
                         `${message.author.username} will be absent from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`,
-                    );
+                    )
+                    .then((message) => {
+                        this.storeSpeedyMessageDetails(username, start, end, message.id, "absent");
+                    });
             } else {
                 client.channels.cache
                     .get(`${process.env.attendance_channel}`)
-                    .send(`${message.author.username} will be absent on ${friendlyStart}. They commented: ${reason}`);
+                    .send(`${message.author.username} will be absent on ${friendlyStart}. They commented: ${reason}`)
+                    .then((message) => {
+                        this.storeSpeedyMessageDetails(username, start, end, message.id, "absent");
+                    });
             }
         }
         if (this_command === "late") {
@@ -384,12 +434,24 @@ class AttendanceTools {
                     .get(`${process.env.attendance_channel}`)
                     .send(
                         `${message.author.username} will be late to raid from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`,
-                    );
+                    )
+                    .then((message) => {
+                        this.storeSpeedyMessageDetails(username, start, end, message.id, "late");
+                    });
             } else {
                 client.channels.cache
                     .get(`${process.env.attendance_channel}`)
-                    .send(`${message.author.username} will be late on ${friendlyStart}. They commented: ${reason}`);
+                    .send(`${message.author.username} will be late on ${friendlyStart}. They commented: ${reason}`)
+                    .then((message) => {
+                        this.storeSpeedyMessageDetails(username, start, end, message.id, "late");
+                    });
             }
+        }
+        if (this_command === "ontime") {
+            this.removeSpeedyMessage(username, start, end, "late");
+        }
+        if (this_command === "present") {
+            this.removeSpeedyMessage(username, start, end, "absent");
         }
     }
 }
