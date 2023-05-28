@@ -13,6 +13,7 @@ module.exports = {
             content: "Here are the raid rules. You can also see the latest version on the Corkboard!",
             files: ["./resources/images/rules.png"],
             components: [row],
+            ephemeral: true,
         });
     },
 };
