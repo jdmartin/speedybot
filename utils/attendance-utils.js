@@ -319,7 +319,7 @@ class attendanceTools {
         acc_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
             if (m.content && m.author.bot === false) {
-                comment = m.content;
+                comment = `"${m.content}"`;
                 theMessage = m;
                 acc_collector.stop("validComment");
             }
