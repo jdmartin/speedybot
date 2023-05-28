@@ -10,34 +10,40 @@ module.exports = {
                 .setDescription("Name of the Raid")
                 .setRequired(true)
                 .addChoices(
-                    { name: "Sepulchre", value: "sepulchre" },
-                    { name: "Sanctum", value: "sanctum" },
-                    { name: "Nathria", value: "nathria" },
-                    { name: "Vault", value: "vault" },
                     { name: "Aberrus", value: "aberrus" },
+                    { name: "Nathria", value: "nathria" },
+                    { name: "Sanctum", value: "sanctum" },
+                    { name: "Sepulchre", value: "sepulchre" },
+                    { name: "Vault", value: "vault" },
                 ),
         ),
 
     async execute(interaction) {
-        const shadowlandsRaids = ["sanctum", "nathria", "sepulchre"];
-        const dragonflightRaids = ["vault", "aberrus"];
+        const raidExpansionMap = new Map();
+        raidExpansionMap.set("aberrus", "Dragonflight");
+        raidExpansionMap.set("nathria", "Shadowlands");
+        raidExpansionMap.set("sanctum", "Shadowlands");
+        raidExpansionMap.set("sepulchre", "Shadowlands");
+        raidExpansionMap.set("vault", "Dragonflight");
+
         const Shadowlands = require("../resources/strats/shadowlands.js");
         const Dragonflight = require("../resources/strats/dragonflight.js");
 
         const raidChoice = interaction.options.getString("raid_name");
-        var expansionChoice = "";
+        let expansionChoice = "";
         let embeds = [];
 
-        if (shadowlandsRaids.includes(raidChoice)) {
-            expansionChoice = "Shadowlands";
-            embeds = [Shadowlands[raidChoice]]; // Access the embed object from the Shadowlands module based on raidChoice
-        } else if (dragonflightRaids.includes(raidChoice)) {
-            expansionChoice = "Dragonflight";
-            embeds = [Dragonflight[raidChoice]]; // Access the embed object from the Dragonflight module based on raidChoice
+        if (raidExpansionMap.has(raidChoice)) {
+            expansionChoice = raidExpansionMap.get(raidChoice);
+            if (expansionChoice === "Shadowlands") {
+                embeds = [Shadowlands[raidChoice]];
+            } else if (expansionChoice === "Dragonflight") {
+                embeds = [Dragonflight[raidChoice]];
+            }
         }
 
-        interaction.reply({
-            content: "It's dangerous to go alone!  Take these:\n",
+        await interaction.reply({
+            content: "It's dangerous to go alone! Take these:\n",
             embeds: embeds,
             ephemeral: true,
         });
