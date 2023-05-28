@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("discord.js");
 
 const absence = require("../db/absencedb-slash.js");
 const absenceDBHelper = new absence.DataDisplayTools();
