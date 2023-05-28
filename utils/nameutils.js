@@ -9,4 +9,4 @@ function asyncGetName(message) {
 
 module.exports = {
     asyncGetName,
-}
+};

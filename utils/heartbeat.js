@@ -1,9 +1,9 @@
 require("dotenv").config();
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = process.env.speedyport;
 
-const helmet = require('helmet');
+const helmet = require("helmet");
 
 class Heartbeat {
     startBeating() {
@@ -17,18 +17,17 @@ class Heartbeat {
         app.use(helmet.referrerPolicy());
         app.use(helmet.xssFilter());
 
-
         app.get(process.env.HEARTBEAT_PATH, (req, res) => {
-            res.set('Cache-control', 'public, max-age=86400')
-            res.send('🐢')
-        })
+            res.set("Cache-control", "public, max-age=86400");
+            res.send("🐢");
+        });
 
-        app.listen(port, 'localhost', () => {
-            console.log(`Heartbeat beating on http://localhost:${port}${process.env.HEARTBEAT_PATH}`)
-        })
+        app.listen(port, "localhost", () => {
+            console.log(`Heartbeat beating on http://localhost:${port}${process.env.HEARTBEAT_PATH}`);
+        });
     }
-};
+}
 
 module.exports = {
-    Heartbeat
-}
+    Heartbeat,
+};
