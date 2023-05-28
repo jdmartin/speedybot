@@ -1,21 +1,15 @@
-const {
-    SlashCommandBuilder
-} = require('@discordjs/builders');
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('xkcd')
-        .setDescription('Get a random xkcd comic!'),
+    data: new SlashCommandBuilder().setName("xkcd").setDescription("Get a random xkcd comic!"),
     async execute(interaction) {
         const https = require("https");
 
         (async function () {
-            const {
-                num
-            } = https.get('https://xkcd.com/info.0.json', res => {
+            const { num } = https.get("https://xkcd.com/info.0.json", (res) => {
                 res.setEncoding("utf8");
-                let body = '';
-                res.on("data", data => {
+                let body = "";
+                res.on("data", (data) => {
                     body += data;
                 });
                 res.on("end", () => {
