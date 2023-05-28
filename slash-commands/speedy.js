@@ -17,7 +17,7 @@ module.exports = {
             **raidbrigade**: Need the code for the in-game channel?
             **rules**: Read the Raid Rules!
             **sheep**: Need CC? Speedy's got you.
-            **speedysource**: View my source code.
+            **sourcecode**: View my source code.
             **strats**: Did you read the strat?
             **xkcd**: Read a random comic...\n\n
             __Attendance-related Commands__:
