@@ -7,7 +7,6 @@ const schedule = require("node-schedule");
 //Load helper files
 const speedydb = require("./db/speedydb.js");
 const absencedb = require("./db/absencedb.js");
-const xmasdb = require("./db/xmasdb.js");
 const utils = require("./utils/speedyutils.js");
 const slash = require("./utils/deploy-slash-commands");
 const heart = require("./utils/heartbeat.js");
@@ -36,8 +35,11 @@ const absence = new absencedb.CreateDatabase();
 absence.startup();
 
 //Initialize the xmas database:
-const xmas = new xmasdb.CreateXmasDatabase();
-xmas.startup();
+if (process.env.enable_xmas === "true") {
+    const xmasdb = require("./db/xmasdb.js");
+    const xmas = new xmasdb.CreateXmasDatabase();
+    xmas.startup();
+}
 
 //Database Cleanup
 const dbclean = new absencedb.DatabaseCleanup();

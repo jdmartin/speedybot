@@ -52,14 +52,21 @@ class XmasDisplayTools {
 
         var elfSql = xmasdb.prepare("SELECT * FROM elves WHERE year = ? ORDER BY name ASC");
         var elfResults = elfSql.all(currentYear);
-
-        elfResults.forEach((row) => {
+        if (elfResults.length > 0) {
+            elfResults.forEach((row) => {
+                elvesEmbed.addFields({
+                    name: row.name,
+                    value: "Number of Cards: " + row.count + "\nNotes: " + row.notes,
+                    inline: false,
+                });
+            });
+        } else {
             elvesEmbed.addFields({
-                name: row.name,
-                value: "Number of Cards: " + row.count + "\nNotes: " + row.notes,
+                name: "No one of consequence!",
+                value: "No elves, yet!  Looks like everyone's getting coal...",
                 inline: false,
             });
-        });
+        }
 
         return elvesEmbed;
     }
@@ -73,17 +80,25 @@ class XmasDisplayTools {
         var allTimeCardTotal = xmasdb.prepare("SELECT SUM(count) FROM elves");
         var allTimeCardTotalResults = allTimeCardTotal.pluck().get();
 
-        elfStatsEmbed.addFields({
-            name: `Total Cards for ${currentYear.toString()}`,
-            value: cardTotalResults.toString(),
-            inline: false,
-        });
+        if (cardTotalResults > 0) {
+            elfStatsEmbed.addFields({
+                name: `Total Cards for ${currentYear.toString()}`,
+                value: cardTotalResults.toString(),
+                inline: false,
+            });
 
-        elfStatsEmbed.addFields({
-            name: "All-Time Card Total",
-            value: allTimeCardTotalResults.toString(),
-            inline: false,
-        });
+            elfStatsEmbed.addFields({
+                name: "All-Time Card Total",
+                value: allTimeCardTotalResults.toString(),
+                inline: false,
+            });
+        } else {
+            elfStatsEmbed.addFields({
+                name: "Saddest Number of Cards:",
+                value: "0",
+                inline: false,
+            });
+        }
 
         return elfStatsEmbed;
     }
