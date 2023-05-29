@@ -1,11 +1,4 @@
-const {
-    ActionRowBuilder,
-    Events,
-    ModalBuilder,
-    SlashCommandBuilder,
-    TextInputBuilder,
-    TextInputStyle,
-} = require("discord.js");
+const { ActionRowBuilder, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } = require("discord.js");
 const utils = require("../utils/speedyutils.js");
 const xmasutils = require("../db/xmasdb.js");
 const xmas = new xmasutils.XmasTools();
@@ -53,30 +46,31 @@ module.exports = {
         // Show the modal to the user
         await interaction.showModal(modal);
 
-        client.on(Events.InteractionCreate, async (interaction) => {
-            if (!interaction.isModalSubmit()) return;
-            if (interaction.customId === "xmasModal") {
-                await interaction.reply({
+        const handleInteraction = async (receivedInteraction) => {
+            if (receivedInteraction.isModalSubmit() && receivedInteraction.customId === "xmasModal") {
+                const xmasCardsCount = receivedInteraction.fields.getTextInputValue("xmasCardsCountInput");
+                const xmasNotes = receivedInteraction.fields.getTextInputValue("xmasNotesInput");
+                console.log({ xmasCardsCount, xmasNotes });
+
+                let theName = "";
+                if (receivedInteraction.member.nickname != null) {
+                    theName = receivedInteraction.member.nickname;
+                } else {
+                    theName = receivedInteraction.user.username;
+                }
+
+                xmas.addElf(theName, xmasCardsCount, xmasNotes);
+
+                await receivedInteraction.reply({
                     content: process.env.xmas_address,
                     ephemeral: true,
                 });
-            }
-        });
 
-        client.on(Events.InteractionCreate, (interaction) => {
-            if (!interaction.isModalSubmit()) return;
-
-            // Get the data entered by the user
-            const xmasCardsCount = interaction.fields.getTextInputValue("xmasCardsCountInput");
-            const xmasNotes = interaction.fields.getTextInputValue("xmasNotesInput");
-            console.log({ xmasCardsCount, xmasNotes });
-            let theName = "";
-            if (interaction.member.nickname != null) {
-                theName = interaction.member.nickname;
-            } else {
-                theName = interaction.user.username;
+                // Remove the event listener after handling the interaction
+                client.off("interactionCreate", handleInteraction);
             }
-            xmas.addElf(theName, xmasCardsCount, xmasNotes);
-        });
+        };
+
+        client.on("interactionCreate", handleInteraction);
     },
 };
