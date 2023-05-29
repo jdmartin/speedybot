@@ -1,48 +1,16 @@
+const { ChannelType } = require("discord.js");
+
 module.exports = {
     name: "strats",
     description: "Get all the links to strats for the current raid, or for an older raid.",
     usage: "[optional raid name]",
     notes: "Right now, the only optional names are: nathria and sanctum",
-    execute(message, args) {
-        const Shadowlands = require("../resources/strats/shadowlands.js");
-        const Dragonflight = require("../resources/strats/dragonflight.js");
-
-        if (!args.length) {
-            message.channel.send({
-                content:
-                    "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [Dragonflight.aberrus],
-            });
-        } else if (args[0].toLowerCase() === "sepulchre") {
-            message.channel.send({
-                content:
-                    "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [Shadowlands.sepulchre],
-            });
-        } else if (args[0].toLowerCase() === "sanctum") {
-            message.channel.send({
-                content:
-                    "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [Shadowlands.sanctum],
-            });
-        } else if (args[0].toLowerCase() === "nathria") {
-            message.channel.send({
-                content:
-                    "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [Shadowlands.nathria],
-            });
-        } else if (args[0].toLowerCase() === "vault") {
-            message.channel.send({
-                content:
-                    "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [Dragonflight.vault],
-            });
-        } else if (args[0].toLowerCase() === "aberrus") {
-            message.channel.send({
-                content:
-                    "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [Dragonflight.aberrus],
-            });
+    execute(message) {
+        const response = `Hey, friend.\n\nIn keeping with changes to Discord, !${this.name} is now **/${this.name}**.\n\nIf you're the curious type, you can read more about Discord's changes here: <https://support-dev.discord.com/hc/en-us/articles/6025578854295-Why-We-Moved-to-Slash-Commands>.\n ~🐢`;
+        if (message.channel.type === ChannelType.DM) {
+            message.channel.send(response);
+        } else {
+            message.member.send(response);
         }
     },
 };

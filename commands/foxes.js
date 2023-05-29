@@ -1,24 +1,16 @@
+const { ChannelType } = require("discord.js");
+
 module.exports = {
-    name: 'foxes',
-    description: 'See a random fox!',
-    usage: '',
-    notes: 'Foxes from https://randomfox.ca/',
+    name: "foxes",
+    description: "See a random fox!",
+    usage: "",
+    notes: "Foxes from https://randomfox.ca/",
     execute(message) {
-        const https = require("https");
-        (async function () {
-            const {
-                image
-            } = https.get('https://randomfox.ca/floof/', res => {
-                res.setEncoding("utf8");
-                let body = '';
-                res.on("data", data => {
-                    body += data;
-                });
-                res.on("end", () => {
-                    var bodyParsed = JSON.parse(body);
-                    message.channel.send(bodyParsed.image);
-                });
-            });
-        })();
+        const response = `Hey, friend.\n\nIn keeping with changes to Discord, !${this.name} is now **/${this.name}**.\n\nIf you're the curious type, you can read more about Discord's changes here: <https://support-dev.discord.com/hc/en-us/articles/6025578854295-Why-We-Moved-to-Slash-Commands>.\n ~🐢`;
+        if (message.channel.type === ChannelType.DM) {
+            message.channel.send(response);
+        } else {
+            message.member.send(response);
+        }
     },
 };

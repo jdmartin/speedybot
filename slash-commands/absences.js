@@ -13,9 +13,9 @@ module.exports = {
                 .setDescription("how much do you want to know?")
                 .setRequired(true)
                 .addChoices(
+                    { name: "today", value: "today" },
                     { name: "all", value: "all" },
                     { name: "mine", value: "mine" },
-                    { name: "today", value: "today" },
                 ),
         ),
 
