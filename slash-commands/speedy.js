@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder().setName("speedy").setDescription("Learn more about Speedybot commands!"),
     async execute(interaction) {
-        const response = `Hello!  Here are some things I can do (commands work here or in chat):\n
+        const response = `Hello!  Here are some things I can do:\n
             __Remember: All commands start with a **/**__\n
             **adventure**: Want a real Adventure?
             **askspeedy**: Need a *guaranteed* helpful answer? Ask away.
