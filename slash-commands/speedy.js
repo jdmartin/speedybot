@@ -13,7 +13,6 @@ module.exports = {
             **foxes**: How about a fox instead? To the Internet!
             **logs**: Want the link to the logs?
             **miniwheat**: Why not flip a mini-wheat?
-            **next**: What are we doing?
             **raidbrigade**: Need the code for the in-game channel?
             **rules**: Read the Raid Rules!
             **sheep**: Need CC? Speedy's got you.
