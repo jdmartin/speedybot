@@ -1,11 +1,17 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("sourcecode")
         .setDescription("See the source code that started an Internet sensa... well, a thing on the Internet!"),
     async execute(interaction) {
-        let response = `My source code is here: https://github.com/jdmartin/speedybot\nThis is the latest release: https://github.com/jdmartin/speedybot/releases/latest/`;
-        interaction.reply({ content: response, ephemeral: true });
+        const button = new ButtonBuilder()
+            .setLabel("See the latest release")
+            .setURL("https://github.com/jdmartin/speedybot/releases/latest/")
+            .setStyle(ButtonStyle.Link);
+
+        const row = new ActionRowBuilder().addComponents(button);
+        let response = `My source code is here: https://github.com/jdmartin/speedybot\n\n`;
+        interaction.reply({ content: response, components: [row], ephemeral: true });
     },
 };
