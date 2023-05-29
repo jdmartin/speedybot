@@ -10,7 +10,7 @@ module.exports = {
             .setStyle(ButtonStyle.Link);
 
         const row = new ActionRowBuilder().addComponents(button);
-        let response = `The password is: **${process.env.CORKBOARD_PASS}**\n\n`;
+        let response = `The password is: "**${process.env.CORKBOARD_PASS}**"\n\n`;
         interaction.reply({ content: response, components: [row], ephemeral: true });
     },
 };
