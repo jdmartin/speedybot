@@ -13,6 +13,7 @@ module.exports = {
         interaction.reply({
             content: `Here's the code for the in-game Raid Brigade channel: **${process.env.raidbrigcode}**\n\nNot sure how to use it? Click the button! \n\n`,
             components: [row],
+            ephemeral: true,
         });
     },
 };
