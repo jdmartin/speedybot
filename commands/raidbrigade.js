@@ -1,10 +1,16 @@
+const { ChannelType } = require("discord.js");
+
 module.exports = {
-	name: 'raidbrigade',
-	description: 'What\'s the code?',
-	usage: '',
-	notes: '',
-	execute(message) {
-        require("dotenv").config();
-		message.channel.send(`Here's the code for the in-game Raid Brigade channel: **${process.env.raidbrigcode}**\nNot sure how to use it? See this: https://worldofwarcraft.com/en-us/invite/K9P9EZpT39q?region=US&faction=Alliance`);
-	},
+    name: "raidbrigade",
+    description: "What's the code?",
+    usage: "",
+    notes: "",
+    execute(message) {
+        const response = `Hey, friend.\n\nIn keeping with changes to Discord, !${this.name} is now **/${this.name}**.\n\nIf you're the curious type, you can read more about Discord's changes here: <https://support-dev.discord.com/hc/en-us/articles/6025578854295-Why-We-Moved-to-Slash-Commands>.\n ~🐢`;
+        if (message.channel.type === ChannelType.DM) {
+            message.channel.send(response);
+        } else {
+            message.member.send(response);
+        }
+    },
 };

@@ -1,27 +1,16 @@
-module.exports = {
-    name: 'xkcd',
-    description: 'Get a random xkcd comic!',
-    usage: '',
-    notes: 'Comics from https://xkcd.com/',
-    execute(message) {
-        const https = require("https");
+const { ChannelType } = require("discord.js");
 
-        (async function () {
-            const {
-                num
-            } = https.get('https://xkcd.com/info.0.json', res => {
-                res.setEncoding("utf8");
-                let body = '';
-                res.on("data", data => {
-                    body += data;
-                });
-                res.on("end", () => {
-                    var bodyParsed = JSON.parse(body);
-                    let theNum = bodyParsed.num;
-                    const choice = Math.round(Math.random() * (theNum - 1) + 1);
-                    message.channel.send(`Here's a random comic from xkcd.com: https://xkcd.com/${choice}/\n`);
-                });
-            });
-        })();
+module.exports = {
+    name: "xkcd",
+    description: "Get a random xkcd comic!",
+    usage: "",
+    notes: "Comics from https://xkcd.com/",
+    execute(message) {
+        const response = `Hey, friend.\n\nIn keeping with changes to Discord, !${this.name} is now **/${this.name}**.\n\nIf you're the curious type, you can read more about Discord's changes here: <https://support-dev.discord.com/hc/en-us/articles/6025578854295-Why-We-Moved-to-Slash-Commands>.\n ~🐢`;
+        if (message.channel.type === ChannelType.DM) {
+            message.channel.send(response);
+        } else {
+            message.member.send(response);
+        }
     },
 };

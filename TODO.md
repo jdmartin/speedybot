@@ -1,3 +1,4 @@
 - ~~Implement alias system.~~
 - ~~Interactive attendance. (Ongoing, Aug 2022)~~
 - Do cleanup of messages table. (end_date < today - 14?)
+- Decide what to do with /next.

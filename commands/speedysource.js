@@ -1,10 +1,16 @@
+const { ChannelType } = require("discord.js");
+
 module.exports = {
-	name: 'speedysource',
-	description: 'See my source code!',
-	usage: '',
-	notes: '',
-	execute(message) {
-		const response = (`My source code is here: https://github.com/jdmartin/speedybot\nThis is the latest release: https://github.com/jdmartin/speedybot/releases/latest/`)
-		message.channel.send(response);
-	},
+    name: "speedysource",
+    description: "See my source code!",
+    usage: "",
+    notes: "",
+    execute(message) {
+        const response = `Hey, friend.\n\nIn keeping with changes to Discord, !${this.name} is now **/sourcecode**.\n\nIf you're the curious type, you can read more about Discord's changes here: <https://support-dev.discord.com/hc/en-us/articles/6025578854295-Why-We-Moved-to-Slash-Commands>.\n ~🐢`;
+        if (message.channel.type === ChannelType.DM) {
+            message.channel.send(response);
+        } else {
+            message.member.send(response);
+        }
+    },
 };

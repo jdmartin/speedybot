@@ -1,12 +1,7 @@
 require("dotenv").config();
-const fs = require('fs');
+const fs = require("fs");
 
-const {
-    Client,
-    Collection,
-    GatewayIntentBits,
-    Partials
-} = require("discord.js");
+const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
 
 const myIntents = [
     GatewayIntentBits.DirectMessages,
@@ -18,26 +13,26 @@ const myIntents = [
     GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.GuildPresences,
     GatewayIntentBits.GuildWebhooks,
-    GatewayIntentBits.MessageContent
-]
+    GatewayIntentBits.MessageContent,
+];
 
-const myPartials = [
-    Partials.Channel,
-    Partials.Message,
-    Partials.Reaction,
-]
+const myPartials = [Partials.Channel, Partials.Message, Partials.Reaction];
 
 const client = new Client({
     intents: myIntents,
-    partials: myPartials
+    partials: myPartials,
 });
 
 const commands = [];
-const commandFiles = fs.readdirSync(require('path').resolve(__dirname, '../commands')).filter(file => file.endsWith('.js'));
+const commandFiles = fs
+    .readdirSync(require("path").resolve(__dirname, "../commands"))
+    .filter((file) => file.endsWith(".js"));
 client.commands = new Collection();
 
 const slashCommands = [];
-const slashCommandFiles = fs.readdirSync(require('path').resolve(__dirname, '../slash-commands')).filter(file => file.endsWith('.js'));
+const slashCommandFiles = fs
+    .readdirSync(require("path").resolve(__dirname, "../slash-commands"))
+    .filter((file) => file.endsWith(".js"));
 client.slashCommands = new Collection();
 
 class CreateCommandSet {
@@ -68,5 +63,5 @@ module.exports = {
     slashCommands: slashCommands,
     slashCommandFiles: slashCommandFiles,
     CreateCommandSet,
-    SpeedyTools
+    SpeedyTools,
 };

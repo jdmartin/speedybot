@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,53 +10,42 @@ module.exports = {
                 .setDescription("Name of the Raid")
                 .setRequired(true)
                 .addChoices(
-                    { name: "Sepulchre", value: "sepulchre" },
-                    { name: "Sanctum", value: "sanctum" },
-                    { name: "Nathria", value: "nathria" },
-                    { name: "Vault", value: "vault" },
                     { name: "Aberrus", value: "aberrus" },
+                    { name: "Nathria", value: "nathria" },
+                    { name: "Sanctum", value: "sanctum" },
+                    { name: "Sepulchre", value: "sepulchre" },
+                    { name: "Vault", value: "vault" },
                 ),
         ),
 
     async execute(interaction) {
+        const raidExpansionMap = new Map();
+        raidExpansionMap.set("aberrus", "Dragonflight");
+        raidExpansionMap.set("nathria", "Shadowlands");
+        raidExpansionMap.set("sanctum", "Shadowlands");
+        raidExpansionMap.set("sepulchre", "Shadowlands");
+        raidExpansionMap.set("vault", "Dragonflight");
+
         const Shadowlands = require("../resources/strats/shadowlands.js");
         const Dragonflight = require("../resources/strats/dragonflight.js");
 
-        if (interaction.options.getString("raid_name") === "sanctum") {
-            interaction.reply({
-                content:
-                    "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [Shadowlands.sanctum],
-                ephemeral: true,
-            });
-        } else if (interaction.options.getString("raid_name") === "nathria") {
-            interaction.reply({
-                content:
-                    "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [Shadowlands.nathria],
-                ephemeral: true,
-            });
-        } else if (interaction.options.getString("raid_name") === "sepulchre") {
-            interaction.reply({
-                content:
-                    "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [Shadowlands.sepulchre],
-                ephemeral: true,
-            });
-        } else if (interaction.options.getString("raid_name") === "vault") {
-            interaction.reply({
-                content:
-                    "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [Dragonflight.vault],
-                ephemeral: true,
-            });
-        } else if (interaction.options.getString("raid_name") === "aberrus") {
-            interaction.reply({
-                content:
-                    "It's dangerous to go alone!  Take these:\n\n(If you don't see anything, try `!simplestrats` or `!speedyhelp`.)",
-                embeds: [Dragonflight.aberrus],
-                ephemeral: true,
-            });
+        const raidChoice = interaction.options.getString("raid_name");
+        let expansionChoice = "";
+        let embeds = [];
+
+        if (raidExpansionMap.has(raidChoice)) {
+            expansionChoice = raidExpansionMap.get(raidChoice);
+            if (expansionChoice === "Shadowlands") {
+                embeds = [Shadowlands[raidChoice]];
+            } else if (expansionChoice === "Dragonflight") {
+                embeds = [Dragonflight[raidChoice]];
+            }
         }
+
+        await interaction.reply({
+            content: "It's dangerous to go alone! Take these:\n",
+            embeds: embeds,
+            ephemeral: true,
+        });
     },
 };
