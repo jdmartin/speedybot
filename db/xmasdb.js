@@ -63,6 +63,30 @@ class XmasDisplayTools {
 
         return elvesEmbed;
     }
+
+    stats() {
+        const elfStatsEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("🧝‍♀️ Happy Little Stats 🧝");
+
+        var cardTotal = xmasdb.prepare("SELECT SUM(count) FROM elves WHERE year = ?");
+        var cardTotalResults = cardTotal.pluck().get(currentYear);
+
+        var allTimeCardTotal = xmasdb.prepare("SELECT SUM(count) FROM elves");
+        var allTimeCardTotalResults = allTimeCardTotal.pluck().get();
+
+        elfStatsEmbed.addFields({
+            name: `Total Cards for ${currentYear.toString()}`,
+            value: cardTotalResults.toString(),
+            inline: false,
+        });
+
+        elfStatsEmbed.addFields({
+            name: "All-Time Card Total",
+            value: allTimeCardTotalResults.toString(),
+            inline: false,
+        });
+
+        return elfStatsEmbed;
+    }
 }
 
 module.exports = {

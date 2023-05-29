@@ -8,6 +8,7 @@ module.exports = {
 
     async execute(interaction) {
         let response = xmasDBHelper.show();
-        interaction.reply({ embeds: [response], ephemeral: true });
+        let stats = xmasDBHelper.stats();
+        interaction.reply({ embeds: [response, stats], ephemeral: true });
     },
 };
