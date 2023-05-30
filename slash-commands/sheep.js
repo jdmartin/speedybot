@@ -10,6 +10,7 @@ module.exports = {
         var files = fs.readdirSync("resources/images/sheep/");
         let chosenFile = files[getRandomIntInclusive(0, files.length - 1)];
         const file = new AttachmentBuilder(`resources/images/sheep/${chosenFile}`);
+
         interaction.reply({
             content: "+1 sheep:",
             files: [file],
