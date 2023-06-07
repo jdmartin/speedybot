@@ -41,7 +41,7 @@ class attendanceTools {
         this.chosenAction = "";
         this.restriction = "";
         const absence_collector = DM.channel.createMessageCollector({
-            time: 30000,
+            time: 120000,
         });
 
         DM.channel.send({
@@ -103,7 +103,7 @@ class attendanceTools {
         this.counter = 0;
         this.Responses = [];
         const asr_collector = DM.channel.createMessageCollector({
-            time: 30000,
+            time: 120000,
         });
 
         DM.channel.send({
@@ -175,7 +175,7 @@ class attendanceTools {
 
     absenceMonthCollection(DM, name) {
         const amc_collector = DM.channel.createMessageCollector({
-            time: 30000,
+            time: 120000,
         });
 
         DM.channel.send({
@@ -224,7 +224,7 @@ class attendanceTools {
 
     absenceDayCollection(DM, name) {
         const adc_collector = DM.channel.createMessageCollector({
-            time: 30000,
+            time: 120000,
         });
 
         DM.channel.send({
@@ -306,7 +306,7 @@ class attendanceTools {
 
     absenceCommentCollection(DM, name) {
         const acc_collector = DM.channel.createMessageCollector({
-            time: 30000,
+            time: 120000,
         });
 
         var comment = "";
@@ -407,7 +407,7 @@ class attendanceTools {
         this.chosenAction = "";
         this.restriction = "";
         const ontime_collector = DM.channel.createMessageCollector({
-            time: 30000,
+            time: 120000,
         });
 
         DM.channel.send({
@@ -524,7 +524,7 @@ class attendanceTools {
 
     askIfSomethingElse(DM, name) {
         const otherwise_collector = DM.channel.createMessageCollector({
-            time: 30000,
+            time: 120000,
         });
 
         DM.channel.send({
@@ -575,7 +575,7 @@ class attendanceTools {
     handleSomethingElse(DM, name) {
         var response = "";
         const otherwise_yes_collector = DM.channel.createMessageCollector({
-            time: 30000,
+            time: 120000,
         });
 
         otherwise_yes_collector.on("collect", (m) => {
