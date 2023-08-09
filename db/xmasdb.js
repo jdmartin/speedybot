@@ -78,6 +78,11 @@ class XmasDisplayTools {
             // Replace newline characters with ', ' in the address field
             row.address = row.address.replace(/\\n/g, ', ');
 
+            // If count is 'null', then we probably have a case where the person chose 'all'
+            if (row.count == null) {
+                row.count = "all";
+            }
+
             // Create an object representing the row with custom values
             const newRow = {
                 ...row,
@@ -111,9 +116,13 @@ class XmasDisplayTools {
         var elfResults = elfSql.all(currentYear);
         if (elfResults.length > 0) {
             elfResults.forEach((row) => {
+                let theCount = row.count;
+                if (theCount == null) {
+                    theCount = "all"
+                }
                 elvesEmbed.addFields({
                     name: row.name,
-                    value: "Number of Cards: " + row.count + "\nNotes: " + row.notes,
+                    value: "Number of Cards: " + theCount + "\nNotes: " + row.notes,
                     inline: false,
                 });
             });

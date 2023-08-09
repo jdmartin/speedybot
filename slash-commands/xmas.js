@@ -19,7 +19,7 @@ module.exports = {
             // The label is the prompt the user sees for this input
             .setLabel("How many cards would you like to send?")
             // Set placeholder
-            .setPlaceholder("Enter a number")
+            .setPlaceholder("Enter a number or 'all'")
             // At least 1 digit, not more than 3.
             .setMinLength(1)
             .setMaxLength(3)
@@ -38,9 +38,9 @@ module.exports = {
         const xmasAddressInput = new TextInputBuilder()
             .setCustomId("xmasAddressInput")
             .setLabel("Address (only visible to Leisa and Evie!):")
-            .setPlaceholder("Please provide your address. If you plan to provide it some other way, please indicate that.")
+            .setPlaceholder("Address changed? Please put it here. If you plan to provide it some other way, please indicate that.")
             .setStyle(TextInputStyle.Paragraph)
-            .setRequired(true);
+            .setRequired(false);
 
         // An action row only holds one text input,
         // so you need one action row per text input.
@@ -59,6 +59,12 @@ module.exports = {
                 const xmasCardsCount = receivedInteraction.fields.getTextInputValue("xmasCardsCountInput");
                 const xmasNotes = receivedInteraction.fields.getTextInputValue("xmasNotesInput");
                 const xmasAddress = receivedInteraction.fields.getTextInputValue("xmasAddressInput");
+                var processedAddress = "";
+                if (xmasAddress.length == 0) {
+                    processedAddress = "On File";
+                } else {
+                    processedAddress = xmasAddress;
+                }
                 console.log({ xmasCardsCount, xmasNotes });
 
                 let theName = "";
@@ -68,7 +74,7 @@ module.exports = {
                     theName = receivedInteraction.user.username;
                 }
 
-                xmas.addElf(theName, xmasCardsCount, xmasNotes, xmasAddress);
+                xmas.addElf(theName, xmasCardsCount, xmasNotes, processedAddress);
 
                 await receivedInteraction.reply({
                     content: process.env.xmas_address,
