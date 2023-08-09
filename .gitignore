@@ -357,4 +357,3 @@ db/absence.db
 .vscode
 .DS_Store
 db/xmas.db
-elf-data/*.xslx
