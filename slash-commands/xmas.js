@@ -35,13 +35,21 @@ module.exports = {
             .setStyle(TextInputStyle.Paragraph)
             .setRequired(false);
 
+        const xmasAddressInput = new TextInputBuilder()
+            .setCustomId("xmasAddressInput")
+            .setLabel("Address (only visible to Leisa and Evie!):")
+            .setPlaceholder("Please provide your address. If you plan to provide it some other way, please indicate that.")
+            .setStyle(TextInputStyle.Paragraph)
+            .setRequired(true);
+
         // An action row only holds one text input,
         // so you need one action row per text input.
         const firstActionRow = new ActionRowBuilder().addComponents(xmasCardsCountInput);
         const secondActionRow = new ActionRowBuilder().addComponents(xmasNotesInput);
+        const thirdActionRow = new ActionRowBuilder().addComponents(xmasAddressInput);
 
         // Add inputs to the modal
-        modal.addComponents(firstActionRow, secondActionRow);
+        modal.addComponents(firstActionRow, secondActionRow, thirdActionRow);
 
         // Show the modal to the user
         await interaction.showModal(modal);
@@ -50,6 +58,7 @@ module.exports = {
             if (receivedInteraction.isModalSubmit() && receivedInteraction.customId === "xmasModal") {
                 const xmasCardsCount = receivedInteraction.fields.getTextInputValue("xmasCardsCountInput");
                 const xmasNotes = receivedInteraction.fields.getTextInputValue("xmasNotesInput");
+                const xmasAddress = receivedInteraction.fields.getTextInputValue("xmasAddressInput");
                 console.log({ xmasCardsCount, xmasNotes });
 
                 let theName = "";
@@ -59,7 +68,7 @@ module.exports = {
                     theName = receivedInteraction.user.username;
                 }
 
-                xmas.addElf(theName, xmasCardsCount, xmasNotes);
+                xmas.addElf(theName, xmasCardsCount, xmasNotes, xmasAddress);
 
                 await receivedInteraction.reply({
                     content: process.env.xmas_address,
