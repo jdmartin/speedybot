@@ -40,7 +40,7 @@ class XmasTools {
     }
 
     updateElfInDB(count, name, notes, address) {
-        const elfUpdate = xmasdb.prepare("UPDATE elves SET count = ?, notes = ? , address = ? WHERE name = ? AND year = ?");
+        const elfUpdate = xmasdb.prepare("UPDATE elves SET count = ?, notes = ?, address = ? WHERE name = ? AND year = ?");
         elfUpdate.run(count, notes, address, name, currentYear);
     }
 }
@@ -68,7 +68,7 @@ class XmasDisplayTools {
         const headerRow = worksheet.addRow(columnOrder.map(column => columnMapping[column]));
         // Set column widths (adjust values as needed)
         headerRow.eachCell((cell, colNumber) => {
-            const columnWidths = [20, 10, 30, 10, 10, 15, 45]; // Example widths
+            const columnWidths = [20, 20, 30, 10, 10, 15, 45]; // Example widths
             const columnIndex = colNumber - 1; // ExcelJS is 1-based index, array is 0-based
             worksheet.getColumn(colNumber).width = columnWidths[columnIndex];
         });
@@ -80,7 +80,7 @@ class XmasDisplayTools {
 
             // If count is 'null', then we probably have a case where the person chose 'all'
             if (row.count == null) {
-                row.count = "all";
+                row.count = "all (should verify)";
             }
 
             // Create an object representing the row with custom values
@@ -138,7 +138,7 @@ class XmasDisplayTools {
     }
 
     stats() {
-        const elfStatsEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("🧝‍♀️ Happy Little Stats 🧝");
+        const elfStatsEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("🧝‍♀️ Happy Little Stats 🧝").setFooter({ text: "(Does not count replies of 'all')", });
 
         var cardTotal = xmasdb.prepare("SELECT SUM(count) FROM elves WHERE year = ?");
         var cardTotalResults = cardTotal.pluck().get(currentYear);
@@ -148,13 +148,13 @@ class XmasDisplayTools {
 
         if (cardTotalResults > 0) {
             elfStatsEmbed.addFields({
-                name: `Total Cards for ${currentYear.toString()}`,
+                name: `Total Cards for ${currentYear.toString()}:`,
                 value: cardTotalResults.toString(),
                 inline: false,
             });
 
             elfStatsEmbed.addFields({
-                name: "All-Time Card Total",
+                name: "All-Time Card Total:",
                 value: allTimeCardTotalResults.toString(),
                 inline: false,
             });

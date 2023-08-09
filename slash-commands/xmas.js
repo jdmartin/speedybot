@@ -38,9 +38,9 @@ module.exports = {
         const xmasAddressInput = new TextInputBuilder()
             .setCustomId("xmasAddressInput")
             .setLabel("Address (only visible to Leisa and Evie!):")
-            .setPlaceholder("Address changed? Please put it here. If you plan to provide it some other way, please indicate that.")
+            .setPlaceholder("Required to get cards. If you plan to provide this some other way, please indicate that.")
             .setStyle(TextInputStyle.Paragraph)
-            .setRequired(false);
+            .setRequired(true);
 
         // An action row only holds one text input,
         // so you need one action row per text input.
