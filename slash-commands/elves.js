@@ -9,6 +9,17 @@ module.exports = {
     async execute(interaction) {
         let response = xmasDBHelper.show();
         let stats = xmasDBHelper.stats();
-        interaction.reply({ embeds: [response, stats], ephemeral: true });
+        // Export the Excel file and get the attachment and buffer
+        const { attachment } = await xmasDBHelper.export();
+
+        // Reply to the interaction with the embed and the Excel file as an attachment
+        interaction.reply({
+            content: "Here's the elf information and the Excel file attachment:",
+            embeds: [response, stats],
+            files: [attachment],
+            ephemeral: true
+        }).catch(error => {
+            console.error(error);
+        });
     },
 };
