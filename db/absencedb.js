@@ -41,7 +41,7 @@ class CreateDatabase {
 class AttendanceTools {
     //Commands absent, late, ontime, and present for scheduling.
 
-    absent(message, restriction, args) {
+    async absent(message, restriction, args) {
         //Just use the first three letters of the month to avoid confusion:
         let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
@@ -79,20 +79,18 @@ class AttendanceTools {
             var comment = args.slice(2).join(" ");
         }
         //Get the nickname
-        var nickname = getNicknames(message);
-        nickname.then((result) => {
-            if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
-                //If we have a range of days, let's store them individually...
-                //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-                this.processDBUpdate(message, result.nickname, "absent", startDate, endDate, comment, restriction);
-                this.generateResponse(message, "absent", "present", startDate, endDate, comment);
-            } else {
-                message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
-            }
-        });
+        const nickname = await getNicknames(message);
+        if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
+            //If we have a range of days, let's store them individually...
+            //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
+            this.processDBUpdate(message, nickname, "absent", startDate, endDate, comment, restriction);
+            this.generateResponse(message, nickname, "absent", "present", startDate, endDate, comment);
+        } else {
+            message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
+        }
     }
 
-    late(message, restriction, args) {
+    async late(message, restriction, args) {
         //Just use the first three letters of the month to avoid confusion:
         let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
@@ -129,20 +127,18 @@ class AttendanceTools {
             var comment = args.slice(2).join(" ");
         }
         //Get the nickname
-        var nickname = getNicknames(message);
-        nickname.then((result) => {
-            if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
-                //If we have a range of days, let's store them individually...
-                //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-                this.processDBUpdate(message, result.nickname, "late", startDate, endDate, comment, restriction);
-                this.generateResponse(message, "late", "ontime", startDate, endDate, comment);
-            } else {
-                message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
-            }
-        });
+        const nickname = await getNicknames(message);
+        if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
+            //If we have a range of days, let's store them individually...
+            //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
+            this.processDBUpdate(message, nickname, "late", startDate, endDate, comment, restriction);
+            this.generateResponse(message, nickname, "late", "ontime", startDate, endDate, comment);
+        } else {
+            message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
+        }
     }
 
-    ontime(message, restriction, args) {
+    async ontime(message, restriction, args) {
         //Just use the first three letters of the month to avoid confusion:
         let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
@@ -173,9 +169,11 @@ class AttendanceTools {
         } else {
             var endDate = startDate;
         }
+        //Get nickname
+        const nickname = await getNicknames(message);
         //Only update db if we have a valid date.
         if (isValid(parseISO(startDate))) {
-            this.processDBUpdate(message, undefined, "ontime", startDate, endDate, undefined, restriction);
+            this.processDBUpdate(message, nickname, "ontime", startDate, endDate, undefined, restriction);
             if (startDate != endDate) {
                 message.author.send(
                     `Ok, I've got you down as on-time from ${dateTools.makeFriendlyDates(
@@ -190,7 +188,7 @@ class AttendanceTools {
         }
     }
 
-    present(message, restriction, args) {
+    async present(message, restriction, args) {
         //Just use the first three letters of the month to avoid confusion:
         let shortMonth = args[0].substring(0, 3);
         if (args[2]) {
@@ -221,12 +219,14 @@ class AttendanceTools {
         } else {
             var endDate = startDate;
         }
+        //Get nickname
+        const nickname = await getNicknames(message);
         //Make sure dates are good.
         if (isValid(parseISO(startDate)) && isValid(parseISO(endDate))) {
             //If we have a range of days, let's store them individually...
             //NOTE: Since raid days are Tue, Thu, Sun... we'll store only those.
-            this.processDBUpdate(message, undefined, "present", startDate, endDate, undefined, restriction);
-            this.generateResponse(message, "present", "absent", startDate, endDate, undefined);
+            this.processDBUpdate(message, nickname, "present", startDate, endDate, undefined, restriction);
+            this.generateResponse(message, nickname, "present", "absent", startDate, endDate, undefined);
         } else {
             message.reply("Sorry, something went wrong. Please tell Doolan what command you typed.");
         }
@@ -329,14 +329,14 @@ class AttendanceTools {
     // prettier-ignore
     processDBUpdateFilterLoop(result, kind, message, nickname, comment, restriction) {
         for (let i = 0; i < result.length; i++) {
-                let short_item = result[i].toISOString().split("T")[0];
-                let newYear = short_item.split("-")[0];
-                let newMonth = short_item.split("-")[1];
-                let newDay = short_item.split("-")[2];
-                let newDate = newYear + "-" + newMonth + "-" + newDay;
-                this.filterDBUpdate(restriction, message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind);
-            }
+            let short_item = result[i].toISOString().split("T")[0];
+            let newYear = short_item.split("-")[0];
+            let newMonth = short_item.split("-")[1];
+            let newDay = short_item.split("-")[2];
+            let newDate = newYear + "-" + newMonth + "-" + newDay;
+            this.filterDBUpdate(restriction, message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind);
         }
+    }
 
     // prettier-ignore
     filterDBUpdate(restriction, message, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind) {
@@ -375,11 +375,17 @@ class AttendanceTools {
     }
 
     //command generateResponse for notifying the user of what has been done.
-    generateResponse(message, this_command, undo_command, start, end, reason) {
+    generateResponse(message, nickname, this_command, undo_command, start, end, reason) {
         //Create some helpers and ensure needed parts:
         var friendlyStart = dateTools.makeFriendlyDates(start);
         var friendlyStartUndo = format(new Date(start + offset), "MMM dd");
         var username = message.author.username;
+        var namestring = "";
+        if (nickname != username) {
+            namestring = username + " (" + nickname + ")"
+        } else {
+            namestring = username;
+        }
         //Make certain there's an end value.
         if (!end) {
             end = start;
@@ -414,7 +420,7 @@ class AttendanceTools {
                 client.channels.cache
                     .get(`${process.env.attendance_channel}`)
                     .send(
-                        `${message.author.username} will be absent from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`,
+                        `${namestring} will be absent from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`,
                     )
                     .then((message) => {
                         this.storeSpeedyMessageDetails(username, start, end, message.id, "absent");
@@ -422,7 +428,7 @@ class AttendanceTools {
             } else {
                 client.channels.cache
                     .get(`${process.env.attendance_channel}`)
-                    .send(`${message.author.username} will be absent on ${friendlyStart}. They commented: ${reason}`)
+                    .send(`${namestring} will be absent on ${friendlyStart}. They commented: ${reason}`)
                     .then((message) => {
                         this.storeSpeedyMessageDetails(username, start, end, message.id, "absent");
                     });
@@ -433,7 +439,7 @@ class AttendanceTools {
                 client.channels.cache
                     .get(`${process.env.attendance_channel}`)
                     .send(
-                        `${message.author.username} will be late to raid from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`,
+                        `${namestring} will be late to raid from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`,
                     )
                     .then((message) => {
                         this.storeSpeedyMessageDetails(username, start, end, message.id, "late");
@@ -441,7 +447,7 @@ class AttendanceTools {
             } else {
                 client.channels.cache
                     .get(`${process.env.attendance_channel}`)
-                    .send(`${message.author.username} will be late on ${friendlyStart}. They commented: ${reason}`)
+                    .send(`${namestring} will be late on ${friendlyStart}. They commented: ${reason}`)
                     .then((message) => {
                         this.storeSpeedyMessageDetails(username, start, end, message.id, "late");
                     });
