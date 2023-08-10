@@ -356,4 +356,3 @@ config.json
 db/absence.db
 .vscode
 .DS_Store
-db/xmas.db

@@ -34,13 +34,6 @@ speedy.startup();
 const absence = new absencedb.CreateDatabase();
 absence.startup();
 
-//Initialize the xmas database:
-if (process.env.enable_xmas === "true") {
-    const xmasdb = require("./db/xmasdb.js");
-    const xmas = new xmasdb.CreateXmasDatabase();
-    xmas.startup();
-}
-
 //Database Cleanup
 const dbclean = new absencedb.DatabaseCleanup();
 const job = schedule.scheduleJob("01 01 01 * * * ", function () {
