@@ -719,7 +719,7 @@ class attendanceTools {
         });
 
         DM.channel.send({
-            content: `\n \nWould you like to do remove the entry for ${dateHelper.makeFriendlyDates(date)}? (**y**/**n**)\n`,
+            content: `\n \nWould you like to remove the entry for ${dateHelper.makeFriendlyDates(date)}? (**y**/**n**)\n`,
         });
 
         quickConfirm_collector.on("collect", (m) => {
