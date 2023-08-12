@@ -747,8 +747,11 @@ class attendanceTools {
                 case "yes":
                     if (category === "late") {
                         quickHelper.quickOntime(name, date);
+                        // We can use the same date twice since we're only removing singles and not ranges.
+                        absenceCreate.removeSpeedyMessage(name, date, date, "late");
                     } else if (category === "absence") {
                         quickHelper.quickPresent(name, date);
+                        absenceCreate.removeSpeedyMessage(name, date, date, "absent");
                     }
                     DM.channel.send({
                         content:

@@ -180,10 +180,12 @@ class AttendanceTools {
                         startDate,
                     )} until ${dateTools.makeFriendlyDates(endDate)}. See you then!`,
                 );
+                this.removeSpeedyMessage(message.author.username, startDate, endDate, "late");
             } else {
                 message.author.send(
                     `Ok, I've got you down as on-time on ${dateTools.makeFriendlyDates(startDate)}. See you then!`,
                 );
+                this.removeSpeedyMessage(message.author.username, startDate, startDate, "late");
             }
         }
     }
@@ -298,7 +300,7 @@ class AttendanceTools {
             })
             .forEach(async (message) => {
                 try {
-                    await message.delete();
+                    message.delete();
                     console.log(`Deleted message: ${message.content}`);
                 } catch (error) {
                     console.error("Error deleting message:", error);
