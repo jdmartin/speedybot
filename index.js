@@ -41,6 +41,8 @@ const job = schedule.scheduleJob("01 01 01 * * * ", function () {
     console.log("Cleaned Absences");
     dbclean.cleanLatecomers();
     console.log("Cleaned Latecomers");
+    dbclean.cleanMessages();
+    console.log("Cleaned Messages");
 });
 
 //Database Vacuuming
