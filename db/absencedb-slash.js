@@ -47,6 +47,20 @@ class AttendanceTools {
         ontimePrep.run(name, sm, sd);
     }
 
+    quickOntime(name, date) {
+        var quickOntimePrep = absencedb.prepare(
+            "DELETE FROM latecomers WHERE (discord_name = ? AND start_date = ?)",
+        );
+        quickOntimePrep.run(name, date);
+    }
+
+    quickPresent(name, date) {
+        var quickPresentPrep = absencedb.prepare(
+            "DELETE FROM absences WHERE (discord_name = ? AND end_date = ?)",
+        );
+        quickPresentPrep.run(name, date);
+    }
+
     processDBUpdate(name, nickname, kind, startDate, endDate, comment) {
         //Make sure there's a comment:
         if (comment == undefined) {
@@ -263,6 +277,62 @@ class DataDisplayTools {
             lateEmbed,
             absentCount,
             lateCount,
+        };
+    }
+
+    showForAttendanceManagement(name) {
+        var absentCount = 0;
+        var lateCount = 0;
+        var absenceList = [];
+        var lateList = [];
+        var rawList = [];
+
+        var attend_sql = absencedb.prepare(
+            "SELECT * FROM absences WHERE end_date >= date('now','localtime') AND discord_name = ? ORDER BY end_date ASC, name",
+        );
+
+        var attend_late_sql = absencedb.prepare(
+            "SELECT * FROM latecomers WHERE start_date >= date('now','localtime') AND discord_name = ? ORDER BY start_date ASC, name",
+        );
+
+        var absResults = attend_sql.all(name);
+        var lateResults = attend_late_sql.all(name);
+
+        absResults.forEach((row) => {
+            absenceList.push(dateTools.makeFriendlyDates(row.end_date));
+            rawList.push(row.end_date);
+            absentCount += 1;
+        });
+        lateResults.forEach((row) => {
+            lateList.push(dateTools.makeFriendlyDates(row.start_date));
+            rawList.push(row.start_date);
+            lateCount += 1;
+        });
+        const absAndLateEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Upcoming absences and tardiness").setFooter({
+            text: "This is known to the Infinite Speedyflight. Use this information wisely.",
+        });
+
+        for (var i = 0; i < absenceList.length; i++) {
+            absAndLateEmbed.addFields({
+                name: "absent",
+                value: "**" + i + ":** " + absenceList[i],
+            });
+        }
+        for (var i = absentCount; i < lateList.length + absentCount; i++) {
+            var lateIndex = i - absentCount;
+            absAndLateEmbed.addFields({
+                name: "late",
+                value: "**" + i + ":** " + lateList[lateIndex],
+            })
+        }
+
+        return {
+            absAndLateEmbed,
+            absenceList,
+            absentCount,
+            lateCount,
+            lateList,
+            rawList,
         };
     }
 }

@@ -4,6 +4,7 @@ const absence = require("../db/absencedb.js");
 const absenceCreate = new absence.AttendanceTools();
 const absenceSlash = require("../db/absencedb-slash.js");
 const absenceDBHelper = new absenceSlash.DataDisplayTools();
+const quickHelper = new absenceSlash.AttendanceTools();
 const dates = require("./datetools.js");
 const dateHelper = new dates.dateTools();
 
@@ -66,9 +67,11 @@ class attendanceTools {
                     this.chosenAction = "late";
                     absence_collector.stop("two_chosen");
                     break;
-                case "m" || "M":
+                case "m":
+                case "M":
                     absence_collector.stop("menu");
-                case "q" || "Q":
+                case "q":
+                case "Q":
                     absence_collector.stop("user");
                     break;
             }
@@ -138,10 +141,12 @@ class attendanceTools {
                     this.restriction = "Sundays";
                     asr_collector.stop("range");
                     break;
-                case "m" || "M":
+                case "m":
+                case "M":
                     asr_collector.stop("menu");
                     break;
-                case "q" || "Q":
+                case "q":
+                case "Q":
                     asr_collector.stop("user");
                     break;
             }
@@ -432,10 +437,12 @@ class attendanceTools {
                     this.chosenAction = "present";
                     ontime_collector.stop("two_chosen");
                     break;
-                case "m" || "M":
+                case "m":
+                case "M":
                     ontime_collector.stop("menu");
                     break;
-                case "q" || "Q":
+                case "q":
+                case "Q":
                     ontime_collector.stop("user");
                     break;
             }
@@ -466,11 +473,72 @@ class attendanceTools {
         });
     }
 
+    quickAbsentOrLateCancel(DM, name, absenceList, lateList, rawList) {
+        var theSelection = '';
+        const quick_collector = DM.channel.createMessageCollector({
+            time: 120000,
+        });
+
+        DM.channel.send({
+            content:
+                "\n \nYou can enter the number of the item you'd like to remove, or...\n \n\tM) **Main Menu**\n\tQ) **Quit**",
+        });
+
+        quick_collector.on("collect", (m) => {
+            //Triggered when the collector is receiving a new message
+            let validAnswers = ["m", "M", "q", "Q"];
+            for (var i = 0; i < rawList.length; i++) {
+                validAnswers.push(i.toString());
+            }
+
+            if (m.content && m.author.bot === false) {
+                if (!validAnswers.includes(m.content)) {
+                    this.sorryTryAgain(DM, m.content);
+                } else if (m.content === "m" || m.content === "M") {
+                    quick_collector.stop("menu");
+                } else if (m.content === "q" || m.content === "Q") {
+                    quick_collector.stop("user");
+                } else {
+                    theSelection = parseInt(m.content);
+                    quick_collector.stop("valid_choice");
+                }
+            }
+        });
+
+        quick_collector.on("end", (collected, reason) => {
+            switch (reason) {
+                case "time":
+                    DM.channel.send({
+                        content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`,
+                    });
+                    break;
+                case "valid_choice":
+                    if (theSelection > absenceList.length - 1) {
+                        this.confirmQuickDelete(name, rawList[theSelection], "late", DM);
+                    } else if (theSelection <= absenceList.length - 1) {
+                        this.confirmQuickDelete(name, rawList[theSelection], "absence", DM);
+                    }
+                    break;
+                case "two_chosen":
+                    this.absenceSingleOrRangeCollection(DM, name);
+                    break;
+                case "menu":
+                    this.backToMainMenu(DM, name);
+                    break;
+                case "user":
+                    DM.channel.send({
+                        content: "Ok, see you!",
+                    });
+                    break;
+            }
+        });
+    }
+
     //// Utils ////
     backToMainMenu(DM, name) {
         DM.channel.send({
             content:
-                "Please choose the number that corresponds to what you want to do.\n  \n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**...\n\tQ) **Quit**",
+                "Please choose the number that corresponds to what you want to do.\n  \n\t0) **Quickly Cancel** An Existing Entry\n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**...\n\tQ) **Quit**",
         });
         this.handleSomethingElse(DM, name);
     }
@@ -540,10 +608,12 @@ class attendanceTools {
                 }
             }
             switch (m.content) {
-                case "y" || "Y":
+                case "y":
+                case "Y":
                     otherwise_collector.stop("yes");
                     break;
-                case "n" || "N":
+                case "n":
+                case "N":
                     otherwise_collector.stop("no");
                     break;
             }
@@ -554,7 +624,7 @@ class attendanceTools {
                 case "yes":
                     DM.channel.send({
                         content:
-                            "Please choose the number that corresponds to what you want to do.\n  \n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**...\n\tQ) **Quit**",
+                            "Please choose the number that corresponds to what you want to do.\n  \n\t0) **Quickly Cancel** An Existing Entry\n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**...\n\tQ) **Quit**",
                     });
                     this.handleSomethingElse(DM, name);
                     break;
@@ -580,20 +650,24 @@ class attendanceTools {
 
         otherwise_yes_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
-            let validAnswers = ["1", "2", "q", "Q"];
+            let validAnswers = ["0", "1", "2", "q", "Q"];
             if (m.content && m.author.bot === false) {
                 if (!validAnswers.includes(m.content)) {
                     this.sorryTryAgain(DM);
                 }
             }
             switch (m.content) {
+                case "0":
+                    otherwise_yes_collector.stop("zero");
+                    break;
                 case "1":
                     otherwise_yes_collector.stop("one");
                     break;
                 case "2":
                     otherwise_yes_collector.stop("two");
                     break;
-                case "q" || "Q":
+                case "q":
+                case "Q":
                     otherwise_yes_collector.stop("user");
                     break;
             }
@@ -601,6 +675,17 @@ class attendanceTools {
 
         otherwise_yes_collector.on("end", (collected, reason) => {
             switch (reason) {
+                case "zero":
+                    response = absenceDBHelper.showForAttendanceManagement(name);
+                    if ((response.absentCount || response.lateCount) > 0) {
+                        DM.channel.send({
+                            embeds: [response.absAndLateEmbed],
+                        });
+                        this.quickAbsentOrLateCancel(DM, name, response.absenceList, response.lateList, response.rawList);
+                    } else {
+                        this.noAbsencesOrLateFound(DM, name);
+                    }
+                    break;
                 case "one":
                     response = absenceDBHelper.show(name, "mine", "short");
                     DM.channel.send({
@@ -624,6 +709,63 @@ class attendanceTools {
                     DM.channel.send({
                         content: "Ok, see you!",
                     });
+            }
+        });
+    }
+
+    confirmQuickDelete(name, date, category, DM) {
+        const quickConfirm_collector = DM.channel.createMessageCollector({
+            time: 120000,
+        });
+
+        DM.channel.send({
+            content: `\n \nWould you like to do remove the entry for ${dateHelper.makeFriendlyDates(date)}? (**y**/**n**)\n`,
+        });
+
+        quickConfirm_collector.on("collect", (m) => {
+            //Triggered when the collector is receiving a new message
+            let validAnswers = ["y", "Y", "n", "N"];
+            if (m.content && m.author.bot === false) {
+                if (!validAnswers.includes(m.content)) {
+                    this.sorryTryAgain(DM);
+                }
+            }
+            switch (m.content) {
+                case "y":
+                case "Y":
+                    quickConfirm_collector.stop("yes");
+                    break;
+                case "n":
+                case "N":
+                    quickConfirm_collector.stop("no");
+                    break;
+            }
+        });
+
+        quickConfirm_collector.on("end", (collected, reason) => {
+            switch (reason) {
+                case "yes":
+                    if (category === "late") {
+                        quickHelper.quickOntime(name, date);
+                    } else if (category === "absence") {
+                        quickHelper.quickPresent(name, date);
+                    }
+                    DM.channel.send({
+                        content:
+                            "\n\tDone.\n  \n\t0) **Quickly Cancel** An Existing Entry\n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**...\n\tQ) **Quit**",
+                    });
+                    this.handleSomethingElse(DM, name);
+                    break;
+                case "no":
+                    DM.channel.send({
+                        content: "Ok, see you!",
+                    });
+                    break;
+                case "time":
+                    DM.channel.send({
+                        content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`,
+                    });
+                    break;
             }
         });
     }
