@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const http = require("http");
 const app = express();
 const port = process.env.speedyport;
 const bind_ip = process.env.bind_ip;
@@ -27,7 +28,25 @@ class Heartbeat {
             console.log(`Heartbeat beating on http://${bind_ip}:${port}${process.env.HEARTBEAT_PATH}`);
         });
     }
+
+    startPushing() {
+        function callURL() {
+            const url = process.env.MONITOR_URL;
+
+            http.get(url, (response) => {
+            }).on('error', (error) => {
+                console.error(`Error calling URL: ${error.message}`);
+            });
+        }
+
+        callURL();
+
+        // Call the URL every 300 seconds (3 minutes) using the interval timer
+        const interval = 298000; // 298 seconds * 1000 milliseconds
+        setInterval(callURL, interval);
+    }
 }
+
 
 module.exports = {
     Heartbeat,
