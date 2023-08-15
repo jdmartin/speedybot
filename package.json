@@ -4,8 +4,6 @@
     "date-fns": "^2.22.1",
     "discord.js": "^14.0.1",
     "dotenv": "^16.3.1",
-    "express": "^4.17.1",
-    "helmet": "^7.0.0",
     "node-schedule": "^2.1.0",
     "sqlstring": "^2.3.2"
   }
