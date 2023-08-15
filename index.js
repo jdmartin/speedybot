@@ -56,14 +56,12 @@ client.once("ready", () => {
     // prints "Ready!" to the console once the bot is online
     client.user.setActivity("you. | say /speedy", { type: 2 });
 
-    console.log("Speedy Standing By!");
-
     //Start the heartbeat
     const heartbeat = new heart.Heartbeat();
     if (process.env.heart_type === 'push') {
         heartbeat.startPushing();
-    } else if (process.env.heart_type === 'beating') {
-        heartbeat.startBeating();
+    } else if (process.env.heart_type === 'socket') {
+        heartbeat.startSocket();
     }
 });
 
