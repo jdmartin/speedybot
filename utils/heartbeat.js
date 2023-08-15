@@ -24,6 +24,7 @@ class Heartbeat {
     }
 
     startSocket() {
+        const cachedResponse = this.generateResponse();
         const socketPath = '/tmp/speedybot-socket.sock';
         // Remove the socket file if it exists
         if (fs.existsSync(socketPath)) {
@@ -31,18 +32,8 @@ class Heartbeat {
         }
 
         const unixServer = net.createServer(function (client) {
-            // HTTP response components (because nginx)
-            const responseStatusLine = 'HTTP/1.1 200 OK';
-            const responseHeaders = 'Content-Type: text/plain\r\n';
-            const responseBody = 'TRTL!\n';
-
-            // Combine the components to create the full response
-            const response = `${responseStatusLine}\r\n${responseHeaders}\r\n${responseBody}`;
-
-            // Send the response to the connected client
-            client.write(response);
-
-            // Close the connection after sending the response
+            // Send the cached response to the connected client, then close the connection
+            client.write(cachedResponse);
             client.end();
         });
 
@@ -66,6 +57,18 @@ class Heartbeat {
                 process.exit(0);
             });
         });
+    }
+
+    generateResponse() {
+        // HTTP response components (because nginx)
+        const responseStatusLine = 'HTTP/1.1 200 OK';
+        const responseHeaders = 'Content-Type: text/plain\r\n';
+        const responseBody = 'TRTL!\n';
+
+        // Combine the components to create the full response
+        const response = `${responseStatusLine}\r\n${responseHeaders}\r\n${responseBody}`;
+
+        return response;
     }
 }
 
