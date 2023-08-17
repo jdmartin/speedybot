@@ -10,7 +10,7 @@ const absencedb = require("./db/absencedb.js");
 const utils = require("./utils/speedyutils.js");
 const slash = require("./utils/deploy-slash-commands");
 const heart = require("./utils/heartbeat.js");
-const { InteractionType } = require("discord.js");
+const { ActivityType, InteractionType } = require("discord.js");
 
 //Get some essential variables from the helper files:
 const client = utils.client;
@@ -54,7 +54,7 @@ const job_two = schedule.scheduleJob("02 01 03 * * *", function () {
 //Once that's done, let's move on to main.
 client.once("ready", () => {
     // prints "Ready!" to the console once the bot is online
-    client.user.setActivity("you. | say /speedy", { type: 2 });
+    client.user.setActivity("Say /speedy", { type: ActivityType.Custom });
 
     //Start the heartbeat
     const heartbeat = new heart.Heartbeat();
