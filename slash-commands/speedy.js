@@ -9,6 +9,7 @@ module.exports = {
             **askspeedy**: Need a *guaranteed* helpful answer? Ask away.
             **cats**: Need a cat right now? Let's get one from the Internet...
             **corkboard**: Where's the website? What's the password?
+            **cows**: Mooooooo!  MOO!
             **dogs**: We've got 'em!  You can also use '/dog corgi' to get a corgi.
             **foxes**: How about a fox instead? To the Internet!
             **logs**: Want the link to the logs?
