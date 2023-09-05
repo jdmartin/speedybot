@@ -1,4 +1,3 @@
-require("dotenv").config();
 const utils = require("../utils/speedyutils.js");
 const client = utils.client;
 

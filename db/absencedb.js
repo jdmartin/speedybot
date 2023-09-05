@@ -1,4 +1,3 @@
-require("dotenv").config();
 const { ChannelType, EmbedBuilder } = require("discord.js");
 const sqlite3 = require("better-sqlite3");
 const utils = require("../utils/speedyutils.js");

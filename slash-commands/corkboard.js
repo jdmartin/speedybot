@@ -3,7 +3,6 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = re
 module.exports = {
     data: new SlashCommandBuilder().setName("corkboard").setDescription("What's the link and code?"),
     async execute(interaction) {
-        require("dotenv").config();
         const button = new ButtonBuilder()
             .setLabel("Visit the Corkboard")
             .setURL("https://velocitycorkboard.com")

@@ -1,6 +1,3 @@
-//Load the config file.
-require("dotenv").config();
-
 //Libraries
 const schedule = require("node-schedule");
 
