@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 
-const absence = require("../db/absencedb-slash.js");
+const absence = require("../utils/absencedb-slash.js");
 const absenceDBHelper = new absence.DataDisplayTools();
 
 module.exports = {

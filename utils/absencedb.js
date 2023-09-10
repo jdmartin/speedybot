@@ -1,34 +1,35 @@
 const { ChannelType, EmbedBuilder } = require("discord.js");
 const sqlite3 = require("better-sqlite3");
-const utils = require("../utils/speedyutils.js");
-const nameutils = require("../utils/nameutils.js");
-const dates = require("../utils/datetools.js");
+const utils = require("./speedyutils.js");
+const nameutils = require("./nameutils.js");
+const dates = require("./datetools.js");
 const dateTools = new dates.dateTools();
 const getNicknames = nameutils.asyncGetName;
 const client = utils.client;
 //Date-related
 const offset = "T11:52:29.478Z";
-var eachDayOfInterval = require("date-fns/eachDayOfInterval");
-var format = require("date-fns/format");
-var isTuesday = require("date-fns/isTuesday");
-var isThursday = require("date-fns/isThursday");
-var isSunday = require("date-fns/isSunday");
-var isValid = require("date-fns/isValid");
-var parseISO = require("date-fns/parseISO");
-//Other Tools
-var SqlString = require("sqlstring");
-
-let absencedb = new sqlite3("./db/absence.db");
+const eachDayOfInterval = require("date-fns/eachDayOfInterval");
+const format = require("date-fns/format");
+const isTuesday = require("date-fns/isTuesday");
+const isThursday = require("date-fns/isThursday");
+const isSunday = require("date-fns/isSunday");
+const isValid = require("date-fns/isValid");
+const parseISO = require("date-fns/parseISO");
+//DB
+const SqlString = require("sqlstring");
 
 class CreateDatabase {
+    constructor() {
+        this.absencedb = new sqlite3("./db/absence.db");
+    }
     startup() {
-        var absenceDBPrep = absencedb.prepare(
+        var absenceDBPrep = this.absencedb.prepare(
             "CREATE TABLE IF NOT EXISTS `absences` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date`, `comment` TEXT)",
         );
-        var lateDBPrep = absencedb.prepare(
+        var lateDBPrep = this.absencedb.prepare(
             "CREATE TABLE IF NOT EXISTS `latecomers` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `start_date`, `comment` TEXT)",
         );
-        var messagesDBPrep = absencedb.prepare(
+        var messagesDBPrep = this.absencedb.prepare(
             "CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `discord_name` TEXT, `start_date` TEXT, `end_date` TEXT, `messageID` TEXT, `kind` TEXT)",
         );
         absenceDBPrep.run();
@@ -38,6 +39,9 @@ class CreateDatabase {
 }
 
 class AttendanceTools {
+    constructor() {
+        this.absencedb = new sqlite3("./db/absence.db");
+    }
     //Commands absent, late, ontime, and present for scheduling.
 
     async absent(message, restriction, args) {
@@ -240,14 +244,14 @@ class AttendanceTools {
         } else {
             var identity = message.author.username;
         }
-        var absencePrep = absencedb.prepare(
+        var absencePrep = this.absencedb.prepare(
             "INSERT INTO absences(name, discord_name, start_year, start_month, start_day, end_date, comment) VALUES (?,?,?,?,?,?,?)",
         );
         absencePrep.run(identity, message.author.username, sy, sm, sd, end, comment);
     }
 
     addPresent(message, sm, sd) {
-        var presentPrep = absencedb.prepare(
+        var presentPrep = this.absencedb.prepare(
             "DELETE FROM absences WHERE (discord_name = ? AND start_month = ? AND start_day = ?)",
         );
         presentPrep.run(message.author.username, sm, sd);
@@ -259,28 +263,28 @@ class AttendanceTools {
         } else {
             var identity = message.author.username;
         }
-        var latePrep = absencedb.prepare(
+        var latePrep = this.absencedb.prepare(
             "INSERT INTO latecomers(name, discord_name, start_year, start_month, start_day, start_date, comment) VALUES (?,?,?,?,?,?,?)",
         );
         latePrep.run(identity, message.author.username, sy, sm, sd, start, comment);
     }
 
     addOntime(message, sm, sd) {
-        var ontimePrep = absencedb.prepare(
+        var ontimePrep = this.absencedb.prepare(
             "DELETE FROM latecomers WHERE (discord_name = ? AND start_month = ? AND start_day = ?)",
         );
         ontimePrep.run(message.author.username, sm, sd);
     }
 
     storeSpeedyMessageDetails(name, start_date, end_date, message_id, kind) {
-        var messagePrep = absencedb.prepare(
+        var messagePrep = this.absencedb.prepare(
             "INSERT INTO messages(discord_name, start_date, end_date, messageID, kind) VALUES (?,?,?,?,?)",
         );
         messagePrep.run(name, start_date, end_date, message_id, kind);
     }
 
     async removeSpeedyMessage(name, start_date, end_date, kind) {
-        var selectMessagePrep = absencedb.prepare(
+        var selectMessagePrep = this.absencedb.prepare(
             "SELECT messageID FROM messages WHERE discord_name = ? AND start_date = ? AND end_date = ? AND kind = ?",
         );
 
@@ -307,7 +311,7 @@ class AttendanceTools {
             });
 
         // Now, cleanup the messages table.
-        var cleanupMessagesTablePrep = absencedb.prepare("DELETE FROM messages WHERE messageID = ?");
+        var cleanupMessagesTablePrep = this.absencedb.prepare("DELETE FROM messages WHERE messageID = ?");
         cleanupMessagesTablePrep.run(messageId);
     }
 
@@ -464,6 +468,9 @@ class AttendanceTools {
 }
 
 class DataDisplayTools {
+    constructor() {
+        this.absencedb = new sqlite3("./db/absence.db");
+    }
     show(message, args) {
         //Convert arg0 and arg1 for string matching
         if (args[0]) {
@@ -472,18 +479,18 @@ class DataDisplayTools {
 
         //Get just the user's absences.
         if (lowerArgZero === "mine") {
-            var sql = absencedb.prepare(
+            var sql = this.absencedb.prepare(
                 "SELECT * FROM absences WHERE end_date >= date('now','localtime') AND discord_name = ? ORDER BY end_date ASC, name",
             );
             var absResults = sql.all(message.author.username);
         } else if (lowerArgZero === "today") {
-            var sql = absencedb.prepare(
+            var sql = this.absencedb.prepare(
                 "SELECT * FROM absences WHERE end_date = date('now','localtime') ORDER BY end_date ASC, name",
             );
             var absResults = sql.all();
         } else {
             //Get all absences for today and later.
-            var sql = absencedb.prepare(
+            var sql = this.absencedb.prepare(
                 "SELECT * FROM absences WHERE end_date BETWEEN date('now','localtime') AND date('now','+8 days') ORDER BY end_date ASC, name",
             );
             var absResults = sql.all();
@@ -503,17 +510,17 @@ class DataDisplayTools {
 
         //Get all tardiness from today and later.
         if (lowerArgZero === "mine") {
-            var late_sql = absencedb.prepare(
+            var late_sql = this.absencedb.prepare(
                 `SELECT * FROM latecomers WHERE start_date >= date('now','localtime') AND discord_name = ? ORDER BY start_date ASC, name`,
             );
             var lateResults = late_sql.all(message.author.username);
         } else if (lowerArgZero === "today") {
-            var late_sql = absencedb.prepare(
+            var late_sql = this.absencedb.prepare(
                 "SELECT * FROM latecomers WHERE start_date = date('now','localtime') ORDER BY start_date ASC, name",
             );
             var lateResults = late_sql.all();
         } else {
-            var late_sql = absencedb.prepare(
+            var late_sql = this.absencedb.prepare(
                 "SELECT * FROM latecomers WHERE start_date BETWEEN date('now','localtime') AND date('now', '+8 days') ORDER BY start_date ASC, name",
             );
             var lateResults = late_sql.all();
@@ -535,26 +542,29 @@ class DataDisplayTools {
 }
 
 class DatabaseCleanup {
+    constructor() {
+        this.absencedb = new sqlite3("./db/absence.db");
+    }
     cleanAbsences() {
         //Expire entries that occurred more than three days ago.
-        let sql = absencedb.prepare("DELETE FROM absences WHERE end_date < date('now', '-3 days')");
+        let sql = this.absencedb.prepare("DELETE FROM absences WHERE end_date < date('now', '-3 days')");
         sql.run();
     }
 
     cleanLatecomers() {
         //Expire entries that occurred more than three days ago.
-        let sql = absencedb.prepare("DELETE FROM latecomers WHERE start_date < date('now', '-3 days')");
+        let sql = this.absencedb.prepare("DELETE FROM latecomers WHERE start_date < date('now', '-3 days')");
         sql.run();
     }
 
     cleanMessages() {
         //Expire entries that occurred more than three days ago.
-        let sql = absencedb.prepare("DELETE FROM messages WHERE end_date < date('now', '-3 days')");
+        let sql = this.absencedb.prepare("DELETE FROM messages WHERE end_date < date('now', '-3 days')");
         sql.run();
     }
 
     vacuumDatabases() {
-        let sql = absencedb.prepare("VACUUM");
+        let sql = this.absencedb.prepare("VACUUM");
         sql.run();
     }
 }

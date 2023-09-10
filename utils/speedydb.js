@@ -3,7 +3,7 @@ const {
 } = require("discord.js");
 const sqlite3 = require('better-sqlite3');
 const statsdb = new sqlite3(':memory:');
-const utils = require('../utils/speedyutils.js');
+const utils = require('./speedyutils.js');
 const commandFiles = utils.commandFiles;
 const slashCommandFiles = utils.slashCommandFiles;
 
@@ -86,7 +86,7 @@ class GetStats {
                 inline: true
             })
         });
-        
+
         if (message.channel.type === ChannelType.DM) {
             message.channel.send({
                 embeds: [statsEmbed, slash_embed]
