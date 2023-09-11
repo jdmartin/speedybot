@@ -1,60 +1,62 @@
 const { EmbedBuilder } = require("discord.js");
 const sqlite3 = require("better-sqlite3");
-const utils = require("../utils/speedyutils.js");
-const dates = require("../utils/datetools.js");
+const utils = require("./speedyutils.js");
+const dates = require("./datetools.js");
 const dateTools = new dates.dateTools();
 const client = utils.client;
 //Date-related
-var eachDayOfInterval = require("date-fns/eachDayOfInterval");
-var isTuesday = require("date-fns/isTuesday");
-var isThursday = require("date-fns/isThursday");
-var isSunday = require("date-fns/isSunday");
-var isValid = require("date-fns/isValid");
-var parseISO = require("date-fns/parseISO");
-//Other Tools
-var SqlString = require("sqlstring");
-
-let absencedb = new sqlite3("./db/absence.db");
+const eachDayOfInterval = require("date-fns/eachDayOfInterval");
+const isTuesday = require("date-fns/isTuesday");
+const isThursday = require("date-fns/isThursday");
+const isSunday = require("date-fns/isSunday");
+const isValid = require("date-fns/isValid");
+const parseISO = require("date-fns/parseISO");
+//DB
+const SqlString = require("sqlstring");
 
 class AttendanceTools {
+    constructor() {
+        this.absencedb = new sqlite3("./db/absence.db");
+    }
+
     //command addAbsence, addLate, addOntime, and addPresent, processDBUpdate, for updating the db.
     addAbsence(name, nickname, sy, sm, sd, end, comment) {
-        var absencePrep = absencedb.prepare(
+        var absencePrep = this.absencedb.prepare(
             "INSERT INTO absences(name, discord_name, start_year, start_month, start_day, end_date, comment) VALUES (?,?,?,?,?,?,?)",
         );
         absencePrep.run(nickname, name, sy, sm, sd, end, comment);
     }
 
     addPresent(name, sm, sd) {
-        var presentPrep = absencedb.prepare(
+        var presentPrep = this.absencedb.prepare(
             "DELETE FROM absences WHERE (discord_name = ? AND start_month = ? AND start_day = ?)",
         );
         presentPrep.run(name, sm, sd);
     }
 
     addLate(name, nickname, sy, sm, sd, start, comment) {
-        var latePrep = absencedb.prepare(
+        var latePrep = this.absencedb.prepare(
             "INSERT INTO latecomers(name, discord_name, start_year, start_month, start_day, start_date, comment) VALUES (?,?,?,?,?,?,?)",
         );
         latePrep.run(nickname, name, sy, sm, sd, start, comment);
     }
 
     addOntime(name, sm, sd) {
-        var ontimePrep = absencedb.prepare(
+        var ontimePrep = this.absencedb.prepare(
             "DELETE FROM latecomers WHERE (discord_name = ? AND start_month = ? AND start_day = ?)",
         );
         ontimePrep.run(name, sm, sd);
     }
 
     quickOntime(name, date) {
-        var quickOntimePrep = absencedb.prepare(
+        var quickOntimePrep = this.absencedb.prepare(
             "DELETE FROM latecomers WHERE (discord_name = ? AND start_date = ?)",
         );
         quickOntimePrep.run(name, date);
     }
 
     quickPresent(name, date) {
-        var quickPresentPrep = absencedb.prepare(
+        var quickPresentPrep = this.absencedb.prepare(
             "DELETE FROM absences WHERE (discord_name = ? AND end_date = ?)",
         );
         quickPresentPrep.run(name, date);
@@ -188,23 +190,27 @@ class AttendanceTools {
 }
 
 class DataDisplayTools {
+    constructor() {
+        this.absencedb = new sqlite3("./db/absence.db");
+    }
+
     show(name, choice, length) {
         var absentCount = 0;
         var lateCount = 0;
         //Get just the user's absences.
         if (choice === "mine") {
-            var sql = absencedb.prepare(
+            var sql = this.absencedb.prepare(
                 "SELECT * FROM absences WHERE end_date >= date('now','localtime') AND discord_name = ? ORDER BY end_date ASC, name LIMIT 20",
             );
             var absResults = sql.all(name);
         } else if (choice === "today") {
-            var sql = absencedb.prepare(
+            var sql = this.absencedb.prepare(
                 "SELECT * FROM absences WHERE end_date = date('now','localtime') ORDER BY end_date ASC, name LIMIT 20",
             );
             var absResults = sql.all();
         } else {
             //Get all absences for today and later.
-            var sql = absencedb.prepare(
+            var sql = this.absencedb.prepare(
                 "SELECT * FROM absences WHERE end_date BETWEEN date('now','localtime') AND date('now','+8 days') ORDER BY end_date ASC, name LIMIT 20",
             );
             var absResults = sql.all();
@@ -235,17 +241,17 @@ class DataDisplayTools {
 
         //Get all tardiness from today and later.
         if (choice === "mine") {
-            var late_sql = absencedb.prepare(
+            var late_sql = this.absencedb.prepare(
                 `SELECT * FROM latecomers WHERE start_date >= date('now','localtime') AND discord_name = ? ORDER BY start_date ASC, name LIMIT 20`,
             );
             var lateResults = late_sql.all(name);
         } else if (choice === "today") {
-            var late_sql = absencedb.prepare(
+            var late_sql = this.absencedb.prepare(
                 "SELECT * FROM latecomers WHERE start_date = date('now','localtime') ORDER BY start_date ASC, name LIMIT 20",
             );
             var lateResults = late_sql.all();
         } else {
-            var late_sql = absencedb.prepare(
+            var late_sql = this.absencedb.prepare(
                 "SELECT * FROM latecomers WHERE start_date BETWEEN date('now','localtime') AND date('now', '+8 days') ORDER BY start_date ASC, name LIMIT 20",
             );
             var lateResults = late_sql.all();
@@ -286,11 +292,11 @@ class DataDisplayTools {
         var lateList = [];
         var rawList = [];
 
-        var attend_sql = absencedb.prepare(
+        var attend_sql = this.absencedb.prepare(
             "SELECT * FROM absences WHERE end_date >= date('now','localtime') AND discord_name = ? ORDER BY end_date ASC, name",
         );
 
-        var attend_late_sql = absencedb.prepare(
+        var attend_late_sql = this.absencedb.prepare(
             "SELECT * FROM latecomers WHERE start_date >= date('now','localtime') AND discord_name = ? ORDER BY start_date ASC, name",
         );
 

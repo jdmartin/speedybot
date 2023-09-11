@@ -1,42 +1,44 @@
 const { EmbedBuilder } = require("discord.js");
 
-const absence = require("../db/absencedb.js");
+const absence = require("../utils/absencedb.js");
 const absenceCreate = new absence.AttendanceTools();
-const absenceSlash = require("../db/absencedb-slash.js");
+const absenceSlash = require("../utils/absencedb-slash.js");
 const absenceDBHelper = new absenceSlash.DataDisplayTools();
 const quickHelper = new absenceSlash.AttendanceTools();
 const dates = require("./datetools.js");
 const dateHelper = new dates.dateTools();
 
 class attendanceTools {
-    Responses = [];
-    counter = 0;
-    chosenAction = "";
-    bypassList = ["ontime", "present"];
-    restriction = "";
+    constructor() {
+        this.Responses = [];
+        this.counter = 0;
+        this.chosenAction = "";
+        this.bypassList = ["ontime", "present"];
+        this.restriction = "";
 
-    // prettier-ignore
-    goodMonthResponses = [
-        "01", "1", "02", "2", "03", "3", "04", "4", "05", "5", "06", "6", "07", "7", "08", "8", "09", "9", "10", "11", "12", "q", "Q",
-    ];
+        // prettier-ignore
+        this.goodMonthResponses = [
+            "01", "1", "02", "2", "03", "3", "04", "4", "05", "5", "06", "6", "07", "7", "08", "8", "09", "9", "10", "11", "12", "q", "Q",
+        ];
 
-    months = {
-        1: "January",
-        2: "February",
-        3: "March",
-        4: "April",
-        5: "May",
-        6: "June",
-        7: "July",
-        8: "August",
-        9: "September",
-        10: "October",
-        11: "November",
-        12: "December",
-    };
+        this.months = {
+            1: "January",
+            2: "February",
+            3: "March",
+            4: "April",
+            5: "May",
+            6: "June",
+            7: "July",
+            8: "August",
+            9: "September",
+            10: "October",
+            11: "November",
+            12: "December",
+        };
 
-    monthMenu =
-        "\n\t**1**.\t January\n\t**2**.\t February\n\t**3**.\t March\n\t**4**.\t April\n\t**5**.\t May\n\t**6**.\t June\n\t**7**.\t July\n\t**8**.\t August\n\t**9**.\t September\n\t**10**.\tOctober\n\t**11**.\tNovember\n\t**12**.\tDecember\n";
+        this.monthMenu =
+            "\n\t**1**.\t January\n\t**2**.\t February\n\t**3**.\t March\n\t**4**.\t April\n\t**5**.\t May\n\t**6**.\t June\n\t**7**.\t July\n\t**8**.\t August\n\t**9**.\t September\n\t**10**.\tOctober\n\t**11**.\tNovember\n\t**12**.\tDecember\n";
+    }
 
     absenceMenuCollection(DM, name) {
         this.chosenAction = "";

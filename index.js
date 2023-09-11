@@ -2,8 +2,8 @@
 const schedule = require("node-schedule");
 
 //Load helper files
-const speedydb = require("./db/speedydb.js");
-const absencedb = require("./db/absencedb.js");
+const speedydb = require("./utils/speedydb.js");
+const absencedb = require("./utils/absencedb.js");
 const utils = require("./utils/speedyutils.js");
 const slash = require("./utils/deploy-slash-commands");
 const heart = require("./utils/heartbeat.js");

@@ -10,18 +10,19 @@ for (const file of commandFiles) {
     commands.push(command.data.toJSON());
 }
 
-const clientID = process.env.client_id;
-const guildID = process.env.guild_id;
-
-const rest = new REST({ version: "9" }).setToken(`${process.env.BOT_TOKEN}`);
-
 class DeploySlashCommands {
+    constructor() {
+        this.clientID = process.env.client_id;
+        this.guildID = process.env.guild_id;
+        this.rest = new REST({ version: "9" }).setToken(`${process.env.BOT_TOKEN}`);
+    }
+
     begin() {
         (async () => {
             try {
                 console.log("Started refreshing application (/) commands.");
 
-                await rest.put(Routes.applicationGuildCommands(clientID, guildID), { body: commands });
+                await this.rest.put(Routes.applicationGuildCommands(this.clientID, this.guildID), { body: commands });
 
                 console.log("Successfully reloaded application (/) commands.");
             } catch (error) {

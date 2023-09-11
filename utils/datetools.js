@@ -1,14 +1,16 @@
-var format = require("date-fns/format");
-var parse = require("date-fns/parse");
-var parseISO = require("date-fns/parseISO");
-var isTuesday = require("date-fns/isTuesday");
-var isThursday = require("date-fns/isThursday");
-var isSunday = require("date-fns/isSunday");
-var isValid = require("date-fns/isValid");
-
-const offset = "T11:52:29.478Z";
+const format = require("date-fns/format");
+const parse = require("date-fns/parse");
+const parseISO = require("date-fns/parseISO");
+const isTuesday = require("date-fns/isTuesday");
+const isThursday = require("date-fns/isThursday");
+const isSunday = require("date-fns/isSunday");
+const isValid = require("date-fns/isValid");
 
 class dateTools {
+    constructor() {
+        this.offset = "T11:52:29.478Z";
+    }
+
     checkIsDate(a, b, c) {
         if (parse(a, "LLLL", new Date())) {
             //Month Check
@@ -88,7 +90,7 @@ class dateTools {
 
     makeFriendlyDates(date) {
         //Ensures that dates are in the appropriate time zone (locally) by adding an ugly ISO timestamp.
-        let friendlyDateTemp = date + offset;
+        let friendlyDateTemp = date + this.offset;
         let friendlyDate = format(new Date(friendlyDateTemp), "iii. MMMM dd, yyyy");
         return friendlyDate;
     }
