@@ -383,7 +383,6 @@ class AttendanceTools {
     generateResponse(message, nickname, this_command, undo_command, start, end, reason) {
         //Create some helpers and ensure needed parts:
         var friendlyStart = dateTools.makeFriendlyDates(start);
-        var friendlyStartUndo = format(new Date(start + offset), "MMM dd");
         var username = message.author.username;
         var namestring = "";
         if (nickname != username) {
@@ -396,26 +395,25 @@ class AttendanceTools {
             end = start;
         }
         var friendlyEnd = dateTools.makeFriendlyDates(end);
-        var friendlyEndUndo = format(new Date(end + offset), "MMM dd");
         //Select the appropriate type of response, and shorten if it's a single day.
         if (message.channel.type === ChannelType.DM) {
             if (start != end) {
                 message.reply(
-                    `Ok, I've marked you ${this_command} from ${friendlyStart} until ${friendlyEnd}.  \n\nTo undo this, type: !${undo_command} ${friendlyStartUndo} ${friendlyEndUndo} `,
+                    `Ok, I've marked you ${this_command} from ${friendlyStart} until ${friendlyEnd}.`,
                 );
             } else {
                 message.reply(
-                    `Ok, I've marked you ${this_command} on ${friendlyStart}.  \n\nTo undo this, type: !${undo_command} ${friendlyStartUndo}`,
+                    `Ok, I've marked you ${this_command} on ${friendlyStart}.`,
                 );
             }
         } else {
             if (start != end) {
                 message.member.send(
-                    `Ok, I've marked you ${this_command} from ${friendlyStart} until ${friendlyEnd}.  \n\nTo undo this, type: !${undo_command} ${friendlyStartUndo} ${friendlyEndUndo} `,
+                    `Ok, I've marked you ${this_command} from ${friendlyStart} until ${friendlyEnd}.`,
                 );
             } else {
                 message.member.send(
-                    `Ok, I've marked you ${this_command} on ${friendlyStart}.  \n\nTo undo this, type: !${undo_command} ${friendlyStartUndo}`,
+                    `Ok, I've marked you ${this_command} on ${friendlyStart}.`,
                 );
             }
         }
