@@ -475,6 +475,79 @@ class attendanceTools {
         });
     }
 
+    quickAbsentOrLateAdd(DM, name, attendance_type) {
+        if (attendance_type === "absent") {
+            this.chosenAction = "absent";
+        } else if (attendance_type === "late") {
+            this.chosenAction = "late";
+        }
+
+        const thisDate = new Date().toLocaleString("en-US", { timeZone: 'America/Los_Angeles' });
+        const thisDateObject = new Date(thisDate);
+        // Many functions rely on older code that expects user input. So, we convert to month name.
+        const thisMonth = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(thisDateObject);
+        const thisDay = thisDateObject.getDate();
+
+        //These Responses are used in the process command called from absenceCommentCollection() below.
+        this.Responses.push("single"); //To keep things in the expected order.
+        this.Responses.push(thisMonth);
+        this.Responses.push(thisDay.toString());
+
+        if (!this.testIsRaidDay(DM, thisDay)) {
+            DM.channel.send({
+                content: "No raid today! 🐢"
+            });
+            this.askIfSomethingElse(DM, name);
+        } else {
+            const quick_abs_collector = DM.channel.createMessageCollector({
+                time: 120000,
+            });
+
+            DM.channel.send({
+                content:
+                    "\n \nChoose an option...\n \n\tC) **Add A Comment to Finish**\n\tM) **Main Menu**\n\tQ) **Quit**",
+            });
+
+            quick_abs_collector.on("collect", (m) => {
+                //Triggered when the collector is receiving a new message
+                let validAnswers = ["c", "C", "m", "M", "q", "Q"];
+
+                if (m.content && m.author.bot === false) {
+                    if (!validAnswers.includes(m.content)) {
+                        this.sorryTryAgain(DM, m.content);
+                    } else if (m.content === "c" || m.content === "C") {
+                        quick_abs_collector.stop("comment_needed");
+                    } else if (m.content === "m" || m.content === "M") {
+                        quick_abs_collector.stop("menu");
+                    } else if (m.content === "q" || m.content === "Q") {
+                        quick_abs_collector.stop("user");
+                    }
+                }
+            });
+
+            quick_abs_collector.on("end", (collected, reason) => {
+                switch (reason) {
+                    case "time":
+                        DM.channel.send({
+                            content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`,
+                        });
+                        break;
+                    case "comment_needed":
+                        this.absenceCommentCollection(DM, name);
+                        break;
+                    case "menu":
+                        this.backToMainMenu(DM, name);
+                        break;
+                    case "user":
+                        DM.channel.send({
+                            content: "Ok, see you!",
+                        });
+                        break;
+                }
+            });
+        }
+    }
+
     quickAbsentOrLateCancel(DM, name, absenceList, lateList, rawList) {
         var theSelection = '';
         const quick_collector = DM.channel.createMessageCollector({
@@ -540,7 +613,7 @@ class attendanceTools {
     backToMainMenu(DM, name) {
         DM.channel.send({
             content:
-                "Please choose the number that corresponds to what you want to do.\n  \n\t0) **Quickly Cancel** An Existing Entry\n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**...\n\tQ) **Quit**",
+                "Please choose the number that corresponds to what you want to do.\n  \n\t0) **Quickly Cancel** An Existing Entry\n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**...\n\n\tC) **Quickly Cancel** An Existing Entry\n\tA) **Quick Absence**: Mark Today As Absent\n\tL) **Quick Late**: Mark Today As Late\n\n\tQ) **Quit**\n\tQ) **Quit**",
         });
         this.handleSomethingElse(DM, name);
     }
@@ -626,7 +699,7 @@ class attendanceTools {
                 case "yes":
                     DM.channel.send({
                         content:
-                            "Please choose the number that corresponds to what you want to do.\n  \n\t0) **Quickly Cancel** An Existing Entry\n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**...\n\tQ) **Quit**",
+                            "Please choose the number that corresponds to what you want to do.\n  \n\t0) **Quickly Cancel** An Existing Entry\n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**...\n\n\tC) **Quickly Cancel** An Existing Entry\n\tA) **Quick Absence**: Mark Today As Absent\n\tL) **Quick Late**: Mark Today As Late\n\n\tQ) **Quit**",
                     });
                     this.handleSomethingElse(DM, name);
                     break;
@@ -652,21 +725,30 @@ class attendanceTools {
 
         otherwise_yes_collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
-            let validAnswers = ["0", "1", "2", "q", "Q"];
+            let validAnswers = ["1", "2", "c", "C", "a", "A", "l", "L", "q", "Q"];
             if (m.content && m.author.bot === false) {
                 if (!validAnswers.includes(m.content)) {
                     this.sorryTryAgain(DM);
                 }
             }
             switch (m.content) {
-                case "0":
-                    otherwise_yes_collector.stop("zero");
-                    break;
                 case "1":
                     otherwise_yes_collector.stop("one");
                     break;
                 case "2":
                     otherwise_yes_collector.stop("two");
+                    break;
+                case "a":
+                case "A":
+                    otherwise_yes_collector.stop("quick_absent");
+                    break;
+                case "c":
+                case "C":
+                    otherwise_yes_collector.stop("quick_cancel");
+                    break;
+                case "l":
+                case "L":
+                    otherwise_yes_collector.stop("quick_late");
                     break;
                 case "q":
                 case "Q":
@@ -677,17 +759,6 @@ class attendanceTools {
 
         otherwise_yes_collector.on("end", (collected, reason) => {
             switch (reason) {
-                case "zero":
-                    response = absenceDBHelper.showForAttendanceManagement(name);
-                    if ((response.absentCount || response.lateCount) > 0) {
-                        DM.channel.send({
-                            embeds: [response.absAndLateEmbed],
-                        });
-                        this.quickAbsentOrLateCancel(DM, name, response.absenceList, response.lateList, response.rawList);
-                    } else {
-                        this.noAbsencesOrLateFound(DM, name);
-                    }
-                    break;
                 case "one":
                     response = absenceDBHelper.show(name, "mine", "short");
                     DM.channel.send({
@@ -698,6 +769,23 @@ class attendanceTools {
                     } else {
                         this.noAbsencesOrLateFound(DM, name);
                     }
+                    break;
+                case "quick_absent":
+                    this.quickAbsentOrLateAdd(DM, name, "absent");
+                    break;
+                case "quick_cancel":
+                    response = absenceDBHelper.showForAttendanceManagement(name);
+                    if ((response.absentCount || response.lateCount) > 0) {
+                        DM.channel.send({
+                            embeds: [response.absAndLateEmbed],
+                        });
+                        this.quickAbsentOrLateCancel(DM, name, response.absenceList, response.lateList, response.rawList);
+                    } else {
+                        this.noAbsencesOrLateFound(DM, name);
+                    }
+                    break;
+                case "quick_late":
+                    this.quickAbsentOrLateAdd(DM, name, "late");
                     break;
                 case "two":
                     this.absenceMenuCollection(DM, name);

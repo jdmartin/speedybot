@@ -23,7 +23,7 @@ module.exports = {
         const name = interaction.user.username;
 
         const DM = await interaction.user.send({
-            content: `Please choose the number that corresponds to what you want to do.\n  \n\t0) **Quickly Cancel** An Existing Entry\n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**\n\tQ) **Quit**`,
+            content: `Please choose the number or letter that corresponds to what you want to do.\n  \n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**\n\n\tC) **Quickly Cancel** An Existing Entry\n\tA) **Quick Absence**: Mark Today As Absent\n\tL) **Quick Late**: Mark Today As Late\n\n\tQ) **Quit**`,
         });
 
         const collector = DM.channel.createMessageCollector({
@@ -34,19 +34,13 @@ module.exports = {
 
         collector.on("collect", (m) => {
             //Triggered when the collector is receiving a new message
-            let goodMenuResponses = ["0", "1", "2", "Q"];
+            let goodMenuResponses = ["1", "2", "A", "C", "L", "Q"];
 
             if (m.author.bot === false) {
                 if (!goodMenuResponses.includes(m.content.toUpperCase())) {
                     DM.channel.send({
                         content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`,
                     });
-                } else if (m.content == "0") {
-                    response = absenceDBHelper.showForAttendanceManagement(name);
-                    DM.channel.send({
-                        embeds: [response.absAndLateEmbed],
-                    });
-                    collector.stop("choice_zero");
                 } else if (m.content == "1") {
                     response = absenceDBHelper.show(name, "mine", "short");
                     DM.channel.send({
@@ -55,6 +49,16 @@ module.exports = {
                     collector.stop("choice_one");
                 } else if (m.content == "2") {
                     collector.stop("choice_two");
+                } else if (m.content.toUpperCase() == "A") {
+                    collector.stop("quick_absent");
+                } else if (m.content.toUpperCase() == "C") {
+                    response = absenceDBHelper.showForAttendanceManagement(name);
+                    DM.channel.send({
+                        embeds: [response.absAndLateEmbed],
+                    });
+                    collector.stop("choice_cancel");
+                } else if (m.content.toUpperCase() == "L") {
+                    collector.stop("quick_late");
                 } else if (m.content.toUpperCase() == "Q") {
                     collector.stop("user");
                 }
@@ -70,12 +74,6 @@ module.exports = {
                 DM.channel.send({
                     content: `OK, see you later!`,
                 });
-            } else if (reason === "choice_zero") {
-                if ((response.absentCount || response.lateCount) > 0) {
-                    attendanceHelper.quickAbsentOrLateCancel(DM, name, response.absenceList, response.lateList, response.rawList);
-                } else {
-                    attendanceHelper.noAbsencesOrLateFound(DM, name);
-                }
             } else if (reason === "choice_one") {
                 if ((response.absentCount || response.lateCount) > 0) {
                     attendanceHelper.chooseOntimeOrPresent(DM, name);
@@ -84,6 +82,16 @@ module.exports = {
                 }
             } else if (reason === "choice_two") {
                 attendanceHelper.absenceMenuCollection(DM, name);
+            } else if (reason === "choice_cancel") {
+                if ((response.absentCount || response.lateCount) > 0) {
+                    attendanceHelper.quickAbsentOrLateCancel(DM, name, response.absenceList, response.lateList, response.rawList);
+                } else {
+                    attendanceHelper.noAbsencesOrLateFound(DM, name);
+                }
+            } else if (reason === "quick_absent") {
+                attendanceHelper.quickAbsentOrLateAdd(DM, name, "absent");
+            } else if (reason === "quick_late") {
+                attendanceHelper.quickAbsentOrLateAdd(DM, name, "late");
             }
         });
     },
