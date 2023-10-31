@@ -482,8 +482,7 @@ class attendanceTools {
             this.chosenAction = "late";
         }
 
-        const thisDate = new Date().toLocaleString("en-US", { timeZone: 'America/Los_Angeles' });
-        const thisDateObject = new Date(thisDate);
+        const thisDateObject = new Date();
         // Many functions rely on older code that expects user input. So, we convert to month name.
         const thisMonth = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(thisDateObject);
         const thisDay = thisDateObject.getDate();
