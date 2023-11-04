@@ -32,34 +32,26 @@ class DatabaseTools {
 }
 
 class GetStats {
-
-    retrieve(message) {
+    retrieve() {
         var slash_sql = statsdb.prepare('SELECT DISTINCT Name name, Count count, Errors errors FROM slash_commands ORDER BY name');
         var allSlashStats = slash_sql.all();
 
-        const slash_embed = new EmbedBuilder()
+        const slashEmbed = new EmbedBuilder()
             .setColor(0xFFFFFF)
             .setTitle("Slash usage stats since last launch")
             .setFooter({
                 text: "These statistics are a product of the Inifite Speedyflight. Use Wisely."
-            })
+            });
+
         allSlashStats.forEach((row) => {
-            slash_embed.addFields({
+            slashEmbed.addFields({
                 name: row.name,
                 value: "\t\tCount: " + row.count + "\t\tErrors " + row.errors,
                 inline: true
             })
         });
 
-        if (message.channel.type === ChannelType.DM) {
-            message.channel.send({
-                embeds: [slash_embed]
-            })
-        } else {
-            message.member.send({
-                embeds: [slash_embed]
-            })
-        }
+        return { slashEmbed }
     }
 }
 

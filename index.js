@@ -11,7 +11,6 @@ const { ActivityType, InteractionType } = require("discord.js");
 
 //Get some essential variables from the helper files:
 const client = utils.client;
-const prefix = process.env.prefix;
 
 //Load commands into array
 const speedyutils = new utils.CreateCommandSet();
@@ -75,23 +74,6 @@ client.on("interactionCreate", async (interaction) => {
         console.error(error);
         speedyDBHelper.slash_error(interaction.commandName);
         return interaction.reply({ content: "There was an error while executing this command!", ephemeral: true });
-    }
-});
-
-//Handle prefixed commands, which come from messages.
-client.on("messageCreate", (message) => {
-    //Make sure the message doesn't come from a bot.
-    if (message.author.bot) return;
-    //Make sure the message starts with the prefix.
-    if (!message.content.startsWith(prefix)) return;
-
-    const commandBody = message.content.slice(prefix.length).trim();
-    const args = commandBody.split(" ");
-    const command = args.shift().toLowerCase();
-
-    //If the command is xyzzy (for stats):
-    if (command === "xyzzy") {
-        speedyStats.retrieve(message);
     }
 });
 
