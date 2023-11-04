@@ -3,9 +3,6 @@ const fs = require("fs");
 const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
 
 const myIntents = [
-    GatewayIntentBits.DirectMessages,
-    GatewayIntentBits.DirectMessageReactions,
-    GatewayIntentBits.DirectMessageTyping,
     GatewayIntentBits.Guilds,
 ];
 
