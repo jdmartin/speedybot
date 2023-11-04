@@ -39,6 +39,9 @@ class attendanceTools {
     }
 
     addAbsence(name, nickname, sy, sm, sd, end, comment, kind) {
+        if (nickname === null) {
+            nickname = name;
+        }
         var absencePrep = this.absencedb.prepare(
             "INSERT INTO attendance(name, discord_name, start_year, start_month, start_day, end_date, comment, kind) VALUES (?,?,?,?,?,?,?,?)",
         );
@@ -107,7 +110,7 @@ class attendanceTools {
         //Create some helpers and ensure needed parts:
         var friendlyStart = dateTools.makeFriendlyDates(start);
         var namestring = "";
-        if (nickname != name) {
+        if (nickname != name && nickname !== null) {
             namestring = name + " (" + nickname + ")"
         } else {
             namestring = name;
