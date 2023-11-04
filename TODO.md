@@ -2,5 +2,3 @@
 - ~~Interactive attendance. (Ongoing, Aug 2023)~~
 - Do cleanup of messages table. (end_date < today - 14?)
 - Decide what to do with /next.
-- Simplify present/ontime by enumerating late/absent and allow cancel-by-number.
-- Get those elves going...
