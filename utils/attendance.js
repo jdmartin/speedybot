@@ -1,10 +1,10 @@
 const { EmbedBuilder } = require("discord.js");
 const sqlite3 = require("better-sqlite3");
 const utils = require("./speedyutils.js");
-const dates = require("./datetools.js");
-const dateTools = new dates.dateTools();
 const client = utils.client;
 //Date-related
+const dates = require("./datetools.js");
+const dateTools = new dates.dateTools();
 const eachDayOfInterval = require("date-fns/eachDayOfInterval");
 const isTuesday = require("date-fns/isTuesday");
 const isThursday = require("date-fns/isThursday");
@@ -31,11 +31,6 @@ class CreateDatabase {
 class attendanceTools {
     constructor() {
         this.absencedb = new sqlite3("./db/attendance.db");
-        this.Responses = [];
-        this.counter = 0;
-        this.chosenAction = "";
-        this.bypassList = ["ontime", "present"];
-        this.restriction = "";
     }
 
     addAbsence(name, nickname, sy, sm, sd, end, comment, kind) {
@@ -136,44 +131,33 @@ class attendanceTools {
             }
         }
 
-        //Handle channel posts for absences and lates. Shorten if only a single day.
-        if (this_command === "absent") {
-            if (start != end) {
-                client.channels.cache
-                    .get(`${process.env.attendance_channel}`)
-                    .send(
-                        `${namestring} will be absent ${friendlyRestriction}from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`,
-                    )
-                    .then((message) => {
-                        this.storeSpeedyMessageDetails(name, start, end, message.id);
-                    });
-            } else {
-                client.channels.cache
-                    .get(`${process.env.attendance_channel}`)
-                    .send(`${namestring} will be absent on ${friendlyStart}. They commented: ${reason}`)
-                    .then((message) => {
-                        this.storeSpeedyMessageDetails(name, start, end, message.id);
-                    });
-            }
+        var reasonInsert = '';
+        switch (this_command) {
+            case "absent":
+                reasonInsert += `absent ${friendlyRestriction}from`;
+                break;
+            case "late":
+                reasonInsert += `late to raid ${friendlyRestriction}from`;
+                break;
         }
-        if (this_command === "late") {
-            if (start != end) {
-                client.channels.cache
-                    .get(`${process.env.attendance_channel}`)
-                    .send(
-                        `${namestring} will be late to raid ${friendlyRestriction}from ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`,
-                    )
-                    .then((message) => {
-                        this.storeSpeedyMessageDetails(name, start, end, message.id);
-                    });
-            } else {
-                client.channels.cache
-                    .get(`${process.env.attendance_channel}`)
-                    .send(`${namestring} will be late on ${friendlyStart}. They commented: ${reason}`)
-                    .then((message) => {
-                        this.storeSpeedyMessageDetails(name, start, end, message.id);
-                    });
-            }
+
+        //Handle channel posts for absences and lates. Shorten if only a single day.
+        if (start != end) {
+            client.channels.cache
+                .get(`${process.env.attendance_channel}`)
+                .send(
+                    `${namestring} will be ${reasonInsert} ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`,
+                )
+                .then((message) => {
+                    this.storeSpeedyMessageDetails(name, start, end, message.id);
+                });
+        } else {
+            client.channels.cache
+                .get(`${process.env.attendance_channel}`)
+                .send(`${namestring} will be ${this_command} on ${friendlyStart}. They commented: ${reason}`)
+                .then((message) => {
+                    this.storeSpeedyMessageDetails(name, start, end, message.id);
+                });
         }
     }
 
