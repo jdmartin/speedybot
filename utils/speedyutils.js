@@ -7,12 +7,6 @@ const myIntents = [
     GatewayIntentBits.DirectMessageReactions,
     GatewayIntentBits.DirectMessageTyping,
     GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.GuildMessageReactions,
-    GatewayIntentBits.GuildPresences,
-    GatewayIntentBits.GuildWebhooks,
-    GatewayIntentBits.MessageContent,
 ];
 
 const myPartials = [Partials.Channel, Partials.Message, Partials.Reaction];
