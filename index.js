@@ -3,7 +3,7 @@ const schedule = require("node-schedule");
 
 //Load helper files
 const speedydb = require("./utils/speedydb.js");
-const absencedb = require("./utils/absencedb.js");
+const attendancedb = require("./utils/attendance.js");
 const utils = require("./utils/speedyutils.js");
 const slash = require("./utils/deploy-slash-commands");
 const heart = require("./utils/heartbeat.js");
@@ -28,16 +28,14 @@ const speedyDBHelper = new speedydb.DatabaseTools();
 speedy.startup();
 
 //Initialize the absences database:
-const absence = new absencedb.CreateDatabase();
-absence.startup();
+const attendance = new attendancedb.CreateDatabase();
+attendance.startup();
 
 //Database Cleanup
-const dbclean = new absencedb.DatabaseCleanup();
+const dbclean = new attendancedb.DatabaseCleanup();
 const job = schedule.scheduleJob("01 01 01 * * * ", function () {
     dbclean.cleanAbsences();
-    console.log("Cleaned Absences");
-    dbclean.cleanLatecomers();
-    console.log("Cleaned Latecomers");
+    console.log("Cleaned Attendance");
     dbclean.cleanMessages();
     console.log("Cleaned Messages");
 });
@@ -94,18 +92,6 @@ client.on("messageCreate", (message) => {
     //If the command is xyzzy (for stats):
     if (command === "xyzzy") {
         speedyStats.retrieve(message);
-    }
-
-    //If the command is not in our list of commands...
-    if (!client.commands.has(command)) return;
-
-    try {
-        client.commands.get(command).execute(message, args);
-        speedyDBHelper.success(command);
-    } catch (error) {
-        console.error(error);
-        message.reply("there was an error trying to execute that command!");
-        speedyDBHelper.error(command);
     }
 });
 
