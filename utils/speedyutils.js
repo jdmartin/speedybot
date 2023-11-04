@@ -22,12 +22,6 @@ const client = new Client({
     partials: myPartials,
 });
 
-const commands = [];
-const commandFiles = fs
-    .readdirSync(require("path").resolve(__dirname, "../commands"))
-    .filter((file) => file.endsWith(".js"));
-client.commands = new Collection();
-
 const slashCommands = [];
 const slashCommandFiles = fs
     .readdirSync(require("path").resolve(__dirname, "../slash-commands"))
@@ -36,10 +30,6 @@ client.slashCommands = new Collection();
 
 class CreateCommandSet {
     generateSet() {
-        for (const file of commandFiles) {
-            const command = require(`../commands/${file}`);
-            client.commands.set(command.name, command);
-        }
         for (const file of slashCommandFiles) {
             const command = require(`../slash-commands/${file}`);
             client.slashCommands.set(command.data.name, command);
@@ -57,8 +47,6 @@ class SpeedyTools {
 
 module.exports = {
     client: client,
-    commands: commands,
-    commandFiles: commandFiles,
     slashCommands: slashCommands,
     slashCommandFiles: slashCommandFiles,
     CreateCommandSet,
