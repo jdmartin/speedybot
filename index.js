@@ -22,7 +22,6 @@ slashutils.begin();
 
 //Initialize the statistics database and get helper for stats:
 const speedy = new speedydb.CreateDatabase();
-const speedyStats = new speedydb.GetStats();
 const speedyDBHelper = new speedydb.DatabaseTools();
 speedy.startup();
 

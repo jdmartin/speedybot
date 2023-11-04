@@ -1,6 +1,4 @@
-const {
-    ChannelType, EmbedBuilder
-} = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const sqlite3 = require('better-sqlite3');
 const statsdb = new sqlite3(':memory:');
 const utils = require('./speedyutils.js');
