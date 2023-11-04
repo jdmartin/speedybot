@@ -353,6 +353,6 @@ MigrationBackup/
 config.json
 .venv
 .env
-db/absence.db
+db/*.db
 .vscode
 .DS_Store
