@@ -14,7 +14,7 @@ module.exports = {
 
         async function getTheAPOTD() {
             try {
-                const astroEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("NASA's Astronomy Pic of the Day");
+                const astroEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("NASA's Astronomy Pic of the Day").setFooter({ text: "Click the image to see the larger version (largest usually in browser)." });
                 var theAPOTDUrl = "https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_API_KEY;
 
                 https.get(theAPOTDUrl, (res) => {
