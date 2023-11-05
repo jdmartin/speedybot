@@ -141,12 +141,17 @@ class attendanceTools {
                 break;
         }
 
+        var commentInsert = '';
+        if (reason.length > 0) {
+            commentInsert = "They commented: " + reason;
+        }
+
         //Handle channel posts for absences and lates. Shorten if only a single day.
         if (start != end) {
             client.channels.cache
                 .get(`${process.env.attendance_channel}`)
                 .send(
-                    `${namestring} will be ${reasonInsert} ${friendlyStart} until ${friendlyEnd}. They commented: ${reason}`,
+                    `${namestring} will be ${reasonInsert} ${friendlyStart} until ${friendlyEnd}. ${commentInsert}`,
                 )
                 .then((message) => {
                     this.storeSpeedyMessageDetails(name, start, end, message.id);
@@ -154,7 +159,7 @@ class attendanceTools {
         } else {
             client.channels.cache
                 .get(`${process.env.attendance_channel}`)
-                .send(`${namestring} will be ${this_command} on ${friendlyStart}. They commented: ${reason}`)
+                .send(`${namestring} will be ${this_command} on ${friendlyStart}. ${commentInsert}`)
                 .then((message) => {
                     this.storeSpeedyMessageDetails(name, start, end, message.id);
                 });
@@ -231,25 +236,19 @@ class DataDisplayTools {
         const absentEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Upcoming absences").setFooter({
             text: "These absences are known to the Infinite Speedyflight. Use this information wisely.",
         });
-        if (length === "short") {
-            absResults.forEach((row) => {
-                absentEmbed.addFields({
-                    name: row.name,
-                    value: dateTools.makeFriendlyDates(row.end_date),
-                    inline: false,
-                });
-                absentCount += 1;
+
+        absResults.forEach((row) => {
+            let commentString = "";
+            if (row.comment.length > 0) {
+                commentString = `\nComments: ${row.comment}`
+            }
+            absentEmbed.addFields({
+                name: row.name,
+                value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + commentString,
+                inline: false,
             });
-        } else {
-            absResults.forEach((row) => {
-                absentEmbed.addFields({
-                    name: row.name,
-                    value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
-                    inline: false,
-                });
-                absentCount += 1;
-            });
-        }
+            absentCount += 1;
+        });
 
         //Get all tardiness from today and later.
         if (choice === "mine") {
@@ -272,23 +271,18 @@ class DataDisplayTools {
         const lateEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Upcoming tardiness").setFooter({
             text: "This tardiness is known to the Infinite Speedyflight. Use this information wisely.",
         });
-        if (length === "short") {
-            lateResults.forEach((row) => {
-                lateEmbed.addFields({
-                    name: row.name,
-                    value: dateTools.makeFriendlyDates(row.end_date),
-                });
-                lateCount += 1;
+        lateResults.forEach((row) => {
+            let commentString = "";
+            if (row.comment.length > 0) {
+                commentString = `\nComments: ${row.comment}`
+            }
+            lateEmbed.addFields({
+                name: row.name,
+                value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + commentString,
             });
-        } else {
-            lateResults.forEach((row) => {
-                lateEmbed.addFields({
-                    name: row.name,
-                    value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + "\nComments: " + row.comment,
-                });
-                lateCount += 1;
-            });
-        }
+            lateCount += 1;
+        });
+
         return {
             absentEmbed,
             lateEmbed,
