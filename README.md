@@ -5,6 +5,7 @@ A tiny, eclectic bot for my guild's Discord channel.
 
 - /adventure - Want a real Adventure?
 - /askspeedy - Need a *guaranteed* helpful answer? Ask away.
+- /astro - Need NASA's Astronomy Pic of the Day? Use this!
 - /cats - Need a cat _right now?_ Let's get one from the Internet!<sup>1</sup>
 - /dogs - Need a dog? There's an API for that...<sup>2</sup>
 - /foxes - Need a fox instead? To the Internet!<sup>3</sup>
@@ -30,6 +31,8 @@ A tiny, eclectic bot for my guild's Discord channel.
 <small>3: Foxes from [Random Fox](https://randomfox.ca/)</small>
 
 <small>4: Comics from [xkcd.com](https://xkcd.com/)</small>
+
+<small>5: Astronomy Picture of the Day from [NASA](https://api.nasa.gov/index.html)</small>
 
 ## requests?
 More ideas are welcome.  Let me know here, or tell Doolan in-game/Discord. ❤️
