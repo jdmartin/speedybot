@@ -45,15 +45,22 @@ module.exports = {
 
         // Create the response message with detailed formatting
         const diceResults = rolls.map((roll, index) => `d${numSides}: ${roll}`);
-        const modifierText = modifierValue !== 0 ? `Mod: ${modifierOperator} ${modifierValue}` : "";
+        const modifierText = modifierValue !== 0 ? `Mod: ${modifierOperator} ${modifierValue}\n-----------` : "-----------";
         const modifierTextForRolling = modifierValue !== 0 ? `${modifierOperator} ${modifierValue}` : "";
+
+        let diceResultsForPrinting = "";
+        // Prepare diceResults for printing:
+        if (rolls.length > 1) {
+            diceResultsForPrinting = diceResults.join("\n");
+        } else {
+            diceResultsForPrinting = diceResults;
+        }
 
         const responseMessage = `
 Rolling: ${numDice}d${numSides} ${modifierTextForRolling}
 -----------
-${diceResults.join("\n")}
+${diceResultsForPrinting}
 ${modifierText}
------------
 Total: **${total}**
 `;
 
