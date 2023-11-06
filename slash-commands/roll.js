@@ -48,7 +48,7 @@ module.exports = {
         const responseMessage = `
 ${diceResults.join("\n")}
 ${modifierText}
-
+-----------
 Total: **${total}**
 `;
 
