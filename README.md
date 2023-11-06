@@ -13,6 +13,7 @@ A tiny, eclectic bot for my guild's Discord channel.
 - /miniwheat - Why not flip a mini-wheat?
 - /next - What are we doing?
 - /raidbrigade - Grab the code for the in-game channel.
+- /roll - TTRPG-style dice roller.
 - /rules - Read the Raid Rules!
 - /sheep - I need CC (and wool)!
 - /speedy -  Displays the help message.
