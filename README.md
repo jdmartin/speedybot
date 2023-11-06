@@ -16,7 +16,7 @@ A tiny, eclectic bot for my guild's Discord channel.
 - /roll - TTRPG-style dice roller.
 - /rules - Read the Raid Rules!
 - /sheep - I need CC (and wool)!
-- /speedy -  Displays the help message.
+- /speedy - Displays the help message.
 - /speedysource: View my source code.
 - /strats: Did you read the strat?
 - /xkcd: Read a random selection.<sup>4</sip>
