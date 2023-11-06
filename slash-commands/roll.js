@@ -7,18 +7,18 @@ module.exports = {
         .addStringOption(option =>
             option
                 .setName("input")
-                .setDescription("Specify dice rolls with an optional modifier (e.g., 2d6 + 2 or 2d6)")
+                .setDescription("Specify dice rolls with an optional modifier (e.g., 2d6 + 2 or 2d6). Valid modifiers: + - *")
                 .setRequired(true)
         ),
     async execute(interaction) {
         const input = interaction.options.getString("input");
 
         // Modify the regular expression to allow an optional modifier
-        const regex = /^(\d+)d(\d+)(?:\s*([+-])\s*(\d+))?$/i;
+        const regex = /^(\d+)d(\d+)(?:\s*([*+-])\s*(\d+))?$/i;
         const match = input.match(regex);
 
         if (!match) {
-            return interaction.reply("Invalid input format. Please use the format `ndm (+/-) n`, e.g., `2d6 + 2` or `2d6`.");
+            return interaction.reply("Invalid input format. Please use the format `ndm (+/-/*) n`, e.g., `2d6 + 2` or `2d6`.");
         }
 
         const numDice = parseInt(match[1]);
@@ -39,13 +39,18 @@ module.exports = {
             total -= modifierValue;
         } else if (modifierOperator === '+') {
             total += modifierValue;
+        } else if (modifierOperator === '*') {
+            total *= modifierValue;
         }
 
         // Create the response message with detailed formatting
         const diceResults = rolls.map((roll, index) => `d${numSides}: ${roll}`);
         const modifierText = modifierValue !== 0 ? `Mod: ${modifierOperator} ${modifierValue}` : "";
+        const modifierTextForRolling = modifierValue !== 0 ? `${modifierOperator} ${modifierValue}` : "";
 
         const responseMessage = `
+Rolling: ${numDice}d${numSides} ${modifierTextForRolling}
+-----------
 ${diceResults.join("\n")}
 ${modifierText}
 -----------
