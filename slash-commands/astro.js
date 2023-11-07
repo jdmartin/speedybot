@@ -13,7 +13,7 @@ module.exports = {
 
         async function getTheAPOTD() {
             try {
-                const astroEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("NASA's Astronomy Pic of the Day").setFooter({ text: "Click the image to see the larger version (largest usually in browser)." });
+                const astroEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("NASA's Astronomy Pic of the Day");
                 var theAPOTDUrl = "https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_API_KEY;
 
                 https.get(theAPOTDUrl, (res) => {
@@ -27,9 +27,20 @@ module.exports = {
                     res.on("end", () => {
                         var bodyParsed = JSON.parse(body);
 
+                        let footerIsSet = 0;
+                        // Construct Copyright and Footer
+                        if (bodyParsed.copyright != undefined) {
+                            astroEmbed.setFooter({ text: `Copyright: ${bodyParsed.copyright}. Click the image to see the larger version (largest usually in browser).` })
+                            footerIsSet += 1;
+                        }
+
                         // Can be "image" or "video"
                         if (bodyParsed.media_type != 'video') {
                             astroEmbed.setImage(bodyParsed.url);
+                            if (footerIsSet === 0) {
+                                astroEmbed.setFooter({ text: `Click the image to see the larger version (largest usually in browser).` })
+                            }
+
                         }
 
                         astroEmbed.addFields({
