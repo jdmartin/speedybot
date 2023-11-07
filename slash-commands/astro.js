@@ -8,8 +8,7 @@ module.exports = {
         getTheAPOTD();
 
         async function showTheAPOTD(astroEmbed) {
-            await interaction.deferReply();
-            interaction.editReply({ embeds: [astroEmbed] });
+            await interaction.reply({ embeds: [astroEmbed], ephemeral: true });
         }
 
         async function getTheAPOTD() {
@@ -28,19 +27,15 @@ module.exports = {
                     res.on("end", () => {
                         var bodyParsed = JSON.parse(body);
 
-                        astroEmbed.setImage(bodyParsed.url);
+                        // Can be "image" or "video"
+                        if (bodyParsed.media_type != 'video') {
+                            astroEmbed.setImage(bodyParsed.url);
+                        }
 
                         astroEmbed.addFields({
                             name: "URL",
                             value: bodyParsed.url
                         });
-
-                        if (bodyParsed.hdurl != bodyParsed.url) {
-                            astroEmbed.addFields({
-                                name: "HD URL",
-                                value: bodyParsed.hdurl
-                            });
-                        }
 
                         astroEmbed.addFields({
                             name: "Description",
