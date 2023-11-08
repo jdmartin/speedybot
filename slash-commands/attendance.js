@@ -260,7 +260,6 @@ module.exports = {
         } catch (error) {
             if (error instanceof DiscordAPIError && error.code === 10062) {
                 console.log("User likely didn't finish. Caught 'Unknown Interaction' error.");
-                // Handle the error specific to code 10062 here
             }
             if (error.code === 'InteractionCollectorError') {
                 console.log(`${interaction.user.tag} timed out.`);
