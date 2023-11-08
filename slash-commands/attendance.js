@@ -177,7 +177,7 @@ module.exports = {
         await interaction.showModal(modal);
 
         try {
-            const filter = (interaction) => interaction.customId === 'attendanceModal';
+            const filter = (interaction) => interaction.customId === uniqueCustomId;
             const collectedInteraction = await interaction.awaitModalSubmit({ filter, time: 300000 });
 
             if (collectedInteraction) {
