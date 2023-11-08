@@ -107,7 +107,8 @@ module.exports = {
     data: new SlashCommandBuilder().setName("attendance").setDescription("Attendance Manager"),
 
     async execute(interaction) {
-        const modal = new ModalBuilder().setCustomId("attendanceModal").setTitle("Attendance!");
+        const uniqueCustomId = `attendanceModal_${interaction.user.id}_${Date.now()}`;
+        const modal = new ModalBuilder().setCustomId(uniqueCustomId).setTitle("Attendance!");
 
         // Create a placeholder date string:
         let todayDatestring = createDateString();
@@ -257,6 +258,10 @@ module.exports = {
                 }
             }
         } catch (error) {
+            if (error instanceof DiscordAPIError && error.code === 10062) {
+                console.log("User likely didn't finish. Caught 'Unknown Interaction' error.");
+                // Handle the error specific to code 10062 here
+            }
             if (error.code === 'InteractionCollectorError') {
                 console.log(`${interaction.user.tag} timed out.`);
             } else {
