@@ -51,6 +51,7 @@ class attendanceTools {
         cancelPrep.run(name, date);
 
         // We're escaping the name because that's how it came in from the Web.
+        // TODO: better name matching, as this is looking for discord_name not nickname.
         if (process.env.enable_attendance_api === "true") {
             let apidb = new sqlite3("./db/apiAttendance.db");
             var cancelApiPrep = apidb.prepare(
@@ -294,9 +295,25 @@ class DataDisplayTools {
             lateCount += 1;
         });
 
+        const apiEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Via Corkboard").setFooter({
+            text: "These items are known to the Infinite Speedyflight. Use this information wisely.",
+        });
+        lateResults.forEach((row) => {
+            let commentString = "";
+            if (row.comment.length > 0) {
+                commentString = `\nComments: ${row.comment}`
+            }
+            lateEmbed.addFields({
+                name: row.name,
+                value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + commentString,
+            });
+            lateCount += 1;
+        });
+
         return {
             absentEmbed,
             lateEmbed,
+            apiEmbed,
             absentCount,
             lateCount,
         };

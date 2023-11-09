@@ -24,6 +24,6 @@ module.exports = {
 
         let option = interaction.options.get("kind").value;
         let response = absenceDBHelper.show(name, option);
-        interaction.reply({ embeds: [response.absentEmbed, response.lateEmbed], ephemeral: true });
+        interaction.reply({ embeds: [response.absentEmbed, response.lateEmbed, response.apiEmbed], ephemeral: true });
     },
 };
