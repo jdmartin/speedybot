@@ -48,6 +48,15 @@ class attendanceTools {
             "DELETE FROM attendance WHERE (discord_name = ? AND end_date = ?)",
         );
         cancelPrep.run(name, date);
+
+        if (process.env.enable_attendance_api === "true") {
+            let apidb = new sqlite3("./db/apiAttendance.db");
+            var cancelApiPrep = apidb.prepare(
+                "DELETE FROM attendance WHERE (name = ? AND end_date = ?)",
+            );
+            cancelApiPrep.run(name, date);
+        }
+
     }
 
     processDBUpdate(name, nickname, kind, comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day) {
