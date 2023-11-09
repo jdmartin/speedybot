@@ -22,6 +22,13 @@ class attendanceTools {
         absencePrep.run(name, sy, sm, sd, end, comment, kind);
     }
 
+    cancelAbsence(code) {
+        var cancelPrep = this.absencedb.prepare(
+            "DELETE FROM attendance WHERE code = ?;"
+        );
+        cancelPrep.run(code);
+    }
+
     processDBUpdate(name, kind, comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day) {
         const result = eachDayOfInterval({
             start: new Date(start_year, start_month, start_day),
