@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 const sqlite3 = require("better-sqlite3");
+const SqlString = require("sqlstring");
 const utils = require("./speedyutils.js");
 const client = utils.client;
 //Date-related
@@ -49,12 +50,13 @@ class attendanceTools {
         );
         cancelPrep.run(name, date);
 
+        // We're escaping the name because that's how it came in from the Web.
         if (process.env.enable_attendance_api === "true") {
             let apidb = new sqlite3("./db/apiAttendance.db");
             var cancelApiPrep = apidb.prepare(
                 "DELETE FROM attendance WHERE (name = ? AND end_date = ?)",
             );
-            cancelApiPrep.run(name, date);
+            cancelApiPrep.run(SqlString.escape(name), date);
         }
 
     }
