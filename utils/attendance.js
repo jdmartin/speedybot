@@ -298,16 +298,36 @@ class DataDisplayTools {
         const apiEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Via Corkboard").setFooter({
             text: "These items are known to the Infinite Speedyflight. Use this information wisely.",
         });
-        lateResults.forEach((row) => {
+
+        //Get all items from the API submissions.
+        if (choice === "mine") {
+            let apidb = new sqlite3("./db/apiAttendance.db");
+            var api_sql = apidb.prepare(
+                "SELECT * FROM attendance WHERE end_date >= date('now','localtime') AND discord_name = ? ORDER BY end_date ASC, name LIMIT 20",
+            );
+            var apiResults = api_sql.all(name);
+        } else if (choice === "today") {
+            let apidb = new sqlite3("./db/apiAttendance.db");
+            var api_sql = apidb.prepare(
+                "SELECT * FROM attendance WHERE end_date = date('now','localtime') ORDER BY end_date ASC, name LIMIT 20",
+            );
+            var apiResults = api_sql.all();
+        } else {
+            let apidb = new sqlite3("./db/apiAttendance.db");
+            var api_sql = apidb.prepare(
+                "SELECT * FROM attendance WHERE end_date BETWEEN date('now','localtime') AND date('now', '+8 days') ORDER BY end_date ASC, name LIMIT 20",
+            );
+            var apiResults = api_sql.all();
+        }
+        apiResults.forEach((row) => {
             let commentString = "";
             if (row.comment.length > 0) {
                 commentString = `\nComments: ${row.comment}`
             }
-            lateEmbed.addFields({
+            apiEmbed.addFields({
                 name: row.name,
                 value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + commentString,
             });
-            lateCount += 1;
         });
 
         return {
