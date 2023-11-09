@@ -4,6 +4,7 @@ const schedule = require("node-schedule");
 //Load helper files
 const speedydb = require("./utils/speedydb.js");
 const attendancedb = require("./utils/attendance.js");
+const apiUtils = require("./api/listener.js");
 const utils = require("./utils/speedyutils.js");
 const slash = require("./utils/deploy-slash-commands");
 const heart = require("./utils/heartbeat.js");
@@ -28,6 +29,13 @@ speedy.startup();
 //Initialize the absences database:
 const attendance = new attendancedb.CreateDatabase();
 attendance.startup();
+
+//Initialize the API Listener and DB (if needed)
+const apiTools = new apiUtils.Server();
+if (process.env.enable_attendance_api === "true") {
+    apiTools.startListening();
+    apiTools.createDB();
+}
 
 //Database Cleanup
 const dbclean = new attendancedb.DatabaseCleanup();
