@@ -50,51 +50,51 @@ class Server {
                     // Send a response that can be captured by the iframe
                     const successMessage = 'Form submitted successfully';
 
-                    if (formData.action === "cancel") {
-                        apiAttendance.cancelAbsence(formData.cancelCode);
-                    } else {
-                        // Validate the user's inputs
-                        let comment = "";
-                        let restriction = "none";
 
-                        if (formData.comment.length > 0) {
-                            comment = SqlString.escape(formData.comment);
-                        }
+                    // Validate the user's inputs
+                    let comment = "";
+                    let restriction = "none";
 
-                        if (formData.restriction !== "nores") {
-                            restriction = formData.restriction;
-                        }
+                    if (formData.comment.length > 0) {
+                        comment = SqlString.escape(formData.comment);
+                    }
 
-                        // Handle given values
-                        let start_date = this.prepareDateForProcessing(formData.date);
-                        let processed_end_date = this.prepareDateForProcessing(formData.endDate);
-                        let start_year = start_date[0];
-                        let start_month = start_date[1];
-                        let start_day = start_date[2];
-                        let full_start_date = start_date[3];
-                        let end_year = processed_end_date[0];
-                        let end_month = processed_end_date[1];
-                        let end_day = processed_end_date[2];
-                        let full_end_date = processed_end_date[3];
+                    if (formData.restriction !== "nores") {
+                        restriction = formData.restriction;
+                    }
 
-                        // We still need something if the user chose a single date, because of later checks.
-                        if (typeof full_end_date === 'undefined') {
-                            full_end_date = full_start_date;
-                            end_year = start_year;
-                            end_month = start_month;
-                            end_day = start_day;
-                        }
+                    // Handle given values
+                    let start_date = this.prepareDateForProcessing(formData.date);
+                    let processed_end_date = this.prepareDateForProcessing(formData.endDate);
+                    let start_year = start_date[0];
+                    let start_month = start_date[1];
+                    let start_day = start_date[2];
+                    let full_start_date = start_date[3];
+                    let end_year = processed_end_date[0];
+                    let end_month = processed_end_date[1];
+                    let end_day = processed_end_date[2];
+                    let full_end_date = processed_end_date[3];
 
-                        switch (formData.action) {
-                            case "absent":
-                                apiAttendance.processDBUpdate(formData.name, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
-                                apiAttendance.generateResponse(formData.name, "absent", full_start_date, full_end_date, comment, restriction);
-                                break;
-                            case "late":
-                                apiAttendance.processDBUpdate(formData.name, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
-                                apiAttendance.generateResponse(formData.name, "late", full_start_date, full_end_date, comment, restriction);
-                                break;
-                        }
+                    // We still need something if the user chose a single date, because of later checks.
+                    if (typeof full_end_date === 'undefined') {
+                        full_end_date = full_start_date;
+                        end_year = start_year;
+                        end_month = start_month;
+                        end_day = start_day;
+                    }
+
+                    switch (formData.action) {
+                        case "cancel":
+                            apiAttendance.cancelAbsence(formData.cancelCode);
+                            break;
+                        case "absent":
+                            apiAttendance.processDBUpdate(formData.name, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            apiAttendance.generateResponse(formData.name, "absent", full_start_date, full_end_date, comment, restriction);
+                            break;
+                        case "late":
+                            apiAttendance.processDBUpdate(formData.name, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            apiAttendance.generateResponse(formData.name, "late", full_start_date, full_end_date, comment, restriction);
+                            break;
                     }
 
                     // Set the appropriate response headers
