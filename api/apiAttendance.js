@@ -126,7 +126,7 @@ class attendanceTools {
         } else {
             client.channels.cache
                 .get(`${process.env.attendance_channel}`)
-                .send(`${namestring} will be ${this_command} on ${friendlyStart}. ${commentInsert}`)
+                .send(`Via Corkboard: ${namestring} will be ${this_command} on ${friendlyStart}. ${commentInsert}`)
         }
     }
 }
