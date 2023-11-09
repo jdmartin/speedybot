@@ -130,7 +130,7 @@ module.exports = {
 
         const startDateInput = new TextInputBuilder()
             .setCustomId("startDateInput")
-            .setLabel("Enter the Date: Month/Day")
+            .setLabel("Enter the Start Date: Month/Day")
             .setMinLength(3)
             .setMaxLength(5)
             .setPlaceholder(`Ex: Today is ${todayDatestring}`)
@@ -146,7 +146,7 @@ module.exports = {
 
         const endDateInput = new TextInputBuilder()
             .setCustomId("endDateInput")
-            .setLabel("(Optional) Range of Dates? Enter an End Date:")
+            .setLabel("(Optional) Recurring? Enter an End Date:")
             .setMinLength(3)
             .setMaxLength(5)
             .setPlaceholder(`Ex: Today is ${todayDatestring}`)
