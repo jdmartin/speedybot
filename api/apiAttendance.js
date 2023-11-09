@@ -15,11 +15,11 @@ class attendanceTools {
         this.absencedb = new sqlite3("./db/apiAttendance.db");
     }
 
-    addAbsence(name, sy, sm, sd, end, comment, kind) {
+    addAbsence(name, sy, sm, sd, end, comment, kind, code) {
         var absencePrep = this.absencedb.prepare(
-            "INSERT INTO attendance(name, start_year, start_month, start_day, end_date, comment, kind) VALUES (?,?,?,?,?,?,?)",
+            "INSERT INTO attendance(name, start_year, start_month, start_day, end_date, comment, kind, code) VALUES (?,?,?,?,?,?,?,?)",
         );
-        absencePrep.run(name, sy, sm, sd, end, comment, kind);
+        absencePrep.run(name, sy, sm, sd, end, comment, kind, code);
     }
 
     cancelAbsence(code) {
@@ -29,7 +29,7 @@ class attendanceTools {
         cancelPrep.run(code);
     }
 
-    processDBUpdate(name, kind, comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day) {
+    processDBUpdate(name, kind, comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, code) {
         const result = eachDayOfInterval({
             start: new Date(start_year, start_month, start_day),
             end: new Date(end_year, end_month, end_day),
@@ -38,40 +38,40 @@ class attendanceTools {
     }
 
     // prettier-ignore
-    processDBUpdateFilterLoop(result, kind, name, comment, restriction) {
+    processDBUpdateFilterLoop(result, kind, name, comment, restriction, code) {
         for (let i = 0; i < result.length; i++) {
             let short_item = result[i].toISOString().split("T")[0];
             let newYear = short_item.split("-")[0];
             let newMonth = short_item.split("-")[1];
             let newDay = short_item.split("-")[2];
             let newDate = newYear + "-" + newMonth + "-" + newDay;
-            this.filterDBUpdate(restriction, name, newYear, newMonth, newDay, newDate, comment, short_item, kind);
+            this.filterDBUpdate(restriction, name, newYear, newMonth, newDay, newDate, comment, short_item, kind, code);
         }
     }
 
     // prettier-ignore
-    filterDBUpdate(restriction, name, newYear, newMonth, newDay, newDate, comment, short_item, kind) {
+    filterDBUpdate(restriction, name, newYear, newMonth, newDay, newDate, comment, short_item, kind, code) {
         if (restriction === "none") {
             if (isTuesday(parseISO(short_item)) || isThursday(parseISO(short_item)) || isSunday(parseISO(short_item))) {
-                this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind);
+                this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         } else if (restriction === "Tuesday") {
             if (isTuesday(parseISO(short_item))) {
-                this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind);
+                this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         } else if (restriction === "Thursday") {
             if (isThursday(parseISO(short_item))) {
-                this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind);
+                this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         } else if (restriction === "Sunday") {
             if (isSunday(parseISO(short_item))) {
-                this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind);
+                this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         }
     }
 
-    doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind) {
-        this.addAbsence(name, newYear, newMonth, newDay, newDate, comment, kind);
+    doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code) {
+        this.addAbsence(name, newYear, newMonth, newDay, newDate, comment, kind, code);
     }
 
     //command generateResponse for notifying the user of what has been done.

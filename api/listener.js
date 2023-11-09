@@ -88,11 +88,11 @@ class Server {
                             apiAttendance.cancelAbsence(formData.cancelCode);
                             break;
                         case "absent":
-                            apiAttendance.processDBUpdate(formData.name, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            apiAttendance.processDBUpdate(formData.name, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, formData.userId);
                             apiAttendance.generateResponse(formData.name, "absent", full_start_date, full_end_date, comment, restriction);
                             break;
                         case "late":
-                            apiAttendance.processDBUpdate(formData.name, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            apiAttendance.processDBUpdate(formData.name, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, formData.userId);
                             apiAttendance.generateResponse(formData.name, "late", full_start_date, full_end_date, comment, restriction);
                             break;
                     }
