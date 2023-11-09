@@ -5,6 +5,7 @@ const schedule = require("node-schedule");
 const speedydb = require("./utils/speedydb.js");
 const attendancedb = require("./utils/attendance.js");
 const apiUtils = require("./api/listener.js");
+const apiDBUtils = require("./api/apiAttendance.js");
 const utils = require("./utils/speedyutils.js");
 const slash = require("./utils/deploy-slash-commands");
 const heart = require("./utils/heartbeat.js");
@@ -51,6 +52,17 @@ const job_two = schedule.scheduleJob("02 01 03 * * *", function () {
     dbclean.vacuumDatabases();
     console.log("Vacuumed Database");
 });
+
+//Clean apiAttendance.db, if api enabled
+if (process.env.enable_attendance_api === "true") {
+    const apiDBTools = new apiDBUtils.DatabaseCleanup();
+    const job_three = schedule.scheduleJob("01 01 04 * * *", function () {
+        apiDBTools.cleanAbsences();
+        console.log("Cleaned API Attendance");
+        apiDBTools.vacuumDatabases();
+        console.log("Vacuumed API DB");
+    });
+}
 
 //Once that's done, let's move on to main.
 client.once("ready", () => {
