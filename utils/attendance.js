@@ -303,7 +303,7 @@ class DataDisplayTools {
         if (choice === "mine") {
             let apidb = new sqlite3("./db/apiAttendance.db");
             var api_sql = apidb.prepare(
-                "SELECT * FROM attendance WHERE end_date >= date('now','localtime') AND discord_name = ? ORDER BY end_date ASC, name LIMIT 20",
+                "SELECT * FROM attendance WHERE end_date >= date('now','localtime') AND name = ? ORDER BY end_date ASC, name LIMIT 20",
             );
             var apiResults = api_sql.all(name);
         } else if (choice === "today") {
