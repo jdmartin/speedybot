@@ -50,7 +50,6 @@ class Server {
                     // Send a response that can be captured by the iframe
                     const successMessage = 'Form submitted successfully';
 
-
                     // Validate the user's inputs
                     let comment = "";
                     let restriction = "none";

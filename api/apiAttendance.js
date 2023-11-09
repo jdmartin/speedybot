@@ -34,7 +34,7 @@ class attendanceTools {
             start: new Date(start_year, start_month, start_day),
             end: new Date(end_year, end_month, end_day),
         });
-        this.processDBUpdateFilterLoop(result, kind, name, comment, restriction);
+        this.processDBUpdateFilterLoop(result, kind, name, comment, restriction, code);
     }
 
     // prettier-ignore
