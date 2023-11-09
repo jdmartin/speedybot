@@ -1,98 +1,271 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { ActionRowBuilder, EmbedBuilder, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } = require("discord.js");
 
-const absence = require("../utils/absencedb-slash.js");
-const absenceDBHelper = new absence.DataDisplayTools();
-
-const attendanceTools = require("../utils/attendance-utils.js");
+const attendanceTools = require("../utils/attendance.js");
 const attendanceHelper = new attendanceTools.attendanceTools();
 
-const utils = require("../utils/speedyutils.js");
-const client = utils.client;
+const dates = require("../utils/datetools.js");
+const dateTools = new dates.dateTools();
+const SqlString = require("sqlstring");
+
+function createDateString() {
+    let today = new Date();
+    let month = today.getMonth() + 1; // Months are zero-based, so add 1 to get the correct month.
+    let day = today.getDate();
+    let dateStr = `${month}/${day}`;
+
+    return dateStr;
+}
+
+function testDates(dateString) {
+    if (dateString.length === 0) {
+        return 0;  // Optional end date is not specified.
+    }
+
+    const splitArray = dateString.split("/");
+    if (splitArray.length === 2) {
+        const firstNumber = Number(splitArray[0]);
+        const secondNumber = Number(splitArray[1]);
+
+        // Ensure month and day are represented with two digits.
+        const formattedFirstNumber = firstNumber < 10 ? `0${firstNumber}` : firstNumber;
+        const formattedSecondNumber = secondNumber < 10 ? `0${secondNumber}` : secondNumber;
+
+        if (formattedFirstNumber === "02" && formattedSecondNumber > "29") {
+            return 1;  // February with an invalid day.
+        }
+
+        if (formattedFirstNumber >= "01" && formattedFirstNumber <= "12" && formattedSecondNumber >= "01" && formattedSecondNumber <= "31") {
+            return 0;  // Valid date.
+        }
+    }
+    return 1;  // Guard value for invalid input.
+}
+
+
+function testAttendanceInput(attendanceActionTest, attendanceRecurringTest, startDate, endDate) {
+    const validActions = ['a', 'c', 'l'];
+    const validRecurringChoices = ['r', 's', 't'];
+    let resultOfTests = 0;
+    let testFailureReasons = "";
+
+    // Validate the user's action choice
+    if (!validActions.includes(attendanceActionTest)) {
+        resultOfTests += 1;
+        testFailureReasons += 'The action (box 1) isn\'t correct. Please try again with **a**, **c**, or **l**.\n';
+    }
+
+    // Validate the user's recurring choice
+    if (attendanceRecurringTest && !validRecurringChoices.includes(attendanceRecurringTest)) {
+        resultOfTests += 1;
+        testFailureReasons += 'The recurring choice (box 5) isn\'t correct. Please try again with **r**, **s**, or **t**.\n';
+    }
+
+    if (!testDates(startDate) == 0) {
+        resultOfTests += 1;
+        testFailureReasons += 'Check your start date is valid. It should be in the format M/D. Ex: 11/1\n';
+    }
+
+    if (!testDates(endDate) == 0) {
+        resultOfTests += 1;
+        testFailureReasons += 'Check your end date is valid. It should be in the format M/D. Ex: 11/1\n';
+    }
+
+    if (resultOfTests > 0) {
+        testFailureReasons += '\nPlease use `/attendance` again. You can fix your existing answers for a couple minutes more...\n'
+    }
+
+    return { resultOfTests, testFailureReasons };
+}
+
+function prepareDateForProcessing(givenDate) {
+    let date_parts = [];
+
+    if (givenDate) {
+        let extracted_values = givenDate.split('/');
+        let month = Number(extracted_values[0] - 1);
+        let month_for_human_date = Number(extracted_values[0]);
+        let day = Number(extracted_values[1]);
+        let year = dateTools.determineYear(month, day);
+
+        // Define a mapping function to format single-digit values as two-digit strings
+        const formatAsTwoDigits = (value) => value < 10 ? `0${value}` : value;
+        // Apply the mapping function to month and day
+        let formattedMonth = formatAsTwoDigits(month);
+        let formattedDay = formatAsTwoDigits(day);
+        let formattedHumanMonth = formatAsTwoDigits(month_for_human_date);
+
+        the_date = year + "-" + formattedHumanMonth + "-" + formattedDay
+        date_parts.push(year, formattedMonth, formattedDay, the_date);
+        return date_parts
+    }
+    else {
+        return givenDate
+    }
+}
 
 module.exports = {
-    data: new SlashCommandBuilder().setName("attendance").setDescription("Manage your raid attendance!"),
+    data: new SlashCommandBuilder().setName("attendance").setDescription("Attendance Manager"),
 
     async execute(interaction) {
-        interaction.reply({
-            content: "Ok, check your DMs and we'll do this.",
-            ephemeral: true,
-        });
+        const uniqueCustomId = `attendanceModal_${interaction.user.id}_${Date.now()}`;
+        const modal = new ModalBuilder().setCustomId(uniqueCustomId).setTitle("Attendance!");
 
-        const user = client.users.cache.get(interaction.member.user.id);
+        // Create a placeholder date string:
+        let todayDatestring = createDateString();
+        // Gather and display known absences in the placeholder for comments:
+        let knownAbsences = "You can let us know why, if needed, here.";
+        // Create the text input components
+        const attendanceActionInput = new TextInputBuilder()
+            .setCustomId("attendanceActionInput")
+            // The label is the prompt the user sees for this input
+            .setLabel("Mark? (a)bsent, (l)ate, (c)ancel existing")
+            // Set placeholder
+            .setPlaceholder("a, c, or l")
+            .setMinLength(1)
+            .setMaxLength(1)
+            // Short means only a single line of text
+            .setStyle(TextInputStyle.Short)
+            // This is a required value
+            .setRequired(true);
 
-        const name = interaction.user.username;
+        const startDateInput = new TextInputBuilder()
+            .setCustomId("startDateInput")
+            .setLabel("Enter the Date: Month/Day")
+            .setMinLength(3)
+            .setMaxLength(5)
+            .setPlaceholder(`Ex: Today is ${todayDatestring}`)
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true);
 
-        const DM = await interaction.user.send({
-            content: `Please choose the number or letter that corresponds to what you want to do.\n  \n\t1) **Show/Cancel** Existing Entries\n\t2) Say You'll Be **Absent** or **Late**\n\n\tC) **Quickly Cancel** An Existing Entry\n\tA) **Quick Absence**: Mark Today As Absent\n\tL) **Quick Late**: Mark Today As Late\n\n\tQ) **Quit**`,
-        });
+        const commentInput = new TextInputBuilder()
+            .setCustomId("commentInput")
+            .setLabel("Anything we should know?")
+            .setPlaceholder(`${knownAbsences}`)
+            .setStyle(TextInputStyle.Paragraph)
+            .setRequired(false);
 
-        const collector = DM.channel.createMessageCollector({
-            time: 30000,
-        });
+        const endDateInput = new TextInputBuilder()
+            .setCustomId("endDateInput")
+            .setLabel("(Optional) Range of Dates? Enter an End Date:")
+            .setMinLength(3)
+            .setMaxLength(5)
+            .setPlaceholder(`Ex: Today is ${todayDatestring}`)
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false);
 
-        var response = "";
+        const recurringInput = new TextInputBuilder()
+            .setCustomId("recurringInput")
+            .setLabel("(Optional) Limit to: (t)ues, thu(r)s, (s)un")
+            .setPlaceholder("r, s, or t")
+            .setMinLength(0)
+            .setMaxLength(1)
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
 
-        collector.on("collect", (m) => {
-            //Triggered when the collector is receiving a new message
-            let goodMenuResponses = ["1", "2", "A", "C", "L", "Q"];
+        // An action row only holds one text input,
+        // so you need one action row per text input.
+        const actionActionRow = new ActionRowBuilder().addComponents(attendanceActionInput);
+        const startDateActionRow = new ActionRowBuilder().addComponents(startDateInput);
+        const commentActionRow = new ActionRowBuilder().addComponents(commentInput);
+        const endDateActionRow = new ActionRowBuilder().addComponents(endDateInput);
+        const recurringActionRow = new ActionRowBuilder().addComponents(recurringInput);
 
-            if (m.author.bot === false) {
-                if (!goodMenuResponses.includes(m.content.toUpperCase())) {
-                    DM.channel.send({
-                        content: `Sorry, I don't know what to do with '${m.content}'. Please try again.`,
+        // Add inputs to the modal
+        modal.addComponents(actionActionRow, startDateActionRow, commentActionRow, endDateActionRow, recurringActionRow);
+
+        // Show the modal to the user
+        await interaction.showModal(modal);
+
+        try {
+            const filter = (interaction) => interaction.customId === uniqueCustomId;
+            const collectedInteraction = await interaction.awaitModalSubmit({ filter, time: 300000 });
+
+            if (collectedInteraction) {
+                const attendanceAction = collectedInteraction.fields.getTextInputValue("attendanceActionInput").toLowerCase();
+                const attendanceStart = collectedInteraction.fields.getTextInputValue("startDateInput");
+                const attendanceComment = collectedInteraction.fields.getTextInputValue("commentInput");
+                const attendanceEnd = collectedInteraction.fields.getTextInputValue("endDateInput");
+                const attendanceRecurring = collectedInteraction.fields.getTextInputValue("recurringInput").toLowerCase();
+
+                // Validate the user's inputs
+                let { resultOfTests, testFailureReasons } = testAttendanceInput(attendanceAction, attendanceRecurring, attendanceStart, attendanceEnd);
+
+                if (resultOfTests > 0) {
+                    await interaction.followUp({
+                        content: testFailureReasons,
+                        ephemeral: true
                     });
-                } else if (m.content == "1") {
-                    response = absenceDBHelper.show(name, "mine", "short");
-                    DM.channel.send({
-                        embeds: [response.absentEmbed, response.lateEmbed],
+                } else {
+                    let username = '';
+                    let nickname = '';
+                    let comment = "";
+                    let restriction = "none";
+
+                    username = interaction.user.username;
+                    nickname = interaction.member.nickname;
+
+                    if (attendanceComment.length > 0) {
+                        comment = SqlString.escape(attendanceComment);
+                    }
+
+                    if (attendanceRecurring) {
+                        restriction = attendanceRecurring;
+                    }
+
+                    // Handle given values
+                    let start_date = prepareDateForProcessing(attendanceStart);
+                    let processed_end_date = prepareDateForProcessing(attendanceEnd);
+                    let start_year = start_date[0];
+                    let start_month = start_date[1];
+                    let start_day = start_date[2];
+                    let full_start_date = start_date[3];
+                    let end_year = processed_end_date[0];
+                    let end_month = processed_end_date[1];
+                    let end_day = processed_end_date[2];
+                    let full_end_date = processed_end_date[3];
+
+                    // We still need something if the user chose a single date, because of later checks.
+                    if (typeof full_end_date === 'undefined') {
+                        full_end_date = full_start_date;
+                        end_year = start_year;
+                        end_month = start_month;
+                        end_day = start_day;
+                    }
+
+                    switch (attendanceAction) {
+                        case "a":
+                            attendanceHelper.processDBUpdate(username, nickname, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            attendanceHelper.generateResponse(username, nickname, "absent", full_start_date, full_end_date, comment, restriction);
+                            break;
+                        case "l":
+                            attendanceHelper.processDBUpdate(username, nickname, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            attendanceHelper.generateResponse(username, nickname, "late", full_start_date, full_end_date, comment, restriction);
+                            break;
+                        case "c":
+                            // The reason for full_start_date is that each date in a range gets converted to a single date, 
+                            // so the 'end_date' is actually the same as the start_date.
+                            attendanceHelper.processDBUpdate(username, nickname, "cancel", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            attendanceHelper.removeSpeedyMessage(username, full_start_date, full_end_date);
+                            break;
+                    }
+
+                    await collectedInteraction.reply({
+                        content: "Ok. Take care! 🐢",
+                        ephemeral: true
+                    }).catch(error => {
+                        console.error(error);
                     });
-                    collector.stop("choice_one");
-                } else if (m.content == "2") {
-                    collector.stop("choice_two");
-                } else if (m.content.toUpperCase() == "A") {
-                    collector.stop("quick_absent");
-                } else if (m.content.toUpperCase() == "C") {
-                    response = absenceDBHelper.showForAttendanceManagement(name);
-                    DM.channel.send({
-                        embeds: [response.absAndLateEmbed],
-                    });
-                    collector.stop("choice_cancel");
-                } else if (m.content.toUpperCase() == "L") {
-                    collector.stop("quick_late");
-                } else if (m.content.toUpperCase() == "Q") {
-                    collector.stop("user");
                 }
             }
-        });
-
-        collector.on("end", (collected, reason) => {
-            if (reason === "time") {
-                DM.channel.send({
-                    content: `Sorry, we ran out of time. Please try again when you're feeling more, uh, Speedy...`,
-                });
-            } else if (reason === "user") {
-                DM.channel.send({
-                    content: `OK, see you later!`,
-                });
-            } else if (reason === "choice_one") {
-                if ((response.absentCount || response.lateCount) > 0) {
-                    attendanceHelper.chooseOntimeOrPresent(DM, name);
-                } else {
-                    attendanceHelper.noAbsencesOrLateFound(DM, name);
-                }
-            } else if (reason === "choice_two") {
-                attendanceHelper.absenceMenuCollection(DM, name);
-            } else if (reason === "choice_cancel") {
-                if ((response.absentCount || response.lateCount) > 0) {
-                    attendanceHelper.quickAbsentOrLateCancel(DM, name, response.absenceList, response.lateList, response.rawList);
-                } else {
-                    attendanceHelper.noAbsencesOrLateFound(DM, name);
-                }
-            } else if (reason === "quick_absent") {
-                attendanceHelper.quickAbsentOrLateAdd(DM, name, "absent");
-            } else if (reason === "quick_late") {
-                attendanceHelper.quickAbsentOrLateAdd(DM, name, "late");
+        } catch (error) {
+            if (error instanceof DiscordAPIError && error.code === 10062) {
+                console.log("User likely didn't finish. Caught 'Unknown Interaction' error.");
             }
-        });
-    },
-};
+            if (error.code === 'InteractionCollectorError') {
+                console.log(`${interaction.user.tag} timed out.`);
+            } else {
+                console.error(error);
+            }
+        }
+    }
+}

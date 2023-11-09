@@ -3,7 +3,8 @@ const schedule = require("node-schedule");
 
 //Load helper files
 const speedydb = require("./utils/speedydb.js");
-const absencedb = require("./utils/absencedb.js");
+const attendancedb = require("./utils/attendance.js");
+const apiUtils = require("./api/listener.js");
 const utils = require("./utils/speedyutils.js");
 const slash = require("./utils/deploy-slash-commands");
 const heart = require("./utils/heartbeat.js");
@@ -11,7 +12,6 @@ const { ActivityType, InteractionType } = require("discord.js");
 
 //Get some essential variables from the helper files:
 const client = utils.client;
-const prefix = process.env.prefix;
 
 //Load commands into array
 const speedyutils = new utils.CreateCommandSet();
@@ -23,21 +23,25 @@ slashutils.begin();
 
 //Initialize the statistics database and get helper for stats:
 const speedy = new speedydb.CreateDatabase();
-const speedyStats = new speedydb.GetStats();
 const speedyDBHelper = new speedydb.DatabaseTools();
 speedy.startup();
 
 //Initialize the absences database:
-const absence = new absencedb.CreateDatabase();
-absence.startup();
+const attendance = new attendancedb.CreateDatabase();
+attendance.startup();
+
+//Initialize the API Listener and DB (if needed)
+const apiTools = new apiUtils.Server();
+if (process.env.enable_attendance_api === "true") {
+    apiTools.startListening();
+    apiTools.createDB();
+}
 
 //Database Cleanup
-const dbclean = new absencedb.DatabaseCleanup();
+const dbclean = new attendancedb.DatabaseCleanup();
 const job = schedule.scheduleJob("01 01 01 * * * ", function () {
     dbclean.cleanAbsences();
-    console.log("Cleaned Absences");
-    dbclean.cleanLatecomers();
-    console.log("Cleaned Latecomers");
+    console.log("Cleaned Attendance");
     dbclean.cleanMessages();
     console.log("Cleaned Messages");
 });
@@ -77,35 +81,6 @@ client.on("interactionCreate", async (interaction) => {
         console.error(error);
         speedyDBHelper.slash_error(interaction.commandName);
         return interaction.reply({ content: "There was an error while executing this command!", ephemeral: true });
-    }
-});
-
-//Handle prefixed commands, which come from messages.
-client.on("messageCreate", (message) => {
-    //Make sure the message doesn't come from a bot.
-    if (message.author.bot) return;
-    //Make sure the message starts with the prefix.
-    if (!message.content.startsWith(prefix)) return;
-
-    const commandBody = message.content.slice(prefix.length).trim();
-    const args = commandBody.split(" ");
-    const command = args.shift().toLowerCase();
-
-    //If the command is xyzzy (for stats):
-    if (command === "xyzzy") {
-        speedyStats.retrieve(message);
-    }
-
-    //If the command is not in our list of commands...
-    if (!client.commands.has(command)) return;
-
-    try {
-        client.commands.get(command).execute(message, args);
-        speedyDBHelper.success(command);
-    } catch (error) {
-        console.error(error);
-        message.reply("there was an error trying to execute that command!");
-        speedyDBHelper.error(command);
     }
 });
 
