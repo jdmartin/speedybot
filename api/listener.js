@@ -84,12 +84,12 @@ class Server {
 
                     switch (formData.action) {
                         case "absent":
-                            apiAttendance.processDBUpdate(SqlString.escape(formData.name), "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
-                            apiAttendance.generateResponse(SqlString.escape(formData.name), "absent", full_start_date, full_end_date, comment, restriction);
+                            apiAttendance.processDBUpdate(formData.name, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            apiAttendance.generateResponse(formData.name, "absent", full_start_date, full_end_date, comment, restriction);
                             break;
                         case "late":
-                            apiAttendance.processDBUpdate(SqlString.escape(formData.name), "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
-                            apiAttendance.generateResponse(SqlString.escape(formData.name), "late", full_start_date, full_end_date, comment, restriction);
+                            apiAttendance.processDBUpdate(formData.name, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            apiAttendance.generateResponse(formData.name, "late", full_start_date, full_end_date, comment, restriction);
                             break;
                     }
 
