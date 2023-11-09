@@ -14,6 +14,11 @@ class Server {
             "CREATE TABLE IF NOT EXISTS `attendance` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date` TEXT, `comment` TEXT, `kind` TEXT NOT NULL)",
         );
         apiDBPrep.run();
+        // Create alias list to help with canceling API absences
+        var aliasDBPrep = this.db.prepare(
+            "CREATE TABLE IF NOT EXISTS `aliases` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `discord_name` TEXT, `nickname` TEXT)",
+        );
+        aliasDBPrep.run();
     }
 
     prepareDateForProcessing(givenDate) {
