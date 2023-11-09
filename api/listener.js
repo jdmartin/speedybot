@@ -51,7 +51,7 @@ class Server {
                     const successMessage = 'Form submitted successfully';
 
                     if (formData.action === "cancel") {
-                        apiAttendance.cancelAbsence(formData.cancelCode);
+                        apiAttendance.cancelAbsence(formData.name, formData.cancelCode);
                     } else {
                         // Validate the user's inputs
                         let comment = "";

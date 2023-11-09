@@ -22,11 +22,11 @@ class attendanceTools {
         absencePrep.run(name, sy, sm, sd, end, comment, kind, code);
     }
 
-    cancelAbsence(code) {
+    cancelAbsence(name, code) {
         var cancelPrep = this.absencedb.prepare(
-            "DELETE FROM attendance WHERE code = ?;"
+            "DELETE FROM attendance WHERE name = ? AND code = ?;"
         );
-        cancelPrep.run(code);
+        cancelPrep.run(name, code);
     }
 
     processDBUpdate(name, kind, comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, code) {
