@@ -19,6 +19,7 @@ const vault = new EmbedBuilder()
         name: "See Also",
         value: "[Velocity Corkboard](https://velocitycorkboard.com/)",
     });
+
 const aberrus = new EmbedBuilder()
     .setTitle("Evie's Strats!")
     .setColor(0xffffff)
@@ -39,7 +40,27 @@ const aberrus = new EmbedBuilder()
         value: "[Velocity Corkboard](https://velocitycorkboard.com/)",
     });
 
+const amirdrassil = new EmbedBuilder()
+    .setTitle("Evie's Strats!")
+    .setColor(0xffffff)
+    .setAuthor({
+        name: "🔥",
+    })
+    .setDescription("__Amirdrassil, the Dream's Hope__")
+    .setFooter({
+        text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...",
+    })
+    .addFields({
+        name: "Bosses",
+        value: "[Gnarlroot](https://discord.com/channels/308622057707536385/308626596623810562/1172430588809052171)\n[Igira](https://discord.com/channels/308622057707536385/308626596623810562/1172431212883746879)\n[Volcoross](https://discord.com/channels/308622057707536385/308626596623810562/1172431670134198272)\n[Dream Council](https://discord.com/channels/308622057707536385/308626596623810562/1172432586891591690)\n",
+        inline: true,
+    })
+    .addFields({
+        name: "See Also",
+        value: "[Velocity Corkboard](https://velocitycorkboard.com/)",
+    });
 module.exports = {
     vault: vault,
     aberrus: aberrus,
+    amirdrassil: amirdrassil
 };

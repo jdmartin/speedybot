@@ -10,6 +10,7 @@ module.exports = {
                 .setDescription("Name of the Raid")
                 .setRequired(true)
                 .addChoices(
+                    { name: "Amirdrassil", value: "amirdrassil" },
                     { name: "Aberrus", value: "aberrus" },
                     { name: "Nathria", value: "nathria" },
                     { name: "Sanctum", value: "sanctum" },
@@ -20,6 +21,7 @@ module.exports = {
 
     async execute(interaction) {
         const raidExpansionMap = new Map();
+        raidExpansionMap.set("amirdrassil", "Dragonflight");
         raidExpansionMap.set("aberrus", "Dragonflight");
         raidExpansionMap.set("nathria", "Shadowlands");
         raidExpansionMap.set("sanctum", "Shadowlands");
