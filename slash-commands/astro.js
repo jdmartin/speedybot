@@ -4,6 +4,13 @@ module.exports = {
     data: new SlashCommandBuilder().setName("astro").setDescription("See NASA's Astronomy Pic of the Day!"),
     async execute(interaction) {
         const https = require("https");
+        function truncateText(text, maxLength) {
+            if (text.length > maxLength) {
+                // Subtracting 3 to account for the ellipsis
+                return text.slice(0, maxLength - 3) + "...";
+                truncateText(explanation, 1024)
+            }
+        }
         //Kick Off
         getTheAPOTD();
 
@@ -26,32 +33,30 @@ module.exports = {
 
                     res.on("end", () => {
                         var bodyParsed = JSON.parse(body);
-
-                        let footerIsSet = 0;
-                        // Construct Copyright and Footer
-                        if (bodyParsed.copyright != undefined) {
-                            astroEmbed.setFooter({ text: `Copyright: ${bodyParsed.copyright}. Click the image to see the larger version (largest usually in browser).` })
-                            footerIsSet += 1;
-                        }
-
                         // Can be "image" or "video"
                         if (bodyParsed.media_type != 'video') {
                             astroEmbed.setImage(bodyParsed.url);
-                            if (footerIsSet === 0) {
-                                astroEmbed.setFooter({ text: `Click the image to see the larger version (largest usually in browser).` })
-                            }
-
+                            astroEmbed.setFooter({ text: `Click the link to see the larger version (largest usually in browser).` });
                         }
 
-                        astroEmbed.addFields({
-                            name: "URL",
-                            value: bodyParsed.url
-                        });
+                        if (bodyParsed.hdurl) {
+                            astroEmbed.addFields({
+                                name: "URL",
+                                value: bodyParsed.hdurl
+                            });
+                        } else if (bodyParsed.url) {
+                            astroEmbed.addFields({
+                                name: "URL",
+                                value: bodyParsed.url
+                            })
+                        }
 
-                        astroEmbed.addFields({
-                            name: "Description",
-                            value: bodyParsed.explanation
-                        });
+                        if (bodyParsed.explanation) {
+                            astroEmbed.addFields({
+                                name: "Description",
+                                value: truncateText(bodyParsed.explanation, 1024)
+                            });
+                        }
 
                         showTheAPOTD(astroEmbed);
                     });
