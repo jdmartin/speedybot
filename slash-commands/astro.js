@@ -34,7 +34,6 @@ module.exports = {
 
                     res.on("end", () => {
                         var bodyParsed = JSON.parse(body);
-                        console.log(bodyParsed);
                         // Can be "image" or "video"
                         if (bodyParsed.media_type != 'video') {
                             astroEmbed.setImage(bodyParsed.url);
