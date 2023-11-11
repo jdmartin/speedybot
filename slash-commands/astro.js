@@ -8,8 +8,9 @@ module.exports = {
             if (text.length > maxLength) {
                 // Subtracting 3 to account for the ellipsis
                 return text.slice(0, maxLength - 3) + "...";
-                truncateText(explanation, 1024)
             }
+            // Return the original text if it doesn't exceed the maxLength
+            return text;
         }
         //Kick Off
         getTheAPOTD();
@@ -20,7 +21,7 @@ module.exports = {
 
         async function getTheAPOTD() {
             try {
-                const astroEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("NASA's Astronomy Pic of the Day");
+                const astroEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("NASA's Astronomy Pic of the Day").setFooter({ text: `Click the link to see the larger version (largest usually in browser).` });
                 var theAPOTDUrl = "https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_API_KEY;
 
                 https.get(theAPOTDUrl, (res) => {
@@ -33,10 +34,10 @@ module.exports = {
 
                     res.on("end", () => {
                         var bodyParsed = JSON.parse(body);
+                        console.log(bodyParsed);
                         // Can be "image" or "video"
                         if (bodyParsed.media_type != 'video') {
                             astroEmbed.setImage(bodyParsed.url);
-                            astroEmbed.setFooter({ text: `Click the link to see the larger version (largest usually in browser).` });
                         }
 
                         if (bodyParsed.hdurl) {
