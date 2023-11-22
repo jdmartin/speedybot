@@ -1,4 +1,4 @@
-const { ActionRowBuilder, EmbedBuilder, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } = require("discord.js");
+const { ActionRowBuilder, DiscordAPIError, EmbedBuilder, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } = require("discord.js");
 
 const attendanceTools = require("../utils/attendance.js");
 const attendanceHelper = new attendanceTools.attendanceTools();
