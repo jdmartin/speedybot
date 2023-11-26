@@ -139,7 +139,7 @@ module.exports = {
 
         const commentInput = new TextInputBuilder()
             .setCustomId("commentInput")
-            .setLabel("Anything we should know?")
+            .setLabel("(Optional) Anything we should know?")
             .setPlaceholder(`${knownAbsences}`)
             .setStyle(TextInputStyle.Paragraph)
             .setRequired(false);
