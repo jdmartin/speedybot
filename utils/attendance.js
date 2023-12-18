@@ -7,9 +7,6 @@ const client = utils.client;
 const dates = require("./datetools.js");
 const dateTools = new dates.dateTools();
 const eachDayOfInterval = require("date-fns/eachDayOfInterval");
-const isTuesday = require("date-fns/isTuesday");
-const isThursday = require("date-fns/isThursday");
-const isSunday = require("date-fns/isSunday");
 const parseISO = require("date-fns/parseISO");
 
 //DB
@@ -85,19 +82,19 @@ class attendanceTools {
     // prettier-ignore
     filterDBUpdate(restriction, name, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind) {
         if (restriction === "none") {
-            if (isTuesday(parseISO(short_item)) || isThursday(parseISO(short_item)) || isSunday(parseISO(short_item))) {
+            if (dateTools.isTuesday(parseISO(short_item)) || dateTools.isThursday(parseISO(short_item)) || dateTools.isSunday(parseISO(short_item))) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         } else if (restriction === "t") {
-            if (isTuesday(parseISO(short_item))) {
+            if (dateTools.isTuesday(parseISO(short_item))) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         } else if (restriction === "r") {
-            if (isThursday(parseISO(short_item))) {
+            if (dateTools.isThursday(parseISO(short_item))) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         } else if (restriction === "s") {
-            if (isSunday(parseISO(short_item))) {
+            if (dateTools.isSunday(parseISO(short_item))) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         }
