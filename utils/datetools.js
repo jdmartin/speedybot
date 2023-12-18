@@ -1,5 +1,4 @@
-const { format } = require('date-fns');
-const parseISO = require("date-fns/parseISO");
+const { format, parseISO } = require('date-fns');
 
 class dateTools {
     determineYear(month, day) {

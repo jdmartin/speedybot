@@ -6,8 +6,8 @@ const client = utils.client;
 //Date-related
 const dates = require("./datetools.js");
 const dateTools = new dates.dateTools();
-const eachDayOfInterval = require("date-fns/eachDayOfInterval");
-const parseISO = require("date-fns/parseISO");
+const { eachDayOfInterval } = require("date-fns/eachDayOfInterval");
+const { parseISO } = require("date-fns/parseISO");
 
 //DB
 class CreateDatabase {

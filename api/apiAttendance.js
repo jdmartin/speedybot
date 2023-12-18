@@ -4,8 +4,8 @@ const client = utils.client;
 //Date-related
 const dates = require("../utils/datetools.js");
 const dateTools = new dates.dateTools();
-const eachDayOfInterval = require("date-fns/eachDayOfInterval");
-const parseISO = require("date-fns/parseISO");
+const { eachDayOfInterval } = require("date-fns/eachDayOfInterval");
+const { parseISO } = require("date-fns/parseISO");
 
 class attendanceTools {
     constructor() {
