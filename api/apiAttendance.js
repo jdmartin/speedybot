@@ -143,7 +143,7 @@ class attendanceTools {
 
     storeSpeedyMessageDetails(name, code, message_id) {
         var messagePrep = this.absencedb.prepare(
-            "INSERT INTO messages(discord_name, code, messageID) VALUES (?,?,?)",
+            "INSERT INTO messages(name, code, messageID) VALUES (?,?,?)",
         );
         messagePrep.run(name, code, message_id);
     }
