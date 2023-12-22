@@ -176,7 +176,7 @@ class attendanceTools {
             });
 
         // Now, cleanup the messages table.
-        var cleanupMessagesTablePrep = this.absencedb.prepare("DELETE FROM messages WHERE messageID = ?");
+        var cleanupMessagesTablePrep = this.db.prepare("DELETE FROM messages WHERE messageID = ?");
         cleanupMessagesTablePrep.run(messageId);
     }
 }
