@@ -154,7 +154,7 @@ class attendanceTools {
         );
 
         // Get the ID of the message that matches the above parameters
-        var result = selectMessagePrep.get(name, start_date, end_date);
+        var result = selectMessagePrep.get(name, code);
         var messageId = result ? result.messageID : null;
 
         // Now, delete that message from the attendance channel.
