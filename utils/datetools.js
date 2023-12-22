@@ -1,5 +1,3 @@
-const { format, parseISO } = require('date-fns');
-
 class dateTools {
     determineYear(month, day) {
         const today = new Date();
@@ -18,6 +16,24 @@ class dateTools {
             // If the input date is today or later this year, return the current year
             return currentYear;
         }
+    }
+
+    eachDayOfInterval(startDate, endDate) {
+        const days = [];
+        let currentDate = new Date(startDate);
+
+        while (currentDate <= endDate) {
+            days.push(new Date(currentDate));
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        return days;
+    }
+
+    formatISODate(date, timeZone = 'UTC') {
+        const options = { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric', timeZone };
+        const formattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(date));
+        return formattedDate;
     }
 
     isTuesday(date) {
@@ -60,7 +76,7 @@ class dateTools {
     }
 
     makeFriendlyDates(date) {
-        let friendlyDate = format(parseISO(date), 'iii. MMMM dd, yyyy');
+        let friendlyDate = this.formatISODate(date);
         return friendlyDate;
     }
 }

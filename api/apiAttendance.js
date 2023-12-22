@@ -4,8 +4,6 @@ const client = utils.client;
 //Date-related
 const dates = require("../utils/datetools.js");
 const dateTools = new dates.dateTools();
-const { eachDayOfInterval } = require("date-fns/eachDayOfInterval");
-const { parseISO } = require("date-fns/parseISO");
 
 class attendanceTools {
     constructor() {
@@ -27,21 +25,28 @@ class attendanceTools {
     }
 
     processDBUpdate(name, kind, comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, code) {
-        const result = eachDayOfInterval({
-            start: new Date(start_year, start_month, start_day),
-            end: new Date(end_year, end_month, end_day),
-        });
+        const startDate = new Date(start_year, start_month, start_day);
+        const endDate = new Date(end_year, end_month, end_day);
+
+        const result = dateTools.eachDayOfInterval(startDate, endDate);
         this.processDBUpdateFilterLoop(result, kind, name, comment, restriction, code);
     }
 
     // prettier-ignore
     processDBUpdateFilterLoop(result, kind, name, comment, restriction, code) {
         for (let i = 0; i < result.length; i++) {
-            let short_item = result[i].toISOString().split("T")[0];
-            let newYear = short_item.split("-")[0];
-            let newMonth = short_item.split("-")[1];
-            let newDay = short_item.split("-")[2];
-            let newDate = newYear + "-" + newMonth + "-" + newDay;
+            let short_item = result[i];
+            let newDate = new Date(short_item);
+
+            if (!(newDate instanceof Date) || isNaN(newDate.getTime())) {
+                console.log('Invalid date:', short_item);
+                continue; // Skip this iteration if the date is invalid
+            }
+
+            let newYear = (newDate.getFullYear()).toString();
+            let newMonth = (newDate.getMonth() + 1).toString(); // Months are zero-based
+            let newDay = (newDate.getDate()).toString();
+
             this.filterDBUpdate(restriction, name, newYear, newMonth, newDay, newDate, comment, short_item, kind, code);
         }
     }
@@ -49,19 +54,19 @@ class attendanceTools {
     // prettier-ignore
     filterDBUpdate(restriction, name, newYear, newMonth, newDay, newDate, comment, short_item, kind, code) {
         if (restriction === "none") {
-            if (dateTools.isTuesday(parseISO(short_item)) || dateTools.isThursday(parseISO(short_item)) || dateTools.isSunday(parseISO(short_item))) {
+            if (dateTools.isTuesday(short_item) || dateTools.isThursday(short_item) || dateTools.isSunday(short_item)) {
                 this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         } else if (restriction === "Tuesday") {
-            if (dateTools.isTuesday(parseISO(short_item))) {
+            if (dateTools.isTuesday(short_item)) {
                 this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         } else if (restriction === "Thursday") {
-            if (dateTools.isThursday(parseISO(short_item))) {
+            if (dateTools.isThursday(short_item)) {
                 this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         } else if (restriction === "Sunday") {
-            if (dateTools.isSunday(parseISO(short_item))) {
+            if (dateTools.isSunday(short_item)) {
                 this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         }
