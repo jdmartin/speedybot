@@ -47,7 +47,10 @@ class attendanceTools {
             let newMonth = (newDate.getMonth() + 1).toString(); // Months are zero-based
             let newDay = (newDate.getDate()).toString();
 
-            this.filterDBUpdate(restriction, name, newYear, newMonth, newDay, newDate, comment, short_item, kind, code);
+            // Format the date string as YYYY-MM-DD
+            let dateString = `${newYear}-${newMonth.toString().padStart(2, '0')}-${newDay.toString().padStart(2, '0')}`;
+
+            this.filterDBUpdate(restriction, name, newYear, newMonth, newDay, dateString, comment, short_item, kind, code);
         }
     }
 
