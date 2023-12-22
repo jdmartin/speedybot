@@ -22,6 +22,7 @@ class attendanceTools {
             "DELETE FROM attendance WHERE name = ? AND code = ?;"
         );
         cancelPrep.run(name, code);
+        this.removeSpeedyMessage(name, code);
     }
 
     processDBUpdate(name, kind, comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, code) {
