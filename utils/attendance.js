@@ -6,8 +6,6 @@ const client = utils.client;
 //Date-related
 const dates = require("./datetools.js");
 const dateTools = new dates.dateTools();
-const { eachDayOfInterval } = require("date-fns/eachDayOfInterval");
-const { parseISO } = require("date-fns/parseISO");
 
 //DB
 class CreateDatabase {
@@ -60,41 +58,51 @@ class attendanceTools {
     }
 
     processDBUpdate(name, nickname, kind, comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day) {
-        const result = eachDayOfInterval({
-            start: new Date(start_year, start_month, start_day),
-            end: new Date(end_year, end_month, end_day),
-        });
+        const startDate = new Date(start_year, start_month, start_day);
+        const endDate = new Date(end_year, end_month, end_day);
+
+        const result = dateTools.eachDayOfInterval(startDate, endDate);
         this.processDBUpdateFilterLoop(result, kind, name, nickname, comment, restriction);
     }
 
     // prettier-ignore
     processDBUpdateFilterLoop(result, kind, name, nickname, comment, restriction, end_date) {
         for (let i = 0; i < result.length; i++) {
-            let short_item = result[i].toISOString().split("T")[0];
-            let newYear = short_item.split("-")[0];
-            let newMonth = short_item.split("-")[1];
-            let newDay = short_item.split("-")[2];
-            let newDate = newYear + "-" + newMonth + "-" + newDay;
-            this.filterDBUpdate(restriction, name, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind);
+            let short_item = result[i];
+            let newDate = new Date(short_item);
+
+            if (!(newDate instanceof Date) || isNaN(newDate.getTime())) {
+                console.log('Invalid date:', short_item);
+                continue; // Skip this iteration if the date is invalid
+            }
+
+            let newYear = (newDate.getFullYear()).toString();
+            let newMonth = (newDate.getMonth() + 1).toString(); // Months are zero-based
+            let newDay = (newDate.getDate()).toString();
+
+            // Format the date string as YYYY-MM-DD
+            let dateString = `${newYear}-${newMonth.toString().padStart(2, '0')}-${newDay.toString().padStart(2, '0')}`;
+
+            this.filterDBUpdate(restriction, name, nickname, newYear, newMonth, newDay, dateString, comment, short_item, kind);
         }
     }
 
     // prettier-ignore
     filterDBUpdate(restriction, name, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind) {
         if (restriction === "none") {
-            if (dateTools.isTuesday(parseISO(short_item)) || dateTools.isThursday(parseISO(short_item)) || dateTools.isSunday(parseISO(short_item))) {
+            if (dateTools.isTuesday(short_item) || dateTools.isThursday(short_item) || dateTools.isSunday(short_item)) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         } else if (restriction === "t") {
-            if (dateTools.isTuesday(parseISO(short_item))) {
+            if (dateTools.isTuesday(short_item)) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         } else if (restriction === "r") {
-            if (dateTools.isThursday(parseISO(short_item))) {
+            if (dateTools.isThursday(short_item)) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         } else if (restriction === "s") {
-            if (dateTools.isSunday(parseISO(short_item))) {
+            if (dateTools.isSunday(short_item)) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         }
