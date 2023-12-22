@@ -14,7 +14,7 @@ class Server {
             "CREATE TABLE IF NOT EXISTS `attendance` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date` TEXT, `comment` TEXT, `kind` TEXT NOT NULL, `code` TEXT)",
         );
         var messagesDBPrep = this.db.prepare(
-            "CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `discord_name` TEXT, `start_date` TEXT, `end_date` TEXT, `messageID` TEXT)",
+            "CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `code` TEXT, `messageID` TEXT)",
         );
         apiDBPrep.run();
         messagesDBPrep.run();
@@ -92,11 +92,11 @@ class Server {
                         switch (formData.action) {
                             case "absent":
                                 apiAttendance.processDBUpdate(formData.name, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, formData.userId);
-                                apiAttendance.generateResponse(formData.name, "absent", full_start_date, full_end_date, comment, restriction);
+                                apiAttendance.generateResponse(formData.name, "absent", full_start_date, full_end_date, comment, restriction, formData.userId);
                                 break;
                             case "late":
                                 apiAttendance.processDBUpdate(formData.name, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, formData.userId);
-                                apiAttendance.generateResponse(formData.name, "late", full_start_date, full_end_date, comment, restriction);
+                                apiAttendance.generateResponse(formData.name, "late", full_start_date, full_end_date, comment, restriction, formData.userId);
                                 break;
                         }
                     }

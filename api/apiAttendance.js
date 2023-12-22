@@ -80,7 +80,7 @@ class attendanceTools {
     }
 
     //command generateResponse for notifying the user of what has been done.
-    generateResponse(name, this_command, start, end, reason, restriction) {
+    generateResponse(name, this_command, start, end, reason, restriction, code) {
         //Create some helpers and ensure needed parts:
         var friendlyStart = dateTools.makeFriendlyDates(start);
         var namestring = name;
@@ -129,28 +129,28 @@ class attendanceTools {
                     `Via Corkboard: ${namestring} will be ${reasonInsert} ${friendlyStart} until ${friendlyEnd}. ${commentInsert}`,
                 )
                 .then((message) => {
-                    this.storeSpeedyMessageDetails(name, start, end, message.id);
+                    this.storeSpeedyMessageDetails(name, code, message.id);
                 });
         } else {
             client.channels.cache
                 .get(`${process.env.attendance_channel}`)
                 .send(`Via Corkboard: ${namestring} will be ${this_command} on ${friendlyStart}. ${commentInsert}`)
                 .then((message) => {
-                    this.storeSpeedyMessageDetails(name, start, end, message.id);
+                    this.storeSpeedyMessageDetails(name, code, message.id);
                 });
         }
     }
 
-    storeSpeedyMessageDetails(name, start_date, end_date, message_id) {
+    storeSpeedyMessageDetails(name, code, message_id) {
         var messagePrep = this.absencedb.prepare(
-            "INSERT INTO messages(discord_name, start_date, end_date, messageID) VALUES (?,?,?,?)",
+            "INSERT INTO messages(discord_name, code, messageID) VALUES (?,?,?)",
         );
-        messagePrep.run(name, start_date, end_date, message_id);
+        messagePrep.run(name, code, message_id);
     }
 
-    async removeSpeedyMessage(name, start_date, end_date) {
+    async removeSpeedyMessage(name, code) {
         var selectMessagePrep = this.absencedb.prepare(
-            "SELECT messageID FROM messages WHERE discord_name = ? AND start_date = ? AND end_date = ?",
+            "SELECT messageID FROM messages WHERE name = ? AND code = ?",
         );
 
         // Get the ID of the message that matches the above parameters
