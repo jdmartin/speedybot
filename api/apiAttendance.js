@@ -149,7 +149,7 @@ class attendanceTools {
     }
 
     async removeSpeedyMessage(name, code) {
-        var selectMessagePrep = this.absencedb.prepare(
+        var selectMessagePrep = this.db.prepare(
             "SELECT messageID FROM messages WHERE name = ? AND code = ?",
         );
 
