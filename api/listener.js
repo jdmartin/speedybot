@@ -13,7 +13,11 @@ class Server {
         var apiDBPrep = this.db.prepare(
             "CREATE TABLE IF NOT EXISTS `attendance` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date` TEXT, `comment` TEXT, `kind` TEXT NOT NULL, `code` TEXT)",
         );
+        var messagesDBPrep = this.db.prepare(
+            "CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `discord_name` TEXT, `start_date` TEXT, `end_date` TEXT, `messageID` TEXT)",
+        );
         apiDBPrep.run();
+        messagesDBPrep.run();
     }
 
     prepareDateForProcessing(givenDate) {

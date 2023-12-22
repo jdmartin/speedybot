@@ -128,11 +128,56 @@ class attendanceTools {
                 .send(
                     `Via Corkboard: ${namestring} will be ${reasonInsert} ${friendlyStart} until ${friendlyEnd}. ${commentInsert}`,
                 )
+                .then((message) => {
+                    this.storeSpeedyMessageDetails(name, start, end, message.id);
+                });
         } else {
             client.channels.cache
                 .get(`${process.env.attendance_channel}`)
                 .send(`Via Corkboard: ${namestring} will be ${this_command} on ${friendlyStart}. ${commentInsert}`)
+                .then((message) => {
+                    this.storeSpeedyMessageDetails(name, start, end, message.id);
+                });
         }
+    }
+
+    storeSpeedyMessageDetails(name, start_date, end_date, message_id) {
+        var messagePrep = this.absencedb.prepare(
+            "INSERT INTO messages(discord_name, start_date, end_date, messageID) VALUES (?,?,?,?)",
+        );
+        messagePrep.run(name, start_date, end_date, message_id);
+    }
+
+    async removeSpeedyMessage(name, start_date, end_date) {
+        var selectMessagePrep = this.absencedb.prepare(
+            "SELECT messageID FROM messages WHERE discord_name = ? AND start_date = ? AND end_date = ?",
+        );
+
+        // Get the ID of the message that matches the above parameters
+        var result = selectMessagePrep.get(name, start_date, end_date);
+        var messageId = result ? result.messageID : null;
+
+        // Now, delete that message from the attendance channel.
+        var channel = client.channels.cache.get(`${process.env.attendance_channel}`);
+        const messages = await channel.messages.fetch({ limit: 100 });
+
+        // Filter and delete old messages
+        messages
+            .filter((message) => {
+                return message.author.bot && message.id == messageId;
+            })
+            .forEach(async (message) => {
+                try {
+                    message.delete();
+                    console.log(`Deleted message: ${message.content}`);
+                } catch (error) {
+                    console.error("Error deleting message:", error);
+                }
+            });
+
+        // Now, cleanup the messages table.
+        var cleanupMessagesTablePrep = this.absencedb.prepare("DELETE FROM messages WHERE messageID = ?");
+        cleanupMessagesTablePrep.run(messageId);
     }
 }
 
