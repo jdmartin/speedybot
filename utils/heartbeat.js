@@ -3,6 +3,10 @@ const http = require("http");
 const net = require('net');
 
 class Heartbeat {
+    constructor() {
+        this.cachedResponse = this.generateResponse();
+    }
+
     startPushing() {
         function callURL() {
             const url = process.env.MONITOR_URL;
@@ -22,17 +26,32 @@ class Heartbeat {
         setInterval(callURL, interval);
     }
 
+    async handleShutdown() {
+        const socketPath = '/tmp/speedybot-socket.sock';
+        console.log('Shutting down server...');
+
+        try {
+            await fs.promises.access(socketPath);
+            await fs.promises.unlink(socketPath);
+            console.log('Socket file removed');
+        } catch (err) {
+            console.error('Error removing socket file:', err);
+        }
+
+        console.log('Server closed');
+        process.exit(0);
+    }
+
     startSocket() {
-        const cachedResponse = this.generateResponse();
         const socketPath = '/tmp/speedybot-socket.sock';
         // Remove the socket file if it exists
         if (fs.existsSync(socketPath)) {
             fs.unlinkSync(socketPath);
         }
 
-        const unixServer = net.createServer(function (client) {
-            // Send the cached response to the connected client, then close the connection
-            client.write(cachedResponse);
+        const unixServer = net.createServer((client) => {
+            // Use an arrow function to maintain the class instance as 'this'
+            client.write(this.cachedResponse);
             client.end();
         });
 
@@ -44,30 +63,19 @@ class Heartbeat {
         });
 
         // Graceful shutdown
-        process.on('SIGINT', function () {
-            console.log('Shutting down server...');
-
-            unixServer.close(function () {
-                // Remove the socket file after server is closed
-                if (fs.existsSync(socketPath)) {
-                    fs.unlinkSync(socketPath);
-                }
-                console.log('Server closed');
-                process.exit(0);
-            });
+        process.on('SIGINT', () => {
+            this.handleShutdown();
         });
     }
 
     generateResponse() {
         // HTTP response components (because nginx)
-        const responseStatusLine = 'HTTP/1.1 200 OK';
-        const responseHeaders = 'Content-Type: text/plain\r\n';
-        const responseBody = 'TRTL!\n';
+        const responseComponents = [];
+        responseComponents.push('HTTP/1.1 200 OK');
+        responseComponents.push('Content-Type: text/plain\r\n');
+        responseComponents.push('TRTL!\n');
 
-        // Combine the components to create the full response
-        const response = `${responseStatusLine}\r\n${responseHeaders}\r\n${responseBody}`;
-
-        return response;
+        return responseComponents.join('\r\n');
     }
 }
 
