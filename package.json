@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "better-sqlite3": "^9.0.0",
+    "better-sqlite3": "^9.4.3",
     "discord.js": "^14.0.1",
     "node-schedule": "^2.1.0",
     "sqlstring": "^2.3.2"
