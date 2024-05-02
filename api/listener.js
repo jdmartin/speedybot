@@ -61,7 +61,7 @@ class Server {
                         let comment = "";
                         let restriction = "none";
 
-                        if (formData.comment.length > 0) {
+                        if (formData.comment !== undefined && formData.comment.length > 0) {
                             comment = SqlString.escape(formData.comment);
                         }
 
