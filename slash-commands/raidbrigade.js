@@ -5,7 +5,7 @@ module.exports = {
     async execute(interaction) {
         const button = new ButtonBuilder()
             .setLabel("Visit the Invitation Page")
-            .setURL("https://worldofwarcraft.com/en-us/invite/K9P9EZpT39q?region=US&faction=Alliance")
+            .setURL(`${process.env.raidbrigadelink}`)
             .setStyle(ButtonStyle.Link);
 
         const row = new ActionRowBuilder().addComponents(button);
