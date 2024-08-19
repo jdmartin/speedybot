@@ -57,7 +57,7 @@ module.exports = {
                     .setTitle("How do I know what addons are required for raiding?")
                     .addFields({
                         name: " ",
-                        value: "\nThere are no addons that are absolutely required for raiding, but I strongly recommend that you have the following two installed and updated:\n\n- RC LootCouncil: [(link)](https://www.curseforge.com/wow/addons/rclootcouncil) Without this, you need to keep track of your own loot\n- DBM [(link)](https://www.curseforge.com/wow/addons/deadly-boss-mods) or BigWigs [(link)](https://www.curseforge.com/wow/addons/big-wigs) Without these, you need to keep track of your own feet\n\n**As a note**: Speedy keeps an eye on all the popular add-ons and watches for when they update. If you want an easy way to check everything before raid to make sure you’re current, check in #addon-updates! Speedy’s got your back.",
+                        value: "\nThere are no addons that are absolutely required for raiding, but I strongly recommend that you have the following two installed and updated:\n\n- RC LootCouncil: [(link)](https://www.curseforge.com/wow/addons/rclootcouncil) Without this, you need to keep track of your own loot\n- DBM [(link)](https://www.curseforge.com/wow/addons/deadly-boss-mods) or BigWigs [(link)](https://www.curseforge.com/wow/addons/big-wigs) Without these, you need to keep track of your own feet\n\n**As a note**: Speedy keeps an eye on all the popular add-ons and watches for when they update. If you want an easy way to check everything before raid to make sure you’re current, check in `#addon-updates`! Speedy’s got your back.",
                         inline: true
                     })
 
@@ -129,7 +129,7 @@ module.exports = {
                     .setTitle("How do I check the raid schedule?")
                     .addFields({
                         name: " ",
-                        value: "\n**The raid schedule is always the same during an active Tier**:\n- Tuesday, Thursday, Sunday\n- Invites at 8:15\n- Raid 8:30-10:30 (Server time)\n\n**When there are special circumstances**, such as during a break, I will post the schedule each week (as soon as I know it) out in the #announcements section.\n\nThere is also a calendar on the Corkboard! [(link)](https://velocitycorkboard.com)",
+                        value: "\n**The raid schedule is always the same during an active Tier**:\n- Tuesday, Thursday, Sunday\n- Invites at 8:15\n- Raid 8:30-10:30 (Server time)\n\n**When there are special circumstances**, such as during a break, I will post the schedule each week (as soon as I know it) out in the `#announcements` section.\n\nThere is also a calendar on the Corkboard! [(link)](https://velocitycorkboard.com)",
                         inline: true
                     })
 
@@ -153,7 +153,7 @@ module.exports = {
                     .setTitle("How do I find the raid strats?")
                     .addFields({
                         name: " ",
-                        value: "\n**Raid strats are in two places!**\n\n- The formal strat is on the Corkboard, and you should read this version first [(link)](https://velocitycorkboard.com/strats/)\n- For quick reminders, you can look in the #raid-strats section of Discord, which has the most relevant diagram and a very brief bullet list. **This version will not teach you the strat!**",
+                        value: "\n**Raid strats are in two places!**\n\n- The formal strat is on the Corkboard, and you should read this version first [(link)](https://velocitycorkboard.com/strats/)\n- For quick reminders, you can look in the `#raid-strats` section of Discord, which has the most relevant diagram and a very brief bullet list. **This version will not teach you the strat!**",
                         inline: true
                     })
 
