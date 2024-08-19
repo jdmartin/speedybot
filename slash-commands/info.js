@@ -4,6 +4,10 @@ module.exports = {
     data: new SlashCommandBuilder().setName("info").setDescription("Answers to all your burning questions...")
         .addSubcommand(subcommand =>
             subcommand
+                .setName('addons')
+                .setDescription('How do I know what addons are required for raiding?'))
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName('attendance')
                 .setDescription('How do I post (or delete) an absence?'))
         .addSubcommand(subcommand =>
@@ -22,6 +26,11 @@ module.exports = {
         )
         .addSubcommand(subcommand =>
             subcommand
+                .setName('loot')
+                .setDescription('How do I know what to roll for loot?')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
                 .setName('schedule')
                 .setDescription('How do I find the raid schedule?')
         )
@@ -37,6 +46,18 @@ module.exports = {
         ),
     async execute(interaction) {
         switch (interaction.options.getSubcommand()) {
+            case 'addons':
+                addonsEmbed = new EmbedBuilder()
+                    .setColor(0xFFFFFF)
+                    .setTitle("How do I know what addons are required for raiding?")
+                    .addFields({
+                        name: " ",
+                        value: "\nThere are no addons that are absolutely required for raiding, but I strongly recommend that you have the following two installed and updated:\n\n- RC LootCouncil: [(link)](https://www.curseforge.com/wow/addons/rclootcouncil) Without this, you need to keep track of your own loot\n- DBM [(link)](https://www.curseforge.com/wow/addons/deadly-boss-mods) or BigWigs [(link)](https://www.curseforge.com/wow/addons/big-wigs) Without these, you need to keep track of your own feet\n\n**As a note**: Speedy keeps an eye on all the popular add-ons and watches for when they update. If you want an easy way to check everything before raid to make sure you’re current, check in the Speedy chat! He’s got your back.",
+                        inline: true
+                    })
+
+                interaction.reply({ embeds: [addonsEmbed], ephemeral: true });
+                break;
             case 'attendance':
                 absenceEmbed = new EmbedBuilder()
                     .setColor(0xFFFFFF)
@@ -84,6 +105,18 @@ module.exports = {
                     })
 
                 interaction.reply({ embeds: [logsEmbed], ephemeral: true });
+                break;
+            case 'loot':
+                lootEmbed = new EmbedBuilder()
+                    .setColor(0xFFFFFF)
+                    .setTitle("How do I know what to roll for loot?")
+                    .addFields({
+                        name: " ",
+                        value: "\n**Regular items** all use the following system:\n- Major upgrade: Something you consider best in slot\n- Minor Upgrade: All normal gear upgrades\n- Off-spec: You will rarely use this item\n- Transmog: Anything you want for transmog, for yourself or an alt\n- Pass: This item is more valuable as a shard\n\n**Tier tokens** have their own separate loot rolls!\n- 4-piece Bonus: Only for the very last armor piece you need to complete your tier set\n- Upgrade: All normal tier upgrades, normal or heroic\n- Pass: You don’t want nasty old tier anyway\n\n**Crafting recipes** have their own separate loot rolls too!\n- Raidcrafter: Official use only\n- Profession: Any recipe your current character could use\n- Alt: You can’t use it, but your alt can\n- Pass: You literally can’t read it. Are those even words?\n\nFor more information on how and why the loot system works, see the Corkboard! [(link)](https://velocitycorkboard.com)",
+                        inline: true
+                    })
+
+                interaction.reply({ embeds: [lootEmbed], ephemeral: true });
                 break;
             case 'schedule':
                 schedEmbed = new EmbedBuilder()
