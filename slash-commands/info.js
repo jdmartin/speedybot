@@ -93,7 +93,7 @@ module.exports = {
                     .setTitle("How do I find a raid crafter?")
                     .addFields({
                         name: " ",
-                        value: "\n**The master list of crafters is on a spreadsheet in the Corkboard!** [(link)](https://velocitycorkboard.com).\n\n- If you need to find someone in charge of a profession, check the spreadsheet.\n- If you want to *BE* in charge of a profession, message @Evie!",
+                        value: "\n**The master list of crafters is on a spreadsheet in the Corkboard!** [(link)](https://velocitycorkboard.com/2022/11/13/extras-content/).\n\n- If you need to find someone in charge of a profession, check the spreadsheet.\n- If you want to *BE* in charge of a profession, message @Evie!",
                         inline: true
                     })
 
