@@ -153,7 +153,7 @@ module.exports = {
                     .setTitle("How do I find the raid strats?")
                     .addFields({
                         name: " ",
-                        value: "\n**Raid strats are in two places!**\n\n- The formal strat is on the Corkboard, and you should read this version first (link)\n- For quick reminders, you can look in the #raid-strats section of Discord, which has the most relevant diagram and a very brief bullet list. **This version will not teach you the strat!**",
+                        value: "\n**Raid strats are in two places!**\n\n- The formal strat is on the Corkboard, and you should read this version first [(link)](https://velocitycorkboard.com)\n- For quick reminders, you can look in the #raid-strats section of Discord, which has the most relevant diagram and a very brief bullet list. **This version will not teach you the strat!**",
                         inline: true
                     })
 
