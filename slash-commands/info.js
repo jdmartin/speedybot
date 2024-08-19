@@ -57,7 +57,7 @@ module.exports = {
                     .setTitle("How do I know what addons are required for raiding?")
                     .addFields({
                         name: " ",
-                        value: "\nThere are no addons that are absolutely required for raiding, but I strongly recommend that you have the following two installed and updated:\n\n- RC LootCouncil: [(link)](https://www.curseforge.com/wow/addons/rclootcouncil) Without this, you need to keep track of your own loot\n- DBM [(link)](https://www.curseforge.com/wow/addons/deadly-boss-mods) or BigWigs [(link)](https://www.curseforge.com/wow/addons/big-wigs) Without these, you need to keep track of your own feet\n\n**As a note**: Speedy keeps an eye on all the popular add-ons and watches for when they update. If you want an easy way to check everything before raid to make sure you’re current, check in the Speedy chat! He’s got your back.",
+                        value: "\nThere are no addons that are absolutely required for raiding, but I strongly recommend that you have the following two installed and updated:\n\n- RC LootCouncil: [(link)](https://www.curseforge.com/wow/addons/rclootcouncil) Without this, you need to keep track of your own loot\n- DBM [(link)](https://www.curseforge.com/wow/addons/deadly-boss-mods) or BigWigs [(link)](https://www.curseforge.com/wow/addons/big-wigs) Without these, you need to keep track of your own feet\n\n**As a note**: Speedy keeps an eye on all the popular add-ons and watches for when they update. If you want an easy way to check everything before raid to make sure you’re current, check in #addon-updates! Speedy’s got your back.",
                         inline: true
                     })
 
@@ -69,7 +69,7 @@ module.exports = {
                     .setTitle("How do I post (or delete) an absence?")
                     .addFields({
                         name: " ",
-                        value: "\n**To update your attendance through Discord:**\n- Make sure you aren’t in a private message window. Any public channel will work, even this one!\n- Just type `/attendance` in the typing box, and Speedy will pop up a box for you to enter your information in!\n\b*The box and its contents do not appear as a chat post, all anyone else will see is the end result, such as “Alien will be absent tomorrow because he sent Evie Frosted claws in the mail*\n\n**To update your attendance through the Corkboard:**\n- Go to the Corkboard [(link)](https://velocitycorkboard.com) and click the attendance button on the home page.\n- You’ll see a big box on the left where you can type your info to add an absence, and a small box on the right that you can use to cancel one.\n- Copy down the secret code at the bottom in case you need to change your answer later.\n\n*The only thing that will be visible to others in Discord chat is the completed absent note, such as: \"via Corkboard: Amarii loves Ned more than you, sorry\"*",
+                        value: "\n**To update your attendance through Discord:**\n- Make sure you aren’t in a private message window. Any public channel will work, even this one!\n- Just type `/attendance` in the typing box, and Speedy will pop up a box for you to enter your information in!\n\n*The box and its contents do not appear as a chat post, all anyone else will see is the end result, such as “Alien will be absent tomorrow because he sent Evie Frosted claws in the mail*\n\n**To update your attendance through the Corkboard:**\n- Go to the Corkboard [(link)](https://velocitycorkboard.com) and click the attendance button on the home page.\n- You’ll see a big box on the left where you can type your info to add an absence, and a small box on the right that you can use to cancel one.\n- Copy down the secret code at the bottom in case you need to change your answer later.\n\n*The only thing that will be visible to others in Discord chat is the completed absent note, such as: \"via Corkboard: Amarii loves Ned more than you, sorry\"*",
                         inline: true
                     })
 
@@ -105,7 +105,7 @@ module.exports = {
                     .setTitle("How do I check the logs?")
                     .addFields({
                         name: " ",
-                        value: "\n- Doolan keeps all the logs for the raid here [(link)](https://www.warcraftlogs.com/guild/reports-list/41907/).\n- You can also access them by typing `/logs` into any public chat channel, and it will post a link for all to see!\n\n*Typing /logs in Discord will produce a visible link, anyone can see that you have asked for them.*",
+                        value: "\n- Doolan keeps all the logs for the raid here [(link)](https://www.warcraftlogs.com/guild/reports-list/41907/).\n- You can also access them by typing `/logs` into any public chat channel, and it will post a link for all to see!\n\n*Typing /logs in Discord will produce a **visible link**, anyone can see that you have asked for them.*",
                         inline: true
                     })
 
@@ -141,7 +141,7 @@ module.exports = {
                     .setTitle("How do I sign up to raid?")
                     .addFields({
                         name: " ",
-                        value: "\nRaid signups are handled on the Corkboard through a spreadsheet. You can find it here in the Extras section [(link)](https://velocitycorkboard.com). If the deadline has already passed, just contact Evie in game or in a Discord message!\n\nNeed the password?  Type `/corkboard` in any public channel. You're the only one that will see the response!",
+                        value: "\nRaid signups are handled on the Corkboard through a spreadsheet. You can find it here in the Extras section [(link)](https://velocitycorkboard.com/2022/11/13/extras-content/). If the deadline has already passed, just contact Evie in game or in a Discord message!\n\n**Need the password?  Type `/corkboard` in any public channel. You're the only one that will see the response!**",
                         inline: true
                     })
 
@@ -153,7 +153,7 @@ module.exports = {
                     .setTitle("How do I find the raid strats?")
                     .addFields({
                         name: " ",
-                        value: "\n**Raid strats are in two places!**\n\n- The formal strat is on the Corkboard, and you should read this version first [(link)](https://velocitycorkboard.com)\n- For quick reminders, you can look in the #raid-strats section of Discord, which has the most relevant diagram and a very brief bullet list. **This version will not teach you the strat!**",
+                        value: "\n**Raid strats are in two places!**\n\n- The formal strat is on the Corkboard, and you should read this version first [(link)](https://velocitycorkboard.com/strats/)\n- For quick reminders, you can look in the #raid-strats section of Discord, which has the most relevant diagram and a very brief bullet list. **This version will not teach you the strat!**",
                         inline: true
                     })
 
@@ -165,7 +165,7 @@ module.exports = {
                     .setTitle("How do I join the TRB community channel in game?")
                     .addFields({
                         name: " ",
-                        value: `\n**If you have a new alt and you want to get into the community channel**:\n- Open up the Community settings thing in game\n- Select “Join a community”.\n- Select "The Raid Brigade".\n- When prompted for a code, paste in: ${process.env.raidbrigcode}\n\n*You can also access this by typing /raidbrigade into any public channel. Only you will see the result!*`,
+                        value: `\n**If you have a new alt and you want to get into the community channel**:\n- Open up the "Guild & Communities" thing in game\n- On the left, scroll down and click where it says “Join or Create Community” \n- In the “Join Community” box, paste in: ${process.env.raidbrigcode} and click "join".\n\n*You can also access this by typing /raidbrigade into any public channel. Only you will see the result!*`,
                         inline: true
                     })
 
