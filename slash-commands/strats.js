@@ -10,6 +10,7 @@ module.exports = {
                 .setDescription("Name of the Raid")
                 .setRequired(true)
                 .addChoices(
+                    { name: "Nerub-ar Palace", value: "nerub" },
                     { name: "Amirdrassil", value: "amirdrassil" },
                     { name: "Aberrus", value: "aberrus" },
                     { name: "Nathria", value: "nathria" },
@@ -21,6 +22,7 @@ module.exports = {
 
     async execute(interaction) {
         const raidExpansionMap = new Map();
+        raidExpansionMap.set("nerub", "TWW");
         raidExpansionMap.set("amirdrassil", "Dragonflight");
         raidExpansionMap.set("aberrus", "Dragonflight");
         raidExpansionMap.set("nathria", "Shadowlands");
@@ -30,6 +32,7 @@ module.exports = {
 
         const Shadowlands = require("../resources/strats/shadowlands.js");
         const Dragonflight = require("../resources/strats/dragonflight.js");
+        const TWW = require("../resources/strats/tww.js");
 
         const raidChoice = interaction.options.getString("raid_name");
         let expansionChoice = "";
@@ -37,10 +40,16 @@ module.exports = {
 
         if (raidExpansionMap.has(raidChoice)) {
             expansionChoice = raidExpansionMap.get(raidChoice);
-            if (expansionChoice === "Shadowlands") {
-                embeds = [Shadowlands[raidChoice]];
-            } else if (expansionChoice === "Dragonflight") {
-                embeds = [Dragonflight[raidChoice]];
+            switch (expansionChoice) {
+                case "Shadowlands":
+                    embeds = [Shadowlands[raidChoice]];
+                    break;
+                case "Dragonflight":
+                    embeds = [Dragonflight[raidChoice]];
+                    break;
+                case "TWW":
+                    embeds = [TWW[raidChoice]];
+                    break;
             }
         }
 
