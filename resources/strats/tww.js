@@ -12,7 +12,7 @@ const nerub = new EmbedBuilder()
     })
     .addFields({
         name: "Bosses",
-        value: "[Ulgrax the Devourer](https://discord.com/channels/308622057707536385/308626596623810562/1278829737405448225)\n[Bloodbound Horror](https://discord.com/channels/308622057707536385/308626596623810562/1279308757582741525)\n",
+        value: "[Ulgrax the Devourer](https://discord.com/channels/308622057707536385/308626596623810562/1278829737405448225)\n[Bloodbound Horror](https://discord.com/channels/308622057707536385/308626596623810562/1279308757582741525)\n[Sikran](https://discord.com/channels/308622057707536385/308626596623810562/1279659275131551859)\n",
         inline: true,
     })
     .addFields({
