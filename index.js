@@ -9,7 +9,7 @@ const apiDBUtils = require("./api/apiAttendance.js");
 const utils = require("./utils/speedyutils.js");
 const slash = require("./utils/deploy-slash-commands");
 const heart = require("./utils/heartbeat.js");
-const { ActivityType, InteractionType } = require("discord.js");
+const { ActivityType, InteractionType, time } = require("discord.js");
 
 //Get some essential variables from the helper files:
 const client = utils.client;
@@ -62,6 +62,36 @@ if (process.env.enable_attendance_api === "true") {
         apiDBTools.vacuumDatabases();
         console.log("Vacuumed API DB");
     });
+}
+
+//Generate Raid-Day absence reports if enabled in .env
+if (process.env.raid_day_reports_enabled === "true") {
+    //Run Job on Raid Days at 20:30:01.
+    const job_four = schedule.scheduleJob("01 30 20 * * 0,2,4", function () {
+        let absence = require("./utils/attendance.js");
+        let absenceDBHelper = new absence.DataDisplayTools();
+        // Parse the user IDs from the environment variable
+        let raidDayReportUsers = process.env.raid_day_reports_users.split(',').map(userId => userId.trim());
+
+        raidDayReportUsers.forEach(async (userId) => {
+            try {
+                // Fetch user object by ID
+                let user = await client.users.fetch(userId.trim());
+
+                // Get the response (e.g., embeds) for this user
+                let response = absenceDBHelper.show(user.username, "today");
+
+                // Send the response as an embed to the user via DM
+                await user.send({
+                    embeds: [response.absentEmbed, response.lateEmbed, response.apiEmbed]
+                });
+
+                console.log(`Summary sent to ${user.tag}`);
+            } catch (error) {
+                console.error(`Could not send message to ${userId}: `, error);
+            }
+        });
+    })
 }
 
 //Once that's done, let's move on to main.
