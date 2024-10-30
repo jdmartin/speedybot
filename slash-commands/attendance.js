@@ -178,7 +178,7 @@ module.exports = {
 
         try {
             const filter = (interaction) => interaction.customId === uniqueCustomId;
-            const collectedInteraction = await interaction.awaitModalSubmit({ filter, time: 300000 });
+            const collectedInteraction = await interaction.awaitModalSubmit({ filter, time: 300_000 });
 
             if (collectedInteraction) {
                 const attendanceAction = collectedInteraction.fields.getTextInputValue("attendanceActionInput").toLowerCase();
