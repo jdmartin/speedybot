@@ -40,7 +40,7 @@ if (process.env.enable_attendance_api === "true") {
 
 //Database Cleanup
 const dbclean = new attendancedb.DatabaseCleanup();
-const job = schedule.scheduleJob("01 01 01 * * * ", function () {
+const job = schedule.scheduleJob(process.env.CRON_DB_CLEANUP_TIME, function () {
     dbclean.cleanAbsences();
     console.log("Cleaned Attendance");
     dbclean.cleanMessages();
@@ -48,7 +48,7 @@ const job = schedule.scheduleJob("01 01 01 * * * ", function () {
 });
 
 //Database Vacuuming
-const job_two = schedule.scheduleJob("02 01 03 * * *", function () {
+const job_two = schedule.scheduleJob(process.env.CRON_DB_VACUUM_TIME, function () {
     dbclean.vacuumDatabases();
     console.log("Vacuumed Database");
 });
@@ -56,7 +56,7 @@ const job_two = schedule.scheduleJob("02 01 03 * * *", function () {
 //Clean apiAttendance.db, if api enabled
 if (process.env.enable_attendance_api === "true") {
     const apiDBTools = new apiDBUtils.DatabaseCleanup();
-    const job_three = schedule.scheduleJob("01 01 04 * * *", function () {
+    const job_three = schedule.scheduleJob(process.env.CRON_API_DB_CLEANUP_TIME, function () {
         apiDBTools.cleanAbsences();
         console.log("Cleaned API Attendance");
         apiDBTools.vacuumDatabases();
@@ -67,7 +67,7 @@ if (process.env.enable_attendance_api === "true") {
 //Generate Raid-Day absence reports if enabled in .env
 if (process.env.raid_day_reports_enabled === "true") {
     //Run Job on Raid Days at 20:30:01.
-    const job_four = schedule.scheduleJob("01 00 21 * * 0,2,4", function () {
+    const job_four = schedule.scheduleJob(process.env.CRON_RAID_REPORT_TIME, function () {
         let absence = require("./utils/attendance.js");
         let absenceDBHelper = new absence.DataDisplayTools();
         // Parse the user IDs from the environment variable
