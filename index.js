@@ -67,7 +67,7 @@ if (process.env.enable_attendance_api === "true") {
 //Generate Raid-Day absence reports if enabled in .env
 if (process.env.raid_day_reports_enabled === "true") {
     //Run Job on Raid Days at 20:30:01.
-    const job_four = schedule.scheduleJob("01 30 20 * * 0,2,4", function () {
+    const job_four = schedule.scheduleJob("01 00 21 * * 0,2,4", function () {
         let absence = require("./utils/attendance.js");
         let absenceDBHelper = new absence.DataDisplayTools();
         // Parse the user IDs from the environment variable
