@@ -116,8 +116,8 @@ class Server {
             }
         });
 
-        const PORT = process.env.api_listener_port;
-        const HOST = process.env.api_listener_host; // Bind to localhost
+        const PORT = process.env.API_LISTENER_PORT;
+        const HOST = process.env.API_LISTENER_HOST; // Bind to localhost
         server.listen(PORT, HOST, () => {
             console.log(`API is listening on http://${HOST}:${PORT}`);
         });

@@ -12,8 +12,8 @@ for (const file of commandFiles) {
 
 class DeploySlashCommands {
     constructor() {
-        this.clientID = process.env.client_id;
-        this.guildID = process.env.guild_id;
+        this.clientID = process.env.CLIENT_ID;
+        this.guildID = process.env.GUILD_ID;
         this.rest = new REST({ version: "9" }).setToken(`${process.env.BOT_TOKEN}`);
     }
 

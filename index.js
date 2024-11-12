@@ -33,7 +33,7 @@ attendance.startup();
 
 //Initialize the API Listener and DB (if needed)
 const apiTools = new apiUtils.Server();
-if (process.env.enable_attendance_api === "true") {
+if (process.env.ENABLE_ATTENDANCE_API === "true") {
     apiTools.startListening();
     apiTools.createDB();
 }
@@ -54,7 +54,7 @@ const job_two = schedule.scheduleJob(process.env.CRON_DB_VACUUM_TIME, function (
 });
 
 //Clean apiAttendance.db, if api enabled
-if (process.env.enable_attendance_api === "true") {
+if (process.env.ENABLE_ATTENDANCE_API === "true") {
     const apiDBTools = new apiDBUtils.DatabaseCleanup();
     const job_three = schedule.scheduleJob(process.env.CRON_API_DB_CLEANUP_TIME, function () {
         apiDBTools.cleanAbsences();
@@ -65,13 +65,13 @@ if (process.env.enable_attendance_api === "true") {
 }
 
 //Generate Raid-Day absence reports if enabled in .env
-if (process.env.raid_day_reports_enabled === "true") {
+if (process.env.RAID_DAY_REPORTS_ENABLED === "true") {
     //Run Job on Raid Days at 20:30:01.
     const job_four = schedule.scheduleJob(process.env.CRON_RAID_REPORT_TIME, function () {
         let absence = require("./utils/attendance.js");
         let absenceDBHelper = new absence.DataDisplayTools();
         // Parse the user IDs from the environment variable
-        let raidDayReportUsers = process.env.raid_day_reports_users.split(',').map(userId => userId.trim());
+        let raidDayReportUsers = process.env.RAID_DAY_REPORTS_USERS.split(',').map(userId => userId.trim());
 
         raidDayReportUsers.forEach(async (userId) => {
             try {
@@ -101,9 +101,9 @@ client.once("ready", () => {
 
     //Start the heartbeat
     const heartbeat = new heart.Heartbeat();
-    if (process.env.heart_type === 'push') {
+    if (process.env.HEART_TYPE === 'push') {
         heartbeat.startPushing();
-    } else if (process.env.heart_type === 'socket') {
+    } else if (process.env.HEART_TYPE === 'socket') {
         heartbeat.startSocket();
     }
 });

@@ -125,7 +125,7 @@ class attendanceTools {
         //Handle channel posts for absences and lates. Shorten if only a single day.
         if (start != end) {
             client.channels.cache
-                .get(`${process.env.attendance_channel}`)
+                .get(`${process.env.ATTENDANCE_CHANNEL}`)
                 .send(
                     `Via Corkboard: ${namestring} will be ${reasonInsert} ${friendlyStart} until ${friendlyEnd}. ${commentInsert}`,
                 )
@@ -134,7 +134,7 @@ class attendanceTools {
                 });
         } else {
             client.channels.cache
-                .get(`${process.env.attendance_channel}`)
+                .get(`${process.env.ATTENDANCE_CHANNEL}`)
                 .send(`Via Corkboard: ${namestring} will be ${this_command} on ${friendlyStart}. ${commentInsert}`)
                 .then((message) => {
                     this.storeSpeedyMessageDetails(name, code, message.id);
@@ -159,7 +159,7 @@ class attendanceTools {
         var messageId = result ? result.messageID : null;
 
         // Now, delete that message from the attendance channel.
-        var channel = client.channels.cache.get(`${process.env.attendance_channel}`);
+        var channel = client.channels.cache.get(`${process.env.ATTENDANCE_CHANNEL}`);
         const messages = await channel.messages.fetch({ limit: 100 });
 
         // Filter and delete old messages

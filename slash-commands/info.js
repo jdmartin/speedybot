@@ -165,7 +165,7 @@ module.exports = {
                     .setTitle("How do I join the TRB community channel in game?")
                     .addFields({
                         name: " ",
-                        value: `\n**If you have a new alt and you want to get into the community channel**:\n- Open up the "Guild & Communities" thing in game\n- On the left, scroll down and click where it says “Join or Create Community” \n- In the “Join Community” box, paste in: ${process.env.raidbrigcode} and click "join".\n\n*You can also access this by typing /raidbrigade into any public channel. Only you will see the result!*`,
+                        value: `\n**If you have a new alt and you want to get into the community channel**:\n- Open up the "Guild & Communities" thing in game\n- On the left, scroll down and click where it says “Join or Create Community” \n- In the “Join Community” box, paste in: ${process.env.RAIDBRIGCODE} and click "join".\n\n*You can also access this by typing /raidbrigade into any public channel. Only you will see the result!*`,
                         inline: true
                     })
 
