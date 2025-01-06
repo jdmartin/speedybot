@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags, SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder().setName("raidbrigade").setDescription("What's the code?"),
@@ -12,7 +12,7 @@ module.exports = {
         interaction.reply({
             content: `Here's the code for the in-game Raid Brigade channel: **${process.env.RAIDBRIGCODE}**\n\nNot sure how to use it? Click the button! \n\n`,
             components: [row],
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     },
 };

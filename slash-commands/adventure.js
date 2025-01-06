@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { MessageFlags, SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -7,7 +7,7 @@ module.exports = {
     async execute(interaction) {
         return interaction.reply({
             content: `This adventure, Speedy craves: https://dungeo.org/ (Hint: Turn on the map!)\n\nThis version is also awesome: https://quuxplusone.github.io/Advent/index.html.`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     },
 };

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { MessageFlags, SlashCommandBuilder } = require("discord.js");
 
 const absence = require("../utils/attendance.js");
 const absenceDBHelper = new absence.DataDisplayTools();
@@ -24,6 +24,6 @@ module.exports = {
 
         let option = interaction.options.get("kind").value;
         let response = absenceDBHelper.show(name, option);
-        interaction.reply({ embeds: [response.absentEmbed, response.lateEmbed, response.apiEmbed], ephemeral: true });
+        interaction.reply({ embeds: [response.absentEmbed, response.lateEmbed, response.apiEmbed], flags: MessageFlags.Ephemeral });
     },
 };

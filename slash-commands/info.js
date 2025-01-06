@@ -1,4 +1,4 @@
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, MessageFlags, SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder().setName("info").setDescription("Answers to all your burning questions...")
@@ -61,7 +61,7 @@ module.exports = {
                         inline: true
                     })
 
-                interaction.reply({ embeds: [addonsEmbed], ephemeral: true });
+                interaction.reply({ embeds: [addonsEmbed], flags: MessageFlags.Ephemeral });
                 break;
             case 'attendance':
                 absenceEmbed = new EmbedBuilder()
@@ -73,7 +73,7 @@ module.exports = {
                         inline: true
                     })
 
-                interaction.reply({ embeds: [absenceEmbed], ephemeral: true });
+                interaction.reply({ embeds: [absenceEmbed], flags: MessageFlags.Ephemeral });
                 break;
             case 'corkboard':
                 corkEmbed = new EmbedBuilder()
@@ -85,7 +85,7 @@ module.exports = {
                         inline: true
                     })
 
-                interaction.reply({ embeds: [corkEmbed], ephemeral: true });
+                interaction.reply({ embeds: [corkEmbed], flags: MessageFlags.Ephemeral });
                 break;
             case 'crafter':
                 craftEmbed = new EmbedBuilder()
@@ -97,7 +97,7 @@ module.exports = {
                         inline: true
                     })
 
-                interaction.reply({ embeds: [craftEmbed], ephemeral: true });
+                interaction.reply({ embeds: [craftEmbed], flags: MessageFlags.Ephemeral });
                 break;
             case 'logs':
                 logsEmbed = new EmbedBuilder()
@@ -109,7 +109,7 @@ module.exports = {
                         inline: true
                     })
 
-                interaction.reply({ embeds: [logsEmbed], ephemeral: true });
+                interaction.reply({ embeds: [logsEmbed], flags: MessageFlags.Ephemeral });
                 break;
             case 'loot':
                 lootEmbed = new EmbedBuilder()
@@ -121,7 +121,7 @@ module.exports = {
                         inline: true
                     })
 
-                interaction.reply({ embeds: [lootEmbed], ephemeral: true });
+                interaction.reply({ embeds: [lootEmbed], flags: MessageFlags.Ephemeral });
                 break;
             case 'schedule':
                 schedEmbed = new EmbedBuilder()
@@ -133,7 +133,7 @@ module.exports = {
                         inline: true
                     })
 
-                interaction.reply({ embeds: [schedEmbed], ephemeral: true });
+                interaction.reply({ embeds: [schedEmbed], flags: MessageFlags.Ephemeral });
                 break;
             case 'signup':
                 signupEmbed = new EmbedBuilder()
@@ -145,7 +145,7 @@ module.exports = {
                         inline: true
                     })
 
-                interaction.reply({ embeds: [signupEmbed], ephemeral: true });
+                interaction.reply({ embeds: [signupEmbed], flags: MessageFlags.Ephemeral });
                 break;
             case 'strats':
                 stratsEmbed = new EmbedBuilder()
@@ -157,7 +157,7 @@ module.exports = {
                         inline: true
                     })
 
-                interaction.reply({ embeds: [stratsEmbed], ephemeral: true });
+                interaction.reply({ embeds: [stratsEmbed], flags: MessageFlags.Ephemeral });
                 break;
             case 'trb':
                 trbEmbed = new EmbedBuilder()
@@ -169,7 +169,7 @@ module.exports = {
                         inline: true
                     })
 
-                interaction.reply({ embeds: [trbEmbed], ephemeral: true });
+                interaction.reply({ embeds: [trbEmbed], flags: MessageFlags.Ephemeral });
                 break;
         }
     },

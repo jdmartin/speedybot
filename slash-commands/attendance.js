@@ -1,4 +1,4 @@
-const { ActionRowBuilder, DiscordAPIError, EmbedBuilder, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } = require("discord.js");
+const { ActionRowBuilder, DiscordAPIError, EmbedBuilder, MessageFlags, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } = require("discord.js");
 
 const attendanceTools = require("../utils/attendance.js");
 const attendanceHelper = new attendanceTools.attendanceTools();
@@ -193,7 +193,7 @@ module.exports = {
                 if (resultOfTests > 0) {
                     await interaction.followUp({
                         content: testFailureReasons,
-                        ephemeral: true
+                        flags: MessageFlags.Ephemeral
                     });
                 } else {
                     let username = '';
@@ -251,7 +251,7 @@ module.exports = {
 
                     await collectedInteraction.reply({
                         content: "Ok. Take care! 🐢",
-                        ephemeral: true
+                        flags: MessageFlags.Ephemeral
                     }).catch(error => {
                         console.error(error);
                     });

@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags, SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,6 +12,6 @@ module.exports = {
 
         const row = new ActionRowBuilder().addComponents(button);
         let response = `My source code is here: https://github.com/jdmartin/speedybot\n\n`;
-        interaction.reply({ content: response, components: [row], ephemeral: true });
+        interaction.reply({ content: response, components: [row], flags: MessageFlags.Ephemeral });
     },
 };

@@ -9,7 +9,7 @@ const apiDBUtils = require("./api/apiAttendance.js");
 const utils = require("./utils/speedyutils.js");
 const slash = require("./utils/deploy-slash-commands");
 const heart = require("./utils/heartbeat.js");
-const { ActivityType, InteractionType, time } = require("discord.js");
+const { ActivityType, InteractionType, MessageFlags } = require("discord.js");
 
 //Get some essential variables from the helper files:
 const client = utils.client;
@@ -122,7 +122,7 @@ client.on("interactionCreate", async (interaction) => {
     } catch (error) {
         console.error(error);
         speedyDBHelper.slash_error(interaction.commandName);
-        return interaction.reply({ content: "There was an error while executing this command!", ephemeral: true });
+        return interaction.reply({ content: "There was an error while executing this command!", flags: MessageFlags.Ephemeral });
     }
 });
 

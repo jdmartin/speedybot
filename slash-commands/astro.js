@@ -1,4 +1,4 @@
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, MessageFlags, SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder().setName("astro").setDescription("See NASA's Astronomy Pic of the Day!"),
@@ -16,7 +16,7 @@ module.exports = {
         getTheAPOTD();
 
         async function showTheAPOTD(astroEmbed) {
-            await interaction.reply({ embeds: [astroEmbed], ephemeral: true });
+            await interaction.reply({ embeds: [astroEmbed], flags: MessageFlags.Ephemeral });
         }
 
         async function getTheAPOTD() {

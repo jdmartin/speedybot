@@ -1,4 +1,4 @@
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, MessageFlags, SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder().setName("next").setDescription("What are we doing?"),
@@ -30,7 +30,7 @@ module.exports = {
         interaction.reply({
             content: "It's dangerous to go alone!  Take these:\n",
             embeds: [embed],
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     },
 };

@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags, SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder().setName("corkboard").setDescription("What's the link and code?"),
@@ -10,6 +10,6 @@ module.exports = {
 
         const row = new ActionRowBuilder().addComponents(button);
         let response = `The password is: "**${process.env.CORKBOARD_PASS}**"\n\n`;
-        interaction.reply({ content: response, components: [row], ephemeral: true });
+        interaction.reply({ content: response, components: [row], flags: MessageFlags.Ephemeral });
     },
 };

@@ -1,4 +1,4 @@
-const { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require("discord.js");
+const { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, MessageFlags, SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder().setName("rules").setDescription("Rules for Raiding!"),
@@ -16,7 +16,7 @@ module.exports = {
             content: "Here are the raid rules. You can also see the latest version on the Corkboard!",
             files: [file],
             components: [row],
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     },
 };
