@@ -10,6 +10,7 @@ module.exports = {
                 .setDescription("Name of the Raid")
                 .setRequired(true)
                 .addChoices(
+                    { name: "Undermine", value: "undermine" },
                     { name: "Nerub-ar Palace", value: "nerub" },
                     { name: "Amirdrassil", value: "amirdrassil" },
                     { name: "Aberrus", value: "aberrus" },
@@ -22,6 +23,7 @@ module.exports = {
 
     async execute(interaction) {
         const raidExpansionMap = new Map();
+        raidExpansionMap.set("undermine", "TWW");
         raidExpansionMap.set("nerub", "TWW");
         raidExpansionMap.set("amirdrassil", "Dragonflight");
         raidExpansionMap.set("aberrus", "Dragonflight");
