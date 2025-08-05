@@ -2,6 +2,7 @@ import { readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { REST, Routes } from 'discord.js';
+import { client } from '../utils/speedyutils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -35,6 +36,27 @@ class DeploySlashCommands {
                 console.error(error);
             }
         })();
+    }
+
+    async loadCommands() {
+        client.slashCommands = new Map();
+
+        const commandsPath = join(process.cwd(), 'slash-commands');
+        const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+        for (const file of commandFiles) {
+            const filePath = join(commandsPath, file);
+            const command = await import(filePath);
+
+            if (!command.data || !command.execute) {
+                console.warn(`[WARNING] Command at ${file} missing data or execute.`);
+                continue;
+            }
+
+            client.slashCommands.set(command.data.name, command);
+        }
+
+        console.log(`Loaded ${client.slashCommands.size} commands.`);
     }
 }
 

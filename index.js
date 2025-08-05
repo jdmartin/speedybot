@@ -8,17 +8,13 @@ import { DataDisplayTools } from "./utils/attendance.js";
 import { AttendanceDatabaseCleanup, CreateAttendanceDatabase } from "./utils/attendance.js";
 import { Server } from './api/listener.js';
 import { ApiDatabaseCleanup } from "./api/apiAttendance.js";
-import { CreateCommandSet } from "./utils/speedyutils.js";
 import { DeploySlashCommands } from "./utils/deploy-slash-commands.js";
 import { Heartbeat } from "./utils/heartbeat.js";
 import { client } from "./utils/speedyutils.js";
 
-//Load commands into array
-const speedyutils = new CreateCommandSet();
-await speedyutils.generateSet();
-
 //Load our slash commands
 const slashutils = new DeploySlashCommands();
+await slashutils.loadCommands();
 slashutils.begin();
 
 //Initialize the statistics database and get helper for stats:
