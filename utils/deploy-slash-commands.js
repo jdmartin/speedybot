@@ -7,7 +7,6 @@ import { client } from '../utils/speedyutils.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-
 const commands = [];
 const commandFiles = readdirSync(join(__dirname, '../slash-commands')).filter((file) => {
     return file.endsWith(".js"); // Include all other .js files

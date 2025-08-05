@@ -1,6 +1,6 @@
 import { readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 
 const __filename = fileURLToPath(import.meta.url);
