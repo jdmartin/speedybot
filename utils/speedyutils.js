@@ -1,6 +1,10 @@
-const fs = require("fs");
+import { readdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { Client, Collection, GatewayIntentBits, Partials } from "discord.js";
 
-const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const myIntents = [
     GatewayIntentBits.Guilds,
@@ -14,16 +18,17 @@ const client = new Client({
 });
 
 const slashCommands = [];
-const slashCommandFiles = fs
-    .readdirSync(require("path").resolve(__dirname, "../slash-commands"))
-    .filter((file) => file.endsWith(".js"));
+const slashCommandsDir = join(__dirname, '..', 'slash-commands');
+const slashCommandFiles = readdirSync(slashCommandsDir).filter((file) =>
+    file.endsWith('.js')
+);
 client.slashCommands = new Collection();
 
 class CreateCommandSet {
-    generateSet() {
+    async generateSet() {
         for (const file of slashCommandFiles) {
-            const command = require(`../slash-commands/${file}`);
-            client.slashCommands.set(command.data.name, command);
+            const commandModule = await import(`../slash-commands/${file}`);
+            client.slashCommands.set(commandModule.data.name, commandModule);
         }
     }
 }
@@ -36,10 +41,4 @@ class SpeedyTools {
     }
 }
 
-module.exports = {
-    client: client,
-    slashCommands: slashCommands,
-    slashCommandFiles: slashCommandFiles,
-    CreateCommandSet,
-    SpeedyTools,
-};
+export { client, CreateCommandSet, slashCommands, slashCommandFiles, SpeedyTools };

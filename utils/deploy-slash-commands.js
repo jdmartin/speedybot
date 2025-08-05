@@ -1,13 +1,19 @@
-const { REST, Routes } = require("discord.js");
-const fs = require("fs");
+import { readdirSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { REST, Routes } from 'discord.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 
 const commands = [];
-const commandFiles = fs.readdirSync("./slash-commands").filter((file) => {
+const commandFiles = readdirSync(join(__dirname, '../slash-commands')).filter((file) => {
     return file.endsWith(".js"); // Include all other .js files
 });
 for (const file of commandFiles) {
-    const command = require(`../slash-commands/${file}`);
-    commands.push(command.data.toJSON());
+    const commandModule = await import(`../slash-commands/${file}`);
+    commands.push(commandModule.data.toJSON());
 }
 
 class DeploySlashCommands {
@@ -32,6 +38,4 @@ class DeploySlashCommands {
     }
 }
 
-module.exports = {
-    DeploySlashCommands,
-};
+export { DeploySlashCommands };

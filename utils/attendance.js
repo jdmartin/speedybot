@@ -1,14 +1,14 @@
-const { EmbedBuilder } = require("discord.js");
-const sqlite3 = require("better-sqlite3");
-const SqlString = require("sqlstring");
-const utils = require("./speedyutils.js");
-const client = utils.client;
+import { EmbedBuilder } from "discord.js";
+import sqlite3 from "better-sqlite3";
+import SqlString from "sqlstring";
+import { client } from "./speedyutils.js";
+
 //Date-related
-const dates = require("./datetools.js");
-const dateTools = new dates.dateTools();
+import { dateTools } from "./datetools.js";
+const dateUtils = new dateTools();
 
 //DB
-class CreateDatabase {
+class CreateAttendanceDatabase {
     constructor() {
         this.absencedb = new sqlite3("./db/attendance.db");
     }
@@ -24,7 +24,7 @@ class CreateDatabase {
     }
 }
 
-class attendanceTools {
+class AttendanceTools {
     constructor() {
         this.absencedb = new sqlite3("./db/attendance.db");
     }
@@ -61,7 +61,7 @@ class attendanceTools {
         const startDate = new Date(start_year, start_month, start_day);
         const endDate = new Date(end_year, end_month, end_day);
 
-        const result = dateTools.eachDayOfInterval(startDate, endDate);
+        const result = dateUtils.eachDayOfInterval(startDate, endDate);
         this.processDBUpdateFilterLoop(result, kind, name, nickname, comment, restriction);
     }
 
@@ -90,19 +90,19 @@ class attendanceTools {
     // prettier-ignore
     filterDBUpdate(restriction, name, nickname, newYear, newMonth, newDay, newDate, comment, short_item, kind) {
         if (restriction === "none") {
-            if (dateTools.isTuesday(short_item) || dateTools.isThursday(short_item) || dateTools.isSunday(short_item)) {
+            if (dateUtils.isTuesday(short_item) || dateUtils.isThursday(short_item) || dateUtils.isSunday(short_item)) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         } else if (restriction === "t") {
-            if (dateTools.isTuesday(short_item)) {
+            if (dateUtils.isTuesday(short_item)) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         } else if (restriction === "r") {
-            if (dateTools.isThursday(short_item)) {
+            if (dateUtils.isThursday(short_item)) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         } else if (restriction === "s") {
-            if (dateTools.isSunday(short_item)) {
+            if (dateUtils.isSunday(short_item)) {
                 this.doDBUpdate(name, nickname, newYear, newMonth, newDay, newDate, comment, kind);
             }
         }
@@ -120,7 +120,7 @@ class attendanceTools {
     //command generateResponse for notifying the user of what has been done.
     generateResponse(name, nickname, this_command, start, end, reason, restriction) {
         //Create some helpers and ensure needed parts:
-        var friendlyStart = dateTools.makeFriendlyDates(start);
+        var friendlyStart = dateUtils.makeFriendlyDates(start);
         var namestring = "";
         if (nickname != name && nickname !== null) {
             namestring = name + " (" + nickname + ")"
@@ -131,7 +131,7 @@ class attendanceTools {
         if (!end) {
             end = start;
         }
-        var friendlyEnd = dateTools.makeFriendlyDates(end);
+        var friendlyEnd = dateUtils.makeFriendlyDates(end);
         var friendlyRestriction = '';
         // Let's create a restriction message we can insert
         if (restriction.length !== "none") {
@@ -261,7 +261,7 @@ class DataDisplayTools {
             }
             absentEmbed.addFields({
                 name: row.name,
-                value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + commentString,
+                value: "Date: " + dateUtils.makeFriendlyDates(row.end_date) + commentString,
                 inline: false,
             });
             absentCount += 1;
@@ -295,7 +295,7 @@ class DataDisplayTools {
             }
             lateEmbed.addFields({
                 name: row.name,
-                value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + commentString,
+                value: "Date: " + dateUtils.makeFriendlyDates(row.end_date) + commentString,
             });
             lateCount += 1;
         });
@@ -331,7 +331,7 @@ class DataDisplayTools {
             }
             apiEmbed.addFields({
                 name: row.name,
-                value: "Date: " + dateTools.makeFriendlyDates(row.end_date) + commentString,
+                value: "Date: " + dateUtils.makeFriendlyDates(row.end_date) + commentString,
             });
         });
 
@@ -345,7 +345,7 @@ class DataDisplayTools {
     }
 }
 
-class DatabaseCleanup {
+class AttendanceDatabaseCleanup {
     constructor() {
         this.absencedb = new sqlite3("./db/attendance.db");
     }
@@ -367,9 +367,4 @@ class DatabaseCleanup {
     }
 }
 
-module.exports = {
-    attendanceTools,
-    CreateDatabase,
-    DatabaseCleanup,
-    DataDisplayTools
-};
+export { AttendanceDatabaseCleanup, AttendanceTools, CreateAttendanceDatabase, DataDisplayTools };

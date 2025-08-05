@@ -1,8 +1,8 @@
-const { EmbedBuilder } = require("discord.js");
-const sqlite3 = require('better-sqlite3');
+import { EmbedBuilder } from "discord.js";
+import sqlite3 from "better-sqlite3";
+import { slashCommandFiles } from './speedyutils.js';
+
 const statsdb = new sqlite3(':memory:');
-const utils = require('./speedyutils.js');
-const slashCommandFiles = utils.slashCommandFiles;
 
 class CreateDatabase {
     startup() {
@@ -53,9 +53,4 @@ class GetStats {
     }
 }
 
-
-module.exports = {
-    CreateDatabase,
-    DatabaseTools,
-    GetStats,
-};
+export { CreateDatabase, DatabaseTools, GetStats };

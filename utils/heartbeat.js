@@ -3,7 +3,7 @@ import { access, unlink } from 'node:fs/promises';
 import { get } from 'node:http';
 import { createServer } from 'node:net';
 
-export class Heartbeat {
+class Heartbeat {
     constructor() {
         this.cachedResponse = this.generateResponse();
     }
@@ -79,3 +79,5 @@ export class Heartbeat {
         return responseComponents.join('\r\n');
     }
 }
+
+export { Heartbeat };

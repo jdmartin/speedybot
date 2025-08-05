@@ -1,11 +1,10 @@
-const sqlite3 = require("better-sqlite3");
-const utils = require("../utils/speedyutils.js");
-const client = utils.client;
-//Date-related
-const dates = require("../utils/datetools.js");
-const dateTools = new dates.dateTools();
+import sqlite3 from 'better-sqlite3';
+import { client } from '../utils/speedyutils.js';
 
-class attendanceTools {
+//Date-related
+import { dateTools } from '../utils/datetools.js';
+
+class apiAttendanceTools {
     constructor() {
         this.absencedb = new sqlite3("./db/apiAttendance.db");
     }
@@ -182,7 +181,7 @@ class attendanceTools {
     }
 }
 
-class DatabaseCleanup {
+class ApiDatabaseCleanup {
     constructor() {
         this.absencedb = new sqlite3("./db/apiAttendance.db");
     }
@@ -198,7 +197,4 @@ class DatabaseCleanup {
     }
 }
 
-module.exports = {
-    attendanceTools,
-    DatabaseCleanup,
-};
+export { apiAttendanceTools, ApiDatabaseCleanup };
