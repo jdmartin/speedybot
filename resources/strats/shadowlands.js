@@ -1,6 +1,4 @@
-const {
-    EmbedBuilder
-} = require('discord.js');
+import { EmbedBuilder } from "discord.js";
 
 const sepulchre = new EmbedBuilder()
     .setTitle("Evie's Strats!")
@@ -88,8 +86,5 @@ const nathria = new EmbedBuilder()
         name: "See Also",
         value: "[Velocity Corkboard](https://velocitycorkboard.com/)"
     })
-module.exports = {
-    sanctum: sanctum,
-    sepulchre: sepulchre,
-    nathria: nathria
-};
+
+export { nathria, sanctum, sepulchre };

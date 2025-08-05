@@ -1,6 +1,7 @@
-const fs = require('fs');
-const http = require("http");
-const net = require('net');
+import { chmodSync, existsSync, unlinkSync } from 'node:fs';
+import { access, unlink } from 'node:fs/promises';
+import { get } from 'node:http';
+import { createServer } from 'node:net';
 
 class Heartbeat {
     constructor() {
@@ -11,7 +12,7 @@ class Heartbeat {
         function callURL() {
             const url = process.env.MONITOR_URL;
 
-            http.get(url, (response) => {
+            get(url, (response) => {
             }).on('error', (error) => {
                 console.error(`Error calling URL: ${error.message}`);
             });
@@ -31,8 +32,8 @@ class Heartbeat {
         console.log('Shutting down server...');
 
         try {
-            await fs.promises.access(socketPath);
-            await fs.promises.unlink(socketPath);
+            await access(socketPath);
+            await unlink(socketPath);
             console.log('Socket file removed');
         } catch (err) {
             console.error('Error removing socket file:', err);
@@ -45,11 +46,11 @@ class Heartbeat {
     startSocket() {
         const socketPath = '/tmp/speedybot-socket.sock';
         // Remove the socket file if it exists
-        if (fs.existsSync(socketPath)) {
-            fs.unlinkSync(socketPath);
+        if (existsSync(socketPath)) {
+            unlinkSync(socketPath);
         }
 
-        const unixServer = net.createServer((client) => {
+        const unixServer = createServer((client) => {
             // Use an arrow function to maintain the class instance as 'this'
             client.write(this.cachedResponse);
             client.end();
@@ -57,7 +58,7 @@ class Heartbeat {
 
         // Start listening on the Unix socket
         unixServer.listen(socketPath, function () {
-            fs.chmodSync(socketPath, '775');
+            chmodSync(socketPath, '775');
             console.log('Speedy socket started...');
             console.log("Speedy Standing By!");
         });
@@ -79,7 +80,4 @@ class Heartbeat {
     }
 }
 
-
-module.exports = {
-    Heartbeat,
-};
+export { Heartbeat };

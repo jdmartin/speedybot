@@ -1,11 +1,11 @@
-const sqlite3 = require("better-sqlite3");
-const utils = require("../utils/speedyutils.js");
-const client = utils.client;
-//Date-related
-const dates = require("../utils/datetools.js");
-const dateTools = new dates.dateTools();
+import sqlite3 from 'better-sqlite3';
+import { client } from '../utils/speedyutils.js';
 
-class attendanceTools {
+//Date-related
+import { dateTools } from '../utils/datetools.js';
+const dateUtils = new dateTools();
+
+class apiAttendanceTools {
     constructor() {
         this.absencedb = new sqlite3("./db/apiAttendance.db");
     }
@@ -29,7 +29,7 @@ class attendanceTools {
         const startDate = new Date(start_year, start_month, start_day);
         const endDate = new Date(end_year, end_month, end_day);
 
-        const result = dateTools.eachDayOfInterval(startDate, endDate);
+        const result = dateUtils.eachDayOfInterval(startDate, endDate);
         this.processDBUpdateFilterLoop(result, kind, name, comment, restriction, code);
     }
 
@@ -58,19 +58,19 @@ class attendanceTools {
     // prettier-ignore
     filterDBUpdate(restriction, name, newYear, newMonth, newDay, newDate, comment, short_item, kind, code) {
         if (restriction === "none") {
-            if (dateTools.isTuesday(short_item) || dateTools.isThursday(short_item) || dateTools.isSunday(short_item)) {
+            if (dateUtils.isTuesday(short_item) || dateUtils.isThursday(short_item) || dateUtils.isSunday(short_item)) {
                 this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         } else if (restriction === "Tuesday") {
-            if (dateTools.isTuesday(short_item)) {
+            if (dateUtils.isTuesday(short_item)) {
                 this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         } else if (restriction === "Thursday") {
-            if (dateTools.isThursday(short_item)) {
+            if (dateUtils.isThursday(short_item)) {
                 this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         } else if (restriction === "Sunday") {
-            if (dateTools.isSunday(short_item)) {
+            if (dateUtils.isSunday(short_item)) {
                 this.doDBUpdate(name, newYear, newMonth, newDay, newDate, comment, kind, code);
             }
         }
@@ -83,14 +83,14 @@ class attendanceTools {
     //command generateResponse for notifying the user of what has been done.
     generateResponse(name, this_command, start, end, reason, restriction, code) {
         //Create some helpers and ensure needed parts:
-        var friendlyStart = dateTools.makeFriendlyDates(start);
+        var friendlyStart = dateUtils.makeFriendlyDates(start);
         var namestring = name;
 
         //Make certain there's an end value.
         if (!end) {
             end = start;
         }
-        var friendlyEnd = dateTools.makeFriendlyDates(end);
+        var friendlyEnd = dateUtils.makeFriendlyDates(end);
         var friendlyRestriction = '';
         // Let's create a restriction message we can insert
         if (restriction !== "none") {
@@ -182,7 +182,7 @@ class attendanceTools {
     }
 }
 
-class DatabaseCleanup {
+class ApiDatabaseCleanup {
     constructor() {
         this.absencedb = new sqlite3("./db/apiAttendance.db");
     }
@@ -198,7 +198,4 @@ class DatabaseCleanup {
     }
 }
 
-module.exports = {
-    attendanceTools,
-    DatabaseCleanup,
-};
+export { apiAttendanceTools, ApiDatabaseCleanup };

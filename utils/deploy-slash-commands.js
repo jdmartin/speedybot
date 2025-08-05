@@ -1,13 +1,19 @@
-const { REST, Routes } = require("discord.js");
-const fs = require("fs");
+import { readdirSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { REST, Routes } from 'discord.js';
+import { client } from '../utils/speedyutils.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const commands = [];
-const commandFiles = fs.readdirSync("./slash-commands").filter((file) => {
+const commandFiles = readdirSync(join(__dirname, '../slash-commands')).filter((file) => {
     return file.endsWith(".js"); // Include all other .js files
 });
 for (const file of commandFiles) {
-    const command = require(`../slash-commands/${file}`);
-    commands.push(command.data.toJSON());
+    const commandModule = await import(`../slash-commands/${file}`);
+    commands.push(commandModule.data.toJSON());
 }
 
 class DeploySlashCommands {
@@ -30,8 +36,27 @@ class DeploySlashCommands {
             }
         })();
     }
+
+    async loadCommands() {
+        client.slashCommands = new Map();
+
+        const commandsPath = join(process.cwd(), 'slash-commands');
+        const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+        for (const file of commandFiles) {
+            const filePath = join(commandsPath, file);
+            const command = await import(filePath);
+
+            if (!command.data || !command.execute) {
+                console.warn(`[WARNING] Command at ${file} missing data or execute.`);
+                continue;
+            }
+
+            client.slashCommands.set(command.data.name, command);
+        }
+
+        console.log(`Loaded ${client.slashCommands.size} commands.`);
+    }
 }
 
-module.exports = {
-    DeploySlashCommands,
-};
+export { DeploySlashCommands };

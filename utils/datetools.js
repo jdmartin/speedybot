@@ -81,6 +81,4 @@ class dateTools {
     }
 }
 
-module.exports = {
-    dateTools,
-};
+export { dateTools };

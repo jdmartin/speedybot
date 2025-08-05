@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
+import { EmbedBuilder } from "discord.js";
 
 const vault = new EmbedBuilder()
     .setTitle("Evie's Strats!")
@@ -59,8 +59,5 @@ const amirdrassil = new EmbedBuilder()
         name: "See Also",
         value: "[Velocity Corkboard](https://velocitycorkboard.com/)",
     });
-module.exports = {
-    vault: vault,
-    aberrus: aberrus,
-    amirdrassil: amirdrassil
-};
+
+export { aberrus, vault, amirdrassil };

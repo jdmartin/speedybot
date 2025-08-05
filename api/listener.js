@@ -1,8 +1,8 @@
-const http = require('http');
-const querystring = require('querystring');
-const SqlString = require("sqlstring");
-const sqlite3 = require("better-sqlite3");
-const apiAttendanceTools = require('./apiAttendance.js');
+import { createServer } from 'node:http';
+import { parse } from 'node:querystring';
+import SqlString from 'sqlstring';
+import sqlite3 from 'better-sqlite3';
+import { apiAttendanceTools } from './apiAttendance.js';
 
 class Server {
     constructor() {
@@ -38,9 +38,9 @@ class Server {
     }
 
     startListening() {
-        const apiAttendance = new apiAttendanceTools.attendanceTools();
+        const apiAttendance = new apiAttendanceTools();
 
-        const server = http.createServer((req, res) => {
+        const server = createServer((req, res) => {
             if (req.method === 'POST' && req.url === '/submit') {
                 let data = '';
 
@@ -49,7 +49,7 @@ class Server {
                 });
 
                 req.on('end', () => {
-                    const formData = querystring.parse(data);
+                    const formData = parse(data);
 
                     // Send a response that can be captured by the iframe
                     const successMessage = 'Form submitted successfully';
@@ -124,6 +124,4 @@ class Server {
     }
 }
 
-module.exports = {
-    Server
-}
+export { Server };

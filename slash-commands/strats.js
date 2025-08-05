@@ -1,64 +1,55 @@
-const { MessageFlags, SlashCommandBuilder } = require("discord.js");
+import { MessageFlags, SlashCommandBuilder } from "discord.js";
+import * as Shadowlands from "../resources/strats/shadowlands.js";
+import * as Dragonflight from "../resources/strats/dragonflight.js";
+import * as TWW from "../resources/strats/tww.js";
 
-module.exports = {
-    data: new SlashCommandBuilder()
-        .setName("strats")
-        .setDescription("Get all the links to strats for the current raid, or for an older raid.")
-        .addStringOption((option) =>
-            option
-                .setName("raid_name")
-                .setDescription("Name of the Raid")
-                .setRequired(true)
-                .addChoices(
-                    { name: "Undermine", value: "undermine" },
-                    { name: "Nerub-ar Palace", value: "nerub" },
-                    { name: "Amirdrassil", value: "amirdrassil" },
-                    { name: "Aberrus", value: "aberrus" },
-                    { name: "Nathria", value: "nathria" },
-                    { name: "Sanctum", value: "sanctum" },
-                    { name: "Sepulchre", value: "sepulchre" },
-                    { name: "Vault", value: "vault" },
-                ),
-        ),
+export const data = new SlashCommandBuilder()
+    .setName("strats")
+    .setDescription("Get all the links to strats for the current raid, or for an older raid.")
+    .addStringOption((option) =>
+        option
+            .setName("raid_name")
+            .setDescription("Name of the Raid")
+            .setRequired(true)
+            .addChoices(
+                { name: "Undermine", value: "undermine" },
+                { name: "Nerub-ar Palace", value: "nerub" },
+                { name: "Amirdrassil", value: "amirdrassil" },
+                { name: "Aberrus", value: "aberrus" },
+                { name: "Nathria", value: "nathria" },
+                { name: "Sanctum", value: "sanctum" },
+                { name: "Sepulchre", value: "sepulchre" },
+                { name: "Vault", value: "vault" },
+            )
+    );
 
-    async execute(interaction) {
-        const raidExpansionMap = new Map();
-        raidExpansionMap.set("undermine", "TWW");
-        raidExpansionMap.set("nerub", "TWW");
-        raidExpansionMap.set("amirdrassil", "Dragonflight");
-        raidExpansionMap.set("aberrus", "Dragonflight");
-        raidExpansionMap.set("nathria", "Shadowlands");
-        raidExpansionMap.set("sanctum", "Shadowlands");
-        raidExpansionMap.set("sepulchre", "Shadowlands");
-        raidExpansionMap.set("vault", "Dragonflight");
+export async function execute(interaction) {
+    const raidExpansionMap = {
+        undermine: TWW,
+        nerub: TWW,
+        amirdrassil: Dragonflight,
+        aberrus: Dragonflight,
+        nathria: Shadowlands,
+        sanctum: Shadowlands,
+        sepulchre: Shadowlands,
+        vault: Dragonflight,
+    };
 
-        const Shadowlands = require("../resources/strats/shadowlands.js");
-        const Dragonflight = require("../resources/strats/dragonflight.js");
-        const TWW = require("../resources/strats/tww.js");
+    const raidChoice = interaction.options.getString("raid_name");
 
-        const raidChoice = interaction.options.getString("raid_name");
-        let expansionChoice = "";
-        let embeds = [];
-
-        if (raidExpansionMap.has(raidChoice)) {
-            expansionChoice = raidExpansionMap.get(raidChoice);
-            switch (expansionChoice) {
-                case "Shadowlands":
-                    embeds = [Shadowlands[raidChoice]];
-                    break;
-                case "Dragonflight":
-                    embeds = [Dragonflight[raidChoice]];
-                    break;
-                case "TWW":
-                    embeds = [TWW[raidChoice]];
-                    break;
-            }
-        }
-
-        await interaction.reply({
-            content: "It's dangerous to go alone! Take these:\n",
-            embeds: embeds,
+    if (!raidExpansionMap[raidChoice]) {
+        return interaction.reply({
+            content: `Sorry, I don't have any strats for that raid.`,
             flags: MessageFlags.Ephemeral,
         });
-    },
-};
+    }
+
+    const expansion = raidExpansionMap[raidChoice];
+    const embed = expansion[raidChoice];
+
+    await interaction.reply({
+        content: "It's dangerous to go alone! Take these:\n",
+        embeds: [embed],
+        flags: MessageFlags.Ephemeral,
+    });
+}
