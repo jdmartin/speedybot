@@ -31,10 +31,10 @@ export async function execute(interaction) {
         nerub: TWW,
         amirdrassil: Dragonflight,
         aberrus: Dragonflight,
-        nathria: Shadowlands,
-        sanctum: Shadowlands,
-        sepulchre: Shadowlands,
         vault: Dragonflight,
+        sepulchre: Shadowlands,
+        sanctum: Shadowlands,
+        nathria: Shadowlands,
     };
 
     const raidChoice = interaction.options.getString("raid_name");
