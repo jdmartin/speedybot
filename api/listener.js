@@ -46,6 +46,7 @@ class Server {
                     } else {
                         let comment = formData.comment ? SqlString.escape(formData.comment) : "";
                         let restriction = formData.restriction !== "nores" ? formData.restriction : "none";
+                        const cancelCode = formData.userId || null;
 
                         const start_date = this.prepareDateForProcessing(formData.date);
                         const end_date = this.prepareDateForProcessing(formData.endDate) || start_date;
@@ -56,13 +57,13 @@ class Server {
                         switch (formData.action) {
                             case "absent":
                                 console.log(`Marking ${formData.name} absent from ${full_start_date} to ${full_end_date}`);
-                                apiAttendance.processDBUpdate(formData.name, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, formData.cancelCode);
-                                apiAttendance.generateResponse(formData.name, "absent", full_start_date, full_end_date, comment, restriction, formData.cancelCode);
+                                apiAttendance.processDBUpdate(formData.name, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, cancelCode);
+                                apiAttendance.generateResponse(formData.name, "absent", full_start_date, full_end_date, comment, restriction, cancelCode);
                                 break;
                             case "late":
                                 console.log(`Marking ${formData.name} late from ${full_start_date} to ${full_end_date}`);
-                                apiAttendance.processDBUpdate(formData.name, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, formData.cancelCode);
-                                apiAttendance.generateResponse(formData.name, "late", full_start_date, full_end_date, comment, restriction, formData.cancelCode);
+                                apiAttendance.processDBUpdate(formData.name, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, cancelCode);
+                                apiAttendance.generateResponse(formData.name, "late", full_start_date, full_end_date, comment, restriction, cancelCode);
                                 break;
                             default:
                                 console.warn(`⚠️ Unknown action: ${formData.action}`);
