@@ -1,5 +1,25 @@
 import { EmbedBuilder } from "discord.js";
 
+const manaforge = new EmbedBuilder()
+    .setTitle("Evie's Strats!")
+    .setColor(0xffffff)
+    .setAuthor({
+        name: "🧿",
+    })
+    .setDescription("__Manaforge__")
+    .setFooter({
+        text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...",
+    })
+    .addFields({
+        name: "Bosses",
+        value: "",
+        inline: true,
+    })
+    .addFields({
+        name: "See Also",
+        value: "[Velocity Corkboard](https://velocitycorkboard.com/)",
+    });
+
 const undermine = new EmbedBuilder()
     .setTitle("Evie's Strats!")
     .setColor(0xffffff)
@@ -40,4 +60,4 @@ const nerub = new EmbedBuilder()
         value: "[Velocity Corkboard](https://velocitycorkboard.com/)",
     });
 
-export { nerub, undermine };
+export { manaforge, nerub, undermine };
