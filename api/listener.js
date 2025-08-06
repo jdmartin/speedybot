@@ -38,12 +38,10 @@ class Server {
             req.on('end', () => {
                 try {
                     const formData = parse(data);
-                    console.log("📨 Received submission:", formData);
 
                     const successMessage = 'Form submitted successfully';
 
                     if (formData.action === "cancel") {
-                        console.log(`🔄 Processing cancellation for ${formData.name} (${formData.cancelCode})`);
                         apiAttendance.cancelAbsence(formData.name, formData.cancelCode);
                     } else {
                         let comment = formData.comment ? SqlString.escape(formData.comment) : "";
