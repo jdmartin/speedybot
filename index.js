@@ -29,7 +29,11 @@ attendance.startup();
 //Initialize the API Listener and DB (if needed)
 const apiTools = new Server();
 if (process.env.ENABLE_ATTENDANCE_API === "true") {
-    apiTools.startListening();
+    if (process.env.API_LISTENER_TYPE === 'tcp') {
+        apiTools.startHttpListener();
+    } else if (process.env.API_LISTENER_TYPE === 'socket') {
+        apiTools.startSocketListener();
+    }
     apiTools.createDB();
 }
 
