@@ -1,5 +1,6 @@
 import { createServer } from 'node:http';
 import { parse } from 'node:querystring';
+import { existsSync, unlinkSync, chmodSync } from 'node:fs';
 import SqlString from 'sqlstring';
 import sqlite3 from 'better-sqlite3';
 import { apiAttendanceTools } from './apiAttendance.js';
@@ -10,116 +11,114 @@ class Server {
     }
 
     createDB() {
-        var apiDBPrep = this.db.prepare(
-            "CREATE TABLE IF NOT EXISTS `attendance` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date` TEXT, `comment` TEXT, `kind` TEXT NOT NULL, `code` TEXT)",
+        const apiDBPrep = this.db.prepare(
+            "CREATE TABLE IF NOT EXISTS `attendance` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date` TEXT, `comment` TEXT, `kind` TEXT NOT NULL, `code` TEXT)"
         );
-        var messagesDBPrep = this.db.prepare(
-            "CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `code` TEXT, `messageID` TEXT)",
+        const messagesDBPrep = this.db.prepare(
+            "CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `code` TEXT, `messageID` TEXT)"
         );
         apiDBPrep.run();
         messagesDBPrep.run();
     }
 
     prepareDateForProcessing(givenDate) {
-        let date_parts = [];
-
-        if (givenDate) {
-            let extracted_values = givenDate.split('-');
-            let month = Number(extracted_values[1] - 1);
-            let day = Number(extracted_values[2]);
-            let year = Number(extracted_values[0]);
-
-            date_parts.push(year, month, day, givenDate);
-            return date_parts
-        }
-        else {
-            return givenDate
-        }
+        if (!givenDate) return givenDate;
+        const [year, month, day] = givenDate.split('-').map(Number);
+        return [year, month - 1, day, givenDate];
     }
 
-    startListening() {
+    handleRequest(req, res) {
         const apiAttendance = new apiAttendanceTools();
 
-        const server = createServer((req, res) => {
-            if (req.method === 'POST' && req.url === '/submit') {
-                let data = '';
+        if (req.method === 'POST' && req.url === '/submit') {
+            let data = '';
 
-                req.on('data', (chunk) => {
-                    data += chunk;
-                });
+            req.on('data', chunk => { data += chunk; });
 
-                req.on('end', () => {
+            req.on('end', () => {
+                try {
                     const formData = parse(data);
+                    console.log("📨 Received submission:", formData);
 
-                    // Send a response that can be captured by the iframe
                     const successMessage = 'Form submitted successfully';
 
                     if (formData.action === "cancel") {
+                        console.log(`🔄 Processing cancellation for ${formData.name} (${formData.cancelCode})`);
                         apiAttendance.cancelAbsence(formData.name, formData.cancelCode);
                     } else {
-                        // Validate the user's inputs
-                        let comment = "";
-                        let restriction = "none";
+                        let comment = formData.comment ? SqlString.escape(formData.comment) : "";
+                        let restriction = formData.restriction !== "nores" ? formData.restriction : "none";
 
-                        if (formData.comment !== undefined && formData.comment.length > 0) {
-                            comment = SqlString.escape(formData.comment);
-                        }
+                        const start_date = this.prepareDateForProcessing(formData.date);
+                        const end_date = this.prepareDateForProcessing(formData.endDate) || start_date;
 
-                        if (formData.restriction !== "nores") {
-                            restriction = formData.restriction;
-                        }
-
-                        // Handle given values
-                        let start_date = this.prepareDateForProcessing(formData.date);
-                        let processed_end_date = this.prepareDateForProcessing(formData.endDate);
-                        let start_year = start_date[0];
-                        let start_month = start_date[1];
-                        let start_day = start_date[2];
-                        let full_start_date = start_date[3];
-                        let end_year = processed_end_date[0];
-                        let end_month = processed_end_date[1];
-                        let end_day = processed_end_date[2];
-                        let full_end_date = processed_end_date[3];
-
-                        // We still need something if the user chose a single date, because of later checks.
-                        if (typeof full_end_date === 'undefined') {
-                            full_end_date = full_start_date;
-                            end_year = start_year;
-                            end_month = start_month;
-                            end_day = start_day;
-                        }
+                        const [start_year, start_month, start_day, full_start_date] = start_date;
+                        const [end_year, end_month, end_day, full_end_date] = end_date;
 
                         switch (formData.action) {
                             case "absent":
-                                apiAttendance.processDBUpdate(formData.name, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, formData.userId);
-                                apiAttendance.generateResponse(formData.name, "absent", full_start_date, full_end_date, comment, restriction, formData.userId);
+                                console.log(`Marking ${formData.name} absent from ${full_start_date} to ${full_end_date}`);
+                                apiAttendance.processDBUpdate(formData.name, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, formData.cancelCode);
+                                apiAttendance.generateResponse(formData.name, "absent", full_start_date, full_end_date, comment, restriction, formData.cancelCode);
                                 break;
                             case "late":
-                                apiAttendance.processDBUpdate(formData.name, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, formData.userId);
-                                apiAttendance.generateResponse(formData.name, "late", full_start_date, full_end_date, comment, restriction, formData.userId);
+                                console.log(`Marking ${formData.name} late from ${full_start_date} to ${full_end_date}`);
+                                apiAttendance.processDBUpdate(formData.name, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day, formData.cancelCode);
+                                apiAttendance.generateResponse(formData.name, "late", full_start_date, full_end_date, comment, restriction, formData.cancelCode);
                                 break;
+                            default:
+                                console.warn(`⚠️ Unknown action: ${formData.action}`);
                         }
                     }
-                    // Set the appropriate response headers
+
                     res.writeHead(200, {
                         'Content-Type': 'text/plain',
-                        'Access-Control-Allow-Origin': '*' // This allows cross-origin communication
+                        'Access-Control-Allow-Origin': '*'
                     });
-
-                    // Send the success message as the response
                     res.end(successMessage);
-                });
-            } else {
-                // Handle other requests or show an error page
-                res.writeHead(404, { 'Content-Type': 'text/plain' });
-                res.end('Not Found');
-            }
+                } catch (err) {
+                    console.error("❌ Error processing request:", err);
+                    res.writeHead(500, { 'Content-Type': 'text/plain' });
+                    res.end('Internal Server Error');
+                }
+            });
+        } else {
+            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.end('Not Found');
+        }
+    }
+
+    startHttpListener() {
+        const server = createServer((req, res) => this.handleRequest(req, res));
+        const PORT = process.env.API_LISTENER_PORT || 8086;
+        const HOST = process.env.API_LISTENER_HOST || '127.0.0.1';
+
+        server.listen(PORT, HOST, () => {
+            console.log(`HTTP API listener started on http://${HOST}:${PORT}`);
+        });
+    }
+
+    startSocketListener() {
+        const socketPath = '/tmp/api-attendance.sock';
+
+        if (existsSync(socketPath)) {
+            unlinkSync(socketPath);
+            console.log(`Removed existing socket at ${socketPath}`);
+        }
+
+        const server = createServer((req, res) => this.handleRequest(req, res));
+
+        server.listen(socketPath, () => {
+            chmodSync(socketPath, '775');
+            console.log(`API socket listener started at ${socketPath}`);
         });
 
-        const PORT = process.env.API_LISTENER_PORT;
-        const HOST = process.env.API_LISTENER_HOST; // Bind to localhost
-        server.listen(PORT, HOST, () => {
-            console.log(`API is listening on http://${HOST}:${PORT}`);
+        process.on('SIGINT', () => {
+            console.log('Shutting down socket server...');
+            server.close(() => {
+                if (existsSync(socketPath)) unlinkSync(socketPath);
+                process.exit();
+            });
         });
     }
 }
