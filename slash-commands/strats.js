@@ -12,7 +12,7 @@ export const data = new SlashCommandBuilder()
             .setDescription("Name of the Raid")
             .setRequired(true)
             .addChoices(
-                { name: "Manaforge", value: "manaforage" },
+                { name: "Manaforge", value: "manaforge" },
                 { name: "Undermine", value: "undermine" },
                 { name: "Nerub-ar Palace", value: "nerub" },
                 { name: "Amirdrassil", value: "amirdrassil" },
