@@ -1,6 +1,7 @@
 import { createServer } from 'node:http';
 import { parse } from 'node:querystring';
 import { existsSync, unlinkSync, chmodSync } from 'node:fs';
+import { platform } from 'node:os';
 import SqlString from 'sqlstring';
 import sqlite3 from 'better-sqlite3';
 import { apiAttendanceTools } from './apiAttendance.js';
@@ -8,6 +9,13 @@ import { apiAttendanceTools } from './apiAttendance.js';
 class Server {
     constructor() {
         this.db = new sqlite3("./db/apiAttendance.db");
+        this.socketPath = this.setSocketPath();
+    }
+
+    setSocketPath() {
+        return platform() === 'darwin'
+            ? '/tmp/api-attendance.sock'
+            : '/run/speedybot/api-attendance.sock';
     }
 
     createDB() {
@@ -98,24 +106,22 @@ class Server {
     }
 
     startSocketListener() {
-        const socketPath = '/tmp/api-attendance.sock';
-
-        if (existsSync(socketPath)) {
-            unlinkSync(socketPath);
-            console.log(`Removed existing socket at ${socketPath}`);
+        if (existsSync(this.socketPath)) {
+            unlinkSync(this.socketPath);
+            console.log(`Removed existing socket at ${this.socketPath}`);
         }
 
         const server = createServer((req, res) => this.handleRequest(req, res));
 
-        server.listen(socketPath, () => {
-            chmodSync(socketPath, '775');
-            console.log(`API socket listener started at ${socketPath}`);
+        server.listen(this.socketPath, () => {
+            chmodSync(this.socketPath, '775');
+            console.log(`API socket listener started at ${this.socketPath}`);
         });
 
         process.on('SIGINT', () => {
             console.log('Shutting down socket server...');
             server.close(() => {
-                if (existsSync(socketPath)) unlinkSync(socketPath);
+                if (existsSync(this.socketPath)) unlinkSync(this.socketPath);
                 process.exit();
             });
         });

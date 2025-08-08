@@ -1,11 +1,19 @@
 import { chmodSync, existsSync, unlinkSync } from 'node:fs';
-import { access, unlink } from 'node:fs/promises';
+import { platform } from 'node:os';
+import { access } from 'node:fs/promises';
 import { get } from 'node:http';
 import { createServer } from 'node:net';
 
 class Heartbeat {
     constructor() {
         this.cachedResponse = this.generateResponse();
+        this.socketPath = this.setSocketPath();
+    }
+
+    setSocketPath() {
+        return platform() === 'darwin'
+            ? '/tmp/speedybot-socket.sock'
+            : '/run/speedybot/speedybot-socket.sock';
     }
 
     startPushing() {
@@ -27,13 +35,12 @@ class Heartbeat {
         setInterval(callURL, interval);
     }
 
-    async handleShutdown() {
-        const socketPath = '/tmp/speedybot-socket.sock';
+    handleShutdown() {
         console.log('Shutting down server...');
 
         try {
-            await access(socketPath);
-            await unlink(socketPath);
+            access(this.socketPath);
+            unlinkSync(this.socketPath);
             console.log('Socket file removed');
         } catch (err) {
             console.error('Error removing socket file:', err);
@@ -44,10 +51,9 @@ class Heartbeat {
     }
 
     startSocket() {
-        const socketPath = '/tmp/speedybot-socket.sock';
         // Remove the socket file if it exists
-        if (existsSync(socketPath)) {
-            unlinkSync(socketPath);
+        if (existsSync(this.socketPath)) {
+            unlinkSync(this.socketPath);
         }
 
         const unixServer = createServer((client) => {
@@ -57,9 +63,9 @@ class Heartbeat {
         });
 
         // Start listening on the Unix socket
-        unixServer.listen(socketPath, function () {
-            chmodSync(socketPath, '775');
-            console.log('Speedy socket started...');
+        unixServer.listen(this.socketPath, () => {
+            chmodSync(this.socketPath, '775');
+            console.log('Speedy socket started on:', this.socketPath);
             console.log("Speedy Standing By!");
         });
 
