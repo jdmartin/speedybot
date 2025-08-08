@@ -12,6 +12,7 @@ export const data = new SlashCommandBuilder()
             .setDescription("Name of the Raid")
             .setRequired(true)
             .addChoices(
+                { name: "Manaforge", value: "manaforage" },
                 { name: "Undermine", value: "undermine" },
                 { name: "Nerub-ar Palace", value: "nerub" },
                 { name: "Amirdrassil", value: "amirdrassil" },
@@ -25,14 +26,15 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction) {
     const raidExpansionMap = {
+        manaforge: TWW,
         undermine: TWW,
         nerub: TWW,
         amirdrassil: Dragonflight,
         aberrus: Dragonflight,
-        nathria: Shadowlands,
-        sanctum: Shadowlands,
-        sepulchre: Shadowlands,
         vault: Dragonflight,
+        sepulchre: Shadowlands,
+        sanctum: Shadowlands,
+        nathria: Shadowlands,
     };
 
     const raidChoice = interaction.options.getString("raid_name");
