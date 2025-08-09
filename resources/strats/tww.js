@@ -15,7 +15,7 @@ const manaforge = new EmbedBuilder()
     })
     .addFields({
         name: "Bosses",
-        value: `[Plexus Sentinel](${theCommonStem}/1403034952026685540)\n[Loom'ithar](${theCommonStem}/1403049142539911228)\n`,
+        value: `[Plexus Sentinel](${theCommonStem}/1403034952026685540)\n[Loom'ithar](${theCommonStem}/1403049142539911228)\n[Soulbinder](${theCommonStem}/1403417292389355560)\n`,
         inline: true,
     })
     .addFields({
