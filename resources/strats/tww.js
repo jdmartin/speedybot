@@ -1,5 +1,8 @@
 import { EmbedBuilder } from "discord.js";
 
+const theCommonStem = process.env.STRATS_COMMON_STEM || "";
+const theCommonAlso = process.env.STRATS_COMMON_ALSO || "";
+
 const manaforge = new EmbedBuilder()
     .setTitle("Evie's Strats!")
     .setColor(0xffffff)
@@ -12,12 +15,12 @@ const manaforge = new EmbedBuilder()
     })
     .addFields({
         name: "Bosses",
-        value: "[Plexus Sentinel](https://discord.com/channels/308622057707536385/308626596623810562/1403034952026685540)\n[Loom'ithar](https://discord.com/channels/308622057707536385/308626596623810562/1403049142539911228)\n",
+        value: `[Plexus Sentinel](${theCommonStem}/1403034952026685540)\n[Loom'ithar](${theCommonStem}/1403049142539911228)\n`,
         inline: true,
     })
     .addFields({
         name: "See Also",
-        value: "[Velocity Corkboard](https://velocitycorkboard.com/)",
+        value: `${theCommonAlso}`,
     });
 
 const undermine = new EmbedBuilder()
@@ -32,12 +35,12 @@ const undermine = new EmbedBuilder()
     })
     .addFields({
         name: "Bosses",
-        value: "[Geargrinder](https://discord.com/channels/308622057707536385/308626596623810562/1343807743462740019)\n[Cauldron](https://discord.com/channels/308622057707536385/308626596623810562/1343807959481978961)\n[Reverb](https://discord.com/channels/308622057707536385/308626596623810562/1345954308415295549)\n[Junker](https://discord.com/channels/308622057707536385/308626596623810562/1345954442058534962)\n[Sprocketmonger](https://discord.com/channels/308622057707536385/308626596623810562/1347075404493488209)\n[One-armed Bandit](https://discord.com/channels/308622057707536385/308626596623810562/1347123769348460616)\n[Mug'Zee](https://discord.com/channels/308622057707536385/308626596623810562/1348172193095352381)\n[Gallywix](https://discord.com/channels/308622057707536385/308626596623810562/1348195677276213358)\n",
+        value: `[Geargrinder](${theCommonStem}/1343807743462740019)\n[Cauldron](${theCommonStem}/1343807959481978961)\n[Reverb](${theCommonStem}/1345954308415295549)\n[Junker](${theCommonStem}/1345954442058534962)\n[Sprocketmonger](${theCommonStem}/1347075404493488209)\n[One-armed Bandit](${theCommonStem}/1347123769348460616)\n[Mug'Zee](${theCommonStem}/1348172193095352381)\n[Gallywix](${theCommonStem}/1348195677276213358)\n`,
         inline: true,
     })
     .addFields({
         name: "See Also",
-        value: "[Velocity Corkboard](https://velocitycorkboard.com/)",
+        value: `${theCommonAlso}`,
     });
 
 const nerub = new EmbedBuilder()
@@ -52,12 +55,12 @@ const nerub = new EmbedBuilder()
     })
     .addFields({
         name: "Bosses",
-        value: "[Ulgrax the Devourer](https://discord.com/channels/308622057707536385/308626596623810562/1278829737405448225)\n[Bloodbound Horror](https://discord.com/channels/308622057707536385/308626596623810562/1279308757582741525)\n[Sikran](https://discord.com/channels/308622057707536385/308626596623810562/1279659275131551859)\n[Rasha'nan](https://discord.com/channels/308622057707536385/308626596623810562/1280026118400770058)\n[Ovi'nax](https://discord.com/channels/308622057707536385/308626596623810562/1282189935188643891)\n[Ky'veza](https://discord.com/channels/308622057707536385/308626596623810562/1283625809587998740)\n[Silken Court](https://discord.com/channels/308622057707536385/308626596623810562/1283679790041268306)\n[Ansurek](https://discord.com/channels/308622057707536385/308626596623810562/1283860780147802145)\n",
+        value: `[Ulgrax the Devourer](${theCommonStem}/1278829737405448225)\n[Bloodbound Horror](${theCommonStem}/1279308757582741525)\n[Sikran](${theCommonStem}/1279659275131551859)\n[Rasha'nan](${theCommonStem}/1280026118400770058)\n[Ovi'nax](${theCommonStem}/1282189935188643891)\n[Ky'veza](${theCommonStem}/1283625809587998740)\n[Silken Court](${theCommonStem}/1283679790041268306)\n[Ansurek](${theCommonStem}/1283860780147802145)\n`,
         inline: true,
     })
     .addFields({
         name: "See Also",
-        value: "[Velocity Corkboard](https://velocitycorkboard.com/)",
+        value: `${theCommonAlso}`,
     });
 
 export { manaforge, nerub, undermine };
