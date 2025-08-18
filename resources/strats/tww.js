@@ -15,7 +15,7 @@ const manaforge = new EmbedBuilder()
     })
     .addFields({
         name: "Bosses",
-        value: `[Plexus Sentinel](${theCommonStem}/1403034952026685540)\n[Loom'ithar](${theCommonStem}/1403049142539911228)\n[Soulbinder](${theCommonStem}/1403417292389355560)\n[Forgeweaver Araz](${theCommonStem}/1403931594468622368)\n[Fractillus](${theCommonStem}/1404537847960174732)\n[Soul Hunters](${theCommonStem}/1405363939721744395)\n[Salhadaar](${theCommonStem}/1405965507290599486\n[Dimensius](${theCommonStem}/1406769622740500681)\n`,
+        value: `[Plexus Sentinel](${theCommonStem}/1403034952026685540)\n[Loom'ithar](${theCommonStem}/1403049142539911228)\n[Soulbinder](${theCommonStem}/1403417292389355560)\n[Forgeweaver Araz](${theCommonStem}/1403931594468622368)\n[Fractillus](${theCommonStem}/1404537847960174732)\n[Soul Hunters](${theCommonStem}/1405363939721744395)\n[Salhadaar](${theCommonStem}/1405965507290599486)\n[Dimensius](${theCommonStem}/1406769622740500681)\n`,
         inline: true,
     })
     .addFields({
