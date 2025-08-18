@@ -7,6 +7,7 @@
     "sqlstring": "^2.3.2"
   },
   "scripts": {
+    "dev": "node --env-file=.env --test --watch index.js",
     "start": "node --env-file=.env index.js"
   }
 }
