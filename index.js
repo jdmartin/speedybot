@@ -77,7 +77,7 @@ if (process.env.RAID_DAY_REPORTS_ENABLED === "true") {
                 let user = await client.users.fetch(userId.trim());
 
                 // Get the response (e.g., embeds) for this user
-                let response = absenceDBHelper.show(user.username, "today");
+                let response = absenceDBHelper.summarize();
 
                 // Send the response as an embed to the user via DM
                 await user.send({
