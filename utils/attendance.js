@@ -383,7 +383,7 @@ class DataDisplayTools {
 
         absentEmbed.addFields({
             name: "Players",
-            value: absentNames.length > 0 ? absentNames.toSorted().join(", ") : "None",
+            value: absentNames.length > 0 ? absentNames.toSorted((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })).join(", ") : "None",
             inline: false,
         });
 
@@ -393,7 +393,7 @@ class DataDisplayTools {
 
         lateEmbed.addFields({
             name: "Players",
-            value: lateNames.length > 0 ? lateNames.toSorted().join(", ") : "None",
+            value: lateNames.length > 0 ? lateNames.toSorted((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })).join(", ") : "None",
             inline: false,
         });
 
