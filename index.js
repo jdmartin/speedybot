@@ -93,7 +93,7 @@ if (process.env.RAID_DAY_REPORTS_ENABLED === "true") {
 }
 
 //Once that's done, let's move on to main.
-client.once("ready", () => {
+client.once("clientReady", () => {
     // prints "Ready!" to the console once the bot is online
     client.user.setActivity("Say /speedy", { type: ActivityType.Custom });
 
