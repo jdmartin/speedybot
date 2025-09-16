@@ -355,7 +355,7 @@ class DataDisplayTools {
 
         let apidb = new sqlite3("./db/apiAttendance.db");
         var api_sql = apidb.prepare(
-            "SELECT * FROM attendance WHERE end_date BETWEEN date('now','localtime') AND date('now', '+8 days') ORDER BY end_date ASC, name LIMIT 20",
+            "SELECT * FROM attendance WHERE end_date = date('now','localtime') ORDER BY end_date ASC, name LIMIT 20",
         );
 
         var absResults = sql.all();
