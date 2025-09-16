@@ -376,14 +376,14 @@ class DataDisplayTools {
 
         let absentNames = [];
         let lateNames = [];
-        let apiNames = [];
 
         absResults.forEach((row) => {
             absentNames.push(row.name);
         });
 
         absentEmbed.addFields({
-            players: absentNames.toSorted().join(", "),
+            name: "Players",
+            value: absentNames.length > 0 ? absentNames.toSorted().join(", ") : "None",
             inline: false,
         });
 
@@ -392,7 +392,8 @@ class DataDisplayTools {
         });
 
         lateEmbed.addFields({
-            players: lateNames.toSorted().join(", "),
+            name: "Players",
+            value: lateNames.length > 0 ? lateNames.toSorted().join(", ") : "None",
             inline: false,
         });
 
