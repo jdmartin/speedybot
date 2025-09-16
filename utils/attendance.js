@@ -228,7 +228,7 @@ class DataDisplayTools {
         this.absencedb = new sqlite3("./db/attendance.db");
     }
 
-    show(name, choice, length) {
+    show(name, choice) {
         var absentCount = 0;
         var lateCount = 0;
         //Get just the user's absences.
@@ -341,6 +341,76 @@ class DataDisplayTools {
             apiEmbed,
             absentCount,
             lateCount,
+        };
+    }
+
+    summarize() {
+        var sql = this.absencedb.prepare(
+            "SELECT * FROM attendance WHERE end_date = date('now','localtime') AND kind = 'absent' ORDER BY end_date ASC, name LIMIT 20",
+        );
+
+        var late_sql = this.absencedb.prepare(
+            "SELECT * FROM attendance WHERE end_date = date('now','localtime') AND kind = 'late' ORDER BY end_date ASC, name LIMIT 20",
+        );
+
+        let apidb = new sqlite3("./db/apiAttendance.db");
+        var api_sql = apidb.prepare(
+            "SELECT * FROM attendance WHERE end_date BETWEEN date('now','localtime') AND date('now', '+8 days') ORDER BY end_date ASC, name LIMIT 20",
+        );
+
+        var absResults = sql.all();
+        var lateResults = late_sql.all();
+        var apiResults = api_sql.all();
+
+        const absentEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Absent Today").setFooter({
+            text: "These absences are known to the Infinite Speedyflight. Use this information wisely.",
+        });
+
+        const lateEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Late Today").setFooter({
+            text: "This tardiness is known to the Infinite Speedyflight. Use this information wisely.",
+        });
+
+        const apiEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Via Corkboard").setFooter({
+            text: "These items are known to the Infinite Speedyflight. Use this information wisely.",
+        });
+
+        let absentNames = [];
+        let lateNames = [];
+        let apiNames = [];
+
+        absResults.forEach((row) => {
+            absentNames.push(row.name);
+        });
+
+        absentEmbed.addFields({
+            players: absentNames.toSorted().join(","),
+            inline: false,
+        });
+
+        lateResults.forEach((row) => {
+            lateNames.push(row.name);
+        });
+
+        lateEmbed.addFields({
+            players: lateNames.toSorted().join(","),
+            inline: false,
+        });
+
+        apiResults.forEach((row) => {
+            let commentString = "";
+            if (row.comment.length > 0) {
+                commentString = `\nComments: ${row.comment}`
+            }
+            apiEmbed.addFields({
+                name: row.name,
+                value: "Date: " + dateUtils.makeFriendlyDates(row.end_date) + commentString,
+            });
+        });
+
+        return {
+            absentEmbed,
+            lateEmbed,
+            apiEmbed,
         };
     }
 }
