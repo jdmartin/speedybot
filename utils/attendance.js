@@ -383,7 +383,7 @@ class DataDisplayTools {
         });
 
         absentEmbed.addFields({
-            players: absentNames.toSorted().join(","),
+            players: absentNames.toSorted().join(", "),
             inline: false,
         });
 
@@ -392,7 +392,7 @@ class DataDisplayTools {
         });
 
         lateEmbed.addFields({
-            players: lateNames.toSorted().join(","),
+            players: lateNames.toSorted().join(", "),
             inline: false,
         });
 
