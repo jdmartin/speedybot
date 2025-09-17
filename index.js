@@ -81,7 +81,7 @@ if (process.env.RAID_DAY_REPORTS_ENABLED === "true") {
 
                 // Send the response as an embed to the user via DM
                 await user.send({
-                    embeds: [response.absentEmbed, response.lateEmbed, response.apiEmbed]
+                    embeds: [response.absentEmbed, response.lateEmbed]
                 });
 
                 console.log(`Summary sent to ${user.tag}`);

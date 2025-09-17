@@ -375,17 +375,23 @@ class DataDisplayTools {
             text: "This tardiness is known to the Infinite Speedyflight. Use this information wisely.",
         });
 
-        const apiEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Via Corkboard").setFooter({
-            text: "These items are known to the Infinite Speedyflight. Use this information wisely.",
-        });
-
         let absentNames = [];
         let lateNames = [];
-        let apiAbsentNames = [];
-        let apiLateNames = [];
+
+        apiAbsentResults.forEach((row => {
+            absentNames.push(row.name);
+        }));
+
+        apiLateResults.forEach((row => {
+            lateNames.push(row.name);
+        }));
 
         absResults.forEach((row) => {
             absentNames.push(row.name);
+        });
+
+        lateResults.forEach((row) => {
+            lateNames.push(row.name);
         });
 
         absentEmbed.addFields({
@@ -394,40 +400,15 @@ class DataDisplayTools {
             inline: false,
         });
 
-        lateResults.forEach((row) => {
-            lateNames.push(row.name);
-        });
-
         lateEmbed.addFields({
             name: "Players",
             value: lateNames.length > 0 ? lateNames.toSorted((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })).join(", ") : "None",
             inline: false,
         });
 
-        apiAbsentResults.forEach((row => {
-            apiAbsentNames.push(row.name);
-        }));
-
-        apiLateResults.forEach((row => {
-            apiLateNames.push(row.name);
-        }));
-
-        apiEmbed.addFields({
-            name: "Players",
-            value:
-                "Absent: " + (apiAbsentNames.length > 0
-                    ? apiAbsentNames.toSorted((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })).join(", ")
-                    : "None") +
-                "\nLate: " + (apiLateNames.length > 0
-                    ? apiLateNames.toSorted((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })).join(", ")
-                    : "None"),
-            inline: false,
-        });
-
         return {
             absentEmbed,
             lateEmbed,
-            apiEmbed,
         };
     }
 }
