@@ -228,7 +228,7 @@ class DataDisplayTools {
         this.absencedb = new sqlite3("./db/attendance.db");
     }
 
-    show(name, choice, length) {
+    show(name, choice) {
         var absentCount = 0;
         var lateCount = 0;
         //Get just the user's absences.
@@ -341,6 +341,74 @@ class DataDisplayTools {
             apiEmbed,
             absentCount,
             lateCount,
+        };
+    }
+
+    summarize() {
+        var sql = this.absencedb.prepare(
+            "SELECT * FROM attendance WHERE end_date = date('now','localtime') AND kind = 'absent' ORDER BY end_date ASC, name LIMIT 20",
+        );
+
+        var late_sql = this.absencedb.prepare(
+            "SELECT * FROM attendance WHERE end_date = date('now','localtime') AND kind = 'late' ORDER BY end_date ASC, name LIMIT 20",
+        );
+
+        let apidb = new sqlite3("./db/apiAttendance.db");
+        var api_absent_sql = apidb.prepare(
+            "SELECT * FROM attendance WHERE end_date = date('now','localtime') AND kind = 'absent' ORDER BY end_date ASC, name LIMIT 20",
+        );
+
+        var api_late_sql = apidb.prepare(
+            "SELECT * FROM attendance WHERE end_date = date('now','localtime') AND kind = 'late' ORDER BY end_date ASC, name LIMIT 20",
+        );
+
+        var absResults = sql.all();
+        var lateResults = late_sql.all();
+        var apiAbsentResults = api_absent_sql.all();
+        var apiLateResults = api_late_sql.all();
+
+        const absentEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Absent Today").setFooter({
+            text: "These absences are known to the Infinite Speedyflight. Use this information wisely.",
+        });
+
+        const lateEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("Late Today").setFooter({
+            text: "This tardiness is known to the Infinite Speedyflight. Use this information wisely.",
+        });
+
+        let absentNames = [];
+        let lateNames = [];
+
+        apiAbsentResults.forEach((row => {
+            absentNames.push(row.name);
+        }));
+
+        apiLateResults.forEach((row => {
+            lateNames.push(row.name);
+        }));
+
+        absResults.forEach((row) => {
+            absentNames.push(row.name);
+        });
+
+        lateResults.forEach((row) => {
+            lateNames.push(row.name);
+        });
+
+        absentEmbed.addFields({
+            name: "Players",
+            value: absentNames.length > 0 ? absentNames.toSorted((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })).join(", ") : "None",
+            inline: false,
+        });
+
+        lateEmbed.addFields({
+            name: "Players",
+            value: lateNames.length > 0 ? lateNames.toSorted((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })).join(", ") : "None",
+            inline: false,
+        });
+
+        return {
+            absentEmbed,
+            lateEmbed,
         };
     }
 }

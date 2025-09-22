@@ -77,11 +77,11 @@ if (process.env.RAID_DAY_REPORTS_ENABLED === "true") {
                 let user = await client.users.fetch(userId.trim());
 
                 // Get the response (e.g., embeds) for this user
-                let response = absenceDBHelper.show(user.username, "today");
+                let response = absenceDBHelper.summarize();
 
                 // Send the response as an embed to the user via DM
                 await user.send({
-                    embeds: [response.absentEmbed, response.lateEmbed, response.apiEmbed]
+                    embeds: [response.absentEmbed, response.lateEmbed]
                 });
 
                 console.log(`Summary sent to ${user.tag}`);
@@ -93,7 +93,7 @@ if (process.env.RAID_DAY_REPORTS_ENABLED === "true") {
 }
 
 //Once that's done, let's move on to main.
-client.once("ready", () => {
+client.once("clientReady", () => {
     // prints "Ready!" to the console once the bot is online
     client.user.setActivity("Say /speedy", { type: ActivityType.Custom });
 
