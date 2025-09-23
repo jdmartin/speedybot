@@ -99,12 +99,14 @@ client.once("clientReady", () => {
 
     //Start the heartbeat
     const heartbeat = new Heartbeat();
-    if (process.env.HEART_TYPE === 'push') {
-        heartbeat.startPushing();
-    } else if (process.env.HEART_TYPE === 'socket') {
-        heartbeat.startSocket();
-    } else if (process.env.HEART_TYPE === 'tcp') {
-        heartbeat.startHttpListener();
+      if (process.env.ENABLE_HEARTBEAT_LISTENER === 'true') {
+        if (process.env.HEART_TYPE === 'push') {
+          heartbeat.startPushing();
+        } else if (process.env.HEART_TYPE === 'socket') {
+          heartbeat.startSocket();
+        } else if (process.env.HEART_TYPE === 'tcp') {
+          heartbeat.startHttpListener();
+        }
     }
 });
 
