@@ -3,6 +3,7 @@ import { platform } from 'node:os';
 import { access } from 'node:fs/promises';
 import { get } from 'node:http';
 import { createServer } from 'node:net';
+import { createServer as createHTTPServer } from 'node:http';
 
 class Heartbeat {
     constructor() {
@@ -17,7 +18,7 @@ class Heartbeat {
     }
 
     startHttpListener() {
-        const server = createServer((req, res) => this.handleRequest(req, res));
+        const server = createHTTPServer((req, res) => this.handleRequest(req, res));
         const PORT = process.env.LISTENER_PORT || 8087;
         const HOST = process.env.LISTENER_HOST || '127.0.0.1';
 
