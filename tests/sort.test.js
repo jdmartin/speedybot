@@ -38,8 +38,8 @@ function alnumSort(a, b) {
 function runTests() {
     // basic ordering
     assert.deepStrictEqual(
-        ["@bob", "alice", ".Alice", "_charlie", "Zara"].toSorted(alnumSort),
-        ["alice", ".Alice", "@bob", "_charlie", "Zara"]
+        ["@bob", "alice", "Alice", ".Alice", "_charlie", "Zara"].toSorted(alnumSort),
+        ["alice", "Alice", ".Alice", "@bob", "_charlie", "Zara"]
     );
 
     // case-insensitive compare
