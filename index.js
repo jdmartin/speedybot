@@ -103,6 +103,8 @@ client.once("clientReady", () => {
         heartbeat.startPushing();
     } else if (process.env.HEART_TYPE === 'socket') {
         heartbeat.startSocket();
+    } else if (process.env.HEART_TYPE === 'tcp') {
+        heartbeat.startHttpListener();
     }
 });
 

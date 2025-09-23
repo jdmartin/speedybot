@@ -16,6 +16,16 @@ class Heartbeat {
             : '/run/speedybot/speedybot-socket.sock';
     }
 
+    startHttpListener() {
+        const server = createServer((req, res) => this.handleRequest(req, res));
+        const PORT = process.env.LISTENER_PORT || 8087;
+        const HOST = process.env.LISTENER_HOST || '127.0.0.1';
+
+        server.listen(PORT, HOST, () => {
+            console.log(`HTTP listener started on http://${HOST}:${PORT}`);
+        });
+    }
+
     startPushing() {
         function callURL() {
             const url = process.env.MONITOR_URL;
