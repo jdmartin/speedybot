@@ -362,6 +362,26 @@ class DataDisplayTools {
             "SELECT * FROM attendance WHERE end_date = date('now','localtime') AND kind = 'late' ORDER BY end_date ASC, name LIMIT 20",
         );
 
+        function alnumSort(a, b) {
+            function firstAlnum(str) {
+                const match = str.match(/[a-z0-9]/i);
+                return match[0].toLowerCase(); // assume at least one exists
+            }
+
+            function stripLeadingNonAlnum(str) {
+                return str.replace(/^[^a-z0-9]+/i, "");
+            }
+
+            const aFirst = firstAlnum(a);
+            const bFirst = firstAlnum(b);
+
+            if (aFirst < bFirst) return -1;
+            if (aFirst > bFirst) return 1;
+
+            // tie-breaker: compare full name ignoring leading punctuation and case
+            return stripLeadingNonAlnum(a).toLowerCase().localeCompare(stripLeadingNonAlnum(b).toLowerCase());
+        }
+
         var absResults = sql.all();
         var lateResults = late_sql.all();
         var apiAbsentResults = api_absent_sql.all();
@@ -396,13 +416,13 @@ class DataDisplayTools {
 
         absentEmbed.addFields({
             name: "Players",
-            value: absentNames.length > 0 ? absentNames.toSorted((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })).join(", ") : "None",
+            value: absentNames.length > 0 ? absentNames.toSorted(alnumSort).join(", ") : "None",
             inline: false,
         });
 
         lateEmbed.addFields({
             name: "Players",
-            value: lateNames.length > 0 ? lateNames.toSorted((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })).join(", ") : "None",
+            value: lateNames.length > 0 ? lateNames.toSorted(alnumSort).join(", ") : "None",
             inline: false,
         });
 
