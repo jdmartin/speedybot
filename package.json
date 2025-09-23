@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "node --env-file=.env --test --watch index.js",
-    "start": "node --env-file=.env index.js"
+    "start": "node --env-file=.env index.js",
+    "test": "node tests/*.js"
   }
 }
