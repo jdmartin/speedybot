@@ -18,7 +18,11 @@ class Heartbeat {
     }
 
     startHttpListener() {
-        const server = createHTTPServer((req, res) => this.handleRequest(req, res));
+        const server = createHTTPServer((req, res) => {
+            res.writeHead(200, { 'Content-Type': 'text/plain' });
+            res.end('TRTL!\n');
+        });
+
         const PORT = process.env.LISTENER_PORT || 8087;
         const HOST = process.env.LISTENER_HOST || '127.0.0.1';
 
