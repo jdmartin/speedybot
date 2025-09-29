@@ -17,7 +17,7 @@ class CreateAttendanceDatabase {
             "CREATE TABLE IF NOT EXISTS `attendance` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT NOT NULL, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date` TEXT, `comment` TEXT, `kind` TEXT NOT NULL)",
         );
         var absenceUniqueIndex = this.absencedb.prepare(
-            "CREATE UNIQUE INDEX IF NOT EXISTS uniq_attendance ON attendance(name, kind, end_date);"
+            "CREATE UNIQUE INDEX IF NOT EXISTS uniq_attendance ON attendance(name, end_date);"
         );
         var messagesDBPrep = this.absencedb.prepare(
             "CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `discord_name` TEXT, `start_date` TEXT, `end_date` TEXT, `messageID` TEXT)",
@@ -42,7 +42,7 @@ class AttendanceTools {
             nickname = name;
         }
         var absencePrep = this.absencedb.prepare(
-            "INSERT INTO attendance (name, discord_name, start_year, start_month, start_day, end_date, comment, kind) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(name, kind, end_date) DO UPDATE SET comment = excluded.comment, discord_name = excluded.discord_name, start_year = excluded.start_year, start_month = excluded.start_month, start_day = excluded.start_day;",
+            "INSERT INTO attendance (name, discord_name, start_year, start_month, start_day, end_date, comment, kind) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(name, end_date) DO UPDATE SET comment = excluded.comment, discord_name = excluded.discord_name, start_year = excluded.start_year, start_month = excluded.start_month, start_day = excluded.start_day, kind = excluded.kind;",
         );
         absencePrep.run(nickname, name, sy, sm, sd, end, comment, kind);
     }
