@@ -16,11 +16,19 @@ class CreateAttendanceDatabase {
         var absenceDBPrep = this.absencedb.prepare(
             "CREATE TABLE IF NOT EXISTS `attendance` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT NOT NULL, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date` TEXT, `comment` TEXT, `kind` TEXT NOT NULL)",
         );
+        var absenceUniqueIndex = this.absencedb.prepare(
+            "CREATE UNIQUE INDEX IF NOT EXISTS uniq_attendance ON attendance(name, kind, end_date);"
+        );
         var messagesDBPrep = this.absencedb.prepare(
             "CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `discord_name` TEXT, `start_date` TEXT, `end_date` TEXT, `messageID` TEXT)",
         );
+        var messagesUniqueIndex = this.absencedb.prepare(
+            "CREATE UNIQUE INDEX IF NOT EXISTS uniq_messages ON messages(discord_name, start_date, end_date);"
+        );
         absenceDBPrep.run();
+        absenceUniqueIndex.run();
         messagesDBPrep.run();
+        messagesUniqueIndex.run();
     }
 }
 
@@ -34,7 +42,7 @@ class AttendanceTools {
             nickname = name;
         }
         var absencePrep = this.absencedb.prepare(
-            "INSERT INTO attendance(name, discord_name, start_year, start_month, start_day, end_date, comment, kind) VALUES (?,?,?,?,?,?,?,?)",
+            "INSERT INTO attendance (name, discord_name, start_year, start_month, start_day, end_date, comment, kind) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(name, kind, end_date) DO UPDATE SET comment = excluded.comment, discord_name = excluded.discord_name, start_year = excluded.start_year, start_month = excluded.start_month, start_day = excluded.start_day;",
         );
         absencePrep.run(nickname, name, sy, sm, sd, end, comment, kind);
     }
@@ -183,11 +191,27 @@ class AttendanceTools {
         }
     }
 
-    storeSpeedyMessageDetails(name, start_date, end_date, message_id) {
-        var messagePrep = this.absencedb.prepare(
-            "INSERT INTO messages(discord_name, start_date, end_date, messageID) VALUES (?,?,?,?)",
+    storeSpeedyMessageDetails(discord_name, start_date, end_date, message_id) {
+        const selectPrep = this.absencedb.prepare(
+            "SELECT messageID FROM messages WHERE discord_name = ? AND start_date = ? AND end_date = ?"
         );
-        messagePrep.run(name, start_date, end_date, message_id);
+        const existing = selectPrep.get(discord_name, start_date, end_date);
+
+        if (existing?.messageID) {
+            // Delete the old message first
+            this.removeSpeedyMessage(discord_name, start_date, end_date)
+                .catch(console.error);
+        }
+
+        // Now insert or replace the record
+        const insertPrep = this.absencedb.prepare(`
+            INSERT INTO messages(discord_name, start_date, end_date, messageID)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(discord_name, start_date, end_date)
+            DO UPDATE SET messageID = excluded.messageID
+        `);
+
+        insertPrep.run(discord_name, start_date, end_date, message_id);
     }
 
     async removeSpeedyMessage(name, start_date, end_date) {
