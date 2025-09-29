@@ -395,24 +395,15 @@ class DataDisplayTools {
             text: "This tardiness is known to the Infinite Speedyflight. Use this information wisely.",
         });
 
-        let absentNames = [];
-        let lateNames = [];
+        let absentNames = [...new Set([
+            ...apiAbsentResults.map(r => r.name),
+            ...absResults.map(r => r.name)
+        ])];
 
-        apiAbsentResults.forEach((row => {
-            absentNames.push(row.name);
-        }));
-
-        apiLateResults.forEach((row => {
-            lateNames.push(row.name);
-        }));
-
-        absResults.forEach((row) => {
-            absentNames.push(row.name);
-        });
-
-        lateResults.forEach((row) => {
-            lateNames.push(row.name);
-        });
+        let lateNames = [...new Set([
+            ...apiLateResults.map(r => r.name),
+            ...lateResults.map(r => r.name)
+        ])];
 
         absentEmbed.addFields({
             name: "Players",
