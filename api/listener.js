@@ -2,13 +2,21 @@ import { createServer } from 'node:http';
 import { parse } from 'node:querystring';
 import { existsSync, unlinkSync, chmodSync } from 'node:fs';
 import { platform } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import SqlString from 'sqlstring';
 import sqlite3 from 'better-sqlite3';
 import { apiAttendanceTools } from './apiAttendance.js';
 
+// Equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const dbDir = resolve(__dirname, "../db");
+const apidbPath = join(dbDir, "apiAttendance.db");
+
 class Server {
     constructor() {
-        this.db = new sqlite3("./db/apiAttendance.db");
+        this.db = new sqlite3(apidbPath);
         this.socketPath = this.setSocketPath();
     }
 

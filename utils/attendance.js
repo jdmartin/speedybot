@@ -2,6 +2,15 @@ import { EmbedBuilder } from "discord.js";
 import sqlite3 from "better-sqlite3";
 import SqlString from "sqlstring";
 import { client } from "./speedyutils.js";
+import { fileURLToPath } from 'node:url';
+import { dirname, join, resolve } from 'node:path';
+
+// Equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const dbDir = resolve(__dirname, "../db");
+const dbPath = join(dbDir, "attendance.db");
+const apidbPath = join(dbDir, "apiAttendance.db");
 
 //Date-related
 import { dateTools } from "./datetools.js";
@@ -10,7 +19,7 @@ const dateUtils = new dateTools();
 //DB
 class CreateAttendanceDatabase {
     constructor() {
-        this.absencedb = new sqlite3("./db/attendance.db");
+        this.absencedb = new sqlite3(dbPath);
     }
     startup() {
         var absenceDBPrep = this.absencedb.prepare(
@@ -34,7 +43,7 @@ class CreateAttendanceDatabase {
 
 class AttendanceTools {
     constructor() {
-        this.absencedb = new sqlite3("./db/attendance.db");
+        this.absencedb = new sqlite3(dbPath);
     }
 
     addAbsence(name, nickname, sy, sm, sd, end, comment, kind) {
@@ -56,7 +65,7 @@ class AttendanceTools {
         // We're escaping the name because that's how it came in from the Web.
         // TODO: better name matching, as this is looking for discord_name not nickname.
         if (process.env.ENABLE_ATTENDANCE_API === "true") {
-            let apidb = new sqlite3("./db/apiAttendance.db");
+            let apidb = new sqlite3(apidbPath);
             var cancelApiPrep = apidb.prepare(
                 "DELETE FROM attendance WHERE (name = ? AND end_date = ?)",
             );
@@ -249,7 +258,7 @@ class AttendanceTools {
 
 class DataDisplayTools {
     constructor() {
-        this.absencedb = new sqlite3("./db/attendance.db");
+        this.absencedb = new sqlite3(dbPath);
     }
 
     show(name, choice) {
@@ -330,19 +339,19 @@ class DataDisplayTools {
 
         //Get all items from the API submissions.
         if (choice === "mine") {
-            let apidb = new sqlite3("./db/apiAttendance.db");
+            let apidb = new sqlite3(apidbPath);
             var api_sql = apidb.prepare(
                 "SELECT * FROM attendance WHERE end_date >= date('now','localtime') AND name = ? ORDER BY end_date ASC, name LIMIT 20",
             );
             var apiResults = api_sql.all(SqlString.escape(name));
         } else if (choice === "today") {
-            let apidb = new sqlite3("./db/apiAttendance.db");
+            let apidb = new sqlite3(apidbPath);
             var api_sql = apidb.prepare(
                 "SELECT * FROM attendance WHERE end_date = date('now','localtime') ORDER BY end_date ASC, name LIMIT 20",
             );
             var apiResults = api_sql.all();
         } else {
-            let apidb = new sqlite3("./db/apiAttendance.db");
+            let apidb = new sqlite3(apidbPath);
             var api_sql = apidb.prepare(
                 "SELECT * FROM attendance WHERE end_date BETWEEN date('now','localtime') AND date('now', '+8 days') ORDER BY end_date ASC, name LIMIT 20",
             );
@@ -377,7 +386,7 @@ class DataDisplayTools {
             "SELECT * FROM attendance WHERE end_date = date('now','localtime') AND kind = 'late' ORDER BY end_date ASC, name LIMIT 20",
         );
 
-        let apidb = new sqlite3("./db/apiAttendance.db");
+        let apidb = new sqlite3(apidbPath);
         var api_absent_sql = apidb.prepare(
             "SELECT * FROM attendance WHERE end_date = date('now','localtime') AND kind = 'absent' ORDER BY end_date ASC, name LIMIT 20",
         );
@@ -450,7 +459,7 @@ class DataDisplayTools {
 
 class AttendanceDatabaseCleanup {
     constructor() {
-        this.absencedb = new sqlite3("./db/attendance.db");
+        this.absencedb = new sqlite3(dbPath);
     }
     cleanAbsences() {
         //Expire entries that occurred more than three days ago.

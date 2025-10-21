@@ -1,5 +1,13 @@
 import sqlite3 from 'better-sqlite3';
 import { client } from '../utils/speedyutils.js';
+import { fileURLToPath } from 'node:url';
+import { dirname, join, resolve } from 'node:path';
+
+// Equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const dbDir = resolve(__dirname, "../db");
+const dbPath = join(dbDir, "apiAttendance.db");
 
 //Date-related
 import { dateTools } from '../utils/datetools.js';
@@ -7,7 +15,7 @@ const dateUtils = new dateTools();
 
 class apiAttendanceTools {
     constructor() {
-        this.absencedb = new sqlite3("./db/apiAttendance.db");
+        this.absencedb = new sqlite3(dbPath);
     }
 
     addAbsence(name, sy, sm, sd, end, comment, kind, code) {
@@ -184,7 +192,7 @@ class apiAttendanceTools {
 
 class ApiDatabaseCleanup {
     constructor() {
-        this.absencedb = new sqlite3("./db/apiAttendance.db");
+        this.absencedb = new sqlite3(dbPath);
     }
     cleanAbsences() {
         //Expire entries that occurred more than three days ago.
