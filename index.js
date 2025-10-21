@@ -23,8 +23,7 @@ const speedyDBHelper = new DatabaseTools();
 speedy.startup();
 
 //Initialize the absences database:
-const attendance = new CreateAttendanceDatabase();
-attendance.startup();
+new CreateAttendanceDatabase();
 
 //Initialize the API Listener and DB (if needed)
 const apiTools = new Server();
@@ -99,13 +98,13 @@ client.once("clientReady", () => {
 
     //Start the heartbeat
     const heartbeat = new Heartbeat();
-      if (process.env.ENABLE_HEARTBEAT_LISTENER === 'true') {
+    if (process.env.ENABLE_HEARTBEAT_LISTENER === 'true') {
         if (process.env.HEART_TYPE === 'push') {
-          heartbeat.startPushing();
+            heartbeat.startPushing();
         } else if (process.env.HEART_TYPE === 'socket') {
-          heartbeat.startSocket();
+            heartbeat.startSocket();
         } else if (process.env.HEART_TYPE === 'tcp') {
-          heartbeat.startHttpListener();
+            heartbeat.startHttpListener();
         }
     }
 });

@@ -2,6 +2,7 @@ import { EmbedBuilder } from "discord.js";
 import sqlite3 from "better-sqlite3";
 import SqlString from "sqlstring";
 import { client } from "./speedyutils.js";
+import { existsSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 
@@ -12,6 +13,11 @@ const dbDir = resolve(__dirname, "../db");
 const dbPath = join(dbDir, "attendance.db");
 const apidbPath = join(dbDir, "apiAttendance.db");
 
+// Ensure db directory exists
+if (!existsSync(dbDir)) {
+    mkdirSync(dbDir, { recursive: true });
+}
+
 //Date-related
 import { dateTools } from "./datetools.js";
 const dateUtils = new dateTools();
@@ -20,24 +26,59 @@ const dateUtils = new dateTools();
 class CreateAttendanceDatabase {
     constructor() {
         this.absencedb = new sqlite3(dbPath);
+        this.startup();
     }
+
     startup() {
-        var absenceDBPrep = this.absencedb.prepare(
-            "CREATE TABLE IF NOT EXISTS `attendance` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `discord_name` TEXT NOT NULL, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date` TEXT, `comment` TEXT, `kind` TEXT NOT NULL)",
-        );
-        var absenceUniqueIndex = this.absencedb.prepare(
-            "CREATE UNIQUE INDEX IF NOT EXISTS uniq_attendance ON attendance(name, end_date);"
-        );
-        var messagesDBPrep = this.absencedb.prepare(
-            "CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `discord_name` TEXT, `start_date` TEXT, `end_date` TEXT, `messageID` TEXT)",
-        );
-        var messagesUniqueIndex = this.absencedb.prepare(
-            "CREATE UNIQUE INDEX IF NOT EXISTS uniq_messages ON messages(discord_name, start_date, end_date);"
-        );
-        absenceDBPrep.run();
-        absenceUniqueIndex.run();
-        messagesDBPrep.run();
-        messagesUniqueIndex.run();
+        try {
+            // Wrap all schema creation in a transaction for safety
+            const tx = this.absencedb.transaction(() => {
+                // attendance table
+                this.absencedb.prepare(`
+                    CREATE TABLE IF NOT EXISTS attendance (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        name TEXT,
+                        discord_name TEXT NOT NULL,
+                        start_year TEXT,
+                        start_month TEXT,
+                        start_day TEXT,
+                        end_date TEXT,
+                        comment TEXT,
+                        kind TEXT NOT NULL
+                    )
+                `).run();
+
+                // unique index on attendance
+                this.absencedb.prepare(`
+                    CREATE UNIQUE INDEX IF NOT EXISTS uniq_attendance
+                    ON attendance(name, end_date)
+                `).run();
+
+                // messages table
+                this.absencedb.prepare(`
+                    CREATE TABLE IF NOT EXISTS messages (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        discord_name TEXT,
+                        start_date TEXT,
+                        end_date TEXT,
+                        messageID TEXT
+                    )
+                `).run();
+
+                // unique index on messages
+                this.absencedb.prepare(`
+                    CREATE UNIQUE INDEX IF NOT EXISTS uniq_messages
+                    ON messages(discord_name, start_date, end_date)
+                `).run();
+            });
+
+            tx(); // Execute
+
+            console.log("Attendance database initialized successfully.");
+        } catch (err) {
+            console.error("Error initializing attendance database:", err);
+            throw err; // Let it crash loudly so you notice
+        }
     }
 }
 
