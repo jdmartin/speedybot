@@ -127,4 +127,22 @@ client.on("interactionCreate", async (interaction) => {
     }
 });
 
+//Add newcomer role to new members (helps to find and set their permissions)
+client.on('guildMemberAdd', async (member) => {
+    try {
+        const newcomerRole = member.guild.roles.cache.get(process.env.NEWCOMER_ROLE_ID);
+        const welcomeChannel = member.guild.channels.cache.get(process.env.NEWCOMER_CHANNEL);
+
+        if (newcomerRole) await member.roles.add(newcomerRole);
+
+        if (welcomeChannel) {
+            welcomeChannel.send(`Welcome, <@${member.id}>! Hang tight, and we'll update your permissions shortly.`);
+        }
+
+        console.log(`New member joined: ${member.user.tag}`);
+    } catch (error) {
+        console.error('Error handling new member:', error);
+    }
+});
+
 client.login(process.env.BOT_TOKEN);
