@@ -8,6 +8,7 @@ const __dirname = dirname(__filename);
 
 const myIntents = [
     GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMembers,
 ];
 
 const myPartials = [Partials.Channel, Partials.Message, Partials.Reaction];
