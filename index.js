@@ -36,59 +36,74 @@ if (process.env.ENABLE_ATTENDANCE_API === "true") {
     apiTools.createDB();
 }
 
-//Database Cleanup
-const dbclean = new AttendanceDatabaseCleanup();
-const job = scheduleJob(process.env.CRON_DB_CLEANUP_TIME, function () {
-    dbclean.cleanAbsences();
-    console.log("Cleaned Attendance");
-    dbclean.cleanMessages();
-    console.log("Cleaned Messages");
-});
-
-//Database Vacuuming
-const job_two = scheduleJob(process.env.CRON_DB_VACUUM_TIME, function () {
-    dbclean.vacuumDatabases();
-    console.log("Vacuumed Database");
-});
-
-//Clean apiAttendance.db, if api enabled
-if (process.env.ENABLE_ATTENDANCE_API === "true") {
-    const apiDBTools = new ApiDatabaseCleanup();
-    const job_three = scheduleJob(process.env.CRON_API_DB_CLEANUP_TIME, function () {
-        apiDBTools.cleanAbsences();
-        console.log("Cleaned API Attendance");
-        apiDBTools.vacuumDatabases();
-        console.log("Vacuumed API DB");
-    });
+// Helper to sanitize cron strings
+function getCron(envVar) {
+    return process.env[envVar]?.trim().replace(/\r/g, '');
 }
 
-//Generate Raid-Day absence reports if enabled in .env
-if (process.env.RAID_DAY_REPORTS_ENABLED === "true") {
-    //Run Job on Raid Days at 20:30:01.
-    const job_four = scheduleJob(process.env.CRON_RAID_REPORT_TIME, function () {
-        let absenceDBHelper = new DataDisplayTools();
-        // Parse the user IDs from the environment variable
-        let raidDayReportUsers = process.env.RAID_DAY_REPORTS_USERS.split(',').map(userId => userId.trim());
+// Function to schedule all jobs once the client is ready
+const dbclean = new AttendanceDatabaseCleanup();
+const apiDBTools = new ApiDatabaseCleanup();
 
-        raidDayReportUsers.forEach(async (userId) => {
-            try {
-                // Fetch user object by ID
-                let user = await client.users.fetch(userId.trim());
+function scheduleJobsAfterReady() {
+    console.log('Scheduling jobs 10s after client is ready...');
 
-                // Get the response (e.g., embeds) for this user
-                let response = absenceDBHelper.summarize();
+    // --- DB Cleanup ---
+    const cronCleanup = getCron('CRON_DB_CLEANUP_TIME');
+    const jobCleanup = scheduleJob({ rule: cronCleanup, tz: 'America/New_York' }, () => {
+        console.log('DB cleanup fired at:', new Date());
+        dbclean.cleanAbsences();
+        dbclean.cleanMessages();
+    });
+    console.log('Next scheduled DB cleanup:', jobCleanup.nextInvocation()?.toString());
 
-                // Send the response as an embed to the user via DM
-                await user.send({
-                    embeds: [response.absentEmbed, response.lateEmbed]
-                });
+    // --- DB Vacuum ---
+    const cronVacuum = getCron('CRON_DB_VACUUM_TIME');
+    const jobVacuum = scheduleJob({ rule: cronVacuum, tz: 'America/New_York' }, () => {
+        console.log('DB vacuum fired at:', new Date());
+        dbclean.vacuumDatabases();
+    });
+    console.log('Next scheduled DB vacuum:', jobVacuum.nextInvocation()?.toString());
 
-                console.log(`Summary sent to ${user.tag}`);
-            } catch (error) {
-                console.error(`Could not send message to ${userId}: `, error);
+    // --- API DB Cleanup ---
+    if (process.env.ENABLE_ATTENDANCE_API === 'true') {
+        const cronApiCleanup = getCron('CRON_API_DB_CLEANUP_TIME');
+        const jobApiCleanup = scheduleJob({ rule: cronApiCleanup, tz: 'America/New_York' }, () => {
+            console.log('API DB cleanup fired at:', new Date());
+            apiDBTools.cleanAbsences();
+            apiDBTools.vacuumDatabases();
+        });
+        console.log('Next scheduled API DB cleanup:', jobApiCleanup.nextInvocation()?.toString());
+    }
+
+    // --- Raid Report ---
+    if (process.env.RAID_DAY_REPORTS_ENABLED === 'true') {
+        const cronRaid = getCron('CRON_RAID_REPORT_TIME');
+        const jobRaid = scheduleJob({ rule: cronRaid, tz: 'America/New_York' }, async () => {
+            console.log('Raid report triggered at:', new Date());
+
+            const absenceDBHelper = new DataDisplayTools();
+            const raidUsers = process.env.RAID_DAY_REPORTS_USERS.split(',').map(u => u.trim());
+
+            // Wait for client to be ready
+            while (!client.isReady()) {
+                console.log('Discord client not ready, waiting 5s...');
+                await new Promise(res => setTimeout(res, 5000));
+            }
+
+            for (const userId of raidUsers) {
+                try {
+                    const user = await client.users.fetch(userId);
+                    const response = absenceDBHelper.summarize();
+                    await user.send({ embeds: [response.absentEmbed, response.lateEmbed] });
+                    console.log(`Summary sent to ${user.tag}`);
+                } catch (err) {
+                    console.error(`Could not send to ${userId}:`, err);
+                }
             }
         });
-    })
+        console.log('Next scheduled Raid report:', jobRaid.nextInvocation()?.toString());
+    }
 }
 
 //Once that's done, let's move on to main.
@@ -107,6 +122,9 @@ client.once("clientReady", () => {
             heartbeat.startHttpListener();
         }
     }
+
+    console.log('Discord client ready! Waiting 10s before scheduling jobs...');
+    setTimeout(scheduleJobsAfterReady, 10000);
 });
 
 //Handle slash commands, which are 'interactions'
