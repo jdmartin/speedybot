@@ -44,13 +44,14 @@ function getCron(envVar) {
 // Function to schedule all jobs once the client is ready
 const dbclean = new AttendanceDatabaseCleanup();
 const apiDBTools = new ApiDatabaseCleanup();
+const TZ = process.env.TZ || 'UTC';
 
 function scheduleJobsAfterReady() {
     console.log('Scheduling jobs 10s after client is ready...');
 
     // --- DB Cleanup ---
     const cronCleanup = getCron('CRON_DB_CLEANUP_TIME');
-    const jobCleanup = scheduleJob({ rule: cronCleanup, tz: 'America/New_York' }, () => {
+    const jobCleanup = scheduleJob({ rule: cronCleanup, tz: TZ }, () => {
         console.log('DB cleanup fired at:', new Date());
         dbclean.cleanAbsences();
         dbclean.cleanMessages();
@@ -59,7 +60,7 @@ function scheduleJobsAfterReady() {
 
     // --- DB Vacuum ---
     const cronVacuum = getCron('CRON_DB_VACUUM_TIME');
-    const jobVacuum = scheduleJob({ rule: cronVacuum, tz: 'America/New_York' }, () => {
+    const jobVacuum = scheduleJob({ rule: cronVacuum, tz: TZ }, () => {
         console.log('DB vacuum fired at:', new Date());
         dbclean.vacuumDatabases();
     });
@@ -68,7 +69,7 @@ function scheduleJobsAfterReady() {
     // --- API DB Cleanup ---
     if (process.env.ENABLE_ATTENDANCE_API === 'true') {
         const cronApiCleanup = getCron('CRON_API_DB_CLEANUP_TIME');
-        const jobApiCleanup = scheduleJob({ rule: cronApiCleanup, tz: 'America/New_York' }, () => {
+        const jobApiCleanup = scheduleJob({ rule: cronApiCleanup, tz: TZ }, () => {
             console.log('API DB cleanup fired at:', new Date());
             apiDBTools.cleanAbsences();
             apiDBTools.vacuumDatabases();
@@ -79,7 +80,7 @@ function scheduleJobsAfterReady() {
     // --- Raid Report ---
     if (process.env.RAID_DAY_REPORTS_ENABLED === 'true') {
         const cronRaid = getCron('CRON_RAID_REPORT_TIME');
-        const jobRaid = scheduleJob({ rule: cronRaid, tz: 'America/New_York' }, async () => {
+        const jobRaid = scheduleJob({ rule: cronRaid, tz: TZ }, async () => {
             console.log('Raid report triggered at:', new Date());
 
             const absenceDBHelper = new DataDisplayTools();
