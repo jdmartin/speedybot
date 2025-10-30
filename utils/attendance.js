@@ -1,6 +1,5 @@
 import { EmbedBuilder } from "discord.js";
 import sqlite3 from "better-sqlite3";
-import SqlString from "sqlstring";
 import { client } from "./speedyutils.js";
 import { existsSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -110,7 +109,7 @@ class AttendanceTools {
             var cancelApiPrep = apidb.prepare(
                 "DELETE FROM attendance WHERE (name = ? AND end_date = ?)",
             );
-            cancelApiPrep.run(SqlString.escape(name), date);
+            cancelApiPrep.run(name, date);
         }
 
     }
@@ -384,7 +383,7 @@ class DataDisplayTools {
             var api_sql = apidb.prepare(
                 "SELECT * FROM attendance WHERE end_date >= date('now','localtime') AND name = ? ORDER BY end_date ASC, name LIMIT 20",
             );
-            var apiResults = api_sql.all(SqlString.escape(name));
+            var apiResults = api_sql.all(name);
         } else if (choice === "today") {
             let apidb = new sqlite3(apidbPath);
             var api_sql = apidb.prepare(

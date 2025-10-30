@@ -6,8 +6,6 @@ const attendanceHelper = new AttendanceTools();
 import { dateTools } from "../utils/datetools.js";
 const dateUtils = new dateTools();
 
-import sqlstring from "sqlstring";
-
 function createDateString() {
     let today = new Date();
     let month = today.getMonth() + 1; // Months are zero-based, so add 1 to get the correct month.
@@ -204,7 +202,7 @@ export async function execute(interaction) {
                 nickname = interaction.member.nickname;
 
                 if (attendanceComment.length > 0) {
-                    comment = sqlstring.escape(attendanceComment);
+                    comment = attendanceComment;
                 }
 
                 if (attendanceRecurring) {

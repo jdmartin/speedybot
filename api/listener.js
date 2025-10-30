@@ -4,7 +4,6 @@ import { existsSync, unlinkSync, chmodSync } from 'node:fs';
 import { platform } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import SqlString from 'sqlstring';
 import sqlite3 from 'better-sqlite3';
 import { apiAttendanceTools } from './apiAttendance.js';
 
@@ -60,7 +59,7 @@ class Server {
                     if (formData.action === "cancel") {
                         apiAttendance.cancelAbsence(formData.name, formData.cancelCode);
                     } else {
-                        let comment = formData.comment ? SqlString.escape(formData.comment) : "";
+                        let comment = formData.comment ? formData.comment : "";
                         let restriction = formData.restriction !== "nores" ? formData.restriction : "none";
                         const cancelCode = formData.userId || null;
 

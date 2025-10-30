@@ -3,12 +3,11 @@
   "dependencies": {
     "better-sqlite3": "^12.1.0",
     "discord.js": "^14.0.1",
-    "node-schedule": "^2.1.0",
-    "sqlstring": "^2.3.2"
+    "node-schedule": "^2.1.0"
   },
   "scripts": {
     "dev": "node --env-file=.env --test --watch index.js",
     "start": "node --env-file=.env index.js",
-    "test": "node tests/*.js"
+    "test": "for f in tests/*.js; do echo \"→ Running $f\"; node \"$f\" || exit 1; done"
   }
 }
