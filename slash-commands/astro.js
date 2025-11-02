@@ -1,67 +1,41 @@
-import { get } from 'node:https';
-import { EmbedBuilder, MessageFlags, SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder, MessageFlags } from "discord.js";
 
-export const data = new SlashCommandBuilder().setName("astro").setDescription("See NASA's Astronomy Pic of the Day!");
+export const data = new SlashCommandBuilder()
+    .setName("astro")
+    .setDescription("See NASA's Astronomy Pic of the Day!");
+
+function truncateText(text, maxLength) {
+    return text.length > maxLength ? text.slice(0, maxLength - 3) + "..." : text;
+}
+
 export async function execute(interaction) {
-    function truncateText(text, maxLength) {
-        if (text.length > maxLength) {
-            // Subtracting 3 to account for the ellipsis
-            return text.slice(0, maxLength - 3) + "...";
+    const embed = new EmbedBuilder()
+        .setColor(0xffffff)
+        .setTitle("NASA's Astronomy Pic of the Day")
+        .setFooter({ text: "Click the link to see the larger version (largest usually in browser)." });
+
+    try {
+        const url = `https://api.nasa.gov/planetary/apod?api_key=${process.env.NASA_API_KEY}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.media_type !== "video" && data.url) {
+            embed.setImage(data.url);
         }
-        // Return the original text if it doesn't exceed the maxLength
-        return text;
-    }
-    //Kick Off
-    getTheAPOTD();
 
-    async function showTheAPOTD(astroEmbed) {
-        await interaction.reply({ embeds: [astroEmbed], flags: MessageFlags.Ephemeral });
-    }
-
-    async function getTheAPOTD() {
-        try {
-            const astroEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("NASA's Astronomy Pic of the Day").setFooter({ text: `Click the link to see the larger version (largest usually in browser).` });
-            var theAPOTDUrl = "https://api.nasa.gov/planetary/apod?api_key=" + process.env.NASA_API_KEY;
-
-            get(theAPOTDUrl, (res) => {
-                res.setEncoding("utf8");
-                let body = "";
-
-                res.on("data", (data) => {
-                    body += data;
-                });
-
-                res.on("end", () => {
-                    var bodyParsed = JSON.parse(body);
-                    // Can be "image" or "video"
-                    if (bodyParsed.media_type != 'video') {
-                        astroEmbed.setImage(bodyParsed.url);
-                    }
-
-                    if (bodyParsed.hdurl) {
-                        astroEmbed.addFields({
-                            name: "URL",
-                            value: bodyParsed.hdurl
-                        });
-                    } else if (bodyParsed.url) {
-                        astroEmbed.addFields({
-                            name: "URL",
-                            value: bodyParsed.url
-                        });
-                    }
-
-                    if (bodyParsed.explanation) {
-                        astroEmbed.addFields({
-                            name: "Description",
-                            value: truncateText(bodyParsed.explanation, 1024)
-                        });
-                    }
-
-                    showTheAPOTD(astroEmbed);
-                });
-            });
-        } catch (error) {
-            console.log(error);
+        if (data.hdurl) {
+            embed.addFields({ name: "URL", value: data.hdurl });
+        } else if (data.url) {
+            embed.addFields({ name: "URL", value: data.url });
         }
+
+        if (data.explanation) {
+            embed.addFields({ name: "Description", value: truncateText(data.explanation, 1024) });
+        }
+
+        await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+    } catch (err) {
+        console.error(err);
+        await interaction.reply({ content: "⚠️ Could not fetch NASA APOD.", flags: MessageFlags.Ephemeral });
     }
 }
