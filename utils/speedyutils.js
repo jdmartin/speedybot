@@ -1,3 +1,4 @@
+import { randomInt } from "node:crypto";
 import { readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -38,7 +39,7 @@ class SpeedyTools {
     getRandomIntInclusive(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+        return randomInt(min, max + 1); // inclusive of min and max
     }
 }
 

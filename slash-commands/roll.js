@@ -1,3 +1,4 @@
+import { randomInt } from "node:crypto";
 import { SlashCommandBuilder } from "discord.js";
 
 export const data = new SlashCommandBuilder()
@@ -28,7 +29,7 @@ export async function execute(interaction) {
     // Roll the dice
     const rolls = [];
     for (let i = 0; i < numDice; i++) {
-        const roll = Math.floor(Math.random() * numSides) + 1;
+        const roll = randomInt(1, numSides + 1);
         rolls.push(roll);
     }
 
