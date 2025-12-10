@@ -1,13 +1,18 @@
-import { randomInt } from "node:crypto";
 import { SlashCommandBuilder } from "discord.js";
+import { SpeedyTools } from "../utils/speedyutils.js";
+const utils = new SpeedyTools();
+const getRandomIntInclusive = utils.getRandomIntInclusive;
 
 export const data = new SlashCommandBuilder()
     .setName("roll")
     .setDescription("Save vs. Jeisa!")
-    .addStringOption(option => option
-        .setName("input")
-        .setDescription("Specify dice rolls with an optional modifier (e.g., 2d6 + 2 or 2d6). Valid modifiers: + - *")
-        .setRequired(true)
+    .addStringOption((option) =>
+        option
+            .setName("input")
+            .setDescription(
+                "Specify dice rolls with an optional modifier (e.g., 2d6 + 2 or 2d6). Valid modifiers: + - *",
+            )
+            .setRequired(true),
     );
 export async function execute(interaction) {
     const input = interaction.options.getString("input");
@@ -17,7 +22,9 @@ export async function execute(interaction) {
     const match = input.match(regex);
 
     if (!match) {
-        return interaction.reply("Invalid input format. Please use the format `ndm (+/-/*) n`, e.g., `2d6 + 2` or `2d6`.");
+        return interaction.reply(
+            "Invalid input format. Please use the format `ndm (+/-/*) n`, e.g., `2d6 + 2` or `2d6`.",
+        );
     }
 
     const numDice = parseInt(match[1]);
@@ -25,21 +32,20 @@ export async function execute(interaction) {
     const modifierOperator = match[3] || "+"; // Default to "+" if no modifier provided
     const modifierValue = parseInt(match[4]) || 0; // Default to 0 if no modifier provided
 
-
     // Roll the dice
     const rolls = [];
     for (let i = 0; i < numDice; i++) {
-        const roll = randomInt(1, numSides + 1);
+        const roll = getRandomIntInclusive(1, numSides + 1);
         rolls.push(roll);
     }
 
     // Calculate the total
     let total = rolls.reduce((acc, roll) => acc + roll, 0);
-    if (modifierOperator === '-') {
+    if (modifierOperator === "-") {
         total -= modifierValue;
-    } else if (modifierOperator === '+') {
+    } else if (modifierOperator === "+") {
         total += modifierValue;
-    } else if (modifierOperator === '*') {
+    } else if (modifierOperator === "*") {
         total *= modifierValue;
     }
 
