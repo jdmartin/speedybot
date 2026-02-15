@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm ci --omit-dev
+RUN npm ci
 
 RUN mkdir -p /app/db
 
