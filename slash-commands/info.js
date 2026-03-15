@@ -50,7 +50,7 @@ export async function execute(interaction) {
         case "corkboard":
             let corkEmbed = new EmbedBuilder().setColor(0xffffff).setTitle("How do I check the Corkboard?").addFields({
                 name: " ",
-                value: "\nYou can get to the Corkboard Here [(link)](https://velocitycorkboard.com).\n\nIf you need the password:\n- Make sure you aren’t in a private message window. Any public channel will work, even this one!\n- Just type `/corkboard` in the typing box. Speedy will give you a link and the code.\n\n*None of the above will be visible to others in the Discord chat.*",
+                value: "\nYou can get to the Corkboard Here [(link)](https://velocitycorkboard.com).\n\n**If you need the password**:\n- Make sure you aren’t in a private message window. Any public channel will work, even this one!\n- Just type `/corkboard` in the typing box. Speedy will give you a link and the code.\n\n*None of the above will be visible to others in the Discord chat.*",
                 inline: true,
             });
 
@@ -92,7 +92,7 @@ export async function execute(interaction) {
                 .setTitle("How do I know what to roll for loot?")
                 .addFields({
                     name: " ",
-                    value: "\n**Regular items** all use the following system:\n- Major upgrade: Something you consider best in slot\n- Minor Upgrade: All normal gear upgrades\n- Off-spec: You will rarely use this item\n- Transmog: Anything you want for transmog, for yourself or an alt\n- Pass: This item is more valuable as a shard\n\n**Tier tokens** have their own separate loot rolls!\n- 4-piece Bonus: Only for the very last armor piece you need to complete your tier set\n- Upgrade: All normal tier upgrades, normal or heroic\n- Pass: You don’t want nasty old tier anyway\n\n**Crafting recipes** have their own separate loot rolls too!\n- Raidcrafter: Official use only\n- Profession: Any recipe your current character could use\n- Alt: You can’t use it, but your alt can\n- Pass: You literally can’t read it. Are those even words?\n\nFor more information on how and why the loot system works, see the Corkboard! [(link)](https://velocitycorkboard.com)",
+                    value: "\n**Regular items** all use the following system:\n- Major upgrade: Something you consider best in slot\n- Minor Upgrade: All normal gear upgrades\n- Off-spec: You will rarely use this item\n- Transmog: Anything you want for transmog, for yourself or an alt\n- Pass: This item is more valuable as a shard\n\n**Tier tokens** have their own separate loot rolls!\n- I want this: All normal tier upgrades, normal or heroic, Indicate in the typing field if this item will grant you a new set bonus (2 or 4 piece) \n- Pass: You don’t want nasty old tier anyway\n\n**Crafting recipes** have their own separate loot rolls too!\n- Raidcrafter: Official use only\n- Profession: Any recipe your current character could use\n- Alt: You can’t use it, but your alt can\n- Pass: You literally can’t read it. Are those even words?\n\nFor more information on how and why the loot system works, see the Corkboard! [(link)](https://velocitycorkboard.com)",
                     inline: true,
                 });
 
