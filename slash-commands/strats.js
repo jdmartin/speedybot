@@ -2,6 +2,7 @@ import { MessageFlags, SlashCommandBuilder } from "discord.js";
 import * as Shadowlands from "../resources/strats/shadowlands.js";
 import * as Dragonflight from "../resources/strats/dragonflight.js";
 import * as TWW from "../resources/strats/tww.js";
+import * as Midnight from "../resources/strats/midnight.js";
 
 export const data = new SlashCommandBuilder()
     .setName("strats")
@@ -12,6 +13,8 @@ export const data = new SlashCommandBuilder()
             .setDescription("Name of the Raid")
             .setRequired(true)
             .addChoices(
+                { name: "Voidspire", value: "voidspire" },
+                { name: "Dreamrift", value: "dreamrift" },
                 { name: "Manaforge", value: "manaforge" },
                 { name: "Undermine", value: "undermine" },
                 { name: "Nerub-ar Palace", value: "nerub" },
@@ -26,6 +29,8 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction) {
     const raidExpansionMap = {
+        voidspire: Midnight,
+        dreamrift: Midnight,
         manaforge: TWW,
         undermine: TWW,
         nerub: TWW,
