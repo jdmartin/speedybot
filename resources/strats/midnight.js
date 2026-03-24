@@ -15,7 +15,7 @@ const voidspire = new EmbedBuilder()
     })
     .addFields({
         name: "Bosses",
-        value: `[Averzian](${theCommonStem}/1483550337586430115)\n[Vorasius](${theCommonStem}/1483551345117237299)\n[SaladBaar](${theCommonStem}/1483552452757422263)\n`,
+        value: `[Averzian](${theCommonStem}/1483550337586430115)\n[Vorasius](${theCommonStem}/1483551345117237299)\n[SaladBaar](${theCommonStem}/1483552452757422263)\n[Vaelgor and Ezzorak](${theCommonStem}/1485791215059210280)\n`,
         inline: true,
     })
     .addFields({
