@@ -42,4 +42,3 @@ jobs:
           provenance: false
           tags: |
             reg.h.koalaheim.com/speedybot:latest
-            reg.h.koalaheim.com/speedybot:${{ github.sha }}
