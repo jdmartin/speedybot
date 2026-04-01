@@ -1,7 +1,7 @@
 name: Build and Push Speedybot (Release)
 on:
-  release:
-    types: [published]
+  paths:
+    - 'Dockerfile'
 
 jobs:
   build-and-push:
@@ -43,6 +43,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
+          provenance: false
           # We can now tag with both 'latest' AND the specific release version
           tags: |
             reg.h.koalaheim.com/speedybot:latest
