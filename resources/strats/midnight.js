@@ -43,4 +43,23 @@ const dreamrift = new EmbedBuilder()
         value: `${theCommonAlso}`,
     });
 
-export { voidspire, dreamrift };
+const march = new EmbedBuilder()
+    .setTitle("Evie's Strats!")
+    .setColor(0xffffff)
+    .setAuthor({
+        name: "🧿",
+    })
+    .setDescription("__March on Quel'Danas__")
+    .setFooter({
+        text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...",
+    })
+    .addFields({
+        name: "Bosses",
+        value: `[Belo'ren](${theCommonStem}/1488780217576198285)\n[L'ura, Midnight Falls](${theCommonStem}/1489059706847887501)\n`,
+        inline: true,
+    })
+    .addFields({
+        name: "See Also",
+        value: `${theCommonAlso}`,
+    });
+export { voidspire, dreamrift, march };

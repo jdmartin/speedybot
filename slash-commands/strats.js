@@ -15,6 +15,7 @@ export const data = new SlashCommandBuilder()
             .addChoices(
                 { name: "Voidspire", value: "voidspire" },
                 { name: "Dreamrift", value: "dreamrift" },
+                { name: "March on Quel'Danas", value: "march" },
                 { name: "Manaforge", value: "manaforge" },
                 { name: "Undermine", value: "undermine" },
                 { name: "Nerub-ar Palace", value: "nerub" },
@@ -24,13 +25,14 @@ export const data = new SlashCommandBuilder()
                 { name: "Sanctum", value: "sanctum" },
                 { name: "Sepulchre", value: "sepulchre" },
                 { name: "Vault", value: "vault" },
-            )
+            ),
     );
 
 export async function execute(interaction) {
     const raidExpansionMap = {
         voidspire: Midnight,
         dreamrift: Midnight,
+        march: Midnight,
         manaforge: TWW,
         undermine: TWW,
         nerub: TWW,
