@@ -10,7 +10,7 @@ jobs:
     runs-on: vulcan
     steps:
       - name: Checkout code
-        uses: actions/checkout@b82d40a8588b2de483fd868330be7bc83ef534b1aa2653d1de4770087400e193 # v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@c6a4d59835e2619a6ab9a20b39020171bf4c24116e2ebb3ddf2337d3f09a80eb # v4.0.0
