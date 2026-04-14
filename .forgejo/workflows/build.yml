@@ -33,7 +33,7 @@ jobs:
           fi
 
       - name: Build and Push AMD64
-        uses: docker/build-push-action@30bac95c4dc30b045496e4978717c8aa4d3bba949ac5574bb718e39d6dbeeae1 # v7.1.0
+        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
         with:
           context: .
           file: ./Dockerfile
