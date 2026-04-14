@@ -5,6 +5,6 @@
   ],
   "enabledManagers": ["github-actions"],
   "github-actions": {
-    "fileMatch": ["^\\.forgejo/workflows/[^/]+\\.yml$"]
+    "fileMatch": [".forgejo/workflows/.*\\.yml$"]
   }
 }
