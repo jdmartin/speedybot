@@ -5,6 +5,7 @@ const attendanceHelper = new AttendanceTools();
 
 import { dateTools } from "../utils/datetools.js";
 const dateUtils = new dateTools();
+const processingUsers = new Set();
 
 function createDateString() {
     let today = new Date();
@@ -229,29 +230,43 @@ export async function execute(interaction) {
                     end_day = start_day;
                 }
 
-                switch (attendanceAction) {
-                    case "a":
-                        attendanceHelper.processDBUpdate(username, nickname, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
-                        attendanceHelper.generateResponse(username, nickname, "absent", full_start_date, full_end_date, comment, restriction);
-                        break;
-                    case "l":
-                        attendanceHelper.processDBUpdate(username, nickname, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
-                        attendanceHelper.generateResponse(username, nickname, "late", full_start_date, full_end_date, comment, restriction);
-                        break;
-                    case "c":
-                        // The reason for full_start_date is that each date in a range gets converted to a single date, 
-                        // so the 'end_date' is actually the same as the start_date.
-                        attendanceHelper.processDBUpdate(username, nickname, "cancel", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
-                        attendanceHelper.removeSpeedyMessage(username, full_start_date, full_end_date);
-                        break;
+                if (processingUsers.has(interaction.user.id)) {
+                    await collectedInteraction.reply({
+                        content: "Your previous submission is still being processed.",
+                        flags: MessageFlags.Ephemeral
+                    });
+                    return;
                 }
 
-                await collectedInteraction.reply({
-                    content: "Ok. Take care! 🐢",
-                    flags: MessageFlags.Ephemeral
-                }).catch(error => {
-                    console.error(error);
-                });
+                processingUsers.add(interaction.user.id);
+                try {
+                    switch (attendanceAction) {
+                        case "a":
+                            attendanceHelper.processDBUpdate(username, nickname, "absent", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            await attendanceHelper.generateResponse(username, nickname, "absent", full_start_date, full_end_date, comment, restriction);
+                            break;
+                        case "l":
+                            attendanceHelper.processDBUpdate(username, nickname, "late", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            await attendanceHelper.generateResponse(username, nickname, "late", full_start_date, full_end_date, comment, restriction);
+                            break;
+                        case "c":
+                            // The reason for full_start_date is that each date in a range gets converted to a single date, 
+                            // so the 'end_date' is actually the same as the start_date.
+                            attendanceHelper.processDBUpdate(username, nickname, "cancel", comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day);
+                            await attendanceHelper.removeSpeedyMessage(username, full_start_date, full_end_date);
+                            break;
+                    }
+
+                    await collectedInteraction.reply({
+                        content: "Ok. Take care! 🐢",
+                        flags: MessageFlags.Ephemeral
+                    }).catch(error => {
+                        console.error(error);
+                    });
+
+                } finally {
+                    processingUsers.delete(interaction.user.id);
+                }
             }
         }
     } catch (error) {

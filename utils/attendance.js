@@ -175,7 +175,7 @@ class AttendanceTools {
     }
 
     //command generateResponse for notifying the user of what has been done.
-    generateResponse(name, nickname, this_command, start, end, reason, restriction) {
+    async generateResponse(name, nickname, this_command, start, end, reason, restriction) {
         //Create some helpers and ensure needed parts:
         var friendlyStart = dateUtils.makeFriendlyDates(start);
         var namestring = "";
@@ -221,26 +221,20 @@ class AttendanceTools {
         }
 
         //Handle channel posts for absences and lates. Shorten if only a single day.
+        let sentMessage;
         if (start != end) {
-            client.channels.cache
+            sentMessage = await client.channels.cache
                 .get(`${process.env.ATTENDANCE_CHANNEL}`)
-                .send(
-                    `${namestring} will be ${reasonInsert} ${friendlyStart} until ${friendlyEnd}. ${commentInsert}`,
-                )
-                .then((message) => {
-                    this.storeSpeedyMessageDetails(name, start, end, message.id);
-                });
+                .send(`${namestring} will be ${reasonInsert} ${friendlyStart} until ${friendlyEnd}. ${commentInsert}`);
         } else {
-            client.channels.cache
+            sentMessage = await client.channels.cache
                 .get(`${process.env.ATTENDANCE_CHANNEL}`)
-                .send(`${namestring} will be ${this_command} on ${friendlyStart}. ${commentInsert}`)
-                .then((message) => {
-                    this.storeSpeedyMessageDetails(name, start, end, message.id);
-                });
+                .send(`${namestring} will be ${this_command} on ${friendlyStart}. ${commentInsert}`);
         }
+        await this.storeSpeedyMessageDetails(name, start, end, message.id);
     }
 
-    storeSpeedyMessageDetails(discord_name, start_date, end_date, message_id) {
+    async storeSpeedyMessageDetails(discord_name, start_date, end_date, message_id) {
         const selectPrep = this.absencedb.prepare(
             "SELECT messageID FROM messages WHERE discord_name = ? AND start_date = ? AND end_date = ?"
         );
@@ -248,7 +242,7 @@ class AttendanceTools {
 
         if (existing?.messageID) {
             // Delete the old message first
-            this.removeSpeedyMessage(discord_name, start_date, end_date)
+            await this.removeSpeedyMessage(discord_name, start_date, end_date)
                 .catch(console.error);
         }
 
