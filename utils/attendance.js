@@ -231,7 +231,7 @@ class AttendanceTools {
                 .get(`${process.env.ATTENDANCE_CHANNEL}`)
                 .send(`${namestring} will be ${this_command} on ${friendlyStart}. ${commentInsert}`);
         }
-        await this.storeSpeedyMessageDetails(name, start, end, message.id);
+        await this.storeSpeedyMessageDetails(name, start, end, sentMessage.id);
     }
 
     async storeSpeedyMessageDetails(discord_name, start_date, end_date, message_id) {
