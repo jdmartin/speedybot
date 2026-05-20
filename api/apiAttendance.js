@@ -1,4 +1,4 @@
-import sqlite3 from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 import { client } from '../utils/speedyutils.js';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
@@ -15,7 +15,7 @@ const dateUtils = new dateTools();
 
 class apiAttendanceTools {
     constructor() {
-        this.absencedb = new sqlite3(dbPath);
+        this.absencedb = new DatabaseSync(dbPath);
     }
 
     addAbsence(name, sy, sm, sd, end, comment, kind, code) {
@@ -192,17 +192,16 @@ class apiAttendanceTools {
 
 class ApiDatabaseCleanup {
     constructor() {
-        this.absencedb = new sqlite3(dbPath);
+        this.absencedb = new DatabaseSync(dbPath);
     }
+
     cleanAbsences() {
         //Expire entries that occurred more than three days ago.
-        let sql = this.absencedb.prepare("DELETE FROM attendance WHERE end_date < date('now', '-3 days')");
-        sql.run();
+        this.absencedb.exec("DELETE FROM attendance WHERE end_date < date('now', '-3 days')");
     }
 
     vacuumDatabases() {
-        let sql = this.absencedb.prepare("VACUUM");
-        sql.run();
+        this.absencedb.exec("VACUUM");
     }
 }
 

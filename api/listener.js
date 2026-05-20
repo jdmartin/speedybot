@@ -4,7 +4,7 @@ import { existsSync, unlinkSync, chmodSync } from 'node:fs';
 import { platform } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import sqlite3 from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 import { apiAttendanceTools } from './apiAttendance.js';
 
 // Equivalent of __dirname
@@ -15,7 +15,7 @@ const apidbPath = join(dbDir, "apiAttendance.db");
 
 class Server {
     constructor() {
-        this.db = new sqlite3(apidbPath);
+        this.db = new DatabaseSync(apidbPath);
         this.socketPath = this.setSocketPath();
     }
 
@@ -26,14 +26,12 @@ class Server {
     }
 
     createDB() {
-        const apiDBPrep = this.db.prepare(
+        this.db.exec(
             "CREATE TABLE IF NOT EXISTS `attendance` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start_year` TEXT, `start_month` TEXT, `start_day` TEXT, `end_date` TEXT, `comment` TEXT, `kind` TEXT NOT NULL, `code` TEXT)"
         );
-        const messagesDBPrep = this.db.prepare(
+        this.db.exec(
             "CREATE TABLE IF NOT EXISTS `messages` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `code` TEXT, `messageID` TEXT)"
         );
-        apiDBPrep.run();
-        messagesDBPrep.run();
     }
 
     prepareDateForProcessing(givenDate) {

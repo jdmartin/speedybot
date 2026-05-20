@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import sqlite3 from "better-sqlite3";
+import { DatabaseSync } from 'node:sqlite';
 import { client } from "./speedyutils.js";
 import { existsSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -24,16 +24,16 @@ const dateUtils = new dateTools();
 //DB
 class CreateAttendanceDatabase {
     constructor() {
-        this.absencedb = new sqlite3(dbPath);
+        this.absencedb = new DatabaseSync(dbPath);
         this.startup();
     }
 
     startup() {
         try {
-            // Wrap all schema creation in a transaction for safety
-            const tx = this.absencedb.transaction(() => {
+            this.absencedb.exec('BEGIN');
+            try {
                 // attendance table
-                this.absencedb.prepare(`
+                this.absencedb.exec(`
                     CREATE TABLE IF NOT EXISTS attendance (
                         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                         name TEXT,
@@ -45,16 +45,16 @@ class CreateAttendanceDatabase {
                         comment TEXT,
                         kind TEXT NOT NULL
                     )
-                `).run();
+                `);
 
                 // unique index on attendance
-                this.absencedb.prepare(`
+                this.absencedb.exec(`
                     CREATE UNIQUE INDEX IF NOT EXISTS uniq_attendance
                     ON attendance(name, end_date)
-                `).run();
+                `);
 
                 // messages table
-                this.absencedb.prepare(`
+                this.absencedb.exec(`
                     CREATE TABLE IF NOT EXISTS messages (
                         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                         discord_name TEXT,
@@ -62,16 +62,19 @@ class CreateAttendanceDatabase {
                         end_date TEXT,
                         messageID TEXT
                     )
-                `).run();
+                `);
 
                 // unique index on messages
-                this.absencedb.prepare(`
+                this.absencedb.exec(`
                     CREATE UNIQUE INDEX IF NOT EXISTS uniq_messages
                     ON messages(discord_name, start_date, end_date)
-                `).run();
-            });
+                `);
 
-            tx(); // Execute
+                this.absencedb.exec('COMMIT');
+            } catch (err) {
+                this.absencedb.exec('ROLLBACK');
+                throw err;
+            }
 
             console.log("Attendance database initialized successfully.");
         } catch (err) {
@@ -83,7 +86,7 @@ class CreateAttendanceDatabase {
 
 class AttendanceTools {
     constructor() {
-        this.absencedb = new sqlite3(dbPath);
+        this.absencedb = new DatabaseSync(dbPath);
     }
 
     addAbsence(name, nickname, sy, sm, sd, end, comment, kind) {
@@ -105,13 +108,12 @@ class AttendanceTools {
         // We're escaping the name because that's how it came in from the Web.
         // TODO: better name matching, as this is looking for discord_name not nickname.
         if (process.env.ENABLE_ATTENDANCE_API === "true") {
-            let apidb = new sqlite3(apidbPath);
+            let apidb = new DatabaseSync(apidbPath);
             var cancelApiPrep = apidb.prepare(
                 "DELETE FROM attendance WHERE (name = ? AND end_date = ?)",
             );
             cancelApiPrep.run(name, date);
         }
-
     }
 
     processDBUpdate(name, nickname, kind, comment, restriction, start_year, start_month, start_day, end_year, end_month, end_day) {
@@ -292,7 +294,7 @@ class AttendanceTools {
 
 class DataDisplayTools {
     constructor() {
-        this.absencedb = new sqlite3(dbPath);
+        this.absencedb = new DatabaseSync(dbPath);
     }
 
     show(name, choice) {
@@ -373,19 +375,19 @@ class DataDisplayTools {
 
         //Get all items from the API submissions.
         if (choice === "mine") {
-            let apidb = new sqlite3(apidbPath);
+            let apidb = new DatabaseSync(apidbPath);
             var api_sql = apidb.prepare(
                 "SELECT * FROM attendance WHERE end_date >= date('now','localtime') AND name = ? ORDER BY end_date ASC, name LIMIT 20",
             );
             var apiResults = api_sql.all(name);
         } else if (choice === "today") {
-            let apidb = new sqlite3(apidbPath);
+            let apidb = new DatabaseSync(apidbPath);
             var api_sql = apidb.prepare(
                 "SELECT * FROM attendance WHERE end_date = date('now','localtime') ORDER BY end_date ASC, name LIMIT 20",
             );
             var apiResults = api_sql.all();
         } else {
-            let apidb = new sqlite3(apidbPath);
+            let apidb = new DatabaseSync(apidbPath);
             var api_sql = apidb.prepare(
                 "SELECT * FROM attendance WHERE end_date BETWEEN date('now','localtime') AND date('now', '+8 days') ORDER BY end_date ASC, name LIMIT 20",
             );
@@ -420,7 +422,7 @@ class DataDisplayTools {
             "SELECT * FROM attendance WHERE end_date = date('now','localtime') AND kind = 'late' ORDER BY end_date ASC, name LIMIT 20",
         );
 
-        let apidb = new sqlite3(apidbPath);
+        let apidb = new DatabaseSync(apidbPath);
         var api_absent_sql = apidb.prepare(
             "SELECT * FROM attendance WHERE end_date = date('now','localtime') AND kind = 'absent' ORDER BY end_date ASC, name LIMIT 20",
         );
@@ -493,23 +495,21 @@ class DataDisplayTools {
 
 class AttendanceDatabaseCleanup {
     constructor() {
-        this.absencedb = new sqlite3(dbPath);
+        this.absencedb = new DatabaseSync(dbPath);
     }
+
     cleanAbsences() {
         //Expire entries that occurred more than three days ago.
-        let sql = this.absencedb.prepare("DELETE FROM attendance WHERE end_date < date('now', '-3 days')");
-        sql.run();
+        this.absencedb.exec("DELETE FROM attendance WHERE end_date < date('now', '-3 days')");
     }
 
     cleanMessages() {
         //Expire entries that occurred more than three days ago.
-        let sql = this.absencedb.prepare("DELETE FROM messages WHERE end_date < date('now', '-3 days')");
-        sql.run();
+        this.absencedb.exec("DELETE FROM messages WHERE end_date < date('now', '-3 days')");
     }
 
     vacuumDatabases() {
-        let sql = this.absencedb.prepare("VACUUM");
-        sql.run();
+        this.absencedb.exec("VACUUM");
     }
 }
 
