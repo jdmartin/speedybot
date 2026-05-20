@@ -1,18 +1,16 @@
 import { EmbedBuilder } from "discord.js";
-import sqlite3 from "better-sqlite3";
+import { DatabaseSync } from 'node:sqlite';
 import { slashCommandFiles } from './speedyutils.js';
 
-const statsdb = new sqlite3(':memory:');
+const statsdb = new DatabaseSync(':memory:');
 
 class CreateDatabase {
     startup() {
-        var slash_bootup = statsdb.prepare("CREATE TABLE `slash_commands` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `count` INT, `errors` INT)");
-        slash_bootup.run();
-
+        statsdb.exec("CREATE TABLE `slash_commands` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT UNIQUE, `count` INT, `errors` INT)");
         var slash_stmt = statsdb.prepare("INSERT INTO `slash_commands` (`name`, `count`, `errors`) VALUES (?, 0, 0)");
         slashCommandFiles.forEach(name => {
             var thisSlashCommand = name.split(".", 1);
-            slash_stmt.run(thisSlashCommand);
+            slash_stmt.run(thisSlashCommand[0]);
         })
     }
 }
