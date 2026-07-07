@@ -3,6 +3,26 @@ import { EmbedBuilder } from "discord.js";
 const theCommonStem = process.env.STRATS_COMMON_STEM || "";
 const theCommonAlso = process.env.STRATS_COMMON_ALSO || "";
 
+const sporefall = new EmbedBuilder()
+    .setTitle("Evie's Strats!")
+    .setColor(0xffffff)
+    .setAuthor({
+        name: "🍄",
+    })
+    .setDescription("__Sporefall__")
+    .setFooter({
+        text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...",
+    })
+    .addFields({
+        name: "Bosses",
+        value: `[Rotmire](${theCommonStem}/1523576084430585908)\n`,
+        inline: true,
+    })
+    .addFields({
+        name: "See Also",
+        value: `${theCommonAlso}`,
+    });
+
 const voidspire = new EmbedBuilder()
     .setTitle("Evie's Strats!")
     .setColor(0xffffff)
@@ -62,4 +82,4 @@ const march = new EmbedBuilder()
         name: "See Also",
         value: `${theCommonAlso}`,
     });
-export { voidspire, dreamrift, march };
+export { sporefall, voidspire, dreamrift, march };

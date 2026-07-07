@@ -13,6 +13,7 @@ export const data = new SlashCommandBuilder()
             .setDescription("Name of the Raid")
             .setRequired(true)
             .addChoices(
+                { name: "Sporefall", value: "sporefall" },
                 { name: "Voidspire", value: "voidspire" },
                 { name: "Dreamrift", value: "dreamrift" },
                 { name: "March on Quel'Danas", value: "march" },
@@ -30,6 +31,7 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction) {
     const raidExpansionMap = {
+        sporefall: Midnight,
         voidspire: Midnight,
         dreamrift: Midnight,
         march: Midnight,
