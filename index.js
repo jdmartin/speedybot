@@ -157,7 +157,7 @@ if (process.env.NEWCOMER_ENABLED === 'true') {
 
             if (welcomeChannel) {
                 welcomeChannel.send(
-                    `Welcome, <@${member.id}>! Hang tight, and we'll update your permissions shortly.`
+                    `Welcome, <@${member.id}>! Please let us know how you ended up here (who invited you, what you're looking to do, that sort of thing), and we'll update your permissions shortly.`
                 );
             }
 
