@@ -13,6 +13,8 @@ export const data = new SlashCommandBuilder()
             .setDescription("Name of the Raid")
             .setRequired(true)
             .addChoices(
+                { name: "Venomous Abyss", value: "venomous" },
+                { name: "Tidebound Grotto", value: "tidebound" },
                 { name: "Sporefall", value: "sporefall" },
                 { name: "Voidspire", value: "voidspire" },
                 { name: "Dreamrift", value: "dreamrift" },
@@ -31,6 +33,8 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction) {
     const raidExpansionMap = {
+        venomous: Midnight,
+        tidebound: Midnight,
         sporefall: Midnight,
         voidspire: Midnight,
         dreamrift: Midnight,

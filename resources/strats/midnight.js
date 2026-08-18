@@ -3,6 +3,46 @@ import { EmbedBuilder } from "discord.js";
 const theCommonStem = process.env.STRATS_COMMON_STEM || "";
 const theCommonAlso = process.env.STRATS_COMMON_ALSO || "";
 
+const venomous = new EmbedBuilder()
+    .setTitle("Evie's Strats!")
+    .setColor(0xffffff)
+    .setAuthor({
+        name: "🐍",
+    })
+    .setDescription("__Venomous Abyss__")
+    .setFooter({
+        text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...",
+    })
+    .addFields({
+        name: "Bosses",
+        value: `[Nek'zali](${theCommonStem}/1539015899225399446)\n`,
+        inline: true,
+    })
+    .addFields({
+        name: "See Also",
+        value: `${theCommonAlso}`,
+    });
+
+const tidebound = new EmbedBuilder()
+    .setTitle("Evie's Strats!")
+    .setColor(0xffffff)
+    .setAuthor({
+        name: "🪸",
+    })
+    .setDescription("__Tidebound Grotto__")
+    .setFooter({
+        text: "SpeedyBot is not responsible for any fire-standing, mutilation, or permanent loss of gold or seaweed...",
+    })
+    .addFields({
+        name: "Bosses",
+        value: `[Nymrissa](${theCommonStem}/1538970890438705253)\n`,
+        inline: true,
+    })
+    .addFields({
+        name: "See Also",
+        value: `${theCommonAlso}`,
+    });
+
 const sporefall = new EmbedBuilder()
     .setTitle("Evie's Strats!")
     .setColor(0xffffff)
@@ -82,4 +122,4 @@ const march = new EmbedBuilder()
         name: "See Also",
         value: `${theCommonAlso}`,
     });
-export { sporefall, voidspire, dreamrift, march };
+export { venomous, tidebound, sporefall, voidspire, dreamrift, march };
