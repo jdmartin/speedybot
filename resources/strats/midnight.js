@@ -15,7 +15,7 @@ const venomous = new EmbedBuilder()
     })
     .addFields({
         name: "Bosses",
-        value: `[Nek'zali](${theCommonStem}/1539015899225399446)\n[Entombed Sentinels](${theCommonStem}/1539331275523891330)\n[Vashnik](${theCommonStem}/1539358554085924904)\n[Lost Explorers](${theCommonStem}/1539802076173836329)\n[Sszorak](${theCommonStem}/1539867988210094100)\n[Twin Fangs](${theCommonStem}/1541151650717372437)\n`,
+        value: `[Nek'zali](${theCommonStem}/1539015899225399446)\n[Entombed Sentinels](${theCommonStem}/1539331275523891330)\n[Vashnik](${theCommonStem}/1539358554085924904)\n[Lost Explorers](${theCommonStem}/1539802076173836329)\n[Sszorak](${theCommonStem}/1539867988210094100)\n[Twin Fangs](${theCommonStem}/1541151650717372437)\n[Coiled Altar](${theCommonStem}/1542236475066814585)\n[Ulatek](${theCommonStem}/1542257481332559883)\n`,
         inline: true,
     })
     .addFields({
