@@ -6,6 +6,7 @@ import { DataDisplayTools } from "./utils/attendance.js";
 
 //Load helper files
 import { AttendanceDatabaseCleanup, CreateAttendanceDatabase } from "./utils/attendance.js";
+import { CreateWelcomeDatabase } from "./utils/welcome.js";
 import { Server } from './api/listener.js';
 import { ApiDatabaseCleanup } from "./api/apiAttendance.js";
 import { DeploySlashCommands } from "./utils/deploy-slash-commands.js";
@@ -24,6 +25,9 @@ speedy.startup();
 
 //Initialize the absences database:
 new CreateAttendanceDatabase();
+
+//Initialize the newecomers database:
+new CreateWelcomeDatabase();
 
 //Initialize the API Listener and DB (if needed)
 const apiTools = new Server();
@@ -157,7 +161,7 @@ if (process.env.NEWCOMER_ENABLED === 'true') {
 
             if (welcomeChannel) {
                 welcomeChannel.send(
-                    `Welcome, <@${member.id}>! Please let us know how you ended up here (who invited you, what you're looking to do, that sort of thing), and we'll update your permissions shortly.`
+                    `Welcome, <@${member.id}>! Please use the /newcomer command to tell us about yourself, and we'll update your permissions shortly.`
                 );
             }
 
